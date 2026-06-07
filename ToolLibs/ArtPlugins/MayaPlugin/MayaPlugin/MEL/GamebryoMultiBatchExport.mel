@@ -1,0 +1,121 @@
+//
+//  GamebryoMultiBatchExport
+//
+//  This function will open the text file passed in as a function argument,
+//  load each maya file on each line of the text file, and export it for
+//  whatever platforms and paths are optionally supplied in the text file.
+//---------------------------------------------------------------------------
+
+proc ExportHelper(string $exportPath)
+{
+    // determine if there is a platform tag at the front
+    // syntax is [platform]=[path]
+    string $finalExportPath = $exportPath;
+    string $platformTokens[];
+    tokenize $exportPath "=" $platformTokens;
+    if (size($platformTokens) > 1)
+    {
+        string $platform = $platformTokens[0];
+        $platform = strip($platform);
+
+        print ("Platform: " + $platform + "\n");
+
+        if ($platform == "DX9")
+        {
+            GamebryoSetExportOption("MayaNifExportForGamebryoPlatformType", "3");
+        }
+        else if (($platform == "Xenon") || ($platform == "Xbox360") || ($platform == "360"))
+        {
+            GamebryoSetExportOption("MayaNifExportForGamebryoPlatformType", "2");
+        }
+        else if ($platform == "PS3")
+        {
+            GamebryoSetExportOption("MayaNifExportForGamebryoPlatformType", "4");
+        }
+        else if ($platform == "Wii")
+        {
+            GamebryoSetExportOption("MayaNifExportForGamebryoPlatformType", "5");
+        }
+        else if ($platform == "D3D10")
+        {
+            GamebryoSetExportOption("MayaNifExportForGamebryoPlatformType", "6");
+        }
+        else
+        {
+            // default to Generic
+            GamebryoSetExportOption("MayaNifExportForGamebryoPlatformType", "1");
+        }
+        $finalExportPath = $platformTokens[1];
+    }
+    
+    // remove all surrounding whitespace
+    $finalExportPath = strip($finalExportPath);
+    
+    // stop if our export path is invalid
+    if (size($finalExportPath) < 1)
+        return;
+
+	// create the target directory if it doesn't already exist
+	string $targetDir = dirname($finalExportPath);
+	if (`filetest -d $targetDir` == 0)
+	{
+	    sysFile -md $targetDir;
+	}
+	
+	// tell the Gamebryo exporter where to deposit the final file
+	optionVar -sv "ExportFilePath" $finalExportPath;
+	
+    // export	
+	GamebryoExportWithCurrentOptions;
+}
+
+global proc GamebryoMultiBatchExport(string $fileListPath)
+{
+    source GamebryoExporting;
+
+    float $version =  getApplicationVersionAsFloat();
+    string $versionString;
+
+    GamebryoLoadPlugins();
+
+    //open the file
+    $fileId=`fopen $fileListPath "r"`;
+    string $nextLine = `fgetline $fileId`;
+    // remove the newline
+    $nextLine = substitute("\n", $nextLine, "");
+
+    string $buffer[];
+
+    while ( size( $nextLine ) > 0 ) 
+    { 
+        tokenize $nextLine ";" $buffer;
+
+        $filePath = $buffer[0];
+	    // remove whitespace from beggining and end of target
+	    $filePath = strip($filePath);
+	    // open the source file
+	    catch(`file -o -f $filePath`);
+
+        if (size($buffer[0]) == 1)
+        {
+            string $extension = fileExtension($filePath);
+            $exportPath = substitute(("\." + $extension), $filePath, ".Nif");
+            ExportHelper($exportPath);
+        }
+        else if (size($buffer[0]) > 1)
+        {
+            int $i = 1;
+            for ($i = 1; $i < size($buffer); $i++)
+            {
+                $exportPath = $buffer[$i];
+                ExportHelper($exportPath);
+            }
+        }
+
+        $nextLine = `fgetline $fileId`;
+        // remove the newline
+        $nextLine = substitute("\n", $nextLine, "");
+    }
+
+    fclose $fileId; 
+}

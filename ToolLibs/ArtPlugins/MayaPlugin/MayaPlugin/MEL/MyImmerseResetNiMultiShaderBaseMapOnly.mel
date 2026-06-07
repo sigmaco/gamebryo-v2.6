@@ -1,0 +1,200 @@
+//
+// MyImmerseResetNiMultiShaderBaseMapOnly.mel
+//
+// Reset the scene graph connections associated with only
+// showing the base map.
+
+//***************************************************************************
+
+global proc MyImmerseResetNiMultiShaderBaseMapOnly(string $nodeName)
+{
+    int $iSelectedTexture = `getAttr ($nodeName + ".SelectedTexture")`;
+    string $szMapName;
+
+    if($iSelectedTexture == 0)
+    {
+        $szMapName = "color";
+    }
+    else if($iSelectedTexture == 1)
+    {
+        $szMapName = "DarkMap";
+    }
+    else if($iSelectedTexture == 2)
+    {
+        $szMapName = "DetailMap";
+    }
+    else if($iSelectedTexture == 3)
+    {
+        $szMapName = "Decal1Map";
+    }
+    else if($iSelectedTexture == 4)
+    {
+        $szMapName = "Decal2Map";
+    }
+    else if($iSelectedTexture == 5)
+    {
+        $szMapName = "GlowMap";
+    }
+    else if($iSelectedTexture == 6)
+    {
+        $szMapName = "GlossMap";
+    }
+    else if($iSelectedTexture == 7)
+    {
+        $szMapName = "BumpMap";
+    }
+    else if($iSelectedTexture == 8)
+    {
+        $szMapName = "NormalMap";
+    }
+    else if($iSelectedTexture == 9)
+    {
+        $szMapName = "ParallaxMap";
+    }
+
+    // Read in the Base Map Only attributes
+    $nodeAttr = $nodeName +".BaseMapOnly";
+    int $iBaseMapOnly = `getAttr $nodeAttr`;
+
+    // Gray out the Resolution
+    editorTemplate -dimControl $nodeName "resolution" $iBaseMapOnly;
+
+    // Gray out the Selected Texture
+    editorTemplate -dimControl $nodeName "SelectedTexture" (!$iBaseMapOnly);
+
+
+    // Find if the base map has a texture
+    string $sBaseAttributeName = $nodeName + "." + $szMapName;
+    string $sBaseNames[] = `listConnections $sBaseAttributeName`;
+
+
+    // Check there are results returned
+    if(size($sBaseNames) != 1)
+    {
+        // Set to the default back to Base Map if we arnt alread there
+        if( $iSelectedTexture != 0)
+        {
+            print ("Warning:: " + $szMapName + " is unconnected defaulting to the Base Map.\n");
+            setAttr ($nodeName + ".SelectedTexture") 0;
+        }
+
+        $szMapName = "color";
+
+        $sBaseAttributeName = $nodeName + "." + $szMapName;
+        $sBaseNames = `listConnections $sBaseAttributeName`;
+
+        // Check there are results returned even if we tried to recover from an error
+        if(size($sBaseNames) != 1)
+        {
+            return;
+        }
+
+    }
+
+
+    string $sBaseName = $sBaseNames[0];
+
+    // Find the Material we are connected to
+    string $sMaterialInfoNames[] = `listConnections -t materialInfo $nodeName`;
+
+    // Check there are results returned
+    if(size($sMaterialInfoNames) == 0)
+        return;
+
+    string $sMaterialInfoName = $sMaterialInfoNames[0];
+
+    // Setup the Messages we are going to change
+    string $sMaterialAttributeName = $nodeName + ".message";
+    string $sInfoAttributeName = $sMaterialInfoName + ".texture[0]";
+    string $sBaseMessageAttribute = $sBaseName + ".message";
+
+
+    if($iBaseMapOnly == 1)
+    {
+        //disconnectAttr NiMultiShader1.message materialInfo1.texture[0];
+        //connectAttr file1.message materialInfo1.texture[0];
+
+        // Is the correct connection already made
+        if(`isConnected $sBaseMessageAttribute $sInfoAttributeName` == 1)
+            return;
+        
+        // Remove the Old Connection if it exists
+        MyImmerseResetNiMultiShaderRemoveAllConnections($nodeName, $sInfoAttributeName);
+
+        connectAttr $sBaseMessageAttribute $sInfoAttributeName;
+    }
+    else
+    {
+        //disconnectAttr file1.message materialInfo1.texture[0];
+        //connectAttr NiMultiShader1.message materialInfo1.texture[0];
+
+        // Is the correct connection already made
+        if(`isConnected $sMaterialAttributeName $sInfoAttributeName` == 1)
+            return;
+
+        // Remove the Old Connection if it exists
+        MyImmerseResetNiMultiShaderRemoveAllConnections($nodeName, $sInfoAttributeName);
+
+        connectAttr $sMaterialAttributeName $sInfoAttributeName;
+    }
+}
+
+//***************************************************************************
+
+global proc MyImmerseResetNiMultiShaderRemoveAllConnections( string $szNodeName, string $szInfoAttributeName)
+{
+    string $szMaterialAttributeName = $szNodeName + ".message";
+
+    // Remove the Old Connection if it exists
+    if(`isConnected $szMaterialAttributeName $szInfoAttributeName` == 1)
+    {
+        disconnectAttr $szMaterialAttributeName $szInfoAttributeName;
+    }
+
+    // disconnect the attribute if already connected.
+    string $clist[] = `listConnections -d off -s on -p on $szInfoAttributeName`;
+    int $iLoop = 0;
+    for( $iLoop = 0; $iLoop < size($clist); $iLoop++)
+    {
+        print ("disconnecting attribute:" + $clist[$iLoop] +  " from " + $szInfoAttributeName + "\n");
+        disconnectAttr $clist[$iLoop] $szInfoAttributeName;
+    }
+
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "color");
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "DarkMap");
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "DetailMap");
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "Decal1Map");
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "Decal2Map");
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "GlowMap");
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "GlossMap");
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "BumpMap");
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "NormalMap");
+    MyImmerseResetNiMultiShaderRemoveConnections( $szNodeName, $szInfoAttributeName, "ParallaxMap");
+}
+
+//***************************************************************************
+
+global proc MyImmerseResetNiMultiShaderRemoveConnections( string $szNodeName, string $szInfoAttributeName, string $szMapName)
+{
+
+    string $sMaterialAttributeName = $szNodeName + ".message";
+    string $sBaseNames[];
+    string $sBaseMessageAttribute;
+
+    // Check for the base Map
+    $sBaseNames = `listConnections ($szNodeName + "." + $szMapName)`;
+
+    // Check there are results returned
+    if(size($sBaseNames) == 1)
+    {
+        $sBaseMessageAttribute = $sBaseNames[0] + ".message";
+
+        // Remove the Old Connection if it exists
+        if(`isConnected $sBaseMessageAttribute $szInfoAttributeName` == 1)
+        {
+            disconnectAttr $sBaseMessageAttribute $szInfoAttributeName;
+        }
+    }
+}
+
+//***************************************************************************

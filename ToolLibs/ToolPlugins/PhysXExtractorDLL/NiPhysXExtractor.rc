@@ -1,0 +1,138 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "NiPhysXExtractor_resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "NiPhysXExtractor_resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PHYSXEXTRACTOR_OPTIONS DIALOGEX 0, 0, 288, 215
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "PhysX Extractor Options"
+FONT 8, "MS Sans Serif", 400, 0, 0x0
+BEGIN
+    GROUPBOX        "Particle Systems",IDC_STATIC,7,55,132,71
+    DEFPUSHBUTTON   "OK",IDOK,7,190,47,18
+    PUSHBUTTON      "Cancel",IDCANCEL,75,190,51,18
+    PUSHBUTTON      "Reset Defaults",IDC_OPT_BUTTON_RESETDEFAULTS,216,191,64,
+                    17
+    CONTROL         "PSys in PhysX Space",IDC_OPT_CHECK_PSYS_SPACE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,92,99,16
+    GROUPBOX        "Prop Parameters",IDC_STATIC,7,7,132,45
+    EDITTEXT        IDC_EDIT_SCALE,59,34,74,13,ES_AUTOHSCROLL
+    LTEXT           "Scale",IDC_STATIC,14,37,19,8
+    GROUPBOX        "Shape Properties",IDC_STATIC,148,7,132,119
+    CONTROL         "Keep Mesh Data on Load",IDC_OPT_CHECK_KEEP_MESHES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,151,78,99,15
+    EDITTEXT        IDC_EDIT_MATERIAL_BASE,219,96,28,13,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    LTEXT           "Material Base Index",IDC_STATIC,151,98,63,8
+    CONTROL         "Cook for Hardware",IDC_OPT_CHECK_HARDWARE_COOK,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,151,33,99,15
+    EDITTEXT        IDC_EDIT_SCENE_NAME,59,19,74,13,ES_AUTOHSCROLL
+    LTEXT           "Name",IDC_STATIC,14,22,20,8
+    CONTROL         "Convert to PhysX Fluid",IDC_OPT_CHECK_FLUID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,82,105,10
+    CONTROL         "Convert to PhysX Rigid Particles",
+                    IDC_OPT_CHECK_CONVERT_PSYS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,67,117,10
+    CONTROL         "Use PhysX Rotations",IDC_OPT_CHECK_PSYS_ROT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,106,99,17
+    EDITTEXT        IDC_EDIT_CONVEX_SKIN,194,19,54,13,ES_AUTOHSCROLL
+    LTEXT           "Skin Width",IDC_STATIC,151,19,36,8
+    CONTROL         "Inflate",IDC_OPT_CHECK_INFLATE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,151,48,99,15
+    CONTROL         "Uncompressed Normals",IDC_OPT_CHECK_UNCOMPRESSEDNORMS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,151,62,99,16
+    GROUPBOX        "Initial States",IDC_STATIC,7,127,131,58
+    CONTROL         "Initial States from Sequences",
+                    IDC_OPT_CHECK_SEQUENCE_STATES,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,138,108,10
+    CONTROL         "Keep All after Creation",IDC_OPT_CHECK_KEEP_ALL_STATES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,152,86,10
+    CONTROL         "Keep Default after Creation",
+                    IDC_OPT_CHECK_KEEP_DEFAULT_STATE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,166,101,12
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_PHYSXEXTRACTOR_OPTIONS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 280
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 208
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,7 @@
+
+global proc MyImmerseSetLastSceneGUIOptions(string $sGUIOptions)
+{
+    MyImmerseCreateExportOptionsLocator();
+    setAttr |Please_Dont_Delete_MyImmerse_Export_Options.MyImmerseNIFOptionsVar -type "string" $sGUIOptions;
+    optionVar -sv "NifOptions" $sGUIOptions;
+}

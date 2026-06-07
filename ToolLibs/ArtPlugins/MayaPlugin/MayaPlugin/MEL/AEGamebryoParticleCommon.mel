@@ -1,0 +1,479 @@
+source AEGamebryoCommonUtils;
+
+global proc AEGamebryoParticleAddAttributeButton(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    if(!`columnLayout -ex GamebryoParticleMainAttrButtons`)
+    {
+        columnLayout GamebryoParticleMainAttrButtons;
+
+            text -label "Add Gamebryo Attributes";
+
+            rowColumnLayout -numberOfColumns 1 
+                -columnWidth 1 45;
+                
+                iconTextButton -label "Add Particle Attributes"
+                    -image1 "MyImmerseParticleSystemIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoAddParticleAndEmitterAttributes(\"" + $nodeName + "\")")
+                    AEGamebryoParticleButton;
+                        
+            setParent..;
+        
+        setParent..;
+    }
+}
+
+global proc AEGamebryoParticleResetAttributeButton(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(!`columnLayout -ex GamebryoParticleMainAttrButtons`)
+    {
+        AEGamebryoParticleAddAttributeButton $nodeAndAttr;
+    }
+    else
+    {
+        iconTextButton -e -command ("AEGamebryoAddParticleAndEmitterAttributes(\"" + $nodeName + "\")")
+            AEGamebryoParticleButton;
+    }    
+}
+
+global proc AEGamebryoParticleToggleAttributes(string $nodeName)
+{
+        AEGamebryoToggle($nodeName, {"Ni_ParticleBeginKeyFrame"}, 
+            "MyImmerseAddGamebryoParticlesAttributes",
+            "MyImmerseDeleteGamebryoParticleAttributes");
+}
+
+//Fix for particles
+global proc AEGamebryoAddParticleAndEmitterAttributes(string $nodeName)
+{
+    MyImmerseAddGamebryoParticlesAttributes($nodeName);
+    string $emitterTransforms[] = `listConnections -d on ($nodeName + ".newParticles")`;
+    
+    string $emitterTransform;
+    for($emitterTransform in $emitterTransforms)
+    {
+        MyImmerseAddGamebryoEmitterAttributes($emitterTransform);
+    }
+}
+
+global proc int AEGamebryoHasGeneral(string $nodeName)
+{    
+    if(`attributeExists Ni_ParticlesInWorldSpace $nodeName` ||
+       `attributeExists Ni_ZBufferProperty $nodeName` ||
+       `attributeExists Ni_ParticleSkipBoundUpdate $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddGeneralAttrs(string $nodeName)
+{
+    string $labels[] = {"Use Worldspace",
+                        "Z Buffer Property",
+                        "Skip Bound Update"};
+
+    string $attrNames[] = {"Ni_ParticlesInWorldSpace",
+                           "Ni_ZBufferProperty", 
+                           "Ni_ParticleSkipBoundUpdate"};
+    
+   AEGamebryoAddManyAttrs($nodeName, "General", $labels, 
+    $attrNames);
+}
+
+global proc AEGamebryoAddGeneral(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("General", "General");
+    AEGamebryoSetEnableStateOframe(false, "General");
+
+    if(AEGamebryoHasGeneral($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "General");
+        AEGamebryoAddGeneralAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetGeneral(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasGeneral($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "General");
+        AEGamebryoAddGeneralAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "General");
+    }
+}
+
+
+global proc int AEGamebryoHasVertexColor(string $nodeName)
+{
+    if(`attributeExists Ni_ParticleVertexColor $nodeName` ||
+       `attributeExists Ni_ParticleVertexColorAlpha $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddVertexColorAttrs(string $nodeName)
+{
+    
+    string $labels[] = {"Vertex Color", 
+                        "Vertex Color Alpha"};
+
+    string $attrNames[] = {"Ni_ParticleVertexColor", 
+                           "Ni_ParticleVertexColorAlpha"};
+                            
+    AEGamebryoAddManyAttrs($nodeName, "VertexColor", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddVertexColor(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Vertex Color", "VertexColor");
+    AEGamebryoSetEnableStateOframe(false, "VertexColor");
+
+    if(AEGamebryoHasVertexColor($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "VertexColor");
+        AEGamebryoAddVertexColorAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetVertexColor(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasVertexColor($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "VertexColor");
+        AEGamebryoAddVertexColorAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "VertexColor");
+    }
+}
+
+global proc int AEGamebryoHasSize(string $nodeName)
+{
+    if(`attributeExists Ni_ParticleSizeVariance $nodeName` ||
+       `attributeExists Ni_ParticleGrowFrames $nodeName` ||
+       `attributeExists Ni_ParticleShrinkFrames $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddSizeAttrs(string $nodeName)
+{
+    string $labels[] = {"Size Variance", 
+                        "Grow Frames",
+                        "Shrink Frames"};
+
+    string $attrNames[] = {"Ni_ParticleSizeVariance", 
+                           "Ni_ParticleGrowFrames",
+                           "Ni_ParticleShrinkFrames"};
+                            
+    AEGamebryoAddManyAttrs($nodeName, "Size", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddSize(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Size", "Size");
+    AEGamebryoSetEnableStateOframe(false, "Size");
+
+    if(AEGamebryoHasSize($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Size");
+        AEGamebryoAddSizeAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetSize(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasSize($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Size");
+        AEGamebryoAddSizeAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Size");
+    }
+}
+
+global proc int AEGamebryoHasRotation(string $nodeName)
+{  
+    if(`attributeExists Ni_ParticleRotateRandomAxis $nodeName` ||
+       `attributeExists Ni_ParticleRotateAxisX $nodeName` ||
+       `attributeExists Ni_ParticleRotateAxisY $nodeName` ||
+       `attributeExists Ni_ParticleRotateAxisZ $nodeName` ||
+       `attributeExists Ni_ParticleRotateSpeedDegrees $nodeName` ||
+       `attributeExists Ni_ParticleRotationSpeedVarDegrees $nodeName` ||
+       `attributeExists Ni_ParticleBiDirectionalRotation $nodeName` ||
+       `attributeExists Ni_ParticleRotationInitialAngle $nodeName` ||
+       `attributeExists Ni_ParticleRotationInitialAngleVar $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddRotationAttrs(string $nodeName)
+{
+    string $labels[] = {"Rotate Random Axis", 
+                        "Rotate X", 
+                        "Rotate Y", 
+                        "Rotate Z", 
+                        "Rotation Speed", 
+                        "Rotation Speed Variation", 
+                        "Bidirectional Rotation", 
+                        "Initial Rotation", 
+                        "Initial Rotation Variation" };
+
+    string $attrNames[] = {"Ni_ParticleRotateRandomAxis",
+                           "Ni_ParticleRotateAxisX",
+                           "Ni_ParticleRotateAxisY",
+                           "Ni_ParticleRotateAxisZ",
+                           "Ni_ParticleRotateSpeedDegrees",
+                           "Ni_ParticleRotationSpeedVarDegrees",
+                           "Ni_ParticleBiDirectionalRotation",
+                           "Ni_ParticleRotationInitialAngle",
+                           "Ni_ParticleRotationInitialAngleVar" };
+                            
+    AEGamebryoAddManyAttrs($nodeName, "Rotation", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddRotation(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Rotation", "Rotation");
+    AEGamebryoSetEnableStateOframe(false, "Rotation");
+
+    if(AEGamebryoHasRotation($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Rotation");
+        AEGamebryoAddRotationAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetRotation(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasSize($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Rotation");
+        AEGamebryoAddRotationAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Rotation");
+    }
+}
+
+global proc int AEGamebryoHasSpawning(string $nodeName)
+{  
+    if(`attributeExists Ni_ParticleSpawnOnDeath $nodeName` ||
+       `attributeExists Ni_ParticleNumGenerations $nodeName` ||
+       `attributeExists Ni_ParticleMinNumToSpawn $nodeName` ||
+       `attributeExists Ni_ParticleMaxNumToSpawn $nodeName` ||
+       `attributeExists Ni_ParticlePercentageSpawned $nodeName` ||
+       `attributeExists Ni_ParticleSpawnedSpread $nodeName` ||
+       `attributeExists Ni_ParticleTargetParticle $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddSpawningAttrs(string $nodeName)
+{
+    string $labels[] = {"Spawn On Death", 
+                        "Number of Generations", 
+                        "Minimum To Spawn", 
+                        "Maximum To Spawn", 
+                        "Percentage Spawned", 
+                        "Spawned Speed Chaos", 
+                        "Spawned Spread",
+                        "Target Particle"};
+
+    string $attrNames[] = {"Ni_ParticleSpawnOnDeath",
+                           "Ni_ParticleNumGenerations",
+                           "Ni_ParticleMinNumToSpawn",
+                           "Ni_ParticleMaxNumToSpawn",
+                           "Ni_ParticlePercentageSpawned",
+                           "Ni_ParticleSpawnedSpeedChaos",
+                           "Ni_ParticleSpawnedSpread",
+                           "Ni_ParticleTargetParticle"};
+                            
+    AEGamebryoAddManyAttrs($nodeName, "Spawning", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddSpawning(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Spawning", "Spawning");
+    AEGamebryoSetEnableStateOframe(false, "Spawning");
+
+    if(AEGamebryoHasSpawning($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Spawning");
+        AEGamebryoAddSpawningAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetSpawning(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasSpawning($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Spawning");
+        AEGamebryoAddSpawningAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Spawning");
+    }
+}
+
+global proc int AEGamebryoHasAdvanced(string $nodeName)
+{      
+    if(`attributeExists Ni_ParticleMeshFillPoolsOnLoad $nodeName` ||
+       `attributeExists Ni_ParticleMeshDefaultPoolSize $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddAdvancedAttrs(string $nodeName)
+{
+    string $labels[] = {"Pool Meshes", 
+                        "Default Pool Size"};
+
+    string $attrNames[] = {"Ni_ParticleMeshFillPoolsOnLoad",
+                            "Ni_ParticleMeshDefaultPoolSize"};
+                            
+    AEGamebryoAddManyAttrs($nodeName, "Advanced", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddAdvanced(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Advanced", "Advanced");
+    AEGamebryoSetEnableStateOframe(false, "Advanced");
+
+    if(AEGamebryoHasAdvanced($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Advanced");
+        AEGamebryoAddAdvancedAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetAdvanced(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasAdvanced($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Advanced");
+        AEGamebryoAddAdvancedAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Advanced");
+    }
+}
+
+global proc AEGamebryoParticleCommon (string $nodeName) 
+{
+    editorTemplate -beginLayout "Gamebryo";
+        
+        editorTemplate -callCustom "AEGamebryoParticleAddAttributeButton" "AEGamebryoParticleResetAttributeButton" "Nothing";
+
+        editorTemplate -callCustom "AEGamebryoAddGeneral" "AEGamebryoResetGeneral" "Nothing";
+    
+        editorTemplate -callCustom "AEGamebryoAddVertexColor" "AEGamebryoResetVertexColor" "Nothing";
+
+        editorTemplate -callCustom "AEGamebryoAddSize" "AEGamebryoResetSize" "Nothing";
+        
+        editorTemplate -callCustom "AEGamebryoAddRotation" "AEGamebryoResetRotation" "Nothing";
+
+        editorTemplate -callCustom "AEGamebryoAddSpawning" "AEGamebryoResetSpawning" "Nothing";
+
+        editorTemplate -callCustom "AEGamebryoAddAdvanced" "AEGamebryoResetAdvanced" "Nothing";
+    editorTemplate -endLayout; 
+    
+    editorTemplate -suppress Ni_ParticleTargetParticle;
+    editorTemplate -suppress Ni_ParticlesInWorldSpace;
+    editorTemplate -suppress Ni_ZBufferProperty;
+    editorTemplate -suppress Ni_ParticleSkipBoundUpdate;
+    editorTemplate -suppress Ni_ParticleVertexColor;
+    editorTemplate -suppress Ni_ParticleVertexColorAlpha;
+    editorTemplate -suppress Ni_ParticleSizeVariance;
+    editorTemplate -suppress Ni_ParticleGrowFrames;
+    editorTemplate -suppress Ni_ParticleShrinkFrames;
+    editorTemplate -suppress Ni_ParticleRotateRandomAxis;
+    editorTemplate -suppress Ni_ParticleRotateAxisX;
+    editorTemplate -suppress Ni_ParticleRotateAxisY;
+    editorTemplate -suppress Ni_ParticleRotateAxisZ;
+    editorTemplate -suppress Ni_ParticleRotateSpeedDegrees;
+    editorTemplate -suppress Ni_ParticleRotationSpeedVarDegrees;
+    editorTemplate -suppress Ni_ParticleBiDirectionalRotation;
+    editorTemplate -suppress Ni_ParticleRotationInitialAngle;
+    editorTemplate -suppress Ni_ParticleRotationInitialAngleVar;
+    editorTemplate -suppress Ni_ParticleSpawnOnDeath;
+    editorTemplate -suppress Ni_ParticleNumGenerations;
+    editorTemplate -suppress Ni_ParticleMinNumToSpawn;
+    editorTemplate -suppress Ni_ParticleMaxNumToSpawn;
+    editorTemplate -suppress Ni_ParticlePercentageSpawned;
+    editorTemplate -suppress Ni_ParticleSpawnedSpread;
+    editorTemplate -suppress Ni_ParticleMeshFillPoolsOnLoad;
+    editorTemplate -suppress Ni_ParticleMeshDefaultPoolSize;    
+}
+
+

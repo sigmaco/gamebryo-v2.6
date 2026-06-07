@@ -1,0 +1,119 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+// 
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not
+// be copied or disclosed except in accordance with the terms of that
+// agreement.
+// 
+// Copyright (c) 1996-2008 Emergent Game Technologies.
+// All Rights Reserved.
+// 
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+//---------------------------------------------------------------------------
+// Phong Bump Textured
+// Per-pixel bump map using the Phong lighting model. This preset supports 
+// three point or spot lights. In addition, you will need to provide a 
+// texture map, a normal map as well as tangents stored at vertex colors to 
+// compute the bump map. Requires support for ARBVP and ARBFP profiles. 
+//--------------------------------------------------------------------------- 
+
+// Vertex shader -----------------------------
+
+struct v2f
+{
+	float4 	hpos      : HPOS;
+	float3	ldir1     : TEXCOORD0;
+	float3	ldir2     : TEXCOORD1;
+	float3	ldir3     : TEXCOORD2;
+	float3	hvec1     : TEXCOORD3;
+	float3	hvec2     : TEXCOORD4;
+	float3	hvec3	  : TEXCOORD5;
+	float3	tc0		  : TEXCOORD6;
+	float3	tc1		  : TEXCOORD7;
+	float3	in_normal : COLOR0; // JNP - added in case normal map = off
+};
+
+float3 	transform(float4x4 mat, float4 N, float4 T, float4 B, float3 vector)
+{
+	float4 outvec = float4(vector.x, vector.y, vector.z, 0);
+
+	vector = mul(mat, outvec);
+
+	outvec.x = dot(T.xyz, vector.xyz);
+	outvec.y = dot(B.xyz, vector.xyz);
+	outvec.z = dot(N.xyz, vector.xyz);
+	outvec.w = 1;
+	outvec = normalize(outvec);
+
+	return outvec;
+}
+
+
+v2f main
+(
+	float4	pos : POSITION,
+	float4	nrml : NORMAL,
+	float4	color : COLOR0,
+	float3	tc0 : TEXCOORD0,
+	float3	tc1 : TEXCOORD1,
+	float3	tc2 : TEXCOORD2,
+	float3	tc3 : TEXCOORD3,
+uniform	float4x4	mModelViewProj,
+uniform	float4x4	mModelViewIT,
+uniform	float4x4	mModelView,
+uniform	float4x4	mModelViewI,
+uniform	float4	silightposition_0,
+uniform	float4	silightposition_1,
+uniform	float4	silightposition_2
+)
+{
+	v2f OUT;
+
+	// transform in screen space
+	OUT.hpos = mul( mModelViewProj, pos);
+
+	// normal must be in eye space - JNP addition ***
+	OUT.in_normal = normalize(mul(mModelViewIT, nrml).xyz);
+
+	// create the basis
+	float4	N = nrml;
+	float4	T = (color  * 2) - 1;
+	float4	B = N.yzxw * T.zxyw;
+	B = (-T.yzxw * N.zxyw) + B;
+	
+	N = normalize(N);
+	T = normalize(T);
+	B = normalize(B);
+	
+	// position must be in eye space
+	float3 position =  mul(mModelView, pos);
+	
+	// compute the light directions
+	OUT.ldir1 = normalize(silightposition_0 - position);
+	OUT.ldir2 = normalize(silightposition_1 - position);
+	OUT.ldir3 = normalize(silightposition_2 - position);
+
+	// compute the half vectors
+	float3 eyetovert = normalize(-position);
+
+	OUT.hvec1 = normalize(eyetovert + OUT.ldir1);
+	OUT.hvec2 = normalize(eyetovert + OUT.ldir2);
+	OUT.hvec3 = normalize(eyetovert + OUT.ldir3);
+
+	// transform to tangent space
+	OUT.ldir1 = transform(mModelViewI,N,T,B,OUT.ldir1);
+	OUT.ldir2 = transform(mModelViewI,N,T,B,OUT.ldir2);
+	OUT.ldir3 = transform(mModelViewI,N,T,B,OUT.ldir3);
+
+	OUT.hvec1 = transform(mModelViewI,N,T,B,OUT.hvec1);
+	OUT.hvec2 = transform(mModelViewI,N,T,B,OUT.hvec2);
+	OUT.hvec3 = transform(mModelViewI,N,T,B,OUT.hvec3);
+
+
+	OUT.tc0 = tc0;
+	OUT.tc1 = tc1;
+
+	return OUT;
+}

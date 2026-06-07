@@ -1,0 +1,84 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+// 
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not
+// be copied or disclosed except in accordance with the terms of that
+// agreement.
+// 
+// Copyright (c) 1996-2008 Emergent Game Technologies.
+// All Rights Reserved.
+// 
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+float4 main
+(
+	float4 	hpos : HPOS,
+	float3	normal : TEXCOORD0,
+	float3	ldir1 : TEXCOORD1,
+	float3	ldir2 : TEXCOORD2,
+	float3	ldir3 : TEXCOORD3,
+	float3	hvec1 : TEXCOORD4,
+	float3	hvec2 : TEXCOORD5,
+	float3	hvec3 : TEXCOORD6,
+	float2	tc0    : TEXCOORD7;
+uniform	float4	silightdiffuse_0,
+uniform	float4	silightdiffuse_1,
+uniform	float4	silightdiffuse_2,
+uniform float3   cKa,
+uniform float3   cKd,
+uniform float3   cKs,
+uniform float3   cKe,
+uniform float    fShininess,
+uniform float    fAlpha,
+uniform	bool		bDiffusemap,
+uniform	sampler2D	diffusemap 
+) : COLOR
+{
+	float4	outcolor;
+
+	float4	Ambient  = float4( cKa.r, cKa.g, cKa.b, fAlpha );
+	float4	Diffuse  = float4( cKd.r, cKd.g, cKd.b, fAlpha );	
+	float4 	Specular = float4( cKs.r, cKs.g, cKs.b, fAlpha );
+
+	Diffuse += tex2D( diffusemap, tc0 );
+
+	normal = normalize(normal);
+	ldir1 = normalize(ldir1);
+	ldir2 = normalize(ldir2);
+	ldir3 = normalize(ldir3);
+
+	hvec1 = normalize(hvec1);
+	hvec2 = normalize(hvec2);
+	hvec3 = normalize(hvec3);
+
+	float dif1 = clamp(dot(normal, ldir1), 0, 1) * silightdiffuse_0;
+	float dif2 = clamp(dot(normal, ldir2), 0, 1) * silightdiffuse_1;
+	float dif3 = clamp(dot(normal, ldir3), 0, 1) * silightdiffuse_2;
+
+	float spec1 = clamp(dot(normal, hvec1), 0, 1);
+	float spec2 = clamp(dot(normal, hvec2), 0, 1);
+	float spec3 = clamp(dot(normal, hvec3), 0, 1);
+
+
+	Diffuse = Diffuse * 
+		((dif1 * silightdiffuse_0) + 
+		(dif2 * silightdiffuse_1) + 
+		(dif3 * silightdiffuse_2));
+
+	if(dif1 = 0) spec1 = 0; 
+	spec1 = pow(spec1, fShininess);
+	if(dif2 = 0) spec2 = 0; 
+	spec2 = pow(spec2, fShininess);
+	if(dif3 = 0) spec3 = 0; 
+	spec3 = pow(spec3, fShininess);
+
+	Specular  = Specular  * 
+		((spec1 * silightdiffuse_0) + 
+		(spec2 * silightdiffuse_1) + 
+		(spec3 * silightdiffuse_2));
+
+	outcolor  = Ambient + Diffuse +  Specular;
+
+	return outcolor;
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<xs:schema id="Menu" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Menu">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="MenuItem" type="MenuItemType"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- <xs:element name="MenuItem"> -->
+	<xs:complexType name="MenuItemType">		
+			<xs:choice>
+				<xs:element name="CustomMenu" type="xs:string" />
+				<xs:element name="Command" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="MenuItem" type="MenuItemType" minOccurs="0" 
+					maxOccurs="unbounded" />
+			</xs:choice>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+	<!-- </xs:element> -->
+</xs:schema>

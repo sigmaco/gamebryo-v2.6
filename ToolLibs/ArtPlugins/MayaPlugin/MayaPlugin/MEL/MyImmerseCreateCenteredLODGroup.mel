@@ -1,0 +1,108 @@
+//
+// MyImmerseCenterLODGroups.mel
+//
+// Mel script for applying adjusting the center of LOD nodes to be 
+// the average of it's children
+//
+
+global proc MyImmerseCreateCenteredLODGroup()
+{
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    // Check to see if we have some objects selected
+    if(size($dagnodes) <= 0)
+    {
+        print ("Error: No Objects Selected\n");
+        return;
+    }
+
+    // Create the Level Of Detail group
+    LevelOfDetailGroup;
+
+    // Add the Screen LOD values
+    addAttr -ln Ni_Use_ScreenLOD -at bool -dv false;
+    addAttr -ln "Ni_ScreenLOD_1" -at "float" -dv 0.5;
+    addAttr -ln "Ni_ScreenLOD_2" -at "float" -dv 0.25;
+    addAttr -ln "Ni_ScreenLOD_3" -at "float" -dv 0.125;
+    addAttr -ln "Ni_ScreenLOD_4" -at "float" -dv -1;
+    addAttr -ln "Ni_ScreenLOD_5" -at "float" -dv -1;
+    addAttr -ln "Ni_ScreenLOD_6" -at "float" -dv -1;
+    addAttr -ln "Ni_ScreenLOD_7" -at "float" -dv -1;
+    addAttr -ln "Ni_ScreenLOD_8" -at "float" -dv -1;
+    addAttr -ln "Ni_ScreenLOD_9" -at "float" -dv -1;
+    addAttr -ln "Ni_ScreenLOD_10" -at "float" -dv -1;
+
+
+    // After Calling LOD the selected object will be the new LOD
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+    string $sLODGroup = $dagnodes[0];
+
+    //Debug:: print ($sLODGroup + "\n");
+
+    select -r $sLODGroup;
+
+    // Find all of the children of the LOD
+    string $sChildren[] = `listRelatives -c -f $sLODGroup`;
+   
+    // Find the Average Translate or Center Point of the Children
+    float $fX = 0;
+    float $fY = 0;
+    float $fZ = 0;
+    int $iChildLoop = 0;
+    string $sAttrX = $sChildren[$iChildLoop] + ".translateX";
+    string $sAttrY = $sChildren[$iChildLoop] + ".translateY";
+    string $sAttrZ = $sChildren[$iChildLoop] + ".translateZ";
+
+    while($iChildLoop < size($sChildren))
+    {
+        //Debug:: print ($sChildren[$iChildLoop] + "\n");
+
+        $sAttrX = $sChildren[$iChildLoop] + ".translateX";
+        $sAttrY = $sChildren[$iChildLoop] + ".translateY";
+        $sAttrZ = $sChildren[$iChildLoop] + ".translateZ";
+
+        $fX = $fX + `getAttr $sAttrX`;
+        $fY = $fY + `getAttr $sAttrY`;
+        $fZ = $fZ + `getAttr $sAttrZ`;
+        $iChildLoop = $iChildLoop + 1;
+    }
+    $fX = $fX / size($sChildren);
+    $fY = $fY / size($sChildren);
+    $fZ = $fZ / size($sChildren);
+
+    // Adjust the LOD Group to the center
+    $sAttrX = $sLODGroup + ".translateX";
+    $sAttrY = $sLODGroup + ".translateY";
+    $sAttrZ = $sLODGroup + ".translateZ";
+    float $fLODX = $fX + `getAttr $sAttrX`;
+    float $fLODY = $fY + `getAttr $sAttrY`;
+    float $fLODZ = $fZ + `getAttr $sAttrZ`;
+
+    setAttr $sAttrX $fLODX;
+    setAttr $sAttrY $fLODY;
+    setAttr $sAttrZ $fLODZ;
+
+    // Adjust each Child by the New Center
+    $iChildLoop = 0;
+    while($iChildLoop < size($sChildren))
+    {
+        //Debug:: print ($sChildren[$iChildLoop] + "\n");
+        $sAttrX = $sChildren[$iChildLoop] + ".translateX";
+        $sAttrY = $sChildren[$iChildLoop] + ".translateY";
+        $sAttrZ = $sChildren[$iChildLoop] + ".translateZ";
+
+        float $fCX = `getAttr $sAttrX` - $fX;
+        float $fCY = `getAttr $sAttrY` - $fY;
+        float $fCZ = `getAttr $sAttrZ` - $fZ;
+
+        setAttr $sAttrX $fCX;
+        setAttr $sAttrY $fCY;
+        setAttr $sAttrZ $fCZ;
+
+        $iChildLoop = $iChildLoop + 1;
+    }
+
+}

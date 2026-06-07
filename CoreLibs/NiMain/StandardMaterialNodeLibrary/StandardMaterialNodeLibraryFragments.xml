@@ -1,0 +1,2627 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<library version="2">
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="TransformNormal">
+    <desc>
+    This fragment is responsible for applying the world transform to the
+    normal.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Normal" label="Local" 
+            variable="Normal" />
+        <resource type="float4x4" semantic="WorldMatrix" label="" 
+            variable="World" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNrm" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    // Transform the normal into world space for lighting
+    WorldNrm = mul( Normal, (float3x3)World );
+
+    // Should not need to normalize here since we will normalize in the pixel 
+    // shader due to linear interpolation across triangle not preserving
+    // normality.
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="TransformNBT">
+    <desc>
+    This fragment is responsible for applying the world transform to the
+    normal, binormal, and tangent.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Normal" label="Local" 
+            variable="Normal" />
+        <resource type="float3" semantic="Binormal" label="Local"
+            variable="Binormal" />
+        <resource type="float3" semantic="Tangent" label="Local" 
+            variable="Tangent" />
+        <resource type="float4x4" semantic="WorldMatrix" label="" 
+            variable="World" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNrm" />
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldBinormal" />
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldTangent" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    // Transform the normal into world space for lighting
+    WorldNrm      = mul( Normal, (float3x3)World );
+    WorldBinormal = mul( Binormal, (float3x3)World );
+    WorldTangent  = mul( Tangent, (float3x3)World );
+    
+    // Should not need to normalize here since we will normalize in the pixel 
+    // shader due to linear interpolation across triangle not preserving
+    // normality.
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="TransformPosition">
+    <desc>
+    This fragment is responsible for applying the view projection transform
+    to the input position. Additionally, this fragment applies the world 
+    transform to the input position. 
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Position" label="Local" 
+            variable="Position" />
+        <resource type="float4x4" semantic="WorldMatrix" label="" 
+            variable="World" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    // Transform the position into world space for lighting, and projected 
+    // space for display
+    WorldPos = mul( float4(Position, 1.0f), World );
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="WorldToTangent">
+    <desc>
+    This fragment is responsible for transforming a vector from world space
+    to tangent space.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="World" 
+            variable="VectorIn" />
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNormalIn" />
+        <resource type="float3" semantic="Binormal" label="World" 
+            variable="WorldBinormalIn" />
+        <resource type="float3" semantic="Tangent" label="World" 
+            variable="WorldTangentIn" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="Tangent" 
+            variable="VectorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    float3x3 xForm = float3x3(WorldTangentIn, WorldBinormalIn, WorldNormalIn);
+    VectorOut = mul(xForm, VectorIn.xyz);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="TransformSkinnedPosition">
+    <desc>
+    This fragment is responsible for applying the view projection and skinning 
+    transform to the input position. Additionally, this fragment applies the 
+    computed world transform to the input position. The weighted world 
+    transform defined by the blendweights is output for use in normals or
+    other calculations as the new world matrix.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Position" label="Local" 
+            variable="Position" />
+        <resource type="int4" semantic="BlendIndices" label="" 
+            variable="BlendIndices" />
+        <resource type="float3" semantic="BlendWeight" label="Local" 
+            variable="BlendWeights" />
+        <resource type="BONEMATRIX_TYPE" count="30" semantic="SkinBoneMatrix" 
+            label="World" variable="Bones" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+        <resource type="float4x4" semantic="WorldMatrix" label="" 
+            variable="SkinBoneTransform" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    // TransformSkinnedPosition *********************************************
+    // Transform the skinned position into world space
+    // Composite the skinning transform which will take the vertex
+    // and normal to world space.
+    float fWeight3 = 1.0 - BlendWeights[0] - BlendWeights[1] - BlendWeights[2];
+    BONEMATRIX_TYPE ShortSkinBoneTransform;
+    ShortSkinBoneTransform  = Bones[BlendIndices[0]] * BlendWeights[0];
+    ShortSkinBoneTransform += Bones[BlendIndices[1]] * BlendWeights[1];
+    ShortSkinBoneTransform += Bones[BlendIndices[2]] * BlendWeights[2];
+    ShortSkinBoneTransform += Bones[BlendIndices[3]] * fWeight3;
+    SkinBoneTransform = float4x4(ShortSkinBoneTransform[0], 0.0f, 
+        ShortSkinBoneTransform[1], 0.0f, 
+        ShortSkinBoneTransform[2], 0.0f, 
+        ShortSkinBoneTransform[3], 1.0f);
+
+    // Transform into world space.
+    WorldPos.xyz = mul(float4(Position, 1.0), ShortSkinBoneTransform);
+    WorldPos.w = 1.0f;
+    </code>
+    <code lang="Cg" platform="PS3" 
+        target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+      // TransformSkinnedPosition *********************************************
+      // Transform the skinned position into world space
+      // Composite the skinning transform which will take the vertex
+      // and normal to world space.
+      float fWeight3 = 1.0 - BlendWeights[0] - BlendWeights[1] - BlendWeights[2];
+      BONEMATRIX_TYPE ShortSkinBoneTransform;
+      ShortSkinBoneTransform  = Bones[BlendIndices[0]] * BlendWeights[0];
+      ShortSkinBoneTransform += Bones[BlendIndices[1]] * BlendWeights[1];
+      ShortSkinBoneTransform += Bones[BlendIndices[2]] * BlendWeights[2];
+      ShortSkinBoneTransform += Bones[BlendIndices[3]] * fWeight3;
+      SkinBoneTransform = transpose(float4x4(ShortSkinBoneTransform[0],
+      ShortSkinBoneTransform[1],
+      ShortSkinBoneTransform[2],
+      float4(0.0f, 0.0f, 0.0f, 1.0f)));
+
+      // Transform into world space.
+      WorldPos.xyz = mul(ShortSkinBoneTransform, float4(Position, 1.0));
+      WorldPos.w = 1.0f;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="ProjectPositionWorldToProj">
+    <desc>
+    This fragment is responsible for applying the view projection transform
+    to the input world position.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+        variable="WorldPosition" />
+        <resource type="float4x4" semantic="ViewProjMatrix" label="" 
+        variable="ViewProjection" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Position" label="Proj" 
+        variable="ProjPos" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    ProjPos = mul(WorldPosition, ViewProjection);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="ProjectPositionWorldToViewToProj">
+    <desc>
+    This fragment is responsible for applying the view projection transform
+    to the input world position.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+        variable="WorldPosition" />
+        <resource type="float4x4" semantic="ViewMatrix" label="" 
+        variable="ViewTransform" />
+        <resource type="float4x4" semantic="ProjMatrix" label="" 
+        variable="ProjTransform" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Position" label="View" 
+        variable="ViewPos" />
+        <resource type="float4" semantic="Position" label="Proj" 
+        variable="ProjPos" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    ViewPos = mul(WorldPosition, ViewTransform);
+    ProjPos = mul(ViewPos, ProjTransform);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="9thOrderSphericalHarmonicLighting">
+    <desc>
+    This fragment is responsible for generating the diffuse 
+    lighting environment as compressed in spherical harmonics.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNormal" />
+        <resource type="float3" semantic="SHCoefficients" label=""
+            variable="SHCoefficients" count="9" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="DiffuseColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    DiffuseColorOut  = SHCoefficients[0];
+    DiffuseColorOut += SHCoefficients[1] * WorldNormal.x;
+    DiffuseColorOut += SHCoefficients[2] * WorldNormal.y;
+    DiffuseColorOut += SHCoefficients[3] * WorldNormal.z;
+    DiffuseColorOut += SHCoefficients[4] * WorldNormal.x * WorldNormal.z;
+    DiffuseColorOut += SHCoefficients[5] * WorldNormal.y * WorldNormal.z;
+    DiffuseColorOut += SHCoefficients[6] * WorldNormal.x * WorldNormal.y;
+    DiffuseColorOut += SHCoefficients[7] * 
+        (3.0 * WorldNormal.z * WorldNormal.z  - 1.0);
+    DiffuseColorOut += SHCoefficients[8] * 
+        (WorldNormal.x * WorldNormal.x  - WorldNormal.y * WorldNormal.y);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="CalculateNormalFromColor">
+    <desc>
+    This fragment is responsible for sampling a normal map to generate the
+    new world-space normal.
+    
+    The normal map type is an enumerated value that indicates the following:
+        0 - Standard (rgb = normal/binormal/tangent)
+        1 - DXN (rg = normal.xy need to calculate z)
+        2 - DXT5 (ag = normal.xy need to calculate z)
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="NormalMap" />
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNormalIn" />
+        <resource type="float3" semantic="Binormal" label="World" 
+            variable="WorldBinormalIn" />
+        <resource type="float3" semantic="Tangent" label="World" 
+            variable="WorldTangentIn" />
+        <resource type="int" semantic="NormalMapType" label=""
+            variable="NormalMapType" default="(0)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNormalOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    
+    NormalMap = NormalMap * 2.0 - 1.0;
+    
+    // Do nothing extra for Standard
+    // Handle compressed types:
+    if (NormalMapType == 1) // DXN
+    {
+        NormalMap.rgb = float3(NormalMap.r, NormalMap.g, 
+            sqrt(1 - NormalMap.r * NormalMap.r - NormalMap.g * NormalMap.g));
+    }
+    else if (NormalMapType == 2) // DXT5
+    {
+        NormalMap.rg = NormalMap.ag;
+        NormalMap.b = sqrt(1 - NormalMap.r*NormalMap.r -  
+            NormalMap.g * NormalMap.g);
+    }
+       
+    float3x3 xForm = float3x3(WorldTangentIn, WorldBinormalIn, WorldNormalIn);
+    xForm = transpose(xForm);
+    WorldNormalOut = mul(xForm, NormalMap.rgb);
+    
+    WorldNormalOut = normalize(WorldNormalOut);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="CalculateParallaxOffset">
+    <desc>
+    This fragment is responsible for calculating the UV offset to apply
+    as a result of a parallax map.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="float2" semantic="Color" label="" 
+            variable="Height" />
+        <resource type="float" semantic="ParallaxOffsetScale" label=""
+            variable="OffsetScale" default="(0.05)"/>
+        <resource type="float3" semantic="ViewVector" label="Tangent"
+            variable="TangentSpaceEyeVec" default="(1.0, 0.0, 0.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="ParallaxOffsetUV" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    // Calculate offset scaling constant bias.
+    float2 Bias = float2(OffsetScale, OffsetScale) * -0.5;
+
+    // Calculate offset
+    float2 Offset = Height.rg * OffsetScale + Bias;
+
+    // Get texcoord.
+    ParallaxOffsetUV = TexCoord + Offset * TangentSpaceEyeVec.xy;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="CalculateBumpOffset">
+    <desc>
+    This fragment is responsible for calculating the UV offset to apply
+    as a result of a bump map.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="Color" label="" 
+            variable="DuDv" />
+        <resource type="float4" semantic="BumpMatrix" label="" 
+            variable="BumpMatrix" default="(1.0, 1.0, 1.0, 1.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="UVSet" label="" 
+            variable="BumpOffset" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    BumpOffset.x = DuDv.x * BumpMatrix[0] + DuDv.y * BumpMatrix[2];
+    BumpOffset.y = DuDv.x * BumpMatrix[1] + DuDv.y * BumpMatrix[3];
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="OffsetUVFloat2">
+    <desc>
+    This fragment is responsible for applying a UV offset to a texture
+    coordinate set.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoordIn" />
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoordOffset" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="UVSet" label="" 
+            variable="TexCoordOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    TexCoordOut = TexCoordIn + TexCoordOffset;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="OffsetUVFloat3">
+    <desc>
+    This fragment is responsible for applying a UV offset to a texture
+    coordinate set.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="TexCoord" label="" 
+            variable="TexCoordIn" />
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoordOffset" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="UVSet" label="" 
+            variable="TexCoordOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    TexCoordOut = TexCoordIn + float3(TexCoordOffset.x, TexCoordOffset.y, 0.0);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="OffsetUVFloat4">
+    <desc>
+    This fragment is responsible for applying a UV offset to a texture
+    coordinate set.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="TexCoord" label="" 
+            variable="TexCoordIn" />
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoordOffset" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="UVSet" label="" 
+            variable="TexCoordOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    TexCoordOut = TexCoordIn + 
+        float4(TexCoordOffset.x, TexCoordOffset.y, 0.0, 0.0);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="TexTransformApply">
+    <desc>
+    This fragment is responsible for applying a transform to the input set
+    of texture coordinates.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="float4x4" semantic="TexTransform" label="" 
+            variable="TexTransform" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoordOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    
+    TexCoordOut = mul(float4(TexCoord.x, TexCoord.y, 0.0, 1.0), TexTransform);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="ProjectTextureCoordinates">
+    <desc>
+    This fragment is responsible for applying a projection to the input set
+    of texture coordinates.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="float4x4" semantic="TexTransform" label="" 
+            variable="TexTransform" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="TexCoord" label="" 
+            variable="TexCoordOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+  
+    TexCoordOut = mul(float4(TexCoord, 1.0), TexTransform);
+    
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="TextureRGBSample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="sampler2D" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(true)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    ColorOut.rgb = tex2D(Sampler, TexCoord).rgb;
+    if (Saturate)
+    {
+        ColorOut.rgb = saturate(ColorOut.rgb);
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="TextureRGBASample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value and an A value.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="sampler2D" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(true)" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    ColorOut = tex2D(Sampler, TexCoord);
+    if (Saturate)
+    {
+        ColorOut = saturate(ColorOut);
+    }
+    </code>
+</fragment>
+
+<!--========================================================================-->
+<fragment type="Pixel" name="TextureRGBProjectSample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value and an A value.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="sampler2D" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(true)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    float4 ProjTexCoord = TexCoord.xyzz;
+    ColorOut.rgb = tex2Dproj(Sampler, ProjTexCoord).rgb;
+    if (Saturate)
+    {
+        ColorOut.rgb = saturate(ColorOut.rgb);
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="TextureRGBCubeSample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="samplerCUBE" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(true)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    ColorOut.rgb = texCUBE(Sampler, TexCoord).rgb;
+    if (Saturate)
+    {
+        ColorOut.rgb = saturate(ColorOut.rgb);
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="CalculateFog">
+    <desc>
+    This fragment is responsible for handling fogging calculations.
+    FogType can be one of 4 values:
+    
+        NONE   - 0
+        EXP    - 1
+        EXP2   - 2
+        LINEAR - 3
+    </desc>
+    <inputs>
+        <resource type="int" semantic="FogType" label="" 
+            variable="FogType" />
+        <resource type="float" semantic="FogDensity" label="" 
+            variable="FogDensity" default="(1.0)"/>
+        <resource type="float4" semantic="Position" label="View" 
+            variable="ViewPosition" default="(0.0, 0.0, 0.0)"/>
+        <resource type="bool" semantic="FogRange" label=""
+            variable="FogRange" default="(false)"/>
+        <resource type="float2" semantic="FogStartEnd" label=""
+            variable="FogStartEnd" default="(0.0, 1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Fog" label="" variable="FogOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    float d;
+    if (FogRange)
+    {
+        d = length(ViewPosition);
+    }
+    else
+    {
+        d = ViewPosition.z;
+    }
+    
+    if (FogType == 0) // NONE
+    {
+        FogOut = 1.0;
+    }
+    else if (FogType == 1) // EXP
+    {
+        FogOut = 1.0 / exp( d * FogDensity);
+    }
+    else if (FogType == 2) // EXP2
+    {
+        FogOut = 1.0 / exp( pow( d * FogDensity, 2));
+    }
+    else if (FogType == 3) // LINEAR
+    {
+        FogOut = saturate( (FogStartEnd.y - d) / 
+            (FogStartEnd.y - FogStartEnd.x));
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="WorldReflect">
+    <desc>
+    This fragment is responsible for computing the reflection vector.
+    The WorldViewVector is negated because the HLSL "reflect" function
+    expects a world-to-camera vector, rather than a camera-to-world vector.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNrm" />
+        <resource type="float3" semantic="ViewVector" label="World" 
+            variable="WorldViewVector" />
+        <resource type="bool" semantic="NormalizeNormal" label="" 
+            variable="NormalizeNormal" default="(true)"/>
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="WorldReflect" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    if (NormalizeNormal)
+        WorldNrm = normalize(WorldNrm);
+    WorldReflect = reflect(-WorldViewVector, WorldNrm);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="CalculateViewVector">
+    <desc>
+    This fragment is responsible for calculating the camera view vector.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+        <resource type="float3" semantic="CameraPosition" label="World" 
+            variable="CameraPos" default="(0.0, 0.0, 0.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="ViewVector" label="World" 
+            variable="WorldViewVector"/>
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    WorldViewVector = CameraPos - WorldPos;
+    </code>
+</fragment>   
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="ClippingPlaneTest">
+    <desc>
+    This fragment is responsible for calculating whether or not the current
+    position is on the positive or negative side of a clipping plane. If the
+    point is on the positive side, the return value will be 1.0. If the value 
+    is on the negative side, the return value will be 0.0. If the point is on
+    the plane, the return value will be 0.0. If InvertClip is true, then the
+    fragment returns the opposite of the above.
+    
+    A plane is assumed to be the points X satisfying the expression:
+        X * normal = plane_constant
+        
+    The WorldClipPlane must match the form of NiPlane, which is of the form:
+        (normal.x, normal.y, normal.z, plane_constant)
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+        <resource type="float4" semantic="ClippingPlane" label="World" 
+            variable="WorldClipPlane" default="(1.0, 0.0, 0.0, 0.0)" />
+        <resource type="bool" semantic="InvertClip" label="" 
+            variable="InvertClip" default="(false)"/>
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Scale" label="World" 
+            variable="Scalar"/>
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">       
+    float fDistance = dot(WorldClipPlane.xyz, WorldPos.xyz) - WorldClipPlane.w;
+    if (InvertClip)
+        Scalar = fDistance &gt; 0.0 ? 0.0 : 1.0;
+    else
+        Scalar = fDistance &gt; 0.0 ? 1.0 : 0.0;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="Light">
+    <desc>
+    This fragment is responsible for accumulating the effect of a light
+    on the current pixel.
+    
+    LightType can be one of three values:
+        0 - Directional
+        1 - Point 
+        2 - Spot
+        
+    Note that the LightType must be a compile-time variable,
+    not a runtime constant/uniform variable on most Shader Model 2.0 cards.
+    
+    The compiler will optimize out any constants that aren't used.
+    
+    Attenuation is defined as (const, linear, quad, range).
+    Range is not implemented at this time.
+    
+    SpotAttenuation is stored as (cos(theta/2), cos(phi/2), falloff)
+    theta is the angle of the inner cone and phi is the angle of the outer
+    cone in the traditional DX manner. Gamebryo only allows setting of
+    phi, so cos(theta/2) will typically be cos(0) or 1. To disable spot
+    effects entirely, set cos(theta/2) and cos(phi/2) to -1 or lower.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNrm" />
+        <resource type="int" semantic="LightType" label="" 
+            variable="LightType" default="(0)"/>
+        <resource type="bool" semantic="Specularity" label="" 
+            variable="SpecularEnable" default="(false)"/>
+        <resource type="float" semantic="Shadow" label="" 
+            variable="Shadow" default="(1.0)"/>
+        <resource type="float3" semantic="ViewVector" label="World" 
+            variable="WorldViewVector" default="(0.0, 0.0, 0.0)"/>
+        <resource type="float4" semantic="LightPos" label="World" 
+            variable="LightPos" default="(0.0, 0.0, 0.0, 0.0)" />
+        <resource type="float3" semantic="LightAmbient" label="" 
+            variable="LightAmbient" default="(1.0, 1.0, 1.0)"/>
+        <resource type="float3" semantic="LightDiffuse" label="" 
+            variable="LightDiffuse" default="(1.0, 1.0, 1.0)"/>
+        <resource type="float3" semantic="LightSpecular" label="" 
+            variable="LightSpecular" default="(1.0, 1.0, 1.0)"/>
+        <resource type="float3" semantic="LightAttenuation" label="" 
+            variable="LightAttenuation" default="(0.0, 1.0, 0.0)"/>
+        <resource type="float3" semantic="LightSpotAttenuation" label="" 
+            variable="LightSpotAttenuation" default="(-1.0, -1.0, 0.0)"/>
+        <resource type="float3" semantic="LightDirection" label="" 
+            variable="LightDirection" default="(1.0, 0.0, 0.0)"/>
+        <resource type="float4" semantic="Color" label="Specular" 
+            variable="SpecularPower" default="(1.0, 1.0, 1.0, 1.0)"/>
+        <resource type="float3" semantic="Color" label="Ambient" 
+            variable="AmbientAccum" default="(0.0, 0.0, 0.0)"/>
+        <resource type="float3" semantic="Color" label="Diffuse" 
+            variable="DiffuseAccum" default="(0.0, 0.0, 0.0)"/>
+        <resource type="float3" semantic="Color" label="Specular" 
+            variable="SpecularAccum" default="(0.0, 0.0, 0.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="Ambient" 
+            variable="AmbientAccumOut" />
+        <resource type="float3" semantic="Color" label="Diffuse" 
+            variable="DiffuseAccumOut" />
+        <resource type="float3" semantic="Color" label="Specular" 
+            variable="SpecularAccumOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">   
+    // Get the world space light vector.
+    float3 LightVector;
+    float DistanceToLight;
+    float DistanceToLightSquared;
+        
+    if (LightType == 0)
+    {
+        LightVector = -LightDirection;
+    }
+    else
+    {
+        LightVector = LightPos - WorldPos;
+        DistanceToLightSquared = dot(LightVector, LightVector);
+        DistanceToLight = length(LightVector);
+        LightVector = normalize(LightVector);
+    }
+    
+    // Take N dot L as intensity.
+    float LightNDotL = dot(LightVector, WorldNrm);
+    float LightIntensity = max(0, LightNDotL);
+
+    float Attenuate = Shadow;
+    
+    if (LightType != 0)
+    {
+        // Attenuate Here
+        Attenuate = LightAttenuation.x +
+            LightAttenuation.y * DistanceToLight +
+            LightAttenuation.z * DistanceToLightSquared;
+        Attenuate = max(1.0, Attenuate);
+        Attenuate = 1.0 / Attenuate;
+        Attenuate *= Shadow;
+
+        if (LightType == 2)
+        {
+            // Get intensity as cosine of light vector and direction.
+            float CosAlpha = dot(-LightVector, LightDirection);
+
+            // Factor in inner and outer cone angles.
+            float AttenDiff = LightSpotAttenuation.x - LightSpotAttenuation.y;
+            CosAlpha = saturate((CosAlpha - LightSpotAttenuation.y) / 
+                AttenDiff);
+
+            // Power to falloff.
+            // The pow() here can create a NaN if CosAlpha is 0 or less.
+            // On some cards (GeForce 6800), the NaN will propagate through
+            // a ternary instruction, so we need two to be safe.
+            float origCosAlpha = CosAlpha;
+            CosAlpha = origCosAlpha &lt;= 0.0 ? 1.0 : CosAlpha;
+            CosAlpha = pow(CosAlpha, LightSpotAttenuation.z);
+            CosAlpha = origCosAlpha &lt;= 0.0 ? 0.0 : CosAlpha;
+
+            // Multiply the spot attenuation into the overall attenuation.
+            Attenuate *= CosAlpha;
+        }
+    }
+    // Determine the interaction of diffuse color of light and material.
+    // Scale by the attenuated intensity.
+    DiffuseAccumOut = DiffuseAccum;
+    DiffuseAccumOut.rgb += LightDiffuse.rgb * LightIntensity * Attenuate;
+
+    // Determine ambient contribution - Is affected by shadow
+    AmbientAccumOut = AmbientAccum;
+    AmbientAccumOut.rgb += LightAmbient.rgb * Attenuate;
+
+    SpecularAccumOut = SpecularAccum;
+    if (SpecularEnable)
+    {
+        // Get the half vector.
+        float3 LightHalfVector = LightVector + WorldViewVector;
+        LightHalfVector = normalize(LightHalfVector);
+
+        // Determine specular intensity.
+        float LightNDotH = max(0, dot(WorldNrm, LightHalfVector));
+        float LightSpecIntensity = pow(LightNDotH, SpecularPower.x);
+        
+        //if (LightNDotL &lt; 0.0)
+        //	LightSpecIntensity = 0.0;
+        // Must use the code below rather than code above.
+        // Using previous lines will cause the compiler to generate incorrect
+        // output.
+        float SpecularMultiplier = LightNDotL &gt; 0.0 ? 1.0 : 0.0;
+        
+        // Attenuate Here
+        LightSpecIntensity = LightSpecIntensity * Attenuate * 
+            SpecularMultiplier;
+        
+        // Determine the interaction of specular color of light and material.
+        // Scale by the attenuated intensity.
+        SpecularAccumOut.rgb += LightSpecIntensity * LightSpecular;
+    }       
+
+    
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="ApplyFog">
+    <desc>
+    This fragment is responsible for applying the fog based on the 
+    calculations in the vertex shader.
+    
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="UnfoggedColor" default="(0.0, 0.0, 0.0)" />
+        <resource type="float3" semantic="Color" label="" 
+            variable="FogColor" default="(0.0, 0.0, 0.0)"/>
+        <resource type="float" semantic="Fog" label="" 
+            variable="FogAmount" default="(1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="FoggedColor" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    FoggedColor = lerp(FogColor, UnfoggedColor, FogAmount);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex" name="ApplyAlphaTest">
+    <desc>
+    This fragment is responsible for alpha testing based on the alpha
+    reference value and alpha test function.
+    </desc>
+    <inputs>
+        <resource type="float" semantic="Alpha" label="" 
+            variable="AlphaTestValue" default="(1.0)" />
+        <resource type="float3" semantic="Function" label="" 
+            variable="AlphaTestFunction" default="(0.0, 0.0, 0.0)"/>
+        <resource type="float" semantic="Fog" label="" 
+            variable="AlphaTestRef" default="(0.0)"/>
+    </inputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    // These tests will evaluate to less than 0 if they are true.
+    float fLessTest = (AlphaTestValue - AlphaTestRef);
+    float fGreaterTest = -fLessTest;
+    float fEqualTest = 0.0;
+    if (fLessTest == 0.0)
+        fEqualTest = -1.0;
+
+    // Clip if AlphaTestValue &lt; AlphaTestRef for:
+    //  TEST_LESS 
+    //  TEST_EQUAL 
+    //  TEST_LESSEQUAL 
+    clip(fGreaterTest * AlphaTestFunction.x);
+    
+    // Clip if AlphaTestValue &gt; AlphaTestRef for:
+    //  TEST_EQUAL 
+    //  TEST_GREATER 
+    //  TEST_GREATEREQUAL 
+    clip(fLessTest * AlphaTestFunction.y);
+    
+    // Clip if AlphaTestValue == AlphaTestRef for:
+    //  TEST_LESS 
+    //  TEST_GREATER 
+    //  TEST_NOTEQUAL 
+    clip(fEqualTest * AlphaTestFunction.z);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="ComputeShadingCoefficients">
+    <desc>
+    This fragment is responsible for computing the coefficients for the 
+    following equations:
+    
+    Kdiffuse = MatEmissive + 
+        MatAmbient * Summation(0...N){LightAmbientContribution[N]} + 
+        MatDiffuse * Summation(0..N){LightDiffuseContribution[N]}
+        
+    Kspecular = MatSpecular * Summation(0..N){LightSpecularContribution[N]}
+    
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="MatEmissive" default="(0.0, 0.0, 0.0)" />
+        <resource type="float3" semantic="Color" label="" 
+            variable="MatDiffuse" default="(0.0, 0.0, 0.0)" />
+        <resource type="float3" semantic="Color" label="" 
+            variable="MatAmbient" default="(0.0, 0.0, 0.0)" />
+        <resource type="float3" semantic="Color" label="" 
+            variable="MatSpecular" default="(0.0, 0.0, 0.0)" />
+        <resource type="float3" semantic="Color" label="" 
+            variable="LightSpecularAccum" default="(0.0, 0.0, 0.0)" />
+        <resource type="float3" semantic="Color" label="" 
+            variable="LightDiffuseAccum" default="(0.0, 0.0, 0.0)" />
+        <resource type="float3" semantic="Color" label="" 
+            variable="LightAmbientAccum" default="(0.0, 0.0, 0.0)" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(true)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="Diffuse" />
+        <resource type="float3" semantic="Color" label="" 
+            variable="Specular" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Diffuse = MatEmissive + MatAmbient * LightAmbientAccum + 
+        MatDiffuse * LightDiffuseAccum;
+    Specular = MatSpecular * LightSpecularAccum;
+    
+    if (Saturate)
+    {
+        Diffuse = saturate(Diffuse);
+        Specular = saturate(Specular);
+    }
+    </code>
+</fragment>
+
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SplitColorAndOpacity">
+    <desc>
+    Separate a float4 into a float3 and a float.   
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="ColorAndOpacity" default="(1.0, 1.0, 1.0, 1.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="Color" />
+        <resource type="float" semantic="Opacity" label="" 
+            variable="Opacity" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Color.rgb = ColorAndOpacity.rgb;
+    Opacity = ColorAndOpacity.a;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SplitRGBA">
+    <desc>
+    Separate a float4 into 4 floats.   
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="ColorAndOpacity" default="(1.0, 1.0, 1.0, 1.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Red" />
+        <resource type="float" semantic="" label="" 
+            variable="Green" />
+        <resource type="float" semantic="" label="" 
+            variable="Blue" />
+        <resource type="float" semantic="Opacity" label="" 
+            variable="Alpha" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Red = ColorAndOpacity.r;
+    Green = ColorAndOpacity.g;
+    Blue = ColorAndOpacity.b;
+    Alpha = ColorAndOpacity.a;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="CompositeFinalRGBColor">
+    <desc>
+    This fragment is responsible for computing the final RGB color.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="DiffuseColor" default="(0.0, 0.0, 0.0)" />
+        <resource type="float3" semantic="Color" label="" 
+            variable="SpecularColor" default="(0.0, 0.0, 0.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="OutputColor" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    OutputColor.rgb = DiffuseColor.rgb + SpecularColor.rgb;
+    </code>
+</fragment>
+
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="CompositeFinalRGBAColor">
+    <desc>
+    This fragment is responsible for computing the final RGBA color.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="FinalColor" default="(0.0, 0.0, 0.0)" />
+        <resource type="float" semantic="Color" label="" 
+            variable="FinalOpacity" default="(1.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="OutputColor" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    OutputColor.rgb = FinalColor.rgb;
+    OutputColor.a = saturate(FinalOpacity);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="AddFloat4">
+    <desc>
+    This fragment is responsible for adding two float4's. 
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+        <resource type="float4" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 + V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="AddFloat3">
+    <desc>
+    This fragment is responsible for adding two float3's. 
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+        <resource type="float3" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 + V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="AddFloat2">
+    <desc>
+    This fragment is responsible for adding two float2's. 
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+        <resource type="float2" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 + V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="AddFloat">
+    <desc>
+    This fragment is responsible for adding two floats. 
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 + V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="MultiplyFloat4">
+    <desc>
+    This fragment is responsible for multiplying two float4's. 
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+        <resource type="float4" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 * V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="MultiplyFloat3">
+    <desc>
+    This fragment is responsible for multiplying two float3's. 
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+        <resource type="float3" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 * V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="MultiplyFloat2">
+    <desc>
+    This fragment is responsible for multiplying two float2's. 
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+        <resource type="float2" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 * V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="MultiplyFloat">
+    <desc>
+    This fragment is responsible for multiplying two floats. 
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 * V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="ScaleFloat4">
+    <desc>
+    This fragment is responsible for scaling a float4 by a constant. 
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="Scale" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = Scale * V1;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="ScaleFloat3">
+    <desc>    
+    This fragment is responsible for scaling a float3 by a constant. 
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="Scale" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = Scale * V1;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="ScaleFloat2">
+    <desc>
+    This fragment is responsible for scaling a float2 by a constant. 
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="Scale" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = Scale * V1;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SaturateFloat4">
+    <desc>
+    This fragment is responsible for saturating a float4. 
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = saturate(V1);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SaturateFloat3">
+    <desc>
+    This fragment is responsible for saturating a float3. 
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = saturate(V1);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SaturateFloat2">
+    <desc>
+    This fragment is responsible for saturating a float2. 
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = saturate(V1);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SaturateFloat">
+    <desc>
+    This fragment is responsible for saturating a float. 
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="V1" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = saturate(V1);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="LerpFloat4">
+    <desc>
+    This fragment is responsible for linearly interpolating two float4's. 
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+        <resource type="float4" semantic="" label="" 
+            variable="V2" />
+        <resource type="float" semantic="" label="" 
+            variable="LerpAmount" default="(0.5)" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = lerp(V1, V2, LerpAmount);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="LerpFloat3">
+    <desc>
+    This fragment is responsible for linearly interpolating two float3's. 
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+        <resource type="float3" semantic="" label="" 
+            variable="V2" />
+        <resource type="float" semantic="" label="" 
+            variable="LerpAmount" default="(0.5)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = lerp(V1, V2, LerpAmount);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="LerpFloat2">
+    <desc>
+    This fragment is responsible for linearly interpolating two float2's.   
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+        <resource type="float2" semantic="" label="" 
+            variable="V2" />
+        <resource type="float" semantic="" label="" 
+            variable="LerpAmount" default="(0.5)" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = lerp(V1, V2, LerpAmount);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="LerpFloat">
+    <desc>
+    This fragment is responsible for linearly interpolating two floats.   
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="V2" />
+        <resource type="float" semantic="" label="" 
+            variable="LerpAmount" default="(0.5)" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = lerp(V1, V2, LerpAmount);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="NormalizeFloat4">
+    <desc>
+    This fragment is responsible for normalizing a float4.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="VectorIn" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="VectorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    VectorOut = normalize(VectorIn);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="NormalizeFloat3">
+    <desc>
+    This fragment is responsible for normalizing a float3.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="VectorIn" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="VectorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    VectorOut = normalize(VectorIn);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="NormalizeFloat2">
+    <desc>
+    This fragment is responsible for normalizing a float2.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="VectorIn" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="VectorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    VectorOut = normalize(VectorIn);
+    </code>
+</fragment>
+
+<!--========================================================================-->
+<fragment type="Pixel" name="MultiplyScalarSatAddFloat3">
+    <desc>
+    This fragment is responsible for accumulating into the current color by
+    multiplying the sampled texture color with the current color. The 
+    original input alpha channel is preserved. The scalar value is added to the
+    sampled color value and then clamped to the range [0.0, 1.0].
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="V1" default="(1.0, 1.0, 1.0)"/>
+        <resource type="float3" semantic="Color" label="" 
+            variable="V2" default="(1.0, 1.0, 1.0)"/>
+        <resource type="float" semantic="Scalar" label=""
+            variable="Scalar" default="(0.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = V1 * saturate(V2.rgb + Scalar.rrr);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="MultiplyAddFloat3">
+    <desc>
+    This fragment implements the equation:
+    Output = (V1 * V2) + V3
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="V1" default="(1.0, 1.0, 1.0)"/>
+        <resource type="float3" semantic="Color" label="" 
+            variable="V2" default="(1.0, 1.0, 1.0)"/>
+        <resource type="float3" semantic="Scalar" label=""
+            variable="V3" default="(1.0, 1.0, 1.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = (V1 * V2) + V3;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="FloatToFloat3">
+    <desc>
+    This fragment implements the operation:
+    Output = float3(Input, Input, Input);
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="Input" default="(1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = Input.rrr;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="FloatToFloat4">
+    <desc>
+    This fragment implements the operation:
+    Output = float4(Input, Input, Input, Input);
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="Input" default="(1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = Input.rrrr;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="Float4ToFloat">
+    <desc>
+    This fragment implements the operation:
+    Output = Input.r;
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Input" default="(1.0, 1.0, 1.0, 1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = Input.r;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="Float3ToFloat">
+    <desc>
+    This fragment implements the operation:
+    Output = Input.r;
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Input" default="(1.0, 1.0, 1.0, 1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = Input.r;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="ShadowMap">
+    <desc>
+    This fragment is responsible for calculating the Shadow coefficient.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+            <resource type="int" semantic="LightType" label="" 
+            variable="LightType" default="(0)"/>
+        <resource type="sampler2D" semantic="Texture" label=""
+            variable="ShadowMap" />
+        <resource type="float2" semantic="" label=""
+            variable="ShadowMapSize" default="(512,512)" />
+        <resource type="float4x4" semantic="" label=""
+            variable="WorldToLightProjMat" />
+        <resource type="float" semantic="" label=""
+            variable="ShadowBias" default="(0.005)" />          
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Shadow" label="" 
+            variable="ShadowOut" />
+    </outputs>
+
+    <!-- Vanilla Shadow Mapping, single sample -->
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    
+    if ( LightType != 0)
+    {
+      // This fragment only supports directional lights.
+        ShadowOut = 0.0;
+    }
+    else
+    {
+        float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+        float2 ShadowTexC = 0.5 * LightProjPos.xy / LightProjPos.w + 
+                  float2( 0.5, 0.5 );
+    
+        ShadowTexC.y = 1.0f - ShadowTexC.y;
+
+        float ShadowLookup = tex2D(ShadowMap, ShadowTexC.xy).r;
+        float LightSpaceDepth = saturate(LightProjPos.z / LightProjPos.w);
+        float2 borderTest = saturate(ShadowTexC) - ShadowTexC;
+
+        if ( (ShadowLookup >= LightSpaceDepth - ShadowBias) ||
+            any(borderTest))
+        {
+            ShadowOut = 1.0;
+        }
+        else
+        {
+            ShadowOut = 0.0;
+        }
+        
+       }
+
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="VSMShadowMap">
+    <desc>
+    This fragment is responsible for calculating the Shadow coefficient.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+            <resource type="int" semantic="LightType" label="" 
+            variable="LightType" default="(0)"/>
+        <resource type="sampler2D" semantic="Texture" label=""
+            variable="ShadowMap" />
+        <resource type="float2" semantic="" label=""
+            variable="ShadowMapSize" default="(512,512)" />
+        <resource type="float4x4" semantic="" label=""
+            variable="WorldToLightProjMat" />
+        <resource type="float" semantic="" label=""
+            variable="ShadowBias" default="(0.005)" />          
+        <resource type="float2" semantic="" label=""
+            variable="ShadowVSMPowerEpsilon" default="(10.0, 0.001)" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Shadow" label="" 
+            variable="ShadowOut" />
+    </outputs>
+
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">    
+    if ( LightType != 0)
+    {
+      // This fragment only supports directional lights.
+        ShadowOut = 0.0;
+    }
+    else
+    { 
+        float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+        float2 ShadowTexC = 0.5 * LightProjPos.xy / LightProjPos.w + 
+            float2( 0.5, 0.5 );
+        ShadowTexC.y = 1.0f - ShadowTexC.y;
+        
+        float LightSpaceDepth = saturate(LightProjPos.z / LightProjPos.w);
+        float2 borderTest = saturate(ShadowTexC) - ShadowTexC;
+
+        float4 vVSM   = tex2D( ShadowMap, ShadowTexC.xy );
+        float  fAvgZ  = vVSM.r; // Filtered z
+        float  fAvgZ2 = vVSM.g; // Filtered z-squared
+        
+        // Standard shadow map comparison
+        if((LightSpaceDepth) - ShadowBias &lt;= fAvgZ || any(borderTest))
+        {
+            ShadowOut = 1.0f;
+        }
+        else
+        {            
+            // Use variance shadow mapping to compute the maximum probability 
+            // that the pixel is in shadow
+            float variance = ( fAvgZ2 ) - ( fAvgZ * fAvgZ );
+            variance       = 
+                min( 1.0f, max( 0.0f, variance + ShadowVSMPowerEpsilon.y ) );
+            ShadowOut = variance;
+            
+            float mean     = fAvgZ;
+            float d        = LightSpaceDepth - mean;
+            float p_max    = variance / ( variance + d*d );
+            
+            ShadowOut = pow( p_max, ShadowVSMPowerEpsilon.x);
+        }
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="PCFShadowMap">
+    <desc>
+    This fragment is responsible for calculating the Shadow coefficient.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+            <resource type="int" semantic="LightType" label="" 
+            variable="LightType" default="(0)"/>
+        <resource type="sampler2D" semantic="Texture" label=""
+            variable="ShadowMap" />
+        <resource type="float2" semantic="" label=""
+            variable="ShadowMapSize" default="(512,512)" />
+        <resource type="float4x4" semantic="" label=""
+            variable="WorldToLightProjMat" />
+        <resource type="float" semantic="" label=""
+            variable="ShadowBias" default="(0.005)" />          
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Shadow" label="" 
+            variable="ShadowOut" />
+    </outputs>
+
+    <!-- 2x2 PCF Shadow Mapping -->
+    <code lang="hlsl/Cg" platform="DX9" target="ps_2_0">
+    
+    if ( LightType != 0)
+    {
+      // This fragment only supports directional lights.
+        ShadowOut = 0.0;
+    }
+    else
+    {
+        float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+        float2 ShadowTexC = 0.5 * LightProjPos.xy / LightProjPos.w + 
+                  float2( 0.5, 0.5 );
+    
+        ShadowTexC.y = 1.0f - ShadowTexC.y;
+    
+        float ShadowMapSizeInverse = 1.0f / ShadowMapSize;
+        float2 lerps = frac( ShadowTexC * ShadowMapSize);
+        float LightSpaceDepth = saturate(LightProjPos.z / LightProjPos.w);
+        float2 borderTest = saturate(ShadowTexC) - ShadowTexC;
+
+        if (any(borderTest))
+        {
+            ShadowOut = 1.0;
+        }
+        else
+        {
+            LightSpaceDepth -= ShadowBias;
+                   
+            float4 SourceVals;
+            SourceVals.x = tex2D( ShadowMap, ShadowTexC ).r;
+    
+            ShadowTexC.x += ShadowMapSizeInverse;
+            SourceVals.y = tex2D( ShadowMap, ShadowTexC).r;  
+    
+            ShadowTexC.y += ShadowMapSizeInverse;                
+            SourceVals.w = tex2D( ShadowMap, ShadowTexC ).r;
+                
+            ShadowTexC.x -= ShadowMapSizeInverse;                
+            SourceVals.z = tex2D( ShadowMap, ShadowTexC).r;
+                
+            float4 Shade = (LightSpaceDepth &lt;= SourceVals);
+    
+            // lerp between the shadow values to calculate our light amount
+            ShadowOut = lerp(
+                lerp(Shade.x, Shade.y, lerps.x),
+                lerp(Shade.z, Shade.w, lerps.x), lerps.y );		
+        }
+    }
+
+    </code>
+    <!-- 4x4 PCF Shadow Mapping -->
+    <code lang="hlsl/Cg" platform="DX9/D3D10/Xenon/PS3" target="ps_3_0/ps_4_0">
+    
+    if ( LightType != 0)
+    {
+      // This fragment only supports directional lights.
+        ShadowOut = 0.0;
+    }
+    else
+    {
+        float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+        float2 ShadowTexC = 0.5 * LightProjPos.xy / LightProjPos.w + 
+                  float2( 0.5, 0.5 );
+        
+        ShadowTexC.y = 1.0f - ShadowTexC.y;
+        
+        float ShadowMapSizeInverse = 1.0f / ShadowMapSize;
+        float LightSpaceDepth = saturate(LightProjPos.z / LightProjPos.w);
+        float2 borderTest = saturate(ShadowTexC) - ShadowTexC;        
+
+        if (any(borderTest))
+        {
+            ShadowOut = 1.0;
+        }
+        else
+        {	
+            LightSpaceDepth -= ShadowBias;
+        
+            ShadowOut = 0;
+            float4 fOnes = float4(1.0, 1.0, 1.0, 1.0);
+            float4 fKernels = float4(1.0, 1.0, 1.0, 1.0);
+            float faKernels[4] = {1.0, 1.0, 1.0, 1.0};
+            
+            faKernels[0] = 1-frac(ShadowTexC.y * ShadowMapSize.y);
+            faKernels[3]= frac(ShadowTexC.y  * ShadowMapSize.y); 
+            
+            fKernels.x = 1-frac(ShadowTexC.x * ShadowMapSize.x);
+            fKernels.w = frac(ShadowTexC.x  * ShadowMapSize.x);
+                      
+            float fTotalPercent = 0;
+            
+            // This loop is manually unrolled here to avoid long
+            // shader compilation times.
+            //for (int i=0; i &lt; 4; i++)
+            // i == 0
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC;                
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+    
+                ShadowOut += dot(shad, fKernels) * faKernels[0];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[0];
+            }
+            // i == 1
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC;                
+                pos.y += ShadowMapSizeInverse;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+    
+                ShadowOut += dot(shad, fKernels) * faKernels[1];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[1];
+            }
+            // i == 2
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC;                
+                pos.y += 2 * ShadowMapSizeInverse;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+    
+                ShadowOut += dot(shad, fKernels) * faKernels[2];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[2];
+            }
+            // i == 3
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC;                
+                pos.y += 3 * ShadowMapSizeInverse;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+    
+                ShadowOut += dot(shad, fKernels) * faKernels[3];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[3];
+            }
+            
+            ShadowOut = ShadowOut / fTotalPercent;         
+        }
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="SpotShadowMap">
+    <desc>
+    This fragment is responsible for calculating the Shadow coefficient.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+        <resource type="int" semantic="LightType" label="" 
+            variable="LightType" default="(0)"/>
+        <resource type="sampler2D" semantic="Texture" label=""
+            variable="ShadowMap" />
+        <resource type="float2" semantic="" label=""
+            variable="ShadowMapSize" default="(512,512)" />
+        <resource type="float3" semantic="LightDirection" label="" 
+            variable="LightDirection" default="(1.0, 0.0, 0.0)"/>
+        <resource type="float3" semantic="Position" label="Light"
+            variable="LightPos" />
+        <resource type="float" semantic="" label=""
+            variable="CosOfCutoff" default="(0.0)" />
+        <resource type="float4x4" semantic="" label=""
+            variable="WorldToLightProjMat" />
+        <resource type="float" semantic="" label=""
+            variable="ShadowBias" default="(0.0005)" />          
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Shadow" label="" 
+            variable="ShadowOut" />
+    </outputs>
+
+    <!-- Vanilla Shadow Mapping, single sample -->
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon" target="ps_2_0/ps_4_0">
+    if (LightType != 2)
+    {
+        // This version only supports spotlights.
+        ShadowOut = 1.0;
+    }
+    else
+    {
+        float3 LightToWorldPos = normalize(float3(WorldPos - LightPos));
+
+        if (dot(LightDirection, LightToWorldPos) > CosOfCutoff)
+        {
+            float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+
+            float3 ShadowTexC = LightProjPos.xyz / LightProjPos.w;               
+            ShadowTexC.xy =( 0.5 * ShadowTexC.xy) + float2( 0.5, 0.5 );
+            ShadowTexC.y = 1.0f - ShadowTexC.y;
+
+            float LightSpaceDepth = clamp(ShadowTexC.z - ShadowBias, 
+                0.0, 1.0);
+            float ShadowLookup = tex2D(ShadowMap, ShadowTexC.xy).r;                
+            ShadowOut = ShadowLookup &lt; LightSpaceDepth ? 0.0 : 1.0;
+        }
+        else
+        {
+            // Outside of the light cone is shadowed completely
+            ShadowOut = 0.0;
+        }
+    }
+    </code>
+    <code lang="hlsl/Cg" platform="PS3" target="ps_3_0">
+    if (LightType != 2)
+    {
+        // This version only supports spotlights.
+        ShadowOut = 1.0;
+    }
+    else
+    {
+        float3 LightToWorldPos = normalize(float3(WorldPos - LightPos));
+
+        if (dot(LightDirection, LightToWorldPos) > CosOfCutoff)
+        {
+            float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+
+            float3 ShadowTexC = LightProjPos.xyz / LightProjPos.w;               
+            ShadowTexC.xy =( 0.5 * ShadowTexC.xy) + float2( 0.5, 0.5 );
+            ShadowTexC.y = 1.0f - ShadowTexC.y;
+
+            // Rescale Depth from (-1.0)-(1.0) to (0.0)-(1.0)
+            ShadowTexC.z = (ShadowTexC.z * 0.5) + 0.5;
+
+            float LightSpaceDepth = clamp(ShadowTexC.z - ShadowBias, 
+                0.0, 1.0);
+            float ShadowLookup = tex2D(ShadowMap, ShadowTexC.xy).r;                
+            ShadowOut = ShadowLookup &lt; LightSpaceDepth ? 0.0 : 1.0;
+        }
+        else
+        {
+            // Outside of the light cone is shadowed completely
+            ShadowOut = 0.0;
+        }
+    }
+    </code>    
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="SpotVSMShadowMap">
+    <desc>
+    This fragment is responsible for calculating the Shadow coefficient.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+        <resource type="int" semantic="LightType" label="" 
+            variable="LightType" default="(0)"/>
+        <resource type="sampler2D" semantic="Texture" label=""
+            variable="ShadowMap" />
+        <resource type="float2" semantic="" label=""
+            variable="ShadowMapSize" default="(512,512)" />
+        <resource type="float3" semantic="LightDirection" label="" 
+            variable="LightDirection" default="(1.0, 0.0, 0.0)"/>
+        <resource type="float3" semantic="Position" label="Light"
+            variable="LightPos" />
+        <resource type="float" semantic="" label=""
+            variable="CosOfCutoff" default="(0.0)" />
+        <resource type="float4x4" semantic="" label=""
+            variable="WorldToLightProjMat" />
+        <resource type="float" semantic="" label=""
+            variable="ShadowBias" default="(0.0005)" />          
+        <resource type="float2" semantic="" label=""
+            variable="ShadowVSMPowerEpsilon" default="(10.0, 0.001)" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Shadow" label="" 
+            variable="ShadowOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon" target="ps_2_0/ps_4_0">
+    if (LightType != 2)
+    {
+        // This version only supports spotlights.
+        ShadowOut = 1.0;
+    }
+    else
+    {
+        float3 LightToWorldPos = normalize(float3(WorldPos - LightPos));
+
+        if (dot(LightDirection, LightToWorldPos) > CosOfCutoff)
+        {
+            float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+            float3 ShadowTexC = LightProjPos.xyz / LightProjPos.w;               
+            ShadowTexC.xy =( 0.5 * ShadowTexC.xy) + float2( 0.5, 0.5 );
+            ShadowTexC.y = 1.0f - ShadowTexC.y;
+            float LightSpaceDepth = clamp(ShadowTexC.z - ShadowBias, 
+                0.0, 1.0);
+                                                        
+            float4 vVSM   = tex2D( ShadowMap, ShadowTexC.xy );
+            float  fAvgZ  = vVSM.r; // Filtered z
+            float  fAvgZ2 = vVSM.g; // Filtered z-squared
+            
+            // Standard shadow map comparison
+            if( (LightSpaceDepth - ShadowBias) &lt;= fAvgZ)
+            {
+                ShadowOut = 1.0f;
+            }
+            else
+            {               
+                // Use variance shadow mapping to compute the maximum 
+                // probability that the pixel is in shadow
+                float variance = ( fAvgZ2 ) - ( fAvgZ * fAvgZ );
+                variance       = 
+                    min( 1.0f, max( 0.0f, variance + ShadowVSMPowerEpsilon.y));
+                ShadowOut = variance;
+                
+                float mean     = fAvgZ;
+                float d        = LightSpaceDepth - mean;
+                float p_max    = variance / ( variance + d*d );
+                
+                ShadowOut = pow( p_max, ShadowVSMPowerEpsilon.x);
+            }
+
+        }
+        else
+        {
+            // Outside of the light cone is shadowed completely
+            ShadowOut = 0.0;
+        }
+    }
+    </code>
+    <code lang="hlsl/Cg" platform="PS3" target="ps_3_0">
+    if (LightType != 2)
+    {
+        // This version only supports spotlights.
+        ShadowOut = 1.0;
+    }
+    else
+    {
+        float3 LightToWorldPos = normalize(float3(WorldPos - LightPos));
+
+        if (dot(LightDirection, LightToWorldPos) > CosOfCutoff)
+        {
+            float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+            float3 ShadowTexC = LightProjPos.xyz / LightProjPos.w;               
+            ShadowTexC.xy =( 0.5 * ShadowTexC.xy) + float2( 0.5, 0.5 );
+            ShadowTexC.y = 1.0f - ShadowTexC.y;
+                       
+            // Rescale Depth from (-1.0)-(1.0) to (0.0)-(1.0)
+            ShadowTexC.z = (ShadowTexC.z * 0.5) + 0.5;                       
+                       
+            float LightSpaceDepth = clamp(ShadowTexC.z - ShadowBias, 
+                0.0, 1.0);
+                                                        
+            float4 vVSM   = tex2D( ShadowMap, ShadowTexC.xy );
+            float  fAvgZ  = vVSM.r; // Filtered z
+            float  fAvgZ2 = vVSM.g; // Filtered z-squared
+            
+            // Standard shadow map comparison
+            if( (LightSpaceDepth - ShadowBias) &lt;= fAvgZ)
+            {
+                ShadowOut = 1.0f;
+            }
+            else
+            {               
+                // Use variance shadow mapping to compute the maximum 
+                // probability that the pixel is in shadow
+                float variance = ( fAvgZ2 ) - ( fAvgZ * fAvgZ );
+                variance       = 
+                    min( 1.0f, max( 0.0f, variance + ShadowVSMPowerEpsilon.y));
+                ShadowOut = variance;
+                
+                float mean     = fAvgZ;
+                float d        = LightSpaceDepth - mean;
+                float p_max    = variance / ( variance + d*d );
+                
+                ShadowOut = pow( p_max, ShadowVSMPowerEpsilon.x);
+            }
+
+        }
+        else
+        {
+            // Outside of the light cone is shadowed completely
+            ShadowOut = 0.0;
+        }
+    }
+    </code>    
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="ShadowCubeMap">
+    <desc>
+    This fragment is responsible for calculating the Shadow coefficient.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+            <resource type="int" semantic="LightType" label="" 
+            variable="LightType" default="(0)"/>
+        <resource type="samplerCUBE" semantic="Texture" label=""
+            variable="ShadowMap" />
+        <resource type="float2" semantic="" label=""
+            variable="ShadowMapSize" default="(512,512)" />
+        <resource type="float3" semantic="Position" label="Light"
+            variable="LightPos" />
+        <resource type="float" semantic="" label=""
+            variable="ShadowBias" default="(0.0005)" />          
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Shadow" label="" 
+            variable="ShadowOut" />
+    </outputs>
+
+    <!-- Vanilla Shadow Mapping, single sample -->
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    if (LightType == 0 || LightType == 2)
+    {
+        // This version only supports point lights.
+        ShadowOut = 1.0;
+    }
+    else
+    {
+        float3 ViewVector = WorldPos - LightPos;    
+        ViewVector.z = -ViewVector.z;
+        float3 ViewVectorNrm = normalize(ViewVector);
+
+        float fDepth = dot(ViewVector, ViewVector);
+        fDepth = sqrt(fDepth) * ShadowBias;
+        float ShadowLookup = texCUBE(ShadowMap, ViewVectorNrm).r;
+         
+        if (ShadowLookup == 0 || ShadowLookup > fDepth )
+            ShadowOut = 1.0;
+        else
+            ShadowOut = 0.0;
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="SpotPCFShadowMap">
+    <desc>
+    This fragment is responsible for calculating the Shadow coefficient.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+        <resource type="int" semantic="LightType" label="" 
+            variable="LightType" default="(0)"/>
+        <resource type="sampler2D" semantic="Texture" label=""
+            variable="ShadowMap" />
+        <resource type="float2" semantic="" label=""
+            variable="ShadowMapSize" default="(512,512)" />
+        <resource type="float3" semantic="LightDirection" label="" 
+            variable="LightDirection" default="(1.0, 0.0, 0.0)"/>
+        <resource type="float3" semantic="Position" label="Light"
+            variable="LightPos" />
+        <resource type="float" semantic="" label=""
+            variable="CosOfCutoff" default="(0.0)" />
+        <resource type="float4x4" semantic="" label=""
+            variable="WorldToLightProjMat" />
+        <resource type="float" semantic="" label=""
+            variable="ShadowBias" default="(0.0005)" />          
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Shadow" label="" 
+            variable="ShadowOut" />
+    </outputs>
+    <!-- 2x2 PCF Shadow Mapping -->
+    
+    <code lang="hlsl/Cg" platform="DX9" target="ps_2_0">
+    if (LightType != 2)
+    {
+        // This version only supports spotlights.
+        ShadowOut = 1.0;
+    }
+    else
+    {
+        float3 LightToWorldPos = normalize(float3(WorldPos - LightPos));
+
+        if (dot(LightDirection, LightToWorldPos) > CosOfCutoff)
+        {
+            float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+            float3 ShadowTexC = LightProjPos.xyz / LightProjPos.w;               
+            ShadowTexC.xy =( 0.5 * ShadowTexC.xy) + float2( 0.5, 0.5 );
+            ShadowTexC.y = 1.0f - ShadowTexC.y;
+            float LightSpaceDepth = clamp(ShadowTexC.z - ShadowBias, 
+                0.0, 1.0);
+            float ShadowMapSizeInverse = 1.0 / ShadowMapSize;
+            float2 lerps = frac( ShadowTexC.xy * ShadowMapSize.xx);
+
+            float4 SourceVals;
+            SourceVals.x = tex2D( ShadowMap, ShadowTexC.xy ).r;
+
+            ShadowTexC.x += ShadowMapSizeInverse;
+            SourceVals.y = tex2D( ShadowMap, ShadowTexC.xy).r;  
+
+            ShadowTexC.y += ShadowMapSizeInverse;                
+            SourceVals.w = tex2D( ShadowMap, ShadowTexC.xy).r;
+                
+            ShadowTexC.x -= ShadowMapSizeInverse;                
+            SourceVals.z = tex2D( ShadowMap, ShadowTexC.xy).r;
+                
+            float4 Shade = (LightSpaceDepth &lt;= SourceVals);
+
+            // lerp between the shadow values to calculate our light amount
+            ShadowOut = lerp(
+                lerp(Shade.x, Shade.y, lerps.x),
+                lerp(Shade.z, Shade.w, lerps.x), lerps.y );
+        }
+        else
+        {
+            // Outside of the light cone is shadowed completely
+            ShadowOut = 0.0;
+        }
+    }    
+    </code>
+    <!-- 4x4 PCF Shadow Mapping -->
+    <code lang="hlsl/Cg" platform="DX9/D3D10/Xenon" target="ps_3_0/ps_4_0">
+    if (LightType != 2)
+    {
+        // This version only supports spotlights.
+        ShadowOut = 1.0;
+    }
+    else
+    {
+        float3 LightToWorldPos = normalize(float3(WorldPos - LightPos));
+
+        if (dot(LightDirection, LightToWorldPos) > CosOfCutoff)
+        {
+            float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+            float3 ShadowTexC = LightProjPos.xyz / LightProjPos.w;               
+            ShadowTexC.xy =( 0.5 * ShadowTexC.xy) + float2( 0.5, 0.5 );
+            ShadowTexC.y = 1.0f - ShadowTexC.y;
+
+            float LightSpaceDepth = clamp(ShadowTexC.z - ShadowBias, 
+                0.0, 1.0);
+            
+            float ShadowMapSizeInverse = 1.0 / ShadowMapSize;
+
+            ShadowTexC.xy = ShadowTexC.xy - ShadowMapSizeInverse.xx;
+               
+            ShadowOut = 0;
+            float4 fOnes = float4(1.0, 1.0, 1.0, 1.0);
+            float4 fKernels = float4(1.0, 1.0, 1.0, 1.0);
+            float faKernels[4] = {1.0, 1.0, 1.0, 1.0};
+           
+            faKernels[0] = 1-frac(ShadowTexC.y * ShadowMapSize.y);
+            faKernels[3]= frac(ShadowTexC.y  * ShadowMapSize.y); 
+           
+            fKernels.x = 1-frac(ShadowTexC.x * ShadowMapSize.x);
+            fKernels.w = frac(ShadowTexC.x  * ShadowMapSize.x);
+                              
+            float fTotalPercent = 0;
+            
+            // This loop is manually unrolled here to avoid long
+            // shader compilation times.            
+            //for (int i=0; i &lt; 4; i++)
+            // i == 0
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC.xy;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+                    
+                ShadowOut += dot(shad, fKernels) * faKernels[0];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[0];
+            }
+            // i == 1
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC.xy;
+                pos.y += ShadowMapSizeInverse;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+                    
+                ShadowOut += dot(shad, fKernels) * faKernels[1];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[1];
+            }
+            // i == 2
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC.xy;
+                pos.y += 2 * ShadowMapSizeInverse;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+                    
+                ShadowOut += dot(shad, fKernels) * faKernels[2];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[2];
+            }
+            // i == 3
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC.xy;
+                pos.y += 3 * ShadowMapSizeInverse;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+                    
+                ShadowOut += dot(shad, fKernels) * faKernels[3];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[3];
+            }
+           
+            ShadowOut = ShadowOut / fTotalPercent;         
+        }
+        else
+        {
+            // Outside of the light cone is shadowed completely
+            ShadowOut = 0.0;
+        }
+    }    
+    </code>
+    <!-- 4x4 PCF Shadow Mapping -->
+    <code lang="hlsl/Cg" platform="PS3" target="ps_3_0">
+    if (LightType != 2)
+    {
+        // This version only supports spotlights.
+        ShadowOut = 1.0;
+    }
+    else
+    {
+        float3 LightToWorldPos = normalize(float3(WorldPos - LightPos));
+
+        if (dot(LightDirection, LightToWorldPos) > CosOfCutoff)
+        {
+            float4 LightProjPos = mul(WorldPos, WorldToLightProjMat);
+            float3 ShadowTexC = LightProjPos.xyz / LightProjPos.w;               
+            ShadowTexC.xy =( 0.5 * ShadowTexC.xy) + float2( 0.5, 0.5 );
+            ShadowTexC.y = 1.0f - ShadowTexC.y;
+
+            // Rescale Depth from (-1.0)-(1.0) to (0.0)-(1.0)
+            ShadowTexC.z = (ShadowTexC.z * 0.5) + 0.5;
+
+            float LightSpaceDepth = clamp(ShadowTexC.z - ShadowBias, 
+                0.0, 1.0);
+            
+            float ShadowMapSizeInverse = 1.0 / ShadowMapSize;
+
+            ShadowTexC.xy = ShadowTexC.xy - ShadowMapSizeInverse.xx;
+               
+            ShadowOut = 0;
+            float4 fOnes = float4(1.0, 1.0, 1.0, 1.0);
+            float4 fKernels = float4(1.0, 1.0, 1.0, 1.0);
+            float faKernels[4] = {1.0, 1.0, 1.0, 1.0};
+           
+            faKernels[0] = 1-frac(ShadowTexC.y * ShadowMapSize.y);
+            faKernels[3]= frac(ShadowTexC.y  * ShadowMapSize.y); 
+           
+            fKernels.x = 1-frac(ShadowTexC.x * ShadowMapSize.x);
+            fKernels.w = frac(ShadowTexC.x  * ShadowMapSize.x);
+                              
+            float fTotalPercent = 0;
+            
+            // This loop is manually unrolled here to avoid long
+            // shader compilation times.            
+            //for (int i=0; i &lt; 4; i++)
+            // i == 0
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC.xy;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+                    
+                ShadowOut += dot(shad, fKernels) * faKernels[0];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[0];
+            }
+            // i == 1
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC.xy;
+                pos.y += ShadowMapSizeInverse;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+                    
+                ShadowOut += dot(shad, fKernels) * faKernels[1];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[1];
+            }
+            // i == 2
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC.xy;
+                pos.y += 2 * ShadowMapSizeInverse;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+                    
+                ShadowOut += dot(shad, fKernels) * faKernels[2];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[2];
+            }
+            // i == 3
+            {
+                float4 shadowMapDepth = 0;
+                float2 pos = ShadowTexC.xy;
+                pos.y += 3 * ShadowMapSizeInverse;
+                shadowMapDepth.x = tex2D(ShadowMap, pos).x; 
+                pos.x += ShadowMapSizeInverse;
+                shadowMapDepth.y = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;        
+                shadowMapDepth.z = tex2D(ShadowMap, pos).x;
+                pos.x += ShadowMapSizeInverse;                
+                shadowMapDepth.w = tex2D(ShadowMap, pos).x;
+                
+                float4 shad = (LightSpaceDepth &lt;= shadowMapDepth);
+                    
+                ShadowOut += dot(shad, fKernels) * faKernels[3];
+                fTotalPercent += dot(fOnes, fKernels) * faKernels[3];
+            }
+           
+            ShadowOut = ShadowOut / fTotalPercent;         
+        }
+        else
+        {
+            // Outside of the light cone is shadowed completely
+            ShadowOut = 0.0;
+        }
+    }    
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="ConstructInstanceTransform">
+    <desc>
+    This fragment is reponsible for creating the world-instance transform.
+    This is a 4x4 transform that is constructed from 3 float4 objects. It 
+    assumes the the last column in the matrix should be (0, 0, 0, 1).
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Position1" />      
+        <resource type="float4" semantic="" label="" 
+            variable="Position2" />                  
+        <resource type="float4" semantic="" label="" 
+            variable="Position3" />                                         
+    </inputs>
+    <outputs>
+        <resource type="float4x4" semantic="Position" label="World" 
+            variable="InstanceWorld" />
+    </outputs>
+
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+  
+    // Build instance world transform matrix.  
+    InstanceWorld._11 = Position1.x;
+    InstanceWorld._12 = Position1.y;
+    InstanceWorld._13 = Position1.z;
+    InstanceWorld._14 = 0;
+    
+    InstanceWorld._21 = Position2.x;
+    InstanceWorld._22 = Position2.y;
+    InstanceWorld._23 = Position2.z;
+    InstanceWorld._24 = 0;    
+          
+    InstanceWorld._31 = Position3.x;
+    InstanceWorld._32 = Position3.y;
+    InstanceWorld._33 = Position3.z;
+    InstanceWorld._34 = 0;       
+    
+    InstanceWorld._41 = Position1.w;
+    InstanceWorld._42 = Position2.w;
+    InstanceWorld._43 = Position3.w;
+    InstanceWorld._44 = 1;       
+    </code>
+    
+</fragment>
+<!--========================================================================-->
+
+</library>
+
+

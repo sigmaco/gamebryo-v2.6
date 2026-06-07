@@ -1,0 +1,70 @@
+Version: 1
+Script ("Default MultiExport","Process")
+{
+	Plugin ("NiCreateABVPlugin","Create ABV","1.0","PROCESS")
+	{
+		Parameter ("CreateABV","TRUE");
+		Parameter ("CreateWireframeABVProxy","FALSE");
+		Parameter ("CreateWireframeABV","FALSE");
+		Parameter ("CreateWireframeSelection","FALSE");
+		Parameter ("RemoveProxyGeometry","TRUE");
+	}
+	Plugin ("NiSceneGraphOptimizationPlugin","Scene Graph Optimization","3.0","PROCESS")
+	{
+		Parameter ("AnimationKeyReductionTolerance","0.000100");
+		Parameter ("RemoveDupProperties","TRUE");
+		Parameter ("RemoveChildlessNodes","TRUE");
+		Parameter ("RemoveMultiMtlNodes","TRUE");
+		Parameter ("RemoveSingleChildNodes","TRUE");
+		Parameter ("MergeSiblingNodes","TRUE");
+		Parameter ("OptimizeTriShapes","TRUE");
+		Parameter ("MergeSiblingTriShapes","TRUE");
+		Parameter ("NoMergeOnAlpha","TRUE");
+		Parameter ("RemoveExtraUVSets","TRUE");
+		Parameter ("RemoveUnnecessaryNormals","TRUE");
+		Parameter ("RemoveUnnecessaryVisControllers","TRUE");
+		Parameter ("RemoveNames","FALSE");
+		Parameter ("NameUnnamedObjects","FALSE");
+		Parameter ("RemoveBadTexturingProps","TRUE");
+		Parameter ("RemoveUnnecessaryExtraData","TRUE");
+		Parameter ("RemoveSgoKeepTags","TRUE");
+		Parameter ("RemoveUnnecessaryLookAtControllers","TRUE");
+		Parameter ("RemoveHiddenBoneGeometry","TRUE");
+		Parameter ("ReduceAnimationKeys","TRUE");
+		Parameter ("SortByTexturingProp","FALSE");
+		Parameter ("WeldSkin","TRUE");
+		Parameter ("ExportSoftwareSkin","FALSE");
+		Parameter ("ExportHardwareSkin","TRUE");
+		Parameter ("BonesPerPartition","30");
+		Parameter ("OptimizeMeshSizeModifier","1.000000");
+		Parameter ("OptimizeMeshNormalModifier","1.000000");
+		Parameter ("OptimizeMeshPositionModifier","1.000000");
+		Parameter ("OptimizeDX9MeshVertexCacheSize","16");
+		Parameter ("OptimizeD3D10MeshVertexCacheSize","16");
+		Parameter ("OptimizeXenonMeshVertexCacheSize","15");
+		Parameter ("OptimizePS3MeshVertexCacheSize","24");
+	}
+	Plugin ("SaveSourceTextureRendererDataPlugin","Save SourceTextureRendererData","1.0","PROCESS")
+	{
+	}
+	Plugin ("MeshFinalizePlugin","Mesh Finalize","1.0","PROCESS")
+	{
+	}
+	Plugin ("MultiNIFExportPlugin","MultiNIF Export Plug-in","1.0","EXPORT")
+	{
+		Parameter ("MultiNifExportUseObjectNameAsFileName","TRUE");
+		Parameter ("MultiNifExportDeleteAfterExport","TRUE");
+		Parameter ("MultiNifExportTranformType","2");
+		Parameter ("MultiNifExportRotateType","0");
+		Parameter ("MultiNifExportScaleType","0");
+		Parameter ("MultiNifExportRepairEmitterWithoutParticles","TRUE");
+	}
+	Plugin ("NifExportPlugin","NIF Exporter","1.1","EXPORT")
+	{
+		Parameter ("PlatformGeometry","FALSE");
+		Parameter ("CompressUV","FALSE");
+		Parameter ("CompressNorm","FALSE");
+		Parameter ("CompressColor","FALSE");
+		Parameter ("CompressWeight","FALSE");
+	}
+}

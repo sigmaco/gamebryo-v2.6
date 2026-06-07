@@ -1,0 +1,179 @@
+//
+// MyImmerseUpgradeABVAttributes.mel
+//
+//  Loops through each transform looking for Legacy ABV Collision Data
+// and it is converting it when it is found. This will run each time  a scene is loaded
+// and convert automatically.
+
+
+global proc MyImmerseUpgradeABVAttributes()
+{
+    int $intVal;
+
+    string $szTransformNodes[] = `ls -l -typ shape -typ transform`;
+    
+    // Check for Nothing Selected
+    if(size($szTransformNodes) == 0)
+    {
+        print("WARNING:: No Shapes or Transforms Selected\n");
+    }
+
+    int $iCount = 0;
+    int $iConfirmed = 0;
+
+    while( $iCount < size($szTransformNodes))
+    {
+        string $szAttribute;
+
+        // Check for old ABV Data
+        if ((`attributeExists "Ni_EnableAlternateBoundingVolumes" $szTransformNodes[$iCount]` == 1) &&
+            (`attributeExists "Ni_ABVPropogateMode" $szTransformNodes[$iCount]` == 1) &&
+            (`attributeExists "Ni_ABVShape" $szTransformNodes[$iCount]` == 1) &&
+            (`attributeExists "Ni_ABVAttachType" $szTransformNodes[$iCount]` == 1))
+        {
+
+            if ($iConfirmed == 0)
+            {
+                string $sResult = `confirmDialog -title "Auto Convert ABV" 
+                    -message "Gamebryo has detected old style ABV information in the scene. Do you want to auto convert?"
+                    -button "Yes" 
+                    -button "No" 
+                    -defaultButton "Yes"
+                    -cancelButton "No" 
+                    -dismissString "No"`;
+
+                // If No then quit
+                if ($sResult == "No")
+                {
+                    return;
+                }
+
+                $iConfirmed = 1;
+            }
+
+
+            // Create the New Attributes
+
+            if (`attributeExists "Ni_EnableABVCollisionData" $szTransformNodes[$iCount]` == 0)
+            {
+                addAttr -ln Ni_EnableABVCollisionData -at bool -k false $szTransformNodes[$iCount];
+    
+                $szAttribute = $szTransformNodes[$iCount] + ".Ni_EnableABVCollisionData";
+                setAttr $szAttribute true;
+            }
+
+
+            if (`attributeExists "Ni_ABV_Propogate" $szTransformNodes[$iCount]` == 0)
+            {
+                addAttr -ln Ni_ABV_Propogate -at enum -enumName "On Success:On Failure:Always:Never" $szTransformNodes[$iCount];
+                
+                $szAttribute = $szTransformNodes[$iCount] + ".Ni_ABV_Propogate";
+                setAttr $szAttribute 0;
+            }
+    
+            if (`attributeExists "Ni_ABV_CollisionShape" $szTransformNodes[$iCount]` == 0)
+            {
+                addAttr -ln Ni_ABV_CollisionShape -at enum -enumName "Sphere:Capsule:Halfspace:Box:Union:Triangles:OBB:No Test" $szTransformNodes[$iCount];
+                
+                $szAttribute = $szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape";
+                setAttr $szAttribute 0;
+            }
+
+            // ***** Set the values base on the old settings *****
+
+            // Sphere
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVShape")` == 0)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape") 0;
+            }
+
+            // Capsule
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVShape")` == 1)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape") 1;
+            }
+
+            // Lozenges become Boxes
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVShape")` == 2)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape") 3;
+            }
+
+            // Box
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVShape")` == 3)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape") 3;
+            }
+
+            // Union
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVShape")` == 4)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape") 4;
+            }
+
+            // Half Space
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVShape")` == 5)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape") 2;
+            }
+
+            // Check for a Never Propogate Mode
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVPropogateMode")` == 0)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_Propogate") 3;
+            }
+
+            // USE _OBB Changes to On Success
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVPropogateMode")` == 2)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_Propogate") 0;
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape") 6;
+            }
+
+            // Continue changes to Always Propogate
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVPropogateMode")` == 3)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_Propogate") 2;
+            }
+
+            // No Text Becomes Never
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVPropogateMode")` == 4)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_Propogate") 3;
+            }
+
+            // Tri with Never Propogate
+            if (`getAttr ($szTransformNodes[$iCount] + ".Ni_ABVPropogateMode")` == 1)
+            {
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_Propogate") 3;
+                setAttr ($szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape") 5;
+            }
+        }
+
+
+        // Delete the old attributes if they exist
+
+        if (`attributeExists "Ni_EnableAlternateBoundingVolumes" $szTransformNodes[$iCount]` == 1)
+        {
+            deleteAttr -at "Ni_EnableAlternateBoundingVolumes" $szTransformNodes[$iCount];
+        }
+
+        if (`attributeExists "Ni_ABVPropogateMode" $szTransformNodes[$iCount]` == 1)
+        {
+            deleteAttr -at "Ni_ABVPropogateMode" $szTransformNodes[$iCount];
+        }
+
+        if (`attributeExists "Ni_ABVShape" $szTransformNodes[$iCount]` == 1)
+        {
+            deleteAttr -at "Ni_ABVShape" $szTransformNodes[$iCount];
+        }
+
+        if  (`attributeExists "Ni_ABVAttachType" $szTransformNodes[$iCount]` == 1)
+        {
+            deleteAttr -at "Ni_ABVAttachType" $szTransformNodes[$iCount];
+        }
+       
+        $iCount = $iCount + 1;
+    }
+}
+

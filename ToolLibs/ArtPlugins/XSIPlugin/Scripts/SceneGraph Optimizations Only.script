@@ -1,0 +1,42 @@
+Version: 1
+Script ("SceneGraph Optimizations Only","Process")
+{
+	Plugin ("NiSceneGraphOptimizationPlugin","Scene Graph Optimization","3.0","PROCESS")
+	{
+		Parameter ("AnimationKeyReductionTolerance","0.000100");
+		Parameter ("RemoveDupProperties","TRUE");
+		Parameter ("RemoveChildlessNodes","TRUE");
+		Parameter ("RemoveMultiMtlNodes","TRUE");
+		Parameter ("RemoveSingleChildNodes","TRUE");
+		Parameter ("MergeSiblingNodes","TRUE");
+		Parameter ("OptimizeTriShapes","TRUE");
+		Parameter ("MergeSiblingTriShapes","TRUE");
+		Parameter ("NoMergeOnAlpha","TRUE");
+		Parameter ("RemoveExtraUVSets","TRUE");
+		Parameter ("RemoveUnnecessaryNormals","TRUE");
+		Parameter ("RemoveUnnecessaryVisControllers","TRUE");
+		Parameter ("RemoveNames","FALSE");
+		Parameter ("NameUnnamedObjects","FALSE");
+		Parameter ("RemoveBadTexturingProps","TRUE");
+		Parameter ("RemoveUnnecessaryExtraData","TRUE");
+		Parameter ("RemoveSgoKeepTags","TRUE");
+		Parameter ("RemoveUnnecessaryLookAtControllers","TRUE");
+		Parameter ("RemoveHiddenBoneGeometry","TRUE");
+		Parameter ("ReduceAnimationKeys","TRUE");
+		Parameter ("SortByTexturingProp","FALSE");
+		Parameter ("WeldSkin","TRUE");
+		Parameter ("ExportSoftwareSkin","FALSE");
+		Parameter ("ExportHardwareSkin","TRUE");
+		Parameter ("BonesPerPartition","30");
+		Parameter ("OptimizeMeshSizeModifier","1.000000");
+		Parameter ("OptimizeMeshNormalModifier","1.000000");
+		Parameter ("OptimizeMeshPositionModifier","1.000000");
+		Parameter ("OptimizeDX9MeshVertexCacheSize","16");
+		Parameter ("OptimizeD3D10MeshVertexCacheSize","16");
+		Parameter ("OptimizeXenonMeshVertexCacheSize","15");
+		Parameter ("OptimizePS3MeshVertexCacheSize","24");
+	}
+	Plugin ("MeshFinalizePlugin","Mesh Finalize","1.0","PROCESS")
+	{
+	}
+}

@@ -1,0 +1,315 @@
+//
+//This script was created first and foremost to remove 4 bit palletized options but
+//can be extended to change other options
+//
+
+//this is my way of converting strings to int
+global proc int returnValue(int $value)
+{
+	return $value;
+}
+
+proc string MyImmerseGetPluginAndGamebryoVersion()
+{
+    // Get the plugin name and version info.
+    string $szPluginName = MyImmerseGetPluginName();
+    string $myImmerseVersion = `pluginInfo -q -v $szPluginName`;
+    
+    return $myImmerseVersion;
+}
+
+proc string MyImmerseGetPluginVersion()
+{
+    // Get the plugin name and version info.
+    string $myImmerseVersion = MyImmerseGetPluginAndGamebryoVersion();
+       
+    // The format of $myImmerseVersion is: 
+    // "Gamebryo Version:[a.b.c.d]\n Exporter Plugin Version:[e.f]"   
+    
+    // First, seperate the two version strings.
+    string $szArray[]; 
+    tokenize($myImmerseVersion,"\n", $szArray);
+    
+    // Next, seperate the string from the actual number
+    string $szExporterVersion[];
+    tokenize($szArray[1],":", $szExporterVersion);
+         
+    return $szExporterVersion[1];
+}
+
+
+proc string MyImmerseGetPreviousVersion(string $initialSettings)
+{
+    // Slow function, call seldomly.
+    string  $optionList[];
+    string  $optionBreakDown[];
+    int     $index;
+
+    string $currentOptions = $initialSettings;
+    string $PreviousExportVersion = "";
+    
+    if (size($currentOptions) > 0) 
+    {
+        tokenize($currentOptions, ";", $optionList);
+        for ($index = 0; $index < size($optionList); $index++) 
+        {
+            tokenize($optionList[$index], "=", $optionBreakDown);
+            if ( $optionBreakDown[0] == "PreviousExportVersion") 
+            {
+                // Versioning didn't exist before Exporter7.3/GB2.2
+                // Check Previous Version
+                $PreviousExportVersion = $optionBreakDown[1];               
+            }
+        }
+    }
+    
+    return $PreviousExportVersion;              
+}
+
+proc conditionallyDeleteAttr(string $attrName, string $objectName)
+{
+	if(`attributeExists $attrName $objectName`)
+	{
+		deleteAttr ($objectName + "." + $attrName);
+	}
+}
+
+proc int has4BitEnum(string $attr, string $objectName)
+{
+	string $attrAndObjectName = $objectName+ "." + $attr;
+	
+	int $result = false;
+	
+	if(`attributeExists $attr $objectName`)
+	{
+		string $enumNamesString = `addAttr -q -enumName $attrAndObjectName`;
+		
+		string $enumNameArray[];
+		
+		tokenize $enumNamesString ":" $enumNameArray;
+		
+		string $enumName;
+		for($enumName in $enumNameArray)
+		{
+			if($enumName == "4 bit palettized")
+			{
+				$result = true;
+			}
+		}
+	}
+	
+	return $result;
+}
+
+proc conditionallyRemoveOldAttr(string $fileTexture)
+{
+	//Old Attrs
+	conditionallyDeleteAttr("Ni_PS2_Format", $fileTexture);
+	conditionallyDeleteAttr("Ni_PS2_Location", $fileTexture);
+	conditionallyDeleteAttr("Ni_PS2_Texture_Size", $fileTexture);
+	
+	conditionallyDeleteAttr("Ni_XBOX_Format", $fileTexture);
+	conditionallyDeleteAttr("Ni_XBOX_Location", $fileTexture);
+	conditionallyDeleteAttr("Ni_XBOX_Texture_Size", $fileTexture);
+	
+	conditionallyDeleteAttr("Ni_GameCube_Format", $fileTexture);
+	conditionallyDeleteAttr("Ni_GameCube_Location", $fileTexture);
+	conditionallyDeleteAttr("Ni_GameCube_Texture_Size", $fileTexture);
+	
+	conditionallyDeleteAttr("Ni_Hurricane_Format", $fileTexture);
+	conditionallyDeleteAttr("Ni_Hurricane_Location", $fileTexture);
+	conditionallyDeleteAttr("Ni_Hurricane_Texture_Size", $fileTexture);
+}
+
+proc updateAndDeleteOldAttrs(string $fileTexture)
+{
+	conditionallyRemoveOldAttr($fileTexture);
+	
+	if(`attributeExists Ni_PC_Format $fileTexture`)
+	{
+		//print("has Ni_PC_Format\n");
+		//change the attribute to generic if it doesn't already have a generic
+		if(`attributeExists Ni_Generic_Format $fileTexture` == false)
+		{
+			renameAttr ($fileTexture + ".Ni_PC_Format") "Ni_Generic_Format";
+		}
+		else
+		{
+			//print("has Ni_Generic_Format\n");
+			deleteAttr ($fileTexture + ".Ni_PC_Format");
+		}
+	}
+	
+	if(`attributeExists Ni_PC_Location $fileTexture`)
+	{
+		if(`attributeExists Ni_Generic_Location $fileTexture` == false)
+		{
+			renameAttr ($fileTexture + ".Ni_PC_Location") "Ni_Generic_Location";
+		}
+		else
+		{
+			//print("has Ni_Generic_Format\n");
+			deleteAttr ($fileTexture + ".Ni_PC_Location");
+		}
+	}
+	
+	if(`attributeExists Ni_PC_Texture_Size $fileTexture`)
+	{
+		
+		if(`attributeExists Ni_Generic_Texture_Size $fileTexture` == false)
+		{
+			renameAttr ($fileTexture + ".Ni_PC_Texture_Size") "Ni_Generic_Texture_Size";
+		}
+		else
+		{
+			//print("has Ni_Generic_Format\n");
+			deleteAttr ($fileTexture + ".Ni_PC_Texture_Size");
+		}
+
+	}
+}	
+	
+proc remove4bitEnum(string $attrName, string $fileTexture)
+{
+	if(has4BitEnum($attrName, $fileTexture))
+	{
+		string $attrAndObjectName = $fileTexture +"." + $attrName;
+		int $enumNumber = `getAttr $attrAndObjectName`;
+		if($enumNumber  > 4)
+		{
+			$enumNumber -= 1;
+		}
+		
+		string $newEnumNames = "Platform Default (Match Default Platform Format):Texture Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5";
+		
+		addAttr -e -enumName $newEnumNames $attrAndObjectName;
+		
+		setAttr $attrAndObjectName $enumNumber;
+	}
+}
+
+proc removeAll4BitEnum(string $fileTexture)
+{
+	remove4bitEnum("Ni_Generic_Format", $fileTexture);
+	remove4bitEnum("Ni_Next_Gen_XBox_Format", $fileTexture);
+	remove4bitEnum("Ni_DX9_Format", $fileTexture);
+    remove4bitEnum("Ni_D3D10_Format", $fileTexture);	
+	remove4bitEnum("Ni_PS3_Format", $fileTexture);
+	remove4bitEnum("Ni_Wii_Format", $fileTexture);
+	resetAE;
+}
+
+proc updatePerTextureAttrs()
+{
+	//Update the per texture properities
+	string $fileTexturesArray[] = `ls -typ file`;
+	
+	//print($fileTexturesArray);
+	
+	string $fileTexture;
+	for($fileTexture in $fileTexturesArray)
+	{
+		//print("$fileTexture = " + $fileTexture + "\n");
+		updateAndDeleteOldAttrs($fileTexture);
+		
+		removeAll4BitEnum($fileTexture);
+	}
+}
+
+global proc MyImmerseUpdateExporterOptions()
+{	
+	string $lastOptions = GamebryoGetExportOptions();
+	string $previousVersion = MyImmerseGetPreviousVersion($lastOptions);
+	string $currentExportVersion = MyImmerseGetPluginVersion();
+
+	string $newOptions;
+
+//	print("$lastOptions = " + $lastOptions + "\n");
+	updatePerTextureAttrs();
+
+	if($previousVersion != $currentExportVersion)
+	{
+		string $options[];
+
+		tokenize $lastOptions ";" $options;
+
+		string $optionBreakDown[];
+		int $optionsIndex = 0;
+		for ($optionsIndex = 0; $optionsIndex < size($options); $optionsIndex++) 
+        {
+			//print("$options[$optionsIndex] = " + $options[$optionsIndex] + "\n"); 
+            tokenize($options[$optionsIndex], "=", $optionBreakDown);
+
+			//change really old options
+			if($optionBreakDown[0] == "MayaNifPCTextureType")
+			{
+				//this is not supported eithert
+				$optionBreakDown[0] =  "MayaNifGenericTextureType";
+			}
+			else if($optionBreakDown[0] == "MayaNifPCTextureReduction")
+			{
+				$optionBreakDown[0] =  "MayaNifGenericTextureReduction";
+			} 
+			else if($optionBreakDown[0] == "MayaNifPCTextureDirectory")
+			{
+				$optionBreakDown[0] =  "MayaNifGenericTextureDirectory";
+			}  
+
+            if ( $optionBreakDown[0] == "MayaNifGenericTextureType" ||
+				 $optionBreakDown[0] == "MayaNifXenonTextureType" ||
+				 $optionBreakDown[0] == "MayaNifDX9TextureType" ||
+				 $optionBreakDown[0] == "MayaNifPS3TextureType" ||
+				 $optionBreakDown[0] == "MayaNifD3D10TextureType" ||
+				 $optionBreakDown[0] == "MayaNifWiiTextureType" 
+				 ) 
+            {
+				//print("Found the option\n");
+				int $optionNumber;
+				//print("$optionBreakDown[1] = " + $optionBreakDown[1] + "\n");
+
+				string $evalString = "returnValue(" + $optionBreakDown[1] + ")";
+
+				$optionNumber = `eval($evalString)`;
+				//print("$optionNumber = " + $optionNumber + "\n");
+				if($optionNumber > 4)
+				{
+					//print("Is a number to change\n");
+					$optionBreakDown[1] = "" + ($optionNumber - 1);
+				}
+            }
+            else if($optionBreakDown[0] == "PreviousExportVersion")
+			{
+				//update the version
+				//print("Going to fix the previsious version\n");
+				$optionBreakDown[1] = $currentExportVersion;
+			}
+			
+            //if($optionBreakDown[0] == "MayaNifPS2TextureType" ||
+            //   $optionBreakDown[0] == "MayaNifPS2TextureReduction" || 
+            //   $optionBreakDown[0] ==	 "MayaNifPS2TextureDirectory" || 
+            //   $optionBreakDown[0] == "MayaNifXBoxTextureType" || 
+            //  $optionBreakDown[0] == "MayaNifXBoxTextureReduction" || 
+            //   $optionBreakDown[0] == "MayaNifXBoxTextureDirectory" || 
+            //   $optionBreakDown[0] == "MayaNifGameCubeTextureType" || 
+            //   $optionBreakDown[0] == "MayaNifGameCubeTextureReduction" || 
+            //   $optionBreakDown[0] == "MayaNifGameCubeTextureDirectory")
+			//{
+			//	//these are dead options that we should get rid of.
+			//	$options[$optionsIndex] = "";
+			//}
+			//else
+			//{
+				$options[$optionsIndex] = $optionBreakDown[0] + "=" +  $optionBreakDown[1];
+			//}   
+			
+        }
+
+        $newOptions = stringArrayToString($options, ";");
+        //print("$newOptions = " + $newOptions + "\n");
+	    MyImmerseSetLastSceneGUIOptions($newOptions);
+	}
+	else
+	{
+	    MyImmerseSetLastSceneGUIOptions($lastOptions);
+	}
+}

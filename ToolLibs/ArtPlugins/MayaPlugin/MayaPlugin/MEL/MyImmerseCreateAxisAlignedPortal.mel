@@ -1,0 +1,214 @@
+//
+// MyImmerseCreateAxisAlignedPortal.mel
+//
+//  Examines the selected Portal System Room and auto generates a portal
+//
+
+global proc MyImmersePrintScenario(float $afBounds0[], 
+    float $afBounds1[], int $iAxis)
+{
+    if ($iAxis == 0)
+        print("X Axis:\n");
+    else if ($iAxis == 1)
+        print("Y Axis:\n");
+    else
+        print("Z Axis:\n");
+
+    int $iMax = $iAxis + 3;
+
+    if ($afBounds0[$iAxis] <= $afBounds1[$iAxis]) // MinA is smallest
+    {
+        if ($afBounds0[$iMax] <= $afBounds1[$iAxis])
+            print("  1. MinA MaxA MinB MaxB ");
+        else if ($afBounds0[$iMax] <= $afBounds1[$iMax])
+            print("  2. MinA MinB MaxA MaxB ");
+        else if ($afBounds0[$iAxis] <= $afBounds1[$iAxis])
+            print("  3. MinA MinB MaxB MaxA ");
+        else
+           print("  -- What happened?\n");
+
+       print ("(diff=" + ($afBounds1[$iAxis] - $afBounds0[$iMax]) + ")\n");
+       return;
+    }
+
+    if ($afBounds1[$iMax] <= $afBounds0[$iAxis])
+        print("  4. MinB MaxB MinA MaxA ");
+    else if ($afBounds1[$iMax] <= $afBounds0[$iMax])
+        print("  5. MinB MinA MaxB MaxA ");
+    else if ($afBounds1[$iAxis] <= $afBounds0[$iAxis])
+        print("  6. MinB MinA MaxA MaxB ");
+    else
+        print("  -- What happened?\n");
+
+    print ("(diff=" + ($afBounds0[$iAxis] - $afBounds1[$iMax]) + ")\n");
+    return;
+}
+
+global proc float MyImmerseGetAxisPosition(float $afBounds0[], 
+    float $afBounds1[], int $iAxis)
+{
+    int $iMax = $iAxis + 3;
+    if ($afBounds0[$iAxis] <= $afBounds1[$iAxis]) // MinA is smallest
+        return $afBounds0[$iMax];
+
+    return $afBounds0[$iAxis];
+}
+
+global proc float MyImmerseGetAxisDiff(float $afBounds0[], 
+    float $afBounds1[], int $iAxis)
+{
+    int $iMax = $iAxis + 3;
+    
+    if ($afBounds0[$iAxis] <= $afBounds1[$iAxis]) // MinA is smallest
+       return ($afBounds1[$iAxis] - $afBounds0[$iMax]);
+
+    return ($afBounds0[$iAxis] - $afBounds1[$iMax]);
+}
+
+global proc MyImmerseCreateAxisAlignedPortal()
+{
+    int $intVal;
+
+    string $szTransformNodes[] = `ls -l -sl -typ transform`;
+    
+    // Check for Nothing Selected
+    if(size($szTransformNodes) == 0)
+    {
+        error("MyImmerseCreateABVAxisAlignedPortalWalls:: No Portal System Rooms Were Selected\n");
+        return;
+    }
+
+    if(size($szTransformNodes) != 2)
+    {
+        error("MyImmerseCreateABVAxisAlignedPortalWalls:: Only Select TWO Portal System Rooms\n");
+        return;
+    }
+
+    // Check the First Selected Object is a room
+    string $szShortName[] = `ls -sl -typ transform`;
+    if (`gmatch $szShortName[0] "*_NDLRM*"` == 0)
+    {
+        error ("MyImmerseCreateABVAxisAlignedPortalWalls:: You must select Portal System Room. ie it's name contains '_NDLRM'");
+        return;
+    } 
+
+    // Check the Second Selected Object is a room
+    if (`gmatch $szShortName[1] "*_NDLRM*"` == 0)
+    {
+        error ("MyImmerseCreateABVAxisAlignedPortalWalls:: You must select Portal System Room. ie it's name contains '_NDLRM'");
+        return;
+    } 
+
+    // Find the Bounds of 1st and 2nd selected
+    float $afBounds0[] = `xform -q -bb $szTransformNodes[0]`;
+    float $afBounds1[] = `xform -q -bb $szTransformNodes[1]`;
+
+    //MyImmersePrintScenario($afBounds0, $afBounds1, 0);
+    //MyImmersePrintScenario($afBounds0, $afBounds1, 1);
+    //MyImmersePrintScenario($afBounds0, $afBounds1, 2);
+
+
+    float $fDiffX = abs(MyImmerseGetAxisDiff($afBounds0, $afBounds1, 0));
+    float $fDiffY = abs(MyImmerseGetAxisDiff($afBounds0, $afBounds1, 1));
+    float $fDiffZ = abs(MyImmerseGetAxisDiff($afBounds0, $afBounds1, 2));
+
+    float $fW;
+    float $fH;
+    float $fPosX;
+    float $fPosY;
+    float $fPosZ;
+    int $i1 = 0;
+    int $i2 = 0;
+    int $i3 = 0;
+    
+    int $rotX = 0;
+    int $rotY = 0;
+
+    if ($fDiffX <= $fDiffY && $fDiffX <= $fDiffZ)
+    {
+        if ($afBounds0[0] < $afBounds1[0]) // check x
+        {
+            // When the portal geometry is created, it will need to be 
+            // rotated around either the y or z axis by 180 degress. We
+            // choose the y axis.
+            $rotY = 180;
+        }
+
+        // W/H comes from Y and Z.
+        $i1 = 1;
+        $fW = ($afBounds0[4] - $afBounds0[1]) / 2.0;
+        $fH = ($afBounds0[5] - $afBounds0[2]) / 2.0;
+        $fPosX = MyImmerseGetAxisPosition($afBounds0, $afBounds1, 0);
+        $fPosY = ($afBounds0[4] + $afBounds0[1]) / 2.0;
+        $fPosZ = ($afBounds0[5] + $afBounds0[2]) / 2.0;
+    }
+    else if ($fDiffY <= $fDiffX && $fDiffY <= $fDiffZ)
+    {
+        if ($afBounds0[1] < $afBounds1[1]) // check y
+        {
+            // When the portal geometry is created, it will need to be 
+            // rotated around either the x or z axis by 180 degress. We
+            // choose the x axis.
+            $rotX = 180;
+        }
+
+        // W/H comes from X and Z
+        $i2 = 1;
+        $fW = ($afBounds0[3] - $afBounds0[0]) / 2.0;
+        $fH = ($afBounds0[5] - $afBounds0[2]) / 2.0;
+        $fPosX = ($afBounds0[3] + $afBounds0[0]) / 2.0;
+        $fPosY = MyImmerseGetAxisPosition($afBounds0, $afBounds1, 1);
+        $fPosZ = ($afBounds0[5] + $afBounds0[2]) / 2.0;
+    }
+    else
+    {
+        if ($afBounds0[2] < $afBounds1[2]) // check z
+        {
+            // When the portal geometry is created, it will need to be 
+            // rotated around either the x or z axis by 180 degress. We
+            // choose the x axis.
+            $rotX = 180;
+        }
+
+        // W/H comes from X and Y
+        $i3 = 1;
+        $fW = ($afBounds0[3] - $afBounds0[0]) / 2.0;
+        $fH = ($afBounds0[4] - $afBounds0[1]) / 2.0;
+        $fPosX = ($afBounds0[3] + $afBounds0[0]) / 2.0;
+        $fPosY = ($afBounds0[4] + $afBounds0[1]) / 2.0;
+        $fPosZ = MyImmerseGetAxisPosition($afBounds0, $afBounds1, 2);
+    }
+
+    // **** Create a Default Portal Plane and position it.
+    string $szPlane[] = `polyPlane -w $fW -h $fH -sx 1 -sy 1 -ax $i1 $i2 $i3 -ch 1`;
+    //print("poly command: szPane(" + $szPlane[0] + ") w="+ $fW + " h=" + $fH + " axis=" + $i1 + "," + $i2 + "," + $i3 + "\n");
+    move -r $fPosX $fPosY $fPosZ $szPlane[0];
+
+    // The plane may need to be rotated to have the normals face the correct 
+    // direction. In this case, either rotX or rotY will have a value of 180.
+    rotate -xy $rotX $rotY 0 -r $szPlane[0];
+
+    // Parent the Plane
+    parent -a $szPlane[0] $szTransformNodes[0];
+
+    // Create the Portal Attributes
+    if(`attributeExists "NiData_Portal" $szPlane[0]` == 0)
+    {
+        addAttr -ln NiData_Portal -dt "string" $szPlane[0];
+    }
+
+    setAttr -type "string" ($szPlane[0] + ".NiData_Portal") 
+        ("NDLADJOINER \"" + $szShortName[1] + "\"");
+
+
+    if(`attributeExists "NiData_TwoWay" $szPlane[0]` ==0)
+    {
+        addAttr -ln NiData_TwoWay -dt "string" $szPlane[0];
+
+        setAttr -type "string" ($szPlane[0] + ".NiData_TwoWay") "NDLTWOWAY";
+    }
+
+    // Rename 
+    rename $szPlane[0] "Portal_NDLPR";
+
+}

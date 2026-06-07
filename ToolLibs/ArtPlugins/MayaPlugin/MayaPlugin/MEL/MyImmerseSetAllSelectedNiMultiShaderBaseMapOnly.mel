@@ -1,0 +1,95 @@
+//
+// MyImmerseResetAllNiMultiShaderBaseMapOnly.mel
+//
+// Loop through each NiMultiShader and set
+// the scene graph connections associated with only
+// showing the base map.
+
+
+global proc MyImmerseSetAllSelectedNiMultiShaderBaseMapOnly(int $iValue)
+{
+    int $iNoneFound = 1;
+
+    string $szPluginName = MyImmerseGetPluginName();
+
+    if (MyImmerseCheckAndLoadPlugin($szPluginName))
+    {
+        error("Couldn't load the MyImmerse Plugin!");
+    }
+
+    string $szNiMultiShaderNodes[] = `ls -l -sl -typ NiMultiShader`;
+    
+    // Check for Nothing Selected
+    if(size($szNiMultiShaderNodes) > 0)
+    {
+        $iNoneFound = 0;
+    }
+
+    int $iCount = 0;
+    while( $iCount < size($szNiMultiShaderNodes))
+    {
+        string $szAttribute = $szNiMultiShaderNodes[$iCount] + ".BaseMapOnly";
+
+        setAttr $szAttribute $iValue;
+        MyImmerseResetNiMultiShaderBaseMapOnly($szNiMultiShaderNodes[$iCount]);
+        $iCount = $iCount + 1;
+    }
+
+    string $szSelected[] = `ls -l -sl`;
+
+    // Find all of the Selected Objects
+    $iCount = 0;
+    while( $iCount < size($szSelected) )
+    {
+//        print ("Selected::" + $szSelected[$iCount] + "\n");
+
+        // Find all of the shapes
+        string $szShapes[] = `listRelatives -s -pa $szSelected[$iCount]`;
+
+        int $iShapeCount = 0;
+        while( $iShapeCount < size($szShapes) )
+        {
+//            print ("Shape::" + $szShapes[$iShapeCount] + "\n");
+
+            // Find all shaders
+            string $szShading[] = `listConnections -d 1 -type "shadingEngine" $szShapes[$iShapeCount]`;
+
+            int $iShadingCount = 0;
+            while ($iShadingCount < size($szShading))
+            {
+//                print ("Shaders Engines::" + $szShading[$iShadingCount] + "\n");
+
+                // Find all NiMultiShaders
+                string $szMultiShaders[] = `listConnections -d 1 -type "NiMultiShader" $szShading[$iShadingCount]`;
+
+                int $iMultiShaderCount = 0;
+                while($iMultiShaderCount < size ($szMultiShaders))
+                {
+//                    print ("NiMultiShader::" + $szMultiShaders[$iMultiShaderCount] + "\n");
+                    
+                    string $szAttribute = $szMultiShaders[$iMultiShaderCount] + ".BaseMapOnly";
+
+                    setAttr $szAttribute $iValue;
+                    MyImmerseResetNiMultiShaderBaseMapOnly($szMultiShaders[$iMultiShaderCount]);
+
+                    $iNoneFound = 0;
+
+                    $iMultiShaderCount = $iMultiShaderCount + 1;
+                }
+
+                $iShadingCount = $iShadingCount + 1;
+            }
+
+            $iShapeCount = $iShapeCount + 1;
+        }
+        
+        $iCount = $iCount + 1;
+    }
+
+
+
+    if ($iNoneFound == 1)
+    {
+        warning ("No NiMultiShaders or Objects with a NiMultiShader were selected.");
+    }
+}

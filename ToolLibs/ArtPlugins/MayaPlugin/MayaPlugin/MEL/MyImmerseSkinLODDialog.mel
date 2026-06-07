@@ -1,0 +1,264 @@
+//
+// MyImmerseSkinLODDialog.mel
+//
+// Mel script for Creating / Editing Skin LODs for Bone LOD
+
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseSkinLODHandErrors(string $szDagNodes[])
+{
+
+    if(size($szDagNodes) != 1)
+    {
+        if(size($szDagNodes) <= 0)
+        {
+            text -label "";
+            text -label "ERROR::No Objects Selected.";
+            text -label "";
+            text -label "Select only ONE Skin for Bone LOD";
+        }
+        else
+        {
+            text -label "";
+            text -label "ERROR::Multiple Objects Selected.";
+            text -label "";
+            text -label "Select only ONE Skin for Bone LOD";
+        }
+
+        return 0;
+    }
+
+    string $szRoot = $szDagNodes[0];
+
+
+    return 1;
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseSkinLODUpdateMinMax( int $iSettingMin )
+{
+    // Check the Minimum is less than or equal the maximum
+    int $iMin = `intSliderGrp -q -v MinimumBoneLOD`;
+    int $iMax = `intSliderGrp -q -v MaximumBoneLOD`;
+
+    if( $iSettingMin )
+    {
+        // Check the Max is Greater then or equal the Minimum
+        if( $iMin > $iMax )
+        {
+            $iMax = $iMin;
+        }
+    }
+    else
+    {
+        // Check the Minimum is Less or equal the Maximum
+        if( $iMax < $iMin )
+        {
+            $iMin = $iMax;
+        }
+    }
+
+    // Reset the sliders
+    intSliderGrp -e -v $iMin MinimumBoneLOD;
+    intSliderGrp -e -v $iMax MaximumBoneLOD;
+
+    if( ( $iMin == `intField -q -v iInitialSkinLODMinimum`)  &&
+        ( $iMax == `intField -q -v iInitialSkinLODMaximum`) )
+    {
+        button -e -en false SkinLODSetLevelButton;      
+    }
+    else 
+    {
+        button -e -en true SkinLODSetLevelButton;       
+    }
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseSkinLODSetLevel()
+{
+
+    // Check the Minimum is less than or equal the maximum
+    int $iMin = `intSliderGrp -q -v MinimumBoneLOD`;
+    int $iMax = `intSliderGrp -q -v MaximumBoneLOD`;
+
+    intField -e -v $iMin iInitialSkinLODMinimum;
+    intField -e -v $iMax iInitialSkinLODMaximum;
+                         
+    string $sObject = `text -q -label SkinLODName`;
+
+    if(`attributeExists Ni_SkinLODLevelMinimum $sObject` == 0)
+    {
+        addAttr -ln Ni_SkinLODLevelMinimum -at char $sObject;
+    }
+
+    setAttr ($sObject + ".Ni_SkinLODLevelMinimum") $iMin;
+
+    if(`attributeExists Ni_SkinLODLevelMaximum $sObject` == 0)
+    {
+        addAttr -ln Ni_SkinLODLevelMaximum -at char $sObject;
+    }
+
+    setAttr ($sObject + ".Ni_SkinLODLevelMaximum") $iMax;
+
+    // Gray out the button until the options change again
+    button -e -en false SkinLODSetLevelButton;      
+
+    // show the Delete Button
+    button -e -en true SkinLODDeleteLevelButton;
+
+    // Clear the Uninitialized Text 
+    text -e -label "" SkinLODUnset;
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseSkinLODDeleteLevel()
+{
+    string $sObject = `text -q -label SkinLODName`;
+
+    if(`attributeExists Ni_SkinLODLevelMinimum $sObject` == 1)
+    {
+        deleteAttr -at Ni_SkinLODLevelMinimum $sObject;
+    }
+
+    if(`attributeExists Ni_SkinLODLevelMaximum $sObject` == 1)
+    {
+        deleteAttr -at Ni_SkinLODLevelMaximum $sObject;
+    }
+
+    // Clear the initial fields
+    intField -e -v -1 iInitialSkinLODMinimum;
+    intField -e -v -1 iInitialSkinLODMaximum;
+
+    // Reset the Sliders
+    intSliderGrp -e -v 0 MinimumBoneLOD;
+    intSliderGrp -e -v 0 MaximumBoneLOD;
+
+    // show the Set Button
+    button -e -en true SkinLODSetLevelButton;       
+
+    // Gray out the Delete Button
+    button -e -en false SkinLODDeleteLevelButton;
+    
+    // Set the Uninitialized Text
+    text -e -label "Skin LOD UnInitialized" SkinLODUnset;
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseSkinLODDialog(string $nodeName)
+{
+    if(MyImmerseWindowExists("Ni_SkinLODWindow"))
+    {
+        deleteUI Ni_SkinLODWindow;
+    }
+
+    window -title "Gamebryo Skin LOD" -widthHeight 400 230 -s false Ni_SkinLODWindow;
+
+    columnLayout;
+
+    // Return dag objects only
+    string $dagnodes[];
+    if($nodeName == "")
+    {
+        $dagnodes = `selectedNodes -dagObjects`;
+    }
+    else
+    {
+        $dagnodes[0] = $nodeName;
+    }
+    
+
+    if(MyImmerseSkinLODHandErrors($dagnodes))
+    {
+        string $sObject = $dagnodes[0];
+
+        text -label "";
+        text -label $dagnodes[0] -vis false SkinLODName;
+
+        rowLayout -nc 2 -cw 1 50;
+            text -l "  Skin:" -al "left" -fn "boldLabelFont" -w 110;
+            text -l $dagnodes[0] -al "left";
+        setParent ..; // RowLayout
+         
+        text -label "";
+
+        // Create the Initial Minimum valoues
+        int $iMinimum = -1;
+        if(`attributeExists Ni_SkinLODLevelMinimum $sObject` == 1)
+        {
+            $iMinimum = `getAttr ($sObject + ".Ni_SkinLODLevelMinimum")`;
+        }
+        intField -vis false -v $iMinimum iInitialSkinLODMinimum;
+
+        int $iMaximum = -1;
+        if(`attributeExists Ni_SkinLODLevelMaximum $sObject` == 1)
+        {
+            $iMaximum = `getAttr ($sObject + ".Ni_SkinLODLevelMaximum")`;
+        }
+        intField -vis false -v $iMaximum iInitialSkinLODMaximum;
+
+        rowLayout -nc 2 -cw2 50 200;
+        
+            text -label "";
+            text -label "" -al "left" -fn "boldLabelFont" -w 110 SkinLODUnset;
+        
+        setParent ..; // rowLayout
+        
+        
+        if (($iMinimum == -1) || ($iMaximum == -1))
+            text -e -label "Skin LOD UnInitialized" SkinLODUnset;
+    
+        intSliderGrp 
+            -l "Minimum Bone LOD level" 
+            -field true 
+            -min 0 
+            -max 16
+            -v $iMinimum
+            -cc "MyImmerseSkinLODUpdateMinMax 1"
+            MinimumBoneLOD;
+
+        intSliderGrp 
+            -l "Maximum Bone LOD level" 
+            -field true 
+            -min 0 
+            -max 16
+            -v $iMaximum
+            -cc "MyImmerseSkinLODUpdateMinMax 0"
+            MaximumBoneLOD;
+
+        text -label "";
+    
+        rowLayout -nc 2;
+            
+            text -label "";
+
+            button 
+                -label "Set Bone LOD Level" 
+                -en ($iMinimum == -1)
+                -c "MyImmerseSkinLODSetLevel"
+                SkinLODSetLevelButton;
+    
+        setParent ..; // rowLayout
+
+        text -label "";
+
+        rowLayout -nc 2;
+            
+            text -label "";
+
+            button 
+                -label "Delete Bone LOD Level" 
+                -en ($iMinimum != -1)
+                -c "MyImmerseSkinLODDeleteLevel"
+                SkinLODDeleteLevelButton;
+   
+        setParent ..; // columnLayout
+    }
+
+    showWindow Ni_SkinLODWindow;
+
+}
+

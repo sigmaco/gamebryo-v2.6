@@ -1,0 +1,2 @@
+IlmBase: 1.0.1
+OpenEXR: 1.6.1

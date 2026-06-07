@@ -1,0 +1,52 @@
+//  
+// MyImmerseAddOptimizeKeepNodeAttribute.mel
+//
+// Loop through each NiMultiShader and set
+// the scene graph connections associated with only
+// showing the base map.
+
+
+global proc MyImmerseAddOptimizeKeepNodeAttribute(string $nodeName)
+{
+    int $intVal;
+
+    string $szShaderNodes[];
+    if($nodeName == "")
+    {
+         $szShaderNodes = `ls -l -sl -typ shape -typ transform`;
+    }
+    else
+    {
+        if(size(`selectedNodes -dagObjects`) > 1)
+        {
+            $szShaderNodes = `selectedNodes -dagObjects`;
+        }
+        else
+        {
+            $szShaderNodes[0] = $nodeName;
+        }
+    }
+    
+    // Check for Nothing Selected
+    if(size($szShaderNodes) == 0)
+    {
+        print("WARNING:: No Shapes or Transforms Selected\n");
+    }
+
+    int $iCount = 0;
+    while( $iCount < size($szShaderNodes))
+    {
+        string $szAttribute;
+
+        if(`attributeExists "Ni_SgoKeepNode" $szShaderNodes[$iCount]` == 0)
+        {
+            addAttr -ln Ni_SgoKeepNode -at bool -k false $szShaderNodes[$iCount];
+
+            $szAttribute = $szShaderNodes[$iCount] + ".Ni_SgoKeepNode";
+            setAttr $szAttribute true;
+        }
+
+
+        $iCount = $iCount + 1;
+    }
+}

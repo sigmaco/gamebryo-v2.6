@@ -1,0 +1,10 @@
+Version: 1
+Script ("Default DX9 Viewer Script","Viewer")
+{
+	Plugin ("NiSceneViewerDX9Plugin","NiSceneViewerDX9","1.0","Viewer")
+	{
+		Parameter ("NiPluginToolkit Renderer","2");
+		Parameter ("TREEVIEW","FALSE");
+		Parameter ("UIMFile",".\InputMap.uim");
+	}
+}

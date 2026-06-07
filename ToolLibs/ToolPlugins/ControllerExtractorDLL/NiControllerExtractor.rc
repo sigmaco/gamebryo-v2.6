@@ -1,0 +1,158 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_OPTIONS DIALOGEX 0, 0, 450, 322
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Controller Extractor Options"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Sequences Per KF File",IDC_STATIC,7,7,213,50
+    CONTROL         "Export all sequences to a single KF file",IDC_RADIO_SINGLE_KF,
+                    "Button",BS_AUTORADIOBUTTON | WS_GROUP,14,23,137,10
+    CONTROL         "Export a separate KF file for each sequence",IDC_RADIO_MULTIPLE_KF,
+                    "Button",BS_AUTORADIOBUTTON,14,39,154,10
+    GROUPBOX        "KF File Naming Convention",IDC_STATIC,7,60,213,66
+    CONTROL         "Use exported file name",IDC_CHECK_EXPORTED_FILE_NAME,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,75,88,10
+    CONTROL         "Use character name",IDC_CHECK_CHARACTER_NAME,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,92,80,10
+    LTEXT           "Separator Character:",IDC_STATIC,14,110,66,8
+    EDITTEXT        IDC_EDIT_SEPARATOR,86,107,30,14,ES_CENTER | ES_AUTOHSCROLL
+    GROUPBOX        "File Extension",IDC_STATIC,127,76,75,44
+    CONTROL         "Upper case",IDC_RADIO_UPPER_CASE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,134,88,53,10
+    CONTROL         "Lower case",IDC_RADIO_LOWER_CASE,"Button",BS_AUTORADIOBUTTON,134,103,53,10
+    GROUPBOX        "Example File Name",IDC_STATIC,7,131,213,46
+    LTEXT           "ExportedFile_CharacterName_LayerName_SequenceName.KF",IDC_STATIC_KF_FILENAME,14,143,199,8
+    LTEXT           "(Layer name will only be present for layered sequences)",IDC_STATIC,25,155,174,8
+    GROUPBOX        "Compression",IDC_STATIC,7,183,436,32
+    CONTROL         "Do not compress if size will be larger",IDC_COMPRESSION_ALWAYSCHECK,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,195,131,11
+    GROUPBOX        "KFM File",IDC_STATIC,230,7,213,45
+    CONTROL         "Create KFM File",IDC_CHECK_CREATE_KFM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,237,20,66,10
+    CONTROL         "Add character name to KFM file name if needed",IDC_CHECK_CHARACTER_NAME_IN_KFM_FILE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,237,34,166,10
+    GROUPBOX        "Default Transition Settings",IDC_STATIC,230,57,213,120
+    LTEXT           "Default Transition Types:",IDC_STATIC,237,70,80,8
+    LTEXT           "Synchronized:",IDC_STATIC,237,86,46,8
+    COMBOBOX        IDC_COMBO_SYNC_TRANS_TYPE,307,82,102,53,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Non-synchronized:",IDC_STATIC,237,104,60,8
+    COMBOBOX        IDC_COMBO_NONSYNC_TRANS_TYPE,307,100,102,55,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Default Transition Durations (in milliseconds):",IDC_STATIC,237,121,141,8
+    LTEXT           "Synchronized:",IDC_STATIC,237,141,46,8
+    EDITTEXT        IDC_EDIT_SYNC_TRANS_DURATION,307,135,78,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Non-synchronized:",IDC_STATIC,237,161,60,8
+    EDITTEXT        IDC_EDIT_NONSYNC_TRANS_DURATION,307,155,78,14,ES_AUTOHSCROLL | ES_NUMBER
+    GROUPBOX        "Excluded Controllers",IDC_STATIC,7,218,436,78
+    LTEXT           "Do not extract the following controller types:",IDC_STATIC,14,230,138,8
+    CONTROL         "NiFlipController",IDC_CHECK_EXCLUDEFLIPCONTROLLERS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,246,63,10
+    CONTROL         "Custom controller types (separated by semicolons):",IDC_CHECK_EXCLUDECUSTOMCONTROLLERS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,262,174,10
+    EDITTEXT        IDC_EDIT_EXCLUDEDCONTROLLERTYPES,27,273,324,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,166,302,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,232,302,50,14
+    CONTROL         "NiPSResetOnLoopCtlr",IDC_CHECK_EXCLUDEPSRESET,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,107,246,87,11
+END
+
+IDD_CHOOSEACTOR DIALOG  0, 0, 163, 115
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Choose Actor Root for KFM File"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "KFM files only support one actor root. You have more than one actor root in the scene.\n\nSelect the actor root to use for this KFM file:",IDC_STATIC,7,7,149,35
+    LISTBOX         IDC_LIST_ACTOR_ROOTS,7,41,149,46,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,56,94,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_OPTIONS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 443
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 316
+    END
+
+    IDD_CHOOSEACTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 156
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 108
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

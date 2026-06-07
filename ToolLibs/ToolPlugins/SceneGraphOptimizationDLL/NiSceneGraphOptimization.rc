@@ -1,0 +1,170 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "NiSceneGraphOptimization_resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "NiSceneGraphOptimization_resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_OPTIMIZATION_OPTIONS DIALOGEX 0, 0, 350, 337
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Optimization Options"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    LTEXT           "Select the optimizations that you want to be performed on the scene graph:",IDC_STATIC,10,10,236,8
+    CONTROL         "Remove duplicate properties",IDC_OPT_CHECK_REMOVEDUPPROPERTIES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,31,106,10
+    CONTROL         "Remove bad NiTexturing properties",IDC_OPT_CHECK_REMOVEBADTEXTURINGPROPS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,45,127,10
+    CONTROL         "Remove multi-material nodes",IDC_OPT_CHECK_REMOVEMULTIMTLNODES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,59,106,10
+    CONTROL         "Remove childless nodes",IDC_OPT_CHECK_REMOVECHILDLESSNODES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,73,93,10
+    CONTROL         "Remove single-child nodes",IDC_OPT_CHECK_REMOVESINGLECHILDNODES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,87,101,10
+    CONTROL         "Merge sibling nodes",IDC_OPT_CHECK_MERGESIBLINGNODES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,101,79,10
+    CONTROL         "Merge sibling NiMesh objects",IDC_OPT_CHECK_MERGESIBLINGTRISHAPES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,115,108,10
+    CONTROL         "Do not merge alpha-blended objects",IDC_OPT_CHECK_NOMERGEONALPHA,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,30,130,130,10
+    CONTROL         "Optimize NiMesh objects",IDC_OPT_CHECK_OPTIMIZETRISHAPES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,26,194,93,10
+    CONTROL         "Remove extra texture coordinate sets",IDC_OPT_CHECK_REMOVEEXTRAUVSETS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,143,133,10
+    CONTROL         "Remove unnecessary normals",IDC_OPT_CHECK_REMOVEUNNECESSARYNORMALS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,158,111,10
+    CONTROL         "Remove unnecessary NiVisControllers",IDC_OPT_CHECK_REMOVEUNNECESSARYVISCONTROLLERS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,173,135,10
+    CONTROL         "Remove unnecessary NiLookAtControllers",IDC_OPT_CHECK_REMOVEUNNECESSARYLOOKATCONTROLLERS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,170,46,149,10
+    CONTROL         "Remove hidden bone mesh",IDC_OPT_CHECK_REMOVEHIDDENBONEMESH,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,170,32,115,10
+    CONTROL         "Reduce animation keys",IDC_OPT_CHECK_REDUCEANIMATIONKEYS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,170,60,90,10
+    LTEXT           "Tolerance:",IDC_STATIC,195,74,35,8
+    EDITTEXT        IDC_OPT_EDIT_ANIMATIONKEYREDUCTIONTOLERANCE,235,74,40,12,ES_AUTOHSCROLL
+    CONTROL         "Remove unnecessary extra data",IDC_OPT_CHECK_REMOVEUNNECESSARYEXTRADATA,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,170,88,118,10
+    CONTROL         "Remove ""NiOptimizeKeep"" tags",IDC_OPT_CHECK_REMOVESGOKEEPTAGS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,195,102,117,10
+    CONTROL         "Sort children of each node by NiTexturingProperty",IDC_OPT_CHECK_SORTBYTEXTURINGPROP,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,170,116,173,10
+    GROUPBOX        "Object Names",IDC_STATIC,171,135,162,60
+    CONTROL         "Remove all object names",IDC_OPT_RADIO_REMOVENAMES,
+                    "Button",BS_AUTORADIOBUTTON,180,150,95,10
+    CONTROL         "Name all unnamed objects",IDC_OPT_RADIO_NAMEUNNAMEDOBJECTS,
+                    "Button",BS_AUTORADIOBUTTON,180,166,99,10
+    CONTROL         "Leave object names as they are",IDC_OPT_RADIO_LEAVENAMES,
+                    "Button",BS_AUTORADIOBUTTON,180,180,117,10
+    DEFPUSHBUTTON   "OK",IDOK,44,316,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,110,316,50,14
+    PUSHBUTTON      "Un-Check All",IDC_OPT_BUTTON_UNCHECKALL,176,316,50,14
+    PUSHBUTTON      "Reset Defaults",IDC_OPT_BUTTON_RESETDEFAULTS,242,316,56,14
+    GROUPBOX        "Skin and Bones Support",IDC_STATIC,170,206,163,106
+    CONTROL         "Hardware",IDC_OPT_RADIO_SKINHW,"Button",BS_AUTORADIOBUTTON | WS_GROUP,177,241,47,10
+    CONTROL         "Software",IDC_OPT_RADIO_SKINSW,"Button",BS_AUTORADIOBUTTON,236,241,44,10
+    LTEXT           "Bones per Partition:",IDC_STATIC,194,260,62,8
+    EDITTEXT        IDC_OPT_EDIT_BONESPERPARTITION,260,259,40,12,ES_AUTOHSCROLL
+    CONTROL         "Weld hardware skin partitions",IDC_OPT_CHECK_WELDSKIN,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,177,223,109,10
+    LTEXT           "Size Weight:",IDC_STATIC,54,208,41,8
+    EDITTEXT        IDC_OPT_EDIT_MESHSIZEMODIFIER,105,204,40,12,ES_AUTOHSCROLL
+    LTEXT           "Direction Weight:",IDC_STATIC,39,221,56,8
+    EDITTEXT        IDC_OPT_EDIT_MESHNORMALMODIFIER,105,217,40,12,ES_AUTOHSCROLL
+    LTEXT           "Position Weight:",IDC_STATIC,43,234,52,8
+    EDITTEXT        IDC_OPT_EDIT_MESHPOSITIONMODIFIER,105,230,40,12,ES_AUTOHSCROLL
+    LTEXT           "DX9 Cache Size:",IDC_STATIC,40,247,55,8
+    EDITTEXT        IDC_OPT_EDIT_DX9_MESHCACHESIZE,105,243,40,12,ES_AUTOHSCROLL
+    GROUPBOX        "Mesh Optimization",IDC_STATIC,16,185,143,127
+    LTEXT           "D3D10 Cache Size:",IDC_STATIC,31,260,64,8
+    EDITTEXT        IDC_OPT_EDIT_D3D10_MESHCACHESIZE,105,256,40,12,ES_AUTOHSCROLL
+    LTEXT           "XBOX 360 Cache Size:",IDC_STATIC,21,273,74,8
+    EDITTEXT        IDC_OPT_EDIT_XENON_MESHCACHESIZE,105,269,40,12,ES_AUTOHSCROLL
+    LTEXT           "PS3 Cache Size:",IDC_STATIC,41,286,54,8
+    EDITTEXT        IDC_OPT_EDIT_PS3_MESHCACHESIZE,105,282,40,12,ES_AUTOHSCROLL
+    LTEXT           "WII Cache Size:",IDC_STATIC,41,299,52,8
+    EDITTEXT        IDC_OPT_EDIT_WII_MESHCACHESIZE,105,295,40,12,ES_AUTOHSCROLL
+    LTEXT           "NOTE: Wii only supports software skinning",IDC_STATIC,177,279,135,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_OPTIMIZATION_OPTIONS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 343
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 330
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

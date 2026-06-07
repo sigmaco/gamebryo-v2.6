@@ -1,0 +1,32 @@
+//
+//  GamebryoGetExportOptions
+//
+//  This function is used to get the string that contains all the Gamebryo
+//  export settings to be used for the currently open file. 
+//---------------------------------------------------------------------------
+global proc string GamebryoGetExportOptions()
+{
+    // Check to see if the Locator exists
+    if(`objExists |Please_Dont_Delete_MyImmerse_Export_Options` == 0)
+    {
+        // if we don't have a locator, try to use the stored settings
+        if (`optionVar -ex "NifOptions"`)
+        {
+            return `optionVar -q "NifOptions"`;
+        }
+        // if there are no stored settings, return empty string
+        return "";
+    }
+
+    // Chech to see if the Attribute exists
+    if(`attributeExists MyImmerseNIFOptionsVar |Please_Dont_Delete_MyImmerse_Export_Options` == 0)
+    {
+        if (`optionVar -ex "NifOptions"`)
+        {
+            return `optionVar -q "NifOptions"`;
+        }
+        return "";
+    }
+
+    return `getAttr |Please_Dont_Delete_MyImmerse_Export_Options.MyImmerseNIFOptionsVar`;
+}

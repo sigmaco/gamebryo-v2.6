@@ -1,0 +1,767 @@
+//
+// MyImmerseCreateCharacterAnimationCompressionDialog.mel
+//
+// Mel script for automatically reducing key frame animations.
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseGetCharacterNodes(string $szCharacterRoot)
+{
+    string $szChildren[] = `listRelatives -ad -ni -typ transform $szCharacterRoot`;
+    string $szChildrenFull[] = `listRelatives -ad -ni -f -typ transform $szCharacterRoot`;
+
+    int $iLoop = 0;
+    for ($iLoop = 0; $iLoop < size($szChildren); $iLoop++)
+    {
+        textScrollList -e -append $szChildren[$iLoop] KFReductionCharacterTransforms;
+        textScrollList -e -append $szChildrenFull[$iLoop] KFReductionCharacterTransformsFullPath;
+    }
+
+    if ( size($szChildren) > 0)
+    {
+        textScrollList -e -sii 1 KFReductionCharacterTransforms;
+    }        
+
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseCharacterKeyFrameReductionGetAllSequences(string $szObject)
+{
+    string $szLayers[] = MyImmerseFindAllLayerTransforms($szObject);
+    
+    int $iLayer = 0;
+    for($iLayer = 0; $iLayer < size($szLayers); $iLayer++)
+    {
+        string $szSequenceNames[] = MyImmerseGetValidSequenceNames($szLayers[$iLayer]);
+        
+        int $iSequence = 0;
+        for($iSequence = 0; $iSequence < size($szSequenceNames); $iSequence++)
+        {
+//            print ("Name " + $szSequenceNames[$iSequence] + " Min " + $fSequenceFrames[($iSequence * 2)] + " Max " + $fSequenceFrames[($iSequence * 2) + 1] + "\n");
+            textScrollList -e -append $szSequenceNames[$iSequence] KFReductionCharacterSequences;
+        }
+        
+        if ( size($szSequenceNames) > 0)
+        {
+            textScrollList -e -sii 1 KFReductionCharacterSequences;
+        }        
+    }
+}
+
+//---------------------------------------------------------------------------
+
+global proc string MyImmerseGetScriptTableValues(int $row, int $column) 
+{
+    int $iRows = `textScrollList -q -ni KFReductionCharacterTransforms`;
+    int $iColumns = `textScrollList -q -ni KFReductionCharacterSequences` + 1;
+
+
+    if ($column == 1)
+    {
+        string $szTransforms[] = `textScrollList -q -ai KFReductionCharacterTransforms`;
+        return $szTransforms[$row -1];
+    }
+
+//    print ("Get " + $row + "," + $column + "=" + $sValues[ ($iRows * ($row-1)) + ($column-1) ] + "\n");
+
+    // Check for the attribute
+    string $szTransforms[] = `textScrollList -q -ai KFReductionCharacterTransformsFullPath`; 
+    string $szSequences[] = `textScrollList -q -ai KFReductionCharacterSequences`;
+    string $szSequence = substituteAllString($szSequences[$column -2], " ", "_SpAcE_");
+    string $szAttribute = ("Ni_CharacterCompression_" + $szSequence);
+    string $szCompactAttribute = ("Ni_CharacterCompactKeys_" + $szSequence);
+
+
+    // Get the Compact Key Global Value
+    int $iCompact = `checkBoxGrp -q -v1 KFReductionCharacterDefaultCompactKeys`;
+
+    // Checkfor an override
+    if (`attributeExists $szCompactAttribute $szTransforms[$row-1]` == 1)
+    {
+        $iCompact = `getAttr ($szTransforms[$row-1] + "." + $szCompactAttribute)`;
+    }
+
+    string $szCompactLabel = "";
+    if ($iCompact == 1)
+        $szCompactLabel = "C";
+
+    if (`attributeExists $szAttribute $szTransforms[$row-1]` == 1)
+    {
+        int $iValue = `getAttr ($szTransforms[$row-1] + "." + $szAttribute)`;
+
+        // Check if we are doing no compression.
+        if ($iValue == 101)
+        {
+            return "Uncompressed";
+        }
+
+        return ($iValue + $szCompactLabel);
+    }
+
+    int $iCharacterDefault = `intScrollBar -q -v KFReductionCharacterDefaultSlider`;
+
+    // Check if we are doing no compression.
+    if ($iCharacterDefault == 101)
+    {
+        return "Uncompressed (default)";
+    }
+   
+    return ($iCharacterDefault + $szCompactLabel + " (default)");
+}
+
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseSetScriptTableValues(int $row, int $column, string $value) 
+{
+    print ("Set::" + $row + "," + $column + "=" + $value + "\n");
+    int $iRows = `textScrollList -q -ni KFReductionCharacterTransforms`;
+    int $iColumns = `textScrollList -q -ni KFReductionCharacterSequences` + 1;
+
+    // return because we don't change the first column it's our label
+    if ($column == 1)
+        return false;
+
+    // Check for the attribute
+    string $szTransforms[] = `textScrollList -q -ai KFReductionCharacterTransformsFullPath`; 
+    string $szSequences[] = `textScrollList -q -ai KFReductionCharacterSequences`;
+    string $szSequence = substituteAllString($szSequences[$column -2], " ", "_SpAcE_");
+
+    string $szAttribute = ("Ni_CharacterCompression_" + $szSequence);
+    string $szCompactAttribute = ("Ni_CharacterCompactKeys_" + $szSequence);
+
+    // Reseting to default
+    if (size($value) == 0)
+    {
+        // Delete the attribute if it exists
+        if (`attributeExists $szAttribute $szTransforms[$row-1]` == 1)
+        {
+            deleteAttr -at $szAttribute $szTransforms[$row-1];
+        }
+
+        // Delete the compact attribute if it exists
+        if (`attributeExists $szCompactAttribute $szTransforms[$row-1]` == 1)
+        {
+            deleteAttr -at $szCompactAttribute $szTransforms[$row-1];
+        }
+
+        // Force the Refresh
+        scriptTable -e -cr $row KFReductionSequenceTransformTable;
+        return true;
+    }
+
+    // Check to see if we will use compact keys
+    int $iCompact = 0;
+    if (endsWith($value, "C") || endsWith($value, "c"))
+    {
+        $iCompact = 1;
+
+        // Strip off the C
+        string $szTemp = substring($value, 1, size($value) - 1);
+        $value = $szTemp;
+    }
+
+    if (isValidString($value, "[0-9]*") == 0)
+    {
+        print ("Invalid String\n");
+        return false;
+    }
+
+    int $iValue = $value;
+
+    
+    // Create the attribute if it exists
+    if (`attributeExists $szAttribute $szTransforms[$row-1]` == 0)
+    {
+        addAttr -at byte -ln $szAttribute -min 0 -max 101 $szTransforms[$row-1];
+    }
+
+    // Trim to the maximum
+    if ($iValue > 101)
+        $iValue = 101;
+
+    // Set the Attribute
+    setAttr ($szTransforms[$row-1] + "." + $szAttribute) $iValue;
+
+
+    // Create the compact attribute if it exists
+    if (`attributeExists $szCompactAttribute $szTransforms[$row-1]` == 0)
+    {
+        addAttr -at bool -ln $szCompactAttribute $szTransforms[$row-1];
+    }
+
+    // Set the Attribute
+    setAttr ($szTransforms[$row-1] + "." + $szCompactAttribute) $iCompact;
+
+    // Force the Refresh
+    scriptTable -e -cr $row KFReductionSequenceTransformTable;
+
+    return true;
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseCharacterKeyFrameReductionSetValue(int $iDefault)
+{
+    //print ("Slider Set Value\n");
+
+    int $iSequences = `radioButtonGrp -q -sl KFReductionCharacterSequenceObjectRadioButtons`;
+
+
+    int $iValue = `intScrollBar -q -v KFReductionSetSlider`;
+    int $iCompact = `checkBoxGrp -q -v1 KFReductionCompactKeys`;
+
+    string $szTransforms[] = `textScrollList -q -ai KFReductionCharacterTransformsFullPath`; 
+    string $szSequences[] = `textScrollList -q -ai KFReductionCharacterSequences`;
+
+    int $iSelectedSequences[] = `textScrollList -q -sii KFReductionCharacterSequences`;
+    int $iSelectedTransforms[] = `textScrollList -q -sii KFReductionCharacterTransforms`; 
+
+    int $iCurrentSequence = $iSelectedSequences[0] - 1;
+    int $iCurrentTransform = $iSelectedTransforms[0] - 1;
+
+    if ($iSequences == 1)  // All objects for the selected sequence
+    {
+        string $szSequence = substituteAllString($szSequences[$iCurrentSequence], " ", "_SpAcE_");
+
+        string $szAttribute = ("Ni_CharacterCompression_" + $szSequence);
+        string $szCompactAttribute = ("Ni_CharacterCompactKeys_" + $szSequence);
+
+
+        // Startup the Progress bar
+        progressWindow 
+            -min 0 
+            -max (trunc (size($szTransforms) * 1.1))
+            -pr 0;
+
+        int $iLoop;
+
+        for($iLoop = 0; $iLoop < size($szTransforms); $iLoop++)
+        {
+            if ($iDefault)
+            {
+                // Remove the attribute if it exists
+                if (`attributeExists $szAttribute $szTransforms[$iLoop]` == 1)
+                {
+                    deleteAttr -at $szAttribute $szTransforms[$iLoop];
+                }
+
+                // Remove the compact attribute if it exists
+                if (`attributeExists $szCompactAttribute $szTransforms[$iLoop]` == 1)
+                {
+                    deleteAttr -at $szCompactAttribute $szTransforms[$iLoop];
+                }
+            }
+            else
+            {
+                // Create the attribute if it does not exists
+                if (`attributeExists $szAttribute $szTransforms[$iLoop]` == 0)
+                {
+                    addAttr -at byte -min 0 -max 101 -ln $szAttribute $szTransforms[$iLoop];
+                }
+
+                setAttr ($szTransforms[$iLoop] + "." + $szAttribute) $iValue;
+
+                // Create the compact attribute if it does not exists
+                if (`attributeExists $szCompactAttribute $szTransforms[$iLoop]` == 0)
+                {
+                    addAttr -at bool -ln $szCompactAttribute $szTransforms[$iLoop];
+                }
+
+                setAttr ($szTransforms[$iLoop] + "." + $szCompactAttribute) $iCompact;
+            }
+
+            // Update the Progress Window
+            progressWindow -e -s 1;
+        }
+
+    }
+    else  // All Sequence for the select object
+    {
+
+        // Startup the Progress bar
+        progressWindow 
+            -min 0 
+            -max (trunc (size($szSequences) * 1.1))
+            -pr 0;
+
+        int $iLoop;
+
+        for($iLoop = 0; $iLoop < size($szSequences); $iLoop++)
+        {
+
+            string $szSequence = substituteAllString($szSequences[$iLoop], " ", "_SpAcE_");
+            string $szAttribute = ("Ni_CharacterCompression_" + $szSequence);
+            string $szCompactAttribute = ("Ni_CharacterCompactKeys_" + $szSequence);
+
+            if ($iDefault)
+            {
+                // Remove the attribute if it exists
+                if (`attributeExists $szAttribute $szTransforms[$iCurrentTransform]` == 1)
+                {
+                    deleteAttr -at $szAttribute $szTransforms[$iCurrentTransform];
+                }
+
+                // Remove the compact attribute if it exists
+                if (`attributeExists $szCompactAttribute $szTransforms[$iCurrentTransform]` == 1)
+                {
+                    deleteAttr -at $szCompactAttribute $szTransforms[$iCurrentTransform];
+                }
+            }
+            else
+            {
+                // Create the attribute if it does not exists
+                if (`attributeExists $szAttribute $szTransforms[$iCurrentTransform]` == 0)
+                {
+                    addAttr -at byte -min 0 -max 101 -ln $szAttribute $szTransforms[$iCurrentTransform];
+                }
+
+                setAttr ($szTransforms[$iCurrentTransform] + "." + $szAttribute) $iValue;
+
+                // Create the compact attribute if it does not exists
+                if (`attributeExists $szCompactAttribute $szTransforms[$iCurrentTransform]` == 0)
+                {
+                    addAttr -at bool -ln $szCompactAttribute $szTransforms[$iCurrentTransform];
+                }
+
+                setAttr ($szTransforms[$iCurrentTransform] + "." + $szCompactAttribute) $iCompact;
+            }
+
+            // Update the Progress Window
+            progressWindow -e -s 1;
+        }
+    }
+
+    // Force the Refresh
+    scriptTable -e -ct KFReductionSequenceTransformTable;
+
+    // Update the Progress Window
+    progressWindow -ep;
+
+}
+
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseCharacterKeyFrameResetToDefault()
+{
+
+    int $iValue = `intScrollBar -q -v KFReductionSetSlider`;
+    int $iCompact = `checkBoxGrp -q -v1 KFReductionCompactKeys`;
+
+    string $szTransforms[] = `textScrollList -q -ai KFReductionCharacterTransformsFullPath`; 
+    string $szSequences[] = `textScrollList -q -ai KFReductionCharacterSequences`;
+
+
+    int $iCurrentSequence = 0;
+    int $iCurrentTransform = 0;
+
+    progressWindow 
+        -min 0 
+        -max (trunc (size($szTransforms) * size($szSequences) * 1.1))
+        -pr 0;
+
+    for ($iCurrentTransform = 0; $iCurrentTransform < size($szTransforms); $iCurrentTransform++)
+    {
+        for ($iCurrentSequence = 0; $iCurrentSequence < size($szSequences); $iCurrentSequence++)
+        {
+
+            string $szSequence = substituteAllString($szSequences[$iCurrentSequence], " ", "_SpAcE_");
+            string $szAttribute = ("Ni_CharacterCompression_" + $szSequence);
+            string $szCompactAttribute = ("Ni_CharacterCompactKeys_" + $szSequence);
+
+            // Remove the attribute if it exists
+            if (`attributeExists $szAttribute $szTransforms[$iCurrentTransform]` == 1)
+            {
+                deleteAttr -at $szAttribute $szTransforms[$iCurrentTransform];
+            }
+
+            // Remove the compact attribute if it exists
+            if (`attributeExists $szCompactAttribute $szTransforms[$iCurrentTransform]` == 1)
+            {
+                deleteAttr -at $szCompactAttribute $szTransforms[$iCurrentTransform];
+            }
+
+            
+            progressWindow -e -s 1;
+
+        }
+    }
+
+
+    // Force the Refresh
+    scriptTable -e -ct KFReductionSequenceTransformTable;
+
+    progressWindow -ep;
+
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseCharacterKeyFrameResetLabel(int $iGlobal)
+{
+    if ($iGlobal)
+    {
+        int $iValue = `intScrollBar -q -v KFReductionCharacterDefaultSlider`;
+
+        text -e -label ("Global Compression:(" + $iValue + ")") KFReductionCharacterDefaultLabel;
+    }
+    else
+    {
+        int $iValue = `intScrollBar -q -v KFReductionSetSlider`;
+
+        text -e -label ("Compression:(" + $iValue + ")") KFReducetionCompressionLabel;
+    }
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseCharacterKeyFrameSetCharacterDefaults()
+{
+    int $iValue = `intScrollBar -q -v KFReductionCharacterDefaultSlider`;
+    int $iCompact = `checkBoxGrp -q -v1 KFReductionCharacterDefaultCompactKeys`;
+
+
+
+    string $szCharacterRoot = `text -q -l KFReductionCharacterRoot`;
+
+    // Set the Global Default Compression
+    if (`attributeExists "Ni_CharacterCompressionGlobal" $szCharacterRoot` == 0)
+    {
+        addAttr -at byte -min 0 -max 101 -ln "Ni_CharacterCompressionGlobal" $szCharacterRoot;
+    }
+
+    setAttr ($szCharacterRoot + ".Ni_CharacterCompressionGlobal") $iValue;
+
+
+    // Set the Global Default Compact
+    if (`attributeExists "Ni_CharacterCompactGlobal" $szCharacterRoot` == 0)
+    {
+        addAttr -at bool -ln "Ni_CharacterCompactGlobal" $szCharacterRoot;
+    }
+
+    setAttr ($szCharacterRoot + ".Ni_CharacterCompactGlobal") $iCompact;
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseCharacterKeyFrameGetCharacterDefaults()
+{
+
+    string $szCharacterRoot = `text -q -l KFReductionCharacterRoot`;
+
+    // Set the Global Default Compression
+    if (`attributeExists "Ni_CharacterCompressionGlobal" $szCharacterRoot` == 1)
+    {
+        int $iValue = `getAttr ($szCharacterRoot + ".Ni_CharacterCompressionGlobal")`;
+
+        intScrollBar -e -v $iValue KFReductionCharacterDefaultSlider;
+    }
+
+
+
+    // Set the Global Default Compact
+    if (`attributeExists "Ni_CharacterCompactGlobal" $szCharacterRoot` == 1)
+    {
+        int $iCompact = `getAttr ($szCharacterRoot + ".Ni_CharacterCompactGlobal")`;
+
+        checkBoxGrp -e -v1 $iCompact KFReductionCharacterDefaultCompactKeys;
+    }
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseCreateCharacterAnimationCompressionDialog()
+{
+//    print ("MyImmerseCreateCharacterAnimationCompressionDialog\n");
+
+    // ONLY ALLOW ONE WINDOW AT A TIME SO WE WILL DELETE IT IF IT EXISTS
+
+    // Check if the window exists
+    if( MyImmerseWindowExists("CharacterAnimationCompressionWindow") )
+    {
+        deleteUI CharacterAnimationCompressionWindow;
+    }
+
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) <= 0)
+    {
+        error "MyImmerseCreateCharacterAnimationCompressionDialog::No Objects Selected";
+        return;
+    }
+
+
+    int $iLeftMargin = 30;
+    string $szCharacterRoot = MyImmerseKeyFrameReductionGetCharacterRoot($dagnodes[0]);
+
+    window -title "Character Animation Compression" -widthHeight 620 930 CharacterAnimationCompressionWindow;
+
+    columnLayout;
+    
+    text -label "";
+
+    rowLayout -nc 3 -cw3 $iLeftMargin 130 200;
+
+        text -label "";
+
+        text -l "Character Root:" -al "left" -fn "boldLabelFont" -w 130;
+
+        text -l $szCharacterRoot -al "left" KFReductionCharacterRoot;
+
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    rowLayout -nc 5 -cw5 $iLeftMargin 125 210 50 50;
+
+        text -label "";
+
+        text -label "Global Compression:" KFReductionCharacterDefaultLabel;
+
+        intScrollBar 
+            -w 200 
+            -min 0 
+            -max 101 
+            -value 25 
+            -step 1 
+            -largeStep 10
+            -cc "MyImmerseCharacterKeyFrameResetLabel 1"
+            -dc "MyImmerseCharacterKeyFrameResetLabel 1"
+            KFReductionCharacterDefaultSlider;
+
+        button 
+            -l "Apply"
+            -c "scriptTable -e -ct KFReductionSequenceTransformTable;MyImmerseCharacterKeyFrameSetCharacterDefaults"
+            KFReductionCharacterApplyButton;
+
+        button 
+            -l "Reset All to Default"
+            -c "MyImmerseCharacterKeyFrameResetToDefault"
+            KFReductionCharacterDefaultButton;
+
+
+    setParent ..; // rowLayout
+
+    rowLayout -nc 3 -cw3 155 165 280;
+
+        text -label "";
+
+        text -label "Size";
+
+        text -label "Quality";
+
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    rowLayout -nc 3 -cw3 $iLeftMargin 175 100;
+
+        text -label "";
+
+        text -label "Use Compact Keys (half precision)";
+
+        checkBoxGrp
+            -ncb 1
+            -w 200
+            KFReductionCharacterDefaultCompactKeys;
+
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    frameLayout -cll false -l "        Control By Sequence or Object" -lv true -bv true -bs "etchedOut";
+        columnLayout;
+
+        text -label "";
+
+        rowLayout -nc 2 -cw2 $iLeftMargin 225;
+
+            text -label "";
+
+            radioButtonGrp 
+                -nrb 2
+                -l "Set Compression by"
+                -l1 "Sequences"
+                -l2 "Objects"
+                -sl 1
+                -on1 "textScrollList -e -en true KFReductionCharacterSequences;textScrollList -e -en false KFReductionCharacterTransforms"
+                -on2 "textScrollList -e -en false KFReductionCharacterSequences;textScrollList -e -en true KFReductionCharacterTransforms"
+                KFReductionCharacterSequenceObjectRadioButtons;
+
+        setParent ..; // rowLayout
+
+        text -label "";
+
+        rowLayout -nc 2 -cw2 200 400;
+
+            columnLayout;
+                rowLayout -nc 2 -cw2 $iLeftMargin 200;
+
+                    text -label "";
+
+                    text -l "Character Sequences:" -al "left" -fn "boldLabelFont" -w 130;
+
+                setParent ..; // rowLayout
+
+                rowLayout -nc 2 -cw2 $iLeftMargin 200;
+
+                    text -label "";
+
+                    textScrollList
+                        -nr 10
+                        -ams false
+                        KFReductionCharacterSequences;
+
+                setParent ..; // rowLayout
+            setParent ..; // columnLayout
+
+            columnLayout;
+                rowLayout -nc 2 -cw2 $iLeftMargin 200;
+
+                    text -label "";
+
+                    text -l "Character Transfroms:" -al "left" -fn "boldLabelFont" -w 130;
+
+                setParent ..; // rowLayout
+
+                rowLayout -nc 3 -cw3 $iLeftMargin 200 300;
+
+                    text -label "";
+
+                    textScrollList
+                        -nr 10
+                        -ams false
+                        -en false
+                        KFReductionCharacterTransforms;
+
+                    textScrollList
+                        -nr 10
+                        -ams false
+                        -visible false
+                        KFReductionCharacterTransformsFullPath;
+
+
+                setParent ..; // rowLayout
+            setParent ..; // columnLayout
+        setParent ..; // rowLayout
+    
+        text -label "";
+
+        rowLayout -nc 5 -cw5 $iLeftMargin 100 210 50 50;
+
+            text -label "";
+
+            text -label "Compression:" KFReducetionCompressionLabel;
+
+            intScrollBar 
+                -w 200 
+                -min 0 
+                -max 101 
+                -value 25 
+                -step 1 
+                -largeStep 10 
+                -cc "MyImmerseCharacterKeyFrameResetLabel 0"
+                -dc "MyImmerseCharacterKeyFrameResetLabel 0"
+                KFReductionSetSlider;
+
+            button 
+                -l "Apply"
+                -c "MyImmerseCharacterKeyFrameReductionSetValue 0"
+                KFReductionApplyButton;
+
+            button 
+                -l "Reset to Default"
+                -c "MyImmerseCharacterKeyFrameReductionSetValue 1"
+                KFReductionDefaultButton;
+
+        setParent ..; // rowLayout
+
+        rowLayout -nc 3 -cw3 130 165 280;
+
+            text -label "";
+
+            text -label "Size";
+
+            text -label "Quality";
+
+        setParent ..; // rowLayout
+
+        text -label "";
+    
+        rowLayout -nc 3 -cw3 $iLeftMargin 175 100;
+
+            text -label "";
+
+            text -label "Use Compact Keys (half precision)";
+
+            checkBoxGrp
+                -ncb 1
+                -w 200
+                KFReductionCompactKeys;
+
+        setParent ..; // rowLayout
+
+        text -label "";
+
+        setParent ..; // columnLayout
+    setParent ..; // FrameLayout
+
+    text -label "";
+
+    rowLayout -nc 2 -cw2 $iLeftMargin 230;
+
+        text -label "";
+
+        text -l "Compressions Table:" -al "left" -fn "boldLabelFont" -w 230;
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    if ($szCharacterRoot != "(NONE)")
+    {
+        MyImmerseGetCharacterNodes($szCharacterRoot);
+        MyImmerseCharacterKeyFrameReductionGetAllSequences($szCharacterRoot);
+
+        MyImmerseCharacterKeyFrameGetCharacterDefaults();
+
+        // Create the Defaults if they don't exist
+        MyImmerseCharacterKeyFrameSetCharacterDefaults();
+
+        MyImmerseCharacterKeyFrameResetLabel 1;
+        MyImmerseCharacterKeyFrameResetLabel 0;
+
+        scriptTable
+            -h 400
+            -w 600
+            -l 1 "Transforms"
+            -rows `textScrollList -q -ni KFReductionCharacterTransforms`
+            -columns (`textScrollList -q -ni KFReductionCharacterSequences` + 1)
+            -gcc "MyImmerseGetScriptTableValues"
+            -ccc "MyImmerseSetScriptTableValues"
+            KFReductionSequenceTransformTable;
+
+        // Build the Column Names
+        string $szColumnNames[] = `textScrollList -q -ai KFReductionCharacterSequences`;
+        int $iLoop;
+        for ($iLoop = 0; $iLoop < size($szColumnNames); $iLoop++)
+        {
+            scriptTable -e -l ($iLoop + 2) $szColumnNames[$iLoop] KFReductionSequenceTransformTable;
+        }
+
+        scriptTable -e -ct KFReductionSequenceTransformTable;    
+    }
+  
+
+    showWindow CharacterAnimationCompressionWindow;
+
+    if ($szCharacterRoot != "(NONE)")
+    {
+        scriptTable -e -ct KFReductionSequenceTransformTable;    
+    }
+}
+
+//MyImmerseCreateCharacterAnimationCompressionDialog;
+

@@ -1,0 +1,4 @@
+bin/libiconv2.dll
+bin/libintl3.dll
+manifest/bison-2.1-dep.mft
+manifest/bison-2.1-dep.ver

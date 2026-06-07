@@ -1,0 +1,41 @@
+//
+// MyImmerseCreateAnimationLoopingControls.mel
+//
+// Mel script for applying Net Immerse Attributes to a control
+// the animation looping.
+
+
+global proc MyImmerseCreateAnimationLoopingControls(string $nodeName)
+{
+    // Return dag objects only
+    string $dagnodes[];
+
+    if($nodeName == "")
+    {
+        $dagnodes = `selectedNodes -dagObjects`;
+    }
+    else
+    {
+        if(size(`selectedNodes -dagObjects`) > 1)
+        {
+            $dagnodes = `selectedNodes -dagObjects`;
+        }
+        else
+        {
+            $dagnodes[0] = $nodeName;
+        }
+    }
+
+    if(size($dagnodes) <= 0)
+    {
+        print("Error:: No Nodes selected.\n");
+        return;
+    }
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop < size($dagnodes); $iLoop++)
+    {
+        addAttr -ln Ni_AnimationLoopingForAllChildren -at bool $dagnodes[$iLoop];
+        addAttr -ln Ni_AnimationLoopingType -at enum -dv 0 -enumName "Loop Animation:Reflecting Loop:No Looping" $dagnodes[$iLoop];
+    }
+}

@@ -1,0 +1,406 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>StdPluginsCs_VC80</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Emergent.Gamebryo.SceneDesigner.StdPluginsCs</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <ProjectGuid>{D2B2A999-9974-4916-A6A6-4EF08B6AB747}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugDLL|AnyCPU' ">
+    <OutputPath>bin\DebugDLL\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;VC80</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseDLL|AnyCPU' ">
+    <OutputPath>bin\ReleaseDLL\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;VC80</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ShippingDLL|AnyCPU' ">
+    <OutputPath>bin\ShippingDLL\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;VC80</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\PaletteTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dialogs\DeleteLayerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\DeleteLayerDialog.Designer.cs">
+      <DependentUpon>DeleteLayerDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\AddNewComponentDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\AddNewPaletteDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\AddNewTemplateDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\AddPropertyDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\EditTemplateDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\PickPaletteDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\AddTagDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\AddTagDlg.Designer.cs">
+      <DependentUpon>AddTagDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\RemoveTagDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\RemoveTagDlg.Designer.cs">
+      <DependentUpon>RemoveTagDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\TemplateConflictDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editors\EntityCollectionEditor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Editors\EntityCollectionEditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editors\EntityPointerEditor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Editors\EntityPointerEditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editors\EntityTagsEditor.cs" />
+    <Compile Include="Editors\EntityTagsEditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editors\EntityTagsEditorDialog.Designer.cs">
+      <DependentUpon>EntityTagsEditorDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\LayersFilter.cs" />
+    <Compile Include="Filters\NameFilter.cs" />
+    <Compile Include="Filters\TagsFilter.cs" />
+    <Compile Include="Panels\ComponentPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\EntityTemplatePanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\LayersPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\LayersPanel.Designer.cs">
+      <DependentUpon>LayersPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\MessagesPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\PalettePanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\SelectionFilterPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\SelectionFilterPanel.Designer.cs">
+      <DependentUpon>SelectionFilterPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\TagsPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\TagsPanel.Designer.cs">
+      <DependentUpon>TagsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\UndoPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Plugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\EntityPathServiceImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\OptionsServiceImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\UICommandServiceImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TypeConverters\ColorAConverter.cs" />
+    <Compile Include="TypeConverters\EntityTagsConverter.cs" />
+    <Compile Include="UIBinding\AbstractBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UIBinding\CommandBindingBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UIBinding\DynamicMenuBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UIBinding\DynamicShortCutBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UIBinding\DynamicToolbarBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UIBinding\OptionsBindingsBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UICommandUtility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\AnimationControlUtility.cs" />
+    <Compile Include="Utility\ComponentPropertyUtilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\PaletteUtilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Win32Utility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Controls\PaletteTreeView.resx">
+      <DependentUpon>PaletteTreeView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\DeleteLayerDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DeleteLayerDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AddNewComponentDlg.resx">
+      <DependentUpon>AddNewComponentDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AddNewPaletteDlg.resx">
+      <DependentUpon>AddNewPaletteDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AddNewTemplateDlg.resx">
+      <DependentUpon>AddNewTemplateDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AddPropertyDlg.resx">
+      <DependentUpon>AddPropertyDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\EditTemplateDlg.resx">
+      <DependentUpon>EditTemplateDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\PickPaletteDialog.resx">
+      <DependentUpon>PickPaletteDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AddTagDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AddTagDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\RemoveTagDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>RemoveTagDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\TemplateConflictDlg.resx">
+      <DependentUpon>TemplateConflictDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editors\EntityCollectionEditorDialog.resx">
+      <DependentUpon>EntityCollectionEditorDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editors\EntityPointerEditorDialog.resx">
+      <DependentUpon>EntityPointerEditorDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editors\EntityTagsEditorDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>EntityTagsEditorDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ComponentPanel.resx">
+      <DependentUpon>ComponentPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\EntityTemplatePanel.resx">
+      <DependentUpon>EntityTemplatePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\LayersPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>LayersPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\MessagesPanel.resx">
+      <DependentUpon>MessagesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\PalettePanel.resx">
+      <DependentUpon>PalettePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\SelectionFilterPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SelectionFilterPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\TagsPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TagsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\UndoPanel.resx">
+      <DependentUpon>UndoPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Icons\component_panel.ico" />
+    <Content Include="Resources\Icons\Current.png" />
+    <Content Include="Resources\Icons\DeleteLayer.png" />
+    <Content Include="Resources\Icons\Group.png" />
+    <Content Include="Resources\Icons\ImportLayer.png" />
+    <Content Include="Resources\Icons\layers_panel.ico" />
+    <Content Include="Resources\Icons\Locked.png" />
+    <Content Include="Resources\Icons\messages_panel.ico" />
+    <Content Include="Resources\Icons\NewGroup.png" />
+    <Content Include="Resources\Icons\palette_panel.ico" />
+    <Content Include="Resources\Icons\Readonly.png" />
+    <Content Include="Resources\Icons\tags_panel.ico" />
+    <Content Include="Resources\Icons\template_panel.ico" />
+    <Content Include="Resources\Icons\undo_panel.ico" />
+    <Content Include="Resources\Icons\Visible.png" />
+    <Content Include="Resources\Icons\Writable.png" />
+    <Content Include="Resources\Images\PalettePanelListView\category.png" />
+    <Content Include="Resources\Images\PalettePanelListView\category_small.png" />
+    <Content Include="Resources\Images\PalettePanelListView\palette.png" />
+    <Content Include="Resources\Images\PalettePanelListView\palette_small.png" />
+    <Content Include="Resources\Images\PalettePanelListView\prefab_category.png" />
+    <Content Include="Resources\Images\PalettePanelListView\prefab_category_small.png" />
+    <Content Include="Resources\Images\PalettePanelListView\prefab_palette.png" />
+    <Content Include="Resources\Images\PalettePanelListView\prefab_palette_small.png" />
+    <Content Include="Resources\Images\PalettePanelListView\prefab_template.png" />
+    <Content Include="Resources\Images\PalettePanelListView\prefab_template_small.png" />
+    <Content Include="Resources\Images\PalettePanelListView\template.png" />
+    <Content Include="Resources\Images\PalettePanelListView\template_small.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\00_import_palette.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\01_new_palette.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\02_rename_palette.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\03_delete_palette.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\04_new_template.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\05_clone_from_entity.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\06_move_copy_rename.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\07_delete_template.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\08_add_art_assets.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\09_large_icons.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\10_small_icons.png" />
+    <Content Include="Resources\Images\PalettePanelToolbar\11_change_palette_folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SceneDesignerFramework\Win32\VC80\SceneDesignerFramework.vcproj">
+      <Project>{60C1FF6B-CF7E-4D83-BF7F-CA974EF1A753}</Project>
+      <Name>SceneDesignerFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>if not exist "..\..\..\Application\VC80\$(ConfigurationName)\Plugins\" mkdir "..\..\..\Application\VC80\$(ConfigurationName)\Plugins\"
+copy "$(TargetPath)" "..\..\..\Application\VC80\$(ConfigurationName)\Plugins\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

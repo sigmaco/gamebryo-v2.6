@@ -1,0 +1,48 @@
+//
+// MayaNifAddNILightAttributes.mel
+//
+// Mel script for applying Net Immerse Attributes to a light
+
+
+global proc MyImmerseCreateLightWithAttributes(string $szLightType)
+{
+    string $szStringVal;
+    
+
+    if($szLightType == "pointLight")
+        $szStringVal = `pointLight`;
+    else if($szLightType == "directionalLight")
+        $szStringVal = `directionalLight`;
+    else if($szLightType == "spotLight")
+        $szStringVal = `spotLight`;
+
+    addAttr -ln Ni_Dimmer -at "float" -min 0.0 -max 100000.0 -dv 1.0 $szStringVal;
+
+    addAttr -ln Ni_AmbientColor -nc 3 -at float3 -uac $szStringVal;
+    addAttr -ln Ni_AmbientColorRed   -at "float" -dv 0.0 -p Ni_AmbientColor $szStringVal;
+    addAttr -ln Ni_AmbientColorGreen -at "float" -dv 0.0 -p Ni_AmbientColor $szStringVal;
+    addAttr -ln Ni_AmbientColorBlue  -at "float" -dv 0.0 -p Ni_AmbientColor $szStringVal;
+
+    addAttr -ln Ni_SpecularColor -nc 3 -at float3 -uac $szStringVal;
+    addAttr -ln Ni_SpecularColorRed   -at "float" -dv 1.0 -p Ni_SpecularColor $szStringVal;
+    addAttr -ln Ni_SpecularColorGreen -at "float" -dv 1.0 -p Ni_SpecularColor $szStringVal;
+    addAttr -ln Ni_SpecularColorBlue  -at "float" -dv 1.0 -p Ni_SpecularColor $szStringVal;
+
+    // Only set Attenuation for pointLights and spotLights
+    if(($szLightType == "pointLight") || ($szLightType == "spotLight"))
+    {
+        addAttr -ln Ni_UseMayaDecayRate -at bool $szStringVal;
+        setAttr ($szStringVal + ".Ni_UseMayaDecayRate") true;
+
+        addAttr -ln Ni_SetAttenuationByDistance -at bool -h true $szStringVal;
+        setAttr ($szStringVal + ".Ni_SetAttenuationByDistance") true;
+
+        addAttr -ln Ni_NearZeroDistance -at "float" -min 0.0001 -dv 10.0 -h true $szStringVal;
+
+        addAttr -ln Ni_ConstantAttenuation -at "float" -dv 1.0 $szStringVal;
+        addAttr -ln Ni_LinearAttenuation -at "float" -dv 0.0 $szStringVal;
+        addAttr -ln Ni_QuadraticAttenuation -at "float" -dv 0.0 $szStringVal;
+
+    }
+}
+

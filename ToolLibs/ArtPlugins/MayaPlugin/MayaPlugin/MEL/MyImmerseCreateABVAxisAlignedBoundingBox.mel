@@ -1,0 +1,104 @@
+//
+// MyImmerseAddABVAttributes.mel
+//
+//  Loops through each selected transform and applies ABV Collision Data
+//
+
+global proc MyImmerseCreateABVAxisAlignedBoundingBox(string $nodeName)
+{
+    int $intVal;
+
+    string $szTransformNodes[];
+    if($nodeName == "")
+    {
+        $szTransformNodes = `ls -l -sl -typ transform`;
+    }
+    else
+    {
+        if(size(`selectedNodes -dagObjects`) > 1)
+        {
+            $dagnodes = `selectedNodes -dagObjects`;
+        }
+        else
+        {
+            $dagnodes[0] = $nodeName;
+        }
+    }
+    
+    // Check for Nothing Selected
+    if(size($szTransformNodes) == 0)
+    {
+        error("MyImmerseCreateABVAxisAlignedBoundingBox:: No Transform Selected\n");
+        return;
+    }
+
+    if(size($szTransformNodes) > 1)
+    {
+        error("MyImmerseCreateABVAxisAlignedBoundingBox:: Only Select ONE Transform\n");
+        return;
+    }
+
+    // Find the Bound
+    float $afBounds[] = `xform -q -bb -ws $szTransformNodes[0]`;
+
+    float $fWX = ($afBounds[3] - $afBounds[0]);
+    float $fWY = ($afBounds[4] - $afBounds[1]);
+    float $fWZ = ($afBounds[5] - $afBounds[2]);
+
+    float $fCX = ($afBounds[3] + $afBounds[0]) / 2.0;
+    float $fCY = ($afBounds[4] + $afBounds[1]) / 2.0;
+    float $fCZ = ($afBounds[5] + $afBounds[2]) / 2.0;
+    
+    float $version =  getApplicationVersionAsFloat();
+
+    // Create the Cube
+    string $szCube[];
+    if( $version >= 2008)
+    {
+        $szCube = `polyCube -w $fWX -h $fWY -d $fWZ -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 1 -ch 1`;
+    }
+    else
+    {
+        $szCube = `polyCube -w $fWX -h $fWY -d $fWZ -sx 1 -sy 1 -sz 1 -ax 0 1 0 -tx 1 -ch 1`;
+    }
+    
+
+    // Position the Cube
+    move -r $fCX $fCY $fCZ $szCube[0];
+
+    // Parent the Cube
+    parent -a $szCube[0] $szTransformNodes[0];
+
+    // Add the ABV attributes
+    string $szAttribute;
+
+    if(`attributeExists "Ni_EnableABVCollisionData" $szCube[0]` == 0)
+    {
+        addAttr -ln Ni_EnableABVCollisionData -at bool -k false $szCube[0];
+
+        $szAttribute = $szCube[0] + ".Ni_EnableABVCollisionData";
+        setAttr $szAttribute true;
+    }
+
+
+    if(`attributeExists "Ni_ABV_Propogate" $szCube[0]` == 0)
+    {
+        addAttr -ln Ni_ABV_Propogate -at enum -enumName "On Success:On Failure:Always:Never" $szCube[0];
+        
+        $szAttribute = $szCube[0] + ".Ni_ABV_Propogate";
+        setAttr $szAttribute 3;
+    }
+
+    if(`attributeExists "Ni_ABV_CollisionShape" $szCube[0]` == 0)
+    {
+        addAttr -ln Ni_ABV_CollisionShape -at enum -enumName "Capsule:Sphere:Halfspace:Box:Union:Triangles:OBB:No Test:Bounding Sphere" $szCube[0];
+        
+        $szAttribute = $szCube[0] + ".Ni_ABV_CollisionShape";
+        setAttr $szAttribute 3;
+    }
+
+
+    // Rename 
+    rename $szCube[0] "ABVBoundingBox";
+
+}

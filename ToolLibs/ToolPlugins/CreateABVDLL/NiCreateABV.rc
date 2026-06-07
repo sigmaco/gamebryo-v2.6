@@ -1,0 +1,131 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "NiCreateABV_resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "NiCreateABV_resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_OPT_CREATE_ABV DIALOG  0, 0, 177, 146
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Create ABV Options"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,30,118,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,96,118,50,14
+    CONTROL         "Remove Proxy Mesh",IDC_CHECK_REMOVE_PROXY_MESH,
+                    "Button",BS_AUTOCHECKBOX | BS_VCENTER | WS_TABSTOP,7,91,
+                    110,16
+    CONTROL         "Create WireFrames representing ABV Proxies",
+                    IDC_CHECK_CREATE_WIREFRAME_ABVPROXY,"Button",
+                    BS_AUTOCHECKBOX | BS_VCENTER | WS_TABSTOP,7,28,157,16
+    CONTROL         "Create WireFrames representing ABVs",
+                    IDC_CHECK_CREATE_WIREFRAME_ABV,"Button",BS_AUTOCHECKBOX | 
+                    BS_VCENTER | WS_TABSTOP,7,49,140,16
+    CONTROL         "Create WireFrame for Selections",
+                    IDC_CHECK_CREATE_WIREFRAME_SELECTION,"Button",
+                    BS_AUTOCHECKBOX | BS_VCENTER | WS_TABSTOP,7,70,137,16
+    CONTROL         "Create ABV",IDC_CHECK_CREATEABV,"Button",
+                    BS_AUTOCHECKBOX | BS_VCENTER | WS_TABSTOP,7,7,60,16
+END
+
+IDD_CREATE_ABV_RESULTS_DIALOG DIALOGEX 0, 0, 382, 289
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Create ABV Results"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,173,268,50,14
+    EDITTEXT        IDC_EDIT_RESULTS,7,7,368,253,ES_MULTILINE | WS_VSCROLL | 
+                    WS_HSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_OPT_CREATE_ABV, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 170
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 132
+    END
+
+    IDD_CREATE_ABV_RESULTS_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 375
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 282
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

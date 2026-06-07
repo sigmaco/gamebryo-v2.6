@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<xsi_file type="Shelf" xsi_version="6.5.2007.0829" syntax_version="1.0">
+   <shelf_view name="GambryoExportToolbar" clsid="{997374B2-550B-495A-A143-8EF99F27FC91}">
+      <properties>
+         <showtabs>false</showtabs>
+      </properties>
+      <definition maxinstances="10000" acceptfocus="true" private="false" defaultsize="0,100,200,300" cmdmap="{00000000-0000-0000-0000-000000000000}" supportedtypes="6" category=""></definition>
+      <tabs layout="top" active="DS Toolbar">
+         <tab label="DS Toolbar" type="toolbar">
+            <properties id="{BA72847F-B2B1-498D-AEC0-89607A0B1BC7}" name="" display_preset_as_small="False" display_as_text_only="False"></properties>
+            <item type="script" userwidth="180" name="Export to Gamebryo" cmdid="{4E326467-980A-DCF8-92B8-2AD3B1036B6F}"></item>
+            <item type="scriptbutton" label="Create Gamebryo Lighting" userwidth="180" scriptengine="VBScript" tooltip="">
+               <scripttext>&lt;![CDATA[Set l_Selection = Application.Selection(0)
+If TypeName(l_Selection) &lt;&gt; &quot;Nothing&quot; Then
+	CreateGamebryoLighting(l_Selection)
+End If
+]]&gt;</scripttext>
+            </item>
+            <item type="scriptbutton" label="Create Gamebryo LOD" userwidth="180" scriptengine="VBScript" tooltip="">
+               <scripttext>&lt;![CDATA[Set l_Selection = Application.Selection(0)
+If TypeName(l_Selection) &lt;&gt; &quot;Nothing&quot; Then
+	CreateGamebryoLOD(l_Selection)
+End If
+]]&gt;</scripttext>
+            </item>
+            <item type="scriptbutton" label="Create Gamebryo Z-Buffer" userwidth="180" scriptengine="VBScript" tooltip="">
+               <scripttext>&lt;![CDATA[Set l_Selection = Application.Selection(0)
+If TypeName(l_Selection) &lt;&gt; &quot;Nothing&quot; Then
+	CreateGamebryoZBuffer(l_Selection)
+End If
+]]&gt;</scripttext>
+            </item>
+            <item type="scriptbutton" label="Create Gamebryo Shadow" userwidth="180" scriptengine="VBScript" tooltip="">
+               <scripttext>&lt;![CDATA[Set l_Selection = Application.Selection(0)
+If TypeName(l_Selection) &lt;&gt; &quot;Nothing&quot; Then
+	CreateGamebryoShadow(l_Selection)
+End If
+]]&gt;</scripttext>
+            </item>
+         </tab>
+      </tabs>
+   </shelf_view>
+</xsi_file>

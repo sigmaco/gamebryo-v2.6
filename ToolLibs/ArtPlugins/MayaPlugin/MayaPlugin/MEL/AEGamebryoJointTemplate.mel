@@ -1,0 +1,211 @@
+source AEGamebryoCommonUtils;
+
+global proc AEGamebryoAddBoneLODButton(string $nodeAndAttr)
+{
+    string $buffer[0];
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    columnLayout GamebryoTransformAttrButtons;
+
+    columnLayout;
+        text -label "Add Gamebryo Attributes";
+    setParent..;
+
+    rowColumnLayout -numberOfColumns 4 
+            -columnWidth 1 45
+            -columnWidth 2 140
+            -columnWidth 3 45
+            -columnWidth 4 165;
+
+        //make a popup window with a shelf to add attributes
+        if(!`iconTextButton -ex AEBoneLODDialogButton`)
+        {
+            columnLayout;
+                iconTextButton -label "Setup / Edit Bone LOD"
+                        -image1 "MyImmerseBoneLODDialogIcon.bmp"
+                        -style "iconOnly"
+                        -command ("MyImmerseBoneLODDialog(\"" + $nodeName + "\")")
+                        AEBoneLODDialogButton;
+            setParent..;
+        }
+
+        text -label "Setup / Edit Bone LOD";
+
+        if(!`iconTextButton -ex AEGamebryoOptimizeKeepNodeButtonJoint`)
+        {
+            columnLayout;
+                iconTextButton -label "Keep Object"
+                    -image1 "MyImmerseOptimizeKeepNodeIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleNoKeepNodeControls(\"" + $nodeName + "\")")
+                    AEGamebryoOptimizeKeepNodeButtonJoint;
+            setParent..;
+        }
+
+        text -label "Keep Object";
+
+    setParent..;
+
+}
+
+
+global proc AEGamebryoToggleNoKeepNodeControls(string $nodeName)
+{
+    if(`attributeExists "Gb_ShowSgoKeepControl" $nodeName`)
+    {
+       deleteAttr -at Gb_ShowSgoKeepControl $nodeName;
+       if(`attributeExists Ni_SgoKeepNode $nodeName`)
+       {
+            deleteAttr -at Ni_SgoKeepNode $nodeName;
+       }
+    }
+    else
+    {
+       addAttr -ln Gb_ShowSgoKeepControl -at bool -dv 1 $nodeName;
+       MyImmerseAddOptimizeKeepNodeAttribute($nodeName);
+    }
+}
+
+global proc AEGamebryoToggleNoKeepNodeAttribute(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_SgoKeepNode"}, 
+        "MyImmerseAddOptimizeKeepNodeAttribute",
+        "deleteAttr -at Ni_SgoKeepNode");
+}
+
+global proc AEGamebryoResetBoneLODButton(string $nodeAndAttr)
+{
+    if(`iconTextButton -ex AEBoneLODDialogButton`)
+    {
+        string $buffer[0];
+        tokenize $nodeAndAttr "." $buffer;
+        string $nodeName = $buffer[0];
+
+        iconTextButton -e -command ("MyImmerseBoneLODDialog(\"" + $nodeName + "\")") 
+            AEBoneLODDialogButton;
+
+        iconTextButton -e -command ("AEGamebryoToggleNoKeepNodeControls(\"" + $nodeName + "\")")
+            AEGamebryoOptimizeKeepNodeButtonJoint;
+    }
+}
+
+
+global proc int AEGamebryoHasOptimizationOverrides(string $nodeName)
+{
+    global int $g_HasSgoKeepNode;
+
+    if(`attributeExists Gb_ShowSgoKeepControl $nodeName` ||
+       `attributeExists Ni_SgoKeepNode $nodeName` ||
+       `attributeExists Ni_No_Stripify $nodeName`)
+    {
+        //weird sort of hack to handle the case of attributes that were added
+        //before 2.3
+        if(`attributeExists Ni_SgoKeepNode $nodeName` &&
+            `attributeExists Gb_ShowSgoKeepControl $nodeName` == 0)
+        {
+            addAttr -ln Gb_ShowSgoKeepControl -at bool $nodeName;
+        }
+
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddOptimizationOverridesAttrs(string $nodeName)
+{
+    global int $g_HasSgoKeepNode;
+
+    string $labels[] = {"Prevent Stripification", 
+                        "Prevent Removal During Optimization"};
+    string $attrNames[] = {"Ni_No_Stripify", "Ni_SgoKeepNode"};
+    
+    //I need to do this one manually because it has a special boolean
+
+    if(`columnLayout -ex ("Ni_No_Stripify" + "ColumnLayout")`)
+    {
+        deleteUI ("Ni_No_Stripify" + "ColumnLayout");
+    }
+
+    if(`attributeExists "Ni_No_Stripify" $nodeName`)
+    {
+        columnLayout -p ("OptimizationOverrides" + "ColumnLayout") 
+            ("Ni_No_Stripify" + "ColumnLayout");
+
+            attrControlGrp 
+                -label "Prevent Stripification"
+                -a ($nodeName + "." + "Ni_No_Stripify") ("Ni_No_Stripify" + "Control");
+
+        setParent..;
+    }
+
+    if(`columnLayout -ex ("Ni_SgoKeepNode" + "ColumnLayout")`)
+    {
+        deleteUI ("Ni_SgoKeepNode" + "ColumnLayout");
+    }
+
+    if(`attributeExists "Gb_ShowSgoKeepControl" $nodeName`)
+    {
+        int $hasAttr = `attributeExists "Ni_SgoKeepNode" $nodeName `;
+
+        columnLayout -p ("OptimizationOverrides" + "ColumnLayout") 
+            -cal "center"
+            -columnOffset "left" 40
+            -cat "left" 146
+            ("Ni_SgoKeepNode" + "ColumnLayout");
+
+
+            checkBox
+                -label "Prevent Removal During Optimization"
+                -v $hasAttr
+                -cc ("AEGamebryoToggleNoKeepNodeAttribute(\"" + $nodeName + "\")");
+        setParent..;
+    }
+}
+
+global proc AEGamebryoAddOptimizationOverrides(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Optimization Overrides", "OptimizationOverrides");
+    AEGamebryoSetEnableStateOframe(false, "OptimizationOverrides");
+
+    if(AEGamebryoHasOptimizationOverrides($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "OptimizationOverrides");
+        AEGamebryoAddOptimizationOverridesAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetOptimizationOverrides(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasOptimizationOverrides($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "OptimizationOverrides");
+        AEGamebryoAddOptimizationOverridesAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "OptimizationOverrides");
+    }
+}
+
+global proc AEGamebryoJointTemplate(string $nodeName)
+{
+
+
+    editorTemplate -beginLayout "Gamebryo";
+        editorTemplate -callCustom "AEGamebryoAddBoneLODButton" 
+            "AEGamebryoResetBoneLODButton" "Nothing";
+        editorTemplate -label "Bone LOD Level" -addControl Ni_BoneLODLevel;
+
+        editorTemplate -callCustom "AEGamebryoAddOptimizationOverrides"
+        "AEGamebryoResetOptimizationOverrides" "Nothing";
+
+    editorTemplate -endLayout;
+}

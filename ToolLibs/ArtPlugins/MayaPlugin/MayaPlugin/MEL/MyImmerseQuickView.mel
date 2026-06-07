@@ -1,0 +1,50 @@
+//
+// MayaNifView.mel
+//
+// Mel script for spawning Nif Viewer
+
+
+global proc MyImmerseQuickView(int $iViewSelected)
+{
+    string $szPluginName = MyImmerseGetPluginName();
+
+    if (MyImmerseCheckAndLoadPlugin($szPluginName))
+    {
+        error("Couldn't load the MyImmerse Plugin!");
+    }
+
+    // Load the current Plugin Options
+
+    string $fileOptions = "";
+    if (`optionVar -exists "NifOptions"`) {
+        // Post the new options.
+        $fileOptions = `optionVar -q "NifOptions"`;
+    } 
+
+    // Export All with a special name for View Only
+
+    if($iViewSelected == 0)
+    {
+        file -ea -op $fileOptions -typ Nif NifViewerMode;
+    }
+    else
+    {
+        // Save the selection list
+        string $szSelection[] = `ls -l -sl`;
+
+        // Add in the cameras for the export
+        string $szCameras[] = `ls -l -ca`;
+
+        int $iLoop;
+        for($iLoop = 0; $iLoop < size($szCameras); $iLoop++)
+        {
+            select -add `listRelatives -p $szCameras[$iLoop]`;
+        }
+
+        file -es -op $fileOptions -typ Nif NifViewerMode;
+
+        // reset the selection
+        select -replace $szSelection;
+
+    }
+}

@@ -1,0 +1,86 @@
+//GamebryoStackTracer.mel
+
+global int $g_Indentation = 0;
+global int $g_FunctionInstrumentation = 0;
+
+//Instrumentation Functions Start
+global proc Cr8zyIncrementIndentation()
+{
+	global int $g_Indentation;
+	
+	$g_Indentation = $g_Indentation + 1;
+}
+
+global proc Cr8zyDecrementIndentation()
+{
+	global int $g_Indentation;
+	
+	$g_Indentation = $g_Indentation - 1;
+}
+
+global proc Cr8zyPrintIdentation()
+{
+	global int $g_Indentation;
+	
+	int $index = 0;
+	for($index; $index < $g_Indentation; $index++)
+	{
+		print(" ");
+	}
+}
+
+global proc Cr8zyPrintVariable(string $variableName, string $value)
+{
+	//string $cmd = "print(\"" + $variableName + "= \"); print(" + $variableName + "); print(\"\\n\");";
+	//eval($cmd);
+	
+	print($variableName + " = " + $value + "\n");
+}
+
+global proc Cr8zyTracerIn(string $functionName, string $argumentNames[], string $argumentValues[])
+{
+	global int $g_FunctionInstrumentation;
+	
+	if($g_FunctionInstrumentation == 1)
+	{
+		Cr8zyIncrementIndentation();
+		    Cr8zyPrintIdentation(); print("Entering " + $functionName +"\n");
+		    Cr8zyPrintIdentation(); print("Arguments\n");
+    		
+		    Cr8zyIncrementIndentation();
+			    int $argumentIndex = 0;
+			    for($argumentIndex; $argumentIndex < size($argumentNames); $argumentIndex++)
+			    {
+				    Cr8zyPrintIdentation(); Cr8zyPrintVariable($argumentNames[$argumentIndex], 
+					    $argumentValues[$argumentIndex]);
+			    }
+		    Cr8zyDecrementIndentation();	
+	}
+	
+}
+
+global proc Cr8zyTracerOut(string $functionName, string $returnVariableName, 
+	string $returnValue)
+{
+	global int $g_FunctionInstrumentation;
+	
+	if($g_FunctionInstrumentation == 1)
+	{
+		    Cr8zyPrintIdentation(); print("Leaving " + $functionName +"\n");
+		    Cr8zyPrintIdentation(); Cr8zyPrintVariable($returnVariableName, $returnValue);
+		Cr8zyDecrementIndentation();
+	}
+}
+
+
+global proc string Cr8zyConvertIntArrayToString(int $intArray[])
+{
+    string $outputString = "";
+    int $element;
+    for($element in $intArray)
+    {
+        $outputString += $element + " ";
+    }
+
+    return $outputString;
+}

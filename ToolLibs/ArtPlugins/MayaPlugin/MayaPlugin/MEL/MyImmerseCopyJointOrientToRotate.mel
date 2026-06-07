@@ -1,0 +1,67 @@
+global proc MyImmerseCopyJointOrientToRotate()
+{
+    int $intVal;
+
+    string $szShaderNodes[] = `ls -l -sl -typ joint`;
+    
+    // Check for Nothing Selected
+    if(size($szShaderNodes) == 0)
+    {
+        print("WARNING:: No joints Selected\n");
+    }
+
+    int $iCount = 0;
+    while( $iCount < size($szShaderNodes))
+    {
+        string $szAttribute;
+        float $fFloatVal;
+
+        // Read the rotation and make sure it is zero
+        $szAttribute = $szShaderNodes[$iCount] + ".rotateX";
+        float $fRotateX = `getAttr $szAttribute`;
+
+        $szAttribute = $szShaderNodes[$iCount] + ".rotateY";
+        float $fRotateY = `getAttr $szAttribute`;
+
+        $szAttribute = $szShaderNodes[$iCount] + ".rotateZ";
+        float $fRotateZ = `getAttr $szAttribute`;
+
+        
+        if(($fRotateX <= 0.001) &&
+           ($fRotateX >= -0.001) &&
+           ($fRotateY <= 0.001) &&
+           ($fRotateY >= -0.001) &&
+           ($fRotateZ <= 0.001) &&
+           ($fRotateZ >= -0.001))
+        {
+
+            // Copy Over and Clear Orientation
+            $szAttribute = $szShaderNodes[$iCount] + ".jointOrientX";
+            $fFloatVal = `getAttr $szAttribute`;
+            setAttr $szAttribute 0.0;
+
+            $szAttribute = $szShaderNodes[$iCount] + ".rotateX";
+            setAttr $szAttribute $fFloatVal;
+
+
+            // Copy Over and Clear Orientation
+            $szAttribute = $szShaderNodes[$iCount] + ".jointOrientY";
+            $fFloatVal = `getAttr $szAttribute`;
+            setAttr $szAttribute 0.0;
+
+            $szAttribute = $szShaderNodes[$iCount] + ".rotateY";
+            setAttr $szAttribute $fFloatVal;
+
+            // Copy Over and Clear Orientation
+            $szAttribute = $szShaderNodes[$iCount] + ".jointOrientZ";
+            $fFloatVal = `getAttr $szAttribute`;
+            setAttr $szAttribute 0.0;
+
+            $szAttribute = $szShaderNodes[$iCount] + ".rotateZ";
+            setAttr $szAttribute $fFloatVal;
+        }
+
+        $iCount = $iCount + 1;
+    }
+
+}

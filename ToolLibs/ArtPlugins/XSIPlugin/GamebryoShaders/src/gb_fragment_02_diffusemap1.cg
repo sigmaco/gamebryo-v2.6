@@ -1,0 +1,117 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+// 
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not
+// be copied or disclosed except in accordance with the terms of that
+// agreement.
+// 
+// Copyright (c) 1996-2008 Emergent Game Technologies.
+// All Rights Reserved.
+// 
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+//---------------------------------------------------------------------------
+// Phong Bump Textured
+// Per-pixel bump map using the Phong lighting model. This preset supports 
+// three point or spot lights. In addition, you will need to provide a 
+// texture map, a normal map as well as tangents stored at vertex colors to 
+// compute the bump map. Requires support for ARBVP and ARBFP profiles. 
+//--------------------------------------------------------------------------- 
+
+// Fragment shader ---------------------------
+
+float4 main
+(
+	float4 	hpos  : HPOS,
+	float3	ldir1 : TEXCOORD0,
+	float3	ldir2 : TEXCOORD1,
+	float3	ldir3 : TEXCOORD2,
+	float3	hvec1 : TEXCOORD3,
+	float3	hvec2 : TEXCOORD4,
+	float3	hvec3 : TEXCOORD5,
+	float3	tc0   : TEXCOORD6,
+	float3	tc1   : TEXCOORD7,
+	float3	in_normal : COLOR0, // JNP -- additional normal
+uniform	float4		silightdiffuse_0,
+uniform	float4		silightdiffuse_1,
+uniform	float4		silightdiffuse_2,
+uniform float3		cKa,
+uniform float3		cKd,
+uniform float3		cKs,
+uniform float3		cKe,
+uniform float		fShininess,
+uniform float		fAlpha,
+uniform	bool		bDiffusemap,   // used ----
+uniform	bool		bDarkmap,                
+uniform	bool		bDetailmap,              
+uniform	bool		bDecalmap_01,            
+uniform	bool		bDecalmap_02,            
+uniform	bool		bDecalmap_03,            
+uniform	bool		bNormalmap,		// used ----            
+uniform	bool		bParallaxmap,            
+uniform	bool		bEnvironment,            
+uniform	bool		bBumpmap,                
+uniform	bool		bGlossmap,               
+uniform	bool		bProjectedlightmap_01,   
+uniform	bool		bProjectedlightmap_02,   
+uniform	bool		bProjectedlightmap_03,   
+uniform	bool		bProjectedshadowmap_01,  
+uniform	bool		bProjectedshadowmap_02,  
+uniform	bool		bProjectedshadowmap_03,  
+uniform	bool		bGlowmap,     
+uniform float		fShininess,
+uniform float		fAlpha,
+uniform	sampler2D	diffusemap,   // used ----
+uniform	sampler2D	normalmap,	  // used ----   
+) : COLOR
+{
+	float4	outcolor;
+
+	float4	Ambient  = float4( cKa.r, cKa.g, cKa.b, fAlpha );
+	float4	Diffuse  = float4( cKd.r, cKd.g, cKd.b, fAlpha );
+	float4 	Specular = float4( cKs.r, cKs.g, cKs.b, fAlpha );
+
+	float4 difmap = (bDiffusemap)? tex2D(diffusemap, tc0) : float4(1.0,1.0,1.0,1.0);
+	float3 normal = (bNormalmap)? tex2D(normalmap, tc1) : in_normal;
+
+	normal = normalize(normal - 0.5);
+	
+	ldir1 = normalize(ldir1);
+	ldir2 = normalize(ldir2);
+	ldir3 = normalize(ldir3);
+
+	hvec1 = normalize(hvec1);
+	hvec2 = normalize(hvec2);
+	hvec3 = normalize(hvec3);
+
+	float dif1 = clamp(dot(normal, ldir1), 0, 1) * silightdiffuse_0;
+	float dif2 = clamp(dot(normal, ldir2), 0, 1) * silightdiffuse_1;
+	float dif3 = clamp(dot(normal, ldir3), 0, 1) * silightdiffuse_2;
+
+	float spec1 = clamp(dot(normal, hvec1), 0, 1);
+	float spec2 = clamp(dot(normal, hvec2), 0, 1);
+	float spec3 = clamp(dot(normal, hvec3), 0, 1);
+
+
+	Diffuse = Diffuse * difmap * 
+		((dif1 * silightdiffuse_0) + 
+		(dif2 * silightdiffuse_1) + 
+		(dif3 * silightdiffuse_2));
+
+	if(dif1 = 0) spec1 = 0; 
+	spec1 = pow(spec1, fShininess) * silightdiffuse_0;
+	if(dif2 = 0) spec2 = 0; 
+	spec2 = pow(spec2, fShininess) * silightdiffuse_1;
+	if(dif3 = 0) spec3 = 0; 
+	spec3 = pow(spec3, fShininess) * silightdiffuse_2;
+
+	Specular  = Specular  * 
+		((spec1 * silightdiffuse_0) + 
+		(spec2 * silightdiffuse_1) + 
+		(spec3 * silightdiffuse_2));
+
+	outcolor  = Ambient + Diffuse + Specular;
+
+	return outcolor;
+}

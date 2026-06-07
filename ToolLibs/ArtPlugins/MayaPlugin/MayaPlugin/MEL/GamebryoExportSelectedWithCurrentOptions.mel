@@ -1,0 +1,32 @@
+
+global proc ExecGamebryoExportSelectedWithCurrentOptions()
+{
+    source GamebryoExporting;
+
+    EnsureDefault();
+
+    string $fileName = `optionVar -q "ExportFilePath"`;
+    int $shouldPrompt = `optionVar -q "ShouldPromptOnExport"`;
+    if (GetGamebryoRunSilently())
+        $shouldPrompt = 0;
+
+    print("$fileName = " + $fileName);
+
+    if($shouldPrompt)
+    {
+        string $dirForBrowser = dirname($fileName);
+        print("$dirForBrowser = " + $dirForBrowser);
+        workspace -directory $dirForBrowser;
+        ExportSelection;
+    }
+    else
+    {
+        file -f -typ "Nif" -pmt $shouldPrompt -es $fileName;
+    }
+}
+
+global proc GamebryoExportSelectedWithCurrentOptions()
+{
+    GamebryoLoadPlugins();
+    eval "ExecGamebryoExportSelectedWithCurrentOptions()";
+}

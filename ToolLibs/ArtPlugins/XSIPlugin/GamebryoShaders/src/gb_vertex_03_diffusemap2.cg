@@ -1,0 +1,70 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+// 
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not
+// be copied or disclosed except in accordance with the terms of that
+// agreement.
+// 
+// Copyright (c) 1996-2008 Emergent Game Technologies.
+// All Rights Reserved.
+// 
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+struct v2f
+{
+	float4 	hpos   : HPOS;
+	float3	normal : TEXCOORD0;
+	float3	ldir1  : TEXCOORD1;
+	float3	ldir2  : TEXCOORD2;
+	float3	ldir3  : TEXCOORD3;
+	float3	hvec1  : TEXCOORD4;
+	float3	hvec2  : TEXCOORD5;
+	float3	hvec3  : TEXCOORD6;
+	float2	tc0    : TEXCOORD7;
+};
+
+v2f main
+(
+	float4	pos  : POSITION,
+	float4	nrml : NORMAL,
+	float2	tc0  : TEXCOORD0,
+	float2	tc1  : TEXCOORD1,
+	float2	tc2  : TEXCOORD2,
+	float2	tc3  : TEXCOORD3,
+uniform float4x4	mModelViewProj,
+uniform float4x4	mModelView,
+uniform	float4x4	mModelViewI,
+uniform float4x4	mModelViewIT,
+uniform	float3	silightposition_0,
+uniform	float3	silightposition_1,
+uniform	float3	silightposition_2
+)
+{
+	v2f OUT;	
+
+	// transform in screen space
+	OUT.hpos = mul( mModelViewProj, pos);
+
+	// normal must be in eye space
+	OUT.normal = normalize(mul(mModelViewIT, nrml).xyz);
+	
+	// position must be in eye space
+	float3 position = mul(mModelView, pos);
+	
+	// compute the light directions
+	OUT.ldir1 = normalize(silightposition_0 - position);
+	OUT.ldir2 = normalize(silightposition_1 - position);
+	OUT.ldir3 = normalize(silightposition_2 - position);
+
+	// compute the half vectors
+	float3 eyetovert = normalize(-position);
+
+	OUT.hvec1 = normalize(eyetovert + OUT.ldir1);
+	OUT.hvec2 = normalize(eyetovert + OUT.ldir2);
+	OUT.hvec3 = normalize(eyetovert + OUT.ldir3);
+
+	OUT.tc0 = tc0;
+
+	return OUT;
+}

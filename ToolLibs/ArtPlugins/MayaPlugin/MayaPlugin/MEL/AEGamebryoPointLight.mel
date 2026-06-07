@@ -1,0 +1,492 @@
+source AEGamebryoCommonUtils;
+source MyImmerseCreateNiLightAttenuationDialog;
+
+global proc AEGamebryoPointLightAddLightButtons(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+        columnLayout GamebryoPointLightButtons;
+
+            text -label "Add Gamebryo Attributes";
+
+                    
+                rowColumnLayout -numberOfColumns 2 
+                    -columnWidth 1 45
+                    -columnWidth 2 165;
+
+                    iconTextButton -label "Add Light Attributes"
+                        -image1 "MyImmerseLightAttenuationIcon.bmp"
+                        -style "iconOnly"
+                        -command ("MyImmerseCreateAllLightAttributes(\"" + 
+                        $nodeName + "\")")
+                        AEGamebryoPointLightAddLightButton;
+
+                    text -label "Add Light Attributes";
+
+                setParent..;
+        setParent..;
+
+}
+
+global proc AEGamebryoPointLightResetLightButtons(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    iconTextButton -e 
+        -command ("MyImmerseCreateAllLightAttributes(\"" + 
+        $nodeName + "\")")
+        AEGamebryoPointLightAddLightButton;
+
+}
+
+global proc AEGamebryoPointLightToggleLightAttribute(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_UseMayaDecayRate"}, 
+        "MyImmerseCreateAllLightAttributes",
+        ("AEGamebryoDeleteAttrList({\"Ni_UseMayaDecayRate\"," +
+        "\"Ni_SetAttenuationByDistance\", \"Ni_NearZeroDistance\"," +
+        "\"Ni_AmbientColor\", \"GbStaticShadows\", \"GbShadowTechnique\", \"GbShadowTechniqueName\", " +
+        "\"GbUseAutomaticBias\", " +
+        "\"Ni_AmbientColorRed\", \"Ni_AmbientColorGreen\", \"Ni_AmbientColorBlue\"," +
+        "\"Ni_SpecularColor\", \"Ni_SpecularColorRed\", \"Ni_SpecularColorGreen\", \"Ni_SpecularColorBlue\"," + 
+        "\"Ni_Dimmer\", \"Ni_ConstantAttenuation\", \"Ni_LinearAttenuation\", \"Ni_QuadraticAttenuation\"})"));
+}
+
+global proc int AEGamebryoPointLightHasLightBasic(string $nodeName)
+{
+    if(`attributeExists Ni_Dimmer $nodeName` || 
+        `attributeExists Ni_AmbientColor $nodeName` ||
+        `attributeExists Ni_SpecularColor $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoPointLightAddLightBasicAttrs(string $nodeName)
+{
+    string $labels[] = {
+                        "Ambient Color",
+                        "Specular Color"};
+    string $attrNames[] = {"Ni_AmbientColor", 
+        "Ni_SpecularColor"};
+
+    AEGamebryoAddManyAttrs($nodeName, "BasicPointLight", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoPointLightAddLightBasic(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Basic", "BasicPointLight");
+    AEGamebryoSetEnableStateOframe(false, "BasicPointLight");
+
+    if(AEGamebryoPointLightHasLightBasic($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "BasicPointLight");
+        AEGamebryoPointLightAddLightBasicAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoPointLightResetLightBasic(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoPointLightHasLightBasic($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "BasicPointLight");
+        AEGamebryoPointLightAddLightBasicAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "BasicPointLight");
+    }
+}
+
+global proc int AEGamebryoPointLightHasAttenuation(string $nodeName)
+{
+    if(`attributeExists  Ni_ConstantAttenuation         $nodeName` || 
+        `attributeExists Ni_LinearAttenuation           $nodeName` ||
+        `attributeExists Ni_QuadraticAttenuation        $nodeName` ||
+        `attributeExists Ni_UseMayaDecayRate            $nodeName` ||
+        `attributeExists Ni_Dimmer                      $nodeName` ||
+        `attributeExists Ni_SetAttenuationByDistance    $nodeName` ||
+        `attributeExists Ni_NearZeroDistance            $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoPointLightAddAttenuationAttrs(string $nodeName)
+{
+    string $labels[] = {"Use Maya Decay Rate",
+                        "Dimmer",
+                        "Constant Attenuation",
+                        "Linear Attenuation",
+                        "Quadratic Attenuation",
+                        "Set Attenuation By Distance",
+                        "Near Zero Distance"};
+    string $attrNames[] = {"Ni_UseMayaDecayRate",
+        "Ni_Dimmer",
+        "Ni_ConstantAttenuation", 
+        "Ni_LinearAttenuation", "Ni_QuadraticAttenuation", 
+    "Ni_SetAttenuationByDistance", "Ni_NearZeroDistance"};
+
+    AEGamebryoAddManyAttrs($nodeName, "AttenuationPointLight", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoPointLightAddAttenuation(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Attenuation", "AttenuationPointLight");
+    AEGamebryoSetEnableStateOframe(false, "AttenuationPointLight");
+
+    if(AEGamebryoPointLightHasAttenuation($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "AttenuationPointLight");
+        AEGamebryoPointLightAddAttenuationAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoPointLightResetAttenuation(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoPointLightHasAttenuation($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "AttenuationPointLight");
+        AEGamebryoPointLightAddAttenuationAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "AttenuationPointLight");
+    }
+}
+
+global proc int AEGamebryoPointLightHasShadow(string $nodeName)
+{
+    if(`attributeExists  GbShadowTechnique  $nodeName` || 
+        `attributeExists GbStaticShadows    $nodeName` ||
+        `attributeExists GbShadowBias       $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoPointLightAddShadowAttrs(string $nodeName)
+{
+    //This needs to change so the option menu change command
+    //works with the string field and gets updated properly on
+    //opening
+
+    if(`columnLayout -ex ("GbShadowTechniquePointLightColumnLayout")`)
+    {
+        deleteUI ("GbShadowTechniquePointLightColumnLayout");
+    }
+
+    int $hasAttr = `attributeExists GbShadowTechnique $nodeName`;
+
+    string $tokenBits[];
+    tokenize $nodeName "|" $tokenBits;
+    string $shortName = $tokenBits[size($tokenBits) - 1];
+
+    if($hasAttr)
+    {
+        columnLayout -p ("ShadowingPointLightColumnLayout") 
+            ("GbShadowTechniquePointLightColumnLayout");
+
+        //build the control
+        optionMenu -l "Shadow Technique" -cc ("AEGamebryoPointLightShadowTechniqueChange(\"" + $nodeName
+            + "\")") GbShadowTechniqueControl;
+            //check for the plugin
+            string $techniques[];
+            string $szPluginName = MyImmerseGetPluginName();
+            if (!MyImmerseCheckAndLoadPlugin($szPluginName))
+            {
+                if(`pluginInfo -query -registered $szPluginName`)
+                {
+                    catch($techniques = `GetShadowTechniques`);
+                    if(size($techniques) == 0 )
+                    {
+                        $techniques[0] = "GetShadowTechniques command failed!";
+                        catch(error("GetShadowTechniques command failed! Try reloading the plugin and calling:\"source AEGamebryoLightNodeCommon;resetAE;\"."));
+                    }
+                }
+                else
+                {
+                    $techniques[0] = "GetShadowTechniques command failed!";
+                    catch(error("GetShadowTechniques command failed! Try reloading the plugin and calling:\"source AEGamebryoLightNodeCommon;resetAE;\"."));
+                }
+            }
+            else
+            {
+                $techniques[0] = "Plugin was not loaded!";
+                catch(error("Plugin was not loaded! Try reloading plugin and calling resetAE."));
+            }
+            
+            string $technique;
+            for($technique in $techniques)
+            {
+                //add the menutItems
+                menuItem -label $technique;
+            }
+    }
+
+    int $hasAttr = `attributeExists GbStaticShadows $nodeName`;
+
+    if(`columnLayout -ex ("GbStaticShadowsPointLightColumnLayout")`)
+    {
+        deleteUI ("GbStaticShadowsPointLightColumnLayout");
+    }
+
+    if($hasAttr)
+    {
+
+        columnLayout -p ("ShadowingPointLightColumnLayout") 
+        ("GbStaticShadowsPointLightColumnLayout");
+
+        attrControlGrp  -label "Static Shadows" -hideMapButton true -a ($nodeName + ".GbStaticShadows")
+            GbStaticShadowsControl;
+    }
+
+    int $hasAttr = `attributeExists GbUseAutomaticBias $nodeName`;
+
+    if(`columnLayout -ex ("GbUseAutomaticBiasPointLightColumnLayout")`)
+    {
+        deleteUI ("GbUseAutomaticBiasPointLightColumnLayout");
+    }
+
+    if($hasAttr)
+    {
+        columnLayout -p ("ShadowingPointLightColumnLayout") 
+        ("GbUseAutomaticBiasPointLightColumnLayout");
+
+        string $changeCommand = "AEGamebryoUpdateBias(\\\"" + $nodeName + "\\\")";
+
+        attrControlGrp  -label "Use Automatic Bias" -hideMapButton true -a ($nodeName + ".GbUseAutomaticBias")
+            -cc $changeCommand GbUseAutomaticBiasControl;
+    }
+
+    $hasAttr = `attributeExists GbUseBackFaces $nodeName`;
+
+    if(`columnLayout -ex ("GbUseBackFacesPointLightColumnLayout")`)
+    {
+        deleteUI ("GbUseBackFacesPointLightColumnLayout");
+    }
+
+    if($hasAttr)
+    {
+        columnLayout -p ("ShadowingPointLightColumnLayout") 
+        ("GbUseBackFacesPointLightColumnLayout");
+
+        attrControlGrp  -label "Use Backfaces" -hideMapButton true -a ($nodeName + ".GbUseBackFaces")
+            GbUseBackFacesControl;
+    }
+
+    $hasAttr = `attributeExists GbForceMapSize $nodeName`;
+
+    if(`columnLayout -ex ("GbForceMapSizePointLightColumnLayout")`)
+    {
+        deleteUI ("GbForceMapSizePointLightColumnLayout");
+    }
+
+    if($hasAttr)
+    {
+        columnLayout -p ("ShadowingPointLightColumnLayout") 
+        ("GbForceMapSizePointLightColumnLayout");
+
+        attrControlGrp  -label "Force Map Size" -hideMapButton true -a ($nodeName + ".GbForceMapSize")
+            GbForceMapSizeControl;
+    }
+}
+
+global proc AEGamebryoPointLightUpdateBias(string $nodeName)
+{
+    int $isInactive = `getAttr ($nodeName  +".GbUseAutomaticBias")`;
+
+
+    if(!$isInactive)
+    {
+        float $bias = 0.0;
+
+        //get the Technique
+
+        int $techniqueIndex = `getAttr ($nodeName + ".GbShadowTechnique")`;
+
+        //get the light type
+        int $iLightType = 4;
+        string $slightType = `nodeType $nodeName`;
+        switch($slightType)
+        {
+        case "directionalLight":
+            $iLightType = 0;
+            break;
+
+        case "pointLight":
+            $iLightType = 1;
+            break;
+
+        case "spotLight":
+            $iLightType = 2;
+            break;
+        
+        default:
+            error("Light type of " + $slightType + " not supported");
+            return;
+        }
+
+        string $szPluginName = MyImmerseGetPluginName();
+        if (!MyImmerseCheckAndLoadPlugin($szPluginName))
+        {
+            catch($bias = `GetDefaultShadowBias $techniqueIndex $iLightType`);
+        }
+       
+        setAttr ($nodeName + ".dmapBias") $bias;
+
+        //attrControlGrp -e -en 1 GbBiasControl;
+    }
+
+}
+
+global proc AEGamebryoPointLightShadowTechniqueChange(string $nodeName)
+{
+    //change the GbShadowTechnique and update the
+
+    //Get the index
+    int $selectedIndex = `optionMenu -q -sl GbShadowTechniqueControl`;
+    setAttr ($nodeName + ".GbShadowTechnique") ($selectedIndex - 1);
+
+    //To get the string
+    string $selectedName = `optionMenu -q -v GbShadowTechniqueControl`;
+    setAttr ($nodeName + ".GbShadowTechniqueName") -type "string" $selectedName;
+}
+
+global proc AEGamebryoPointLightVerifyShadowNameAndId(string $nodeName)
+{
+    string $currentShadowTechniqueName = `getAttr ($nodeName + ".GbShadowTechniqueName")`;
+
+    string $shadowTechniqueName;
+    
+    string $techniques[];
+
+    string $szPluginName = MyImmerseGetPluginName();
+    if (!MyImmerseCheckAndLoadPlugin($szPluginName))
+    {
+        catch($techniques = `GetShadowTechniques`);
+    }
+    else
+    {
+        $techniques[0] = "GetShadowTechniques command failed!";
+        catch(error("GetShadowTechniques command failed! Try reloading the plugin and calling:\"source AEGamebryoLightNodeCommon;resetAE;\"."));
+    }
+    int $techniqueIndex = 0;
+    if($currentShadowTechniqueName != "")
+    {
+        for($shadowTechniqueName in $techniques)
+        {
+            if($shadowTechniqueName == $currentShadowTechniqueName)
+            {
+                break;
+            }
+
+            $techniqueIndex++;
+        }
+    }
+
+    if($techniqueIndex >= size($techniques))
+    {
+        warning ("Cannot find shadow technique " + $currentShadowTechniqueName + ". Using default.");
+        $techniqueIndex = 0;
+    }
+
+    setAttr ($nodeName + ".GbShadowTechnique") ($techniqueIndex);
+    setAttr ($nodeName + ".GbShadowTechniqueName") -type "string" $techniques[$techniqueIndex];
+    optionMenu -e -sl ($techniqueIndex + 1) GbShadowTechniqueControl;
+}
+
+global proc AEGamebryoPointLightAddShadow(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    string $szPluginName = MyImmerseGetPluginName();
+    MyImmerseCheckAndLoadPlugin($szPluginName);
+    
+    AEGamebryoAddFrame("Shadowing", "ShadowingPointLight");
+    AEGamebryoSetEnableStateOframe(false, "ShadowingPointLight");
+
+    if(AEGamebryoPointLightHasShadow($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "ShadowingPointLight");
+        AEGamebryoPointLightAddShadowAttrs($nodeName);
+        AEGamebryoPointLightVerifyShadowNameAndId($nodeName);
+    }
+}
+
+global proc AEGamebryoPointLightResetShadow(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    string $szPluginName = MyImmerseGetPluginName();
+    MyImmerseCheckAndLoadPlugin($szPluginName);
+
+    if(AEGamebryoPointLightHasShadow($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "ShadowingPointLight");
+        AEGamebryoPointLightAddShadowAttrs($nodeName);
+        AEGamebryoPointLightVerifyShadowNameAndId($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "ShadowingPointLight");
+    }
+}
+
+global proc AEGamebryoPointLight (string $nodeName) 
+{
+	editorTemplate -beginLayout "Gamebryo";
+
+        editorTemplate -callCustom "AEGamebryoPointLightAddLightButtons"
+        "AEGamebryoPointLightResetLightButtons" "Nothing";
+        
+        editorTemplate -callCustom "AEGamebryoPointLightAddLightBasic"
+        "AEGamebryoPointLightResetLightBasic" "Nothing";
+
+        editorTemplate -callCustom "AEGamebryoPointLightAddAttenuation"
+        "AEGamebryoPointLightResetAttenuation" "Nothing";
+
+        editorTemplate -callCustom "AEGamebryoPointLightAddShadow"
+        "AEGamebryoPointLightResetShadow" "Nothing";
+
+        editorTemplate -suppress Ni_Dimmer;
+        editorTemplate -suppress Ni_AmbientColor;
+        editorTemplate -suppress Ni_SpecularColor;
+        editorTemplate -suppress Ni_ConstantAttenuation;
+        editorTemplate -suppress Ni_LinearAttenuation;
+        editorTemplate -suppress Ni_QuadraticAttenuation;
+        editorTemplate -suppress Ni_UseMayaDecayRate;
+        editorTemplate -suppress Ni_SetAttenuationByDistance;    
+        editorTemplate -suppress Ni_NearZeroDistance; 
+        editorTemplate -suppress GbShadowTechnique;
+        editorTemplate -suppress GbStaticShadows;
+        editorTemplate -suppress GbShadowTechniqueName;
+        editorTemplate -suppress GbUseAutomaticBias;
+        editorTemplate -suppress GbUseBackFaces;
+        editorTemplate -suppress GbForceMapSize;
+
+    editorTemplate -endLayout;
+}
+

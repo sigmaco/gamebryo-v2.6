@@ -1,0 +1,10 @@
+Script ("Default Wii Viewer Script","Viewer")
+{
+	Plugin ("NiWiiViewerPlugin","Wii Viewer","1.0","Viewer")
+	{
+		Parameter ("NiPluginToolkit Renderer","2");
+		Parameter ("NDEV Tools Path","C:\NDEV\bin");
+		Parameter ("NDEV Set DVD Root Command","SetNdEnv.exe DvdRoot %ROOT_DIR%");		
+		Parameter ("NDEV Run Command","NdevRun.exe -enfw %NIFVIEWER_ELF% -a %NIF_FILE%");
+	}
+}

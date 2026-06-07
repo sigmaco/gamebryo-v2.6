@@ -1,0 +1,4759 @@
+<?xml version="1.0"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+	<asset>
+		<contributor>
+			<author>ed.holzwarth</author>
+			<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+			<comments/>
+			<copyright/>
+		</contributor>
+		<contributor>
+			<author>Michael.Noland</author>
+			<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+			<comments/>
+			<copyright/>
+		</contributor>
+		<created>2007-09-13T17:09:15</created>
+		<keywords>FXComposer, NVIDIA</keywords>
+		<modified>2007-11-15T16:41:59</modified>
+		<subject/>
+		<title/>
+	</asset>
+	<library_effects>
+		<effect id="Skin2DirLightsWarpEffect0" name="Skin2DirLightsWarpEffect">
+			<profile_CG platform="PC-OGL">
+				<include sid="Skin2DirLightsWarpEffect" url="Skin2DirLightsWarpEffect.cgfx"/>
+				<newparam sid="description">
+					<annotate name="detail0">
+						<string>This shader skins a model using 20 bones per partition, applies a base </string>
+					</annotate>
+					<annotate name="detail1">
+						<string>map, and lights it with two directional lights using a normal map. </string>
+					</annotate>
+					<annotate name="detail3">
+						<string>the shader to fade out over time. The warp effect is a 2D texture that </string>
+					</annotate>
+					<annotate name="detail5">
+						<string>the V coordinate. This shader was used for the alien's skin in the </string>
+					</annotate>
+					<annotate name="detail2">
+						<string>Then, the entire effect is modified by a warping effect that allows </string>
+					</annotate>
+					<annotate name="detail4">
+						<string>will be sampled using (N dot V) as the U coordinate and 'warpAlpha' as </string>
+					</annotate>
+					<annotate name="detail6">
+						<string>Eturnum sample.</string>
+					</annotate>
+					<string>Skin With 2 Directional Lights and Warp Effect</string>
+				</newparam>
+				<newparam sid="ViewProjTranspose">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>VIEWPROJTRANSPOSE</semantic>
+					<float4x4>7.39485e+031 2.00222e-019 2.03666e-019 0 1.50879e-019 4.37124e+024 6.80019e+022 0 7.15472e+022 1.84987e+020 4.17517e-041 0 7.22507e+028 1.76353e+014 0 0</float4x4>
+				</newparam>
+				<newparam sid="EyePos">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>EYEPOS</semantic>
+					<float4>0 0 0 0</float4>
+				</newparam>
+				<newparam sid="MaterialDiffuse">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>MATERIALDIFFUSE</semantic>
+					<float4>0 0 0 0</float4>
+				</newparam>
+				<newparam sid="WarpAlpha">
+					<annotate name="UIName">
+						<string>Warp Alpha</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>-2</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>2</float>
+					</annotate>
+					<float>0.3</float>
+				</newparam>
+				<newparam sid="SkinBoneMatrices">
+					<semantic>SkinBoneMatrix3</semantic>
+					<array length="20">
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+					</array>
+				</newparam>
+				<newparam sid="Light1">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="Object">
+						<string>GeneralLight</string>
+					</annotate>
+					<annotate name="ObjectIndex">
+						<string>0</string>
+					</annotate>
+					<string>Light1</string>
+				</newparam>
+				<newparam sid="Light2">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="Object">
+						<string>GeneralLight</string>
+					</annotate>
+					<annotate name="ObjectIndex">
+						<string>1</string>
+					</annotate>
+					<string>Light2</string>
+				</newparam>
+				<newparam sid="Light1Direction">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light1</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>WorldDirection</string>
+					</annotate>
+					<float3>1.80992e-041 0 0</float3>
+				</newparam>
+				<newparam sid="Light2Direction">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light2</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>WorldDirection</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light1Color">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light1</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>Diffuse</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light2Color">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light2</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>Diffuse</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="time">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>TIME</semantic>
+					<float>0</float>
+				</newparam>
+				<newparam sid="BaseTexture">
+					<annotate name="NTM">
+						<string>base</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<surface type="2D">
+						<init_as_null/>
+						<format>A8R8G8B8</format>
+						<size>0 0 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="BaseMapSampler">
+					<semantic>TEXUNIT0</semantic>
+					<sampler2D>
+						<source>BaseTexture</source>
+						<wrap_s>CLAMP</wrap_s>
+						<wrap_t>CLAMP</wrap_t>
+						<minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<newparam sid="WarpEffects">
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<surface type="2D">
+						<init_from>WarpEffects101</init_from>
+						<format>A8R8G8B8</format>
+						<size>0 0 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="WarpEffectSampler">
+					<semantic>TEXUNIT1</semantic>
+					<sampler2D>
+						<source>WarpEffects</source>
+						<wrap_s>CLAMP</wrap_s>
+						<wrap_t>CLAMP</wrap_t>
+						<minfilter>LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<newparam sid="NormalMap">
+					<annotate name="ResourceName">
+						<string>normals.tga</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>normals.tga</string>
+					</annotate>
+					<surface type="2D">
+						<init_from>normals5</init_from>
+						<format>A8R8G8B8</format>
+						<size>0 0 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="NormalMapSampler">
+					<semantic>TEXUNIT2</semantic>
+					<sampler2D>
+						<source>NormalMap</source>
+						<wrap_s>CLAMP</wrap_s>
+						<wrap_t>CLAMP</wrap_t>
+						<minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<technique sid="main">
+					<pass sid="p0">
+						<blend_enable value="true"/>
+						<blend_func>
+							<src value="SRC_ALPHA"/>
+							<dest value="ONE_MINUS_SRC_ALPHA"/>
+						</blend_func>
+						<polygon_mode>
+							<face value="FRONT"/>
+							<mode/>
+						</polygon_mode>
+						<shader stage="VERTEX">
+							<compiler_target>arbvp1</compiler_target>
+							<name source="Skin2DirLightsWarpEffect">vmain</name>
+							<bind symbol="ViewProjTranspose">
+								<param ref="ViewProjTranspose"/>
+							</bind>
+							<bind symbol="EyePos">
+								<param ref="EyePos"/>
+							</bind>
+							<bind symbol="MaterialDiffuse">
+								<param ref="MaterialDiffuse"/>
+							</bind>
+							<bind symbol="SkinBoneMatrices">
+								<param ref="SkinBoneMatrices"/>
+							</bind>
+							<bind symbol="Light1Direction">
+								<param ref="Light1Direction"/>
+							</bind>
+							<bind symbol="Light2Direction">
+								<param ref="Light2Direction"/>
+							</bind>
+						</shader>
+						<shader stage="FRAGMENT">
+							<compiler_target>arbfp1</compiler_target>
+							<name source="Skin2DirLightsWarpEffect">fmain</name>
+							<bind symbol="WarpAlpha">
+								<param ref="WarpAlpha"/>
+							</bind>
+							<bind symbol="Light1Color">
+								<param ref="Light1Color"/>
+							</bind>
+							<bind symbol="Light2Color">
+								<param ref="Light2Color"/>
+							</bind>
+							<bind symbol="BaseMapSampler">
+								<param ref="BaseMapSampler"/>
+							</bind>
+							<bind symbol="WarpEffectSampler">
+								<param ref="WarpEffectSampler"/>
+							</bind>
+							<bind symbol="NormalMapSampler">
+								<param ref="NormalMapSampler"/>
+							</bind>
+						</shader>
+						<extra type="passenable">
+							<technique profile="NVIDIA_FXCOMPOSER">
+								<true/>
+							</technique>
+						</extra>
+					</pass>
+					<extra type="import">
+						<technique profile="NVIDIA_FXCOMPOSER">
+							<import compiler_options=""/>
+						</technique>
+					</extra>
+				</technique>
+			</profile_CG>
+			<profile_CG platform="PS3">
+				<include sid="Skin2DirLightsWarpEffect" url="Skin2DirLightsWarpEffect.cgfx"/>
+				<include sid="Skin2DirLightsWarpEffect_main_p0_vmain_compiled" url="Skin2DirLightsWarpEffect_main_p0.vpo"/>
+				<include sid="Skin2DirLightsWarpEffect_main_p0_fmain_compiled" url="Skin2DirLightsWarpEffect_main_p0.fpo"/>
+				<newparam sid="description">
+					<annotate name="detail0">
+						<string>This shader skins a model using 20 bones per partition, applies a base </string>
+					</annotate>
+					<annotate name="detail1">
+						<string>map, and lights it with two directional lights using a normal map. </string>
+					</annotate>
+					<annotate name="detail3">
+						<string>the shader to fade out over time. The warp effect is a 2D texture that </string>
+					</annotate>
+					<annotate name="detail5">
+						<string>the V coordinate. This shader was used for the alien's skin in the </string>
+					</annotate>
+					<annotate name="detail2">
+						<string>Then, the entire effect is modified by a warping effect that allows </string>
+					</annotate>
+					<annotate name="detail4">
+						<string>will be sampled using (N dot V) as the U coordinate and 'warpAlpha' as </string>
+					</annotate>
+					<annotate name="detail6">
+						<string>Eturnum sample.</string>
+					</annotate>
+					<string>Skin With 2 Directional Lights and Warp Effect</string>
+				</newparam>
+				<newparam sid="ViewProjTranspose">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>VIEWPROJTRANSPOSE</semantic>
+					<float4x4>7.39485e+031 2.00222e-019 2.03666e-019 0 1.50879e-019 4.37124e+024 6.80019e+022 0 7.15472e+022 1.84987e+020 4.17517e-041 0 7.22507e+028 1.76353e+014 0 0</float4x4>
+				</newparam>
+				<newparam sid="EyePos">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>EYEPOS</semantic>
+					<float4>0 0 0 0</float4>
+				</newparam>
+				<newparam sid="MaterialDiffuse">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>MATERIALDIFFUSE</semantic>
+					<float4>0 0 0 0</float4>
+				</newparam>
+				<newparam sid="WarpAlpha">
+					<annotate name="UIName">
+						<string>Warp Alpha</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>-2</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>2</float>
+					</annotate>
+					<float>0.3</float>
+				</newparam>
+				<newparam sid="SkinBoneMatrices">
+					<semantic>SkinBoneMatrix3</semantic>
+					<array length="20">
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+						<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+					</array>
+				</newparam>
+				<newparam sid="Light1">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="Object">
+						<string>GeneralLight</string>
+					</annotate>
+					<annotate name="ObjectIndex">
+						<string>0</string>
+					</annotate>
+					<string>Light1</string>
+				</newparam>
+				<newparam sid="Light2">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="Object">
+						<string>GeneralLight</string>
+					</annotate>
+					<annotate name="ObjectIndex">
+						<string>1</string>
+					</annotate>
+					<string>Light2</string>
+				</newparam>
+				<newparam sid="Light1Direction">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light1</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>WorldDirection</string>
+					</annotate>
+					<float3>1.80992e-041 0 0</float3>
+				</newparam>
+				<newparam sid="Light2Direction">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light2</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>WorldDirection</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light1Color">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light1</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>Diffuse</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light2Color">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light2</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>Diffuse</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="time">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>TIME</semantic>
+					<float>0</float>
+				</newparam>
+				<newparam sid="BaseTexture">
+					<annotate name="NTM">
+						<string>base</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<surface type="2D">
+						<init_as_null/>
+						<format>A8R8G8B8</format>
+						<size>0 0 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="BaseMapSampler">
+					<semantic>TEXUNIT0</semantic>
+					<sampler2D>
+						<source>BaseTexture</source>
+						<wrap_s>CLAMP</wrap_s>
+						<wrap_t>CLAMP</wrap_t>
+						<minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<newparam sid="WarpEffects">
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<surface type="2D">
+						<init_from>WarpEffects101</init_from>
+						<format>A8R8G8B8</format>
+						<size>0 0 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="WarpEffectSampler">
+					<semantic>TEXUNIT1</semantic>
+					<sampler2D>
+						<source>WarpEffects</source>
+						<wrap_s>CLAMP</wrap_s>
+						<wrap_t>CLAMP</wrap_t>
+						<minfilter>LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<newparam sid="NormalMap">
+					<annotate name="ResourceName">
+						<string>normals.tga</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>normals.tga</string>
+					</annotate>
+					<surface type="2D">
+						<init_from>normals5</init_from>
+						<format>A8R8G8B8</format>
+						<size>0 0 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="NormalMapSampler">
+					<semantic>TEXUNIT2</semantic>
+					<sampler2D>
+						<source>NormalMap</source>
+						<wrap_s>CLAMP</wrap_s>
+						<wrap_t>CLAMP</wrap_t>
+						<minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<technique sid="main">
+					<pass sid="p0">
+						<blend_enable value="true"/>
+						<blend_func>
+							<src value="SRC_ALPHA"/>
+							<dest value="ONE_MINUS_SRC_ALPHA"/>
+						</blend_func>
+						<polygon_mode>
+							<face value="FRONT"/>
+							<mode/>
+						</polygon_mode>
+						<shader stage="VERTEX">
+							<compiler_target>arbvp1</compiler_target>
+							<name source="Skin2DirLightsWarpEffect_main_p0_vmain_compiled">vmain</name>
+							<bind symbol="ViewProjTranspose">
+								<param ref="ViewProjTranspose"/>
+							</bind>
+							<bind symbol="EyePos">
+								<param ref="EyePos"/>
+							</bind>
+							<bind symbol="MaterialDiffuse">
+								<param ref="MaterialDiffuse"/>
+							</bind>
+							<bind symbol="SkinBoneMatrices">
+								<param ref="SkinBoneMatrices"/>
+							</bind>
+							<bind symbol="Light1Direction">
+								<param ref="Light1Direction"/>
+							</bind>
+							<bind symbol="Light2Direction">
+								<param ref="Light2Direction"/>
+							</bind>
+						</shader>
+						<shader stage="FRAGMENT">
+							<compiler_target>arbfp1</compiler_target>
+							<name source="Skin2DirLightsWarpEffect_main_p0_fmain_compiled">fmain</name>
+							<bind symbol="WarpAlpha">
+								<param ref="WarpAlpha"/>
+							</bind>
+							<bind symbol="Light1Color">
+								<param ref="Light1Color"/>
+							</bind>
+							<bind symbol="Light2Color">
+								<param ref="Light2Color"/>
+							</bind>
+							<bind symbol="BaseMapSampler">
+								<param ref="BaseMapSampler"/>
+							</bind>
+							<bind symbol="WarpEffectSampler">
+								<param ref="WarpEffectSampler"/>
+							</bind>
+							<bind symbol="NormalMapSampler">
+								<param ref="NormalMapSampler"/>
+							</bind>
+						</shader>
+						<extra type="passenable">
+							<technique profile="NVIDIA_FXCOMPOSER">
+								<true/>
+							</technique>
+						</extra>
+					</pass>
+					<extra type="import">
+						<technique profile="NVIDIA_FXCOMPOSER">
+							<import compiler_options=""/>
+						</technique>
+					</extra>
+				</technique>
+			</profile_CG>
+		</effect>
+	</library_effects>
+	<library_images>
+		<image id="filmRamp" name="filmRamp">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="normalMap" name="normalMap">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap1" name="normalMap1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects" name="WarpEffects">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect" name="warpEffect">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="normalMap2" name="normalMap2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap3" name="normalMap3">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap4" name="normalMap4">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects1" name="WarpEffects1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap" name="NormalMap">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap1" name="NormalMap1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects2" name="WarpEffects2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap2" name="NormalMap2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap3" name="NormalMap3">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="filmRamp1" name="filmRamp1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="NormalMap4" name="NormalMap4">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap5" name="NormalMap5">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap6" name="NormalMap6">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects3" name="WarpEffects3">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp2" name="filmRamp2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect1" name="warpEffect1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects4" name="WarpEffects4">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap7" name="NormalMap7">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap8" name="NormalMap8">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects5" name="WarpEffects5">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap9" name="NormalMap9">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap10" name="NormalMap10">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap11" name="NormalMap11">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects6" name="WarpEffects6">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap12" name="NormalMap12">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap13" name="NormalMap13">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap14" name="NormalMap14">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap15" name="NormalMap15">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects7" name="WarpEffects7">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects8" name="WarpEffects8">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap16" name="NormalMap16">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap17" name="NormalMap17">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects9" name="WarpEffects9">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap18" name="NormalMap18">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap19" name="NormalMap19">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects10" name="WarpEffects10">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap20" name="NormalMap20">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects11" name="WarpEffects11">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects12" name="WarpEffects12">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap21" name="NormalMap21">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects13" name="WarpEffects13">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects14" name="WarpEffects14">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects15" name="WarpEffects15">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap22" name="NormalMap22">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects16" name="WarpEffects16">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap23" name="NormalMap23">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap24" name="NormalMap24">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="warpEffect2" name="warpEffect2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp3" name="filmRamp3">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect3" name="warpEffect3">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp4" name="filmRamp4">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect4" name="warpEffect4">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects17" name="WarpEffects17">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap25" name="NormalMap25">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap26" name="NormalMap26">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects18" name="WarpEffects18">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap27" name="NormalMap27">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects19" name="WarpEffects19">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects20" name="WarpEffects20">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects21" name="WarpEffects21">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects22" name="WarpEffects22">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap28" name="NormalMap28">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap29" name="NormalMap29">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects23" name="WarpEffects23">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects24" name="WarpEffects24">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap30" name="NormalMap30">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap31" name="NormalMap31">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects25" name="WarpEffects25">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap32" name="NormalMap32">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects26" name="WarpEffects26">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects27" name="WarpEffects27">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap33" name="NormalMap33">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap5" name="normalMap5">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap6" name="normalMap6">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects28" name="WarpEffects28">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap34" name="NormalMap34">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap7" name="normalMap7">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap8" name="normalMap8">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects29" name="WarpEffects29">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap35" name="NormalMap35">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap36" name="NormalMap36">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects30" name="WarpEffects30">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap37" name="NormalMap37">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap38" name="NormalMap38">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects31" name="WarpEffects31">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap39" name="NormalMap39">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap40" name="NormalMap40">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap41" name="NormalMap41">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap42" name="NormalMap42">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects32" name="WarpEffects32">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects33" name="WarpEffects33">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects34" name="WarpEffects34">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap43" name="NormalMap43">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap44" name="NormalMap44">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects35" name="WarpEffects35">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="normalMap9" name="normalMap9">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap10" name="normalMap10">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects36" name="WarpEffects36">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="normalMap11" name="normalMap11">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap12" name="normalMap12">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap13" name="normalMap13">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects37" name="WarpEffects37">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects38" name="WarpEffects38">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects39" name="WarpEffects39">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap45" name="NormalMap45">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects40" name="WarpEffects40">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects41" name="WarpEffects41">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap46" name="NormalMap46">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap47" name="NormalMap47">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects42" name="WarpEffects42">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap48" name="NormalMap48">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects43" name="WarpEffects43">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects44" name="WarpEffects44">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects45" name="WarpEffects45">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap49" name="NormalMap49">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap50" name="NormalMap50">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects46" name="WarpEffects46">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects47" name="WarpEffects47">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap51" name="NormalMap51">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap52" name="NormalMap52">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap53" name="NormalMap53">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects48" name="WarpEffects48">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects49" name="WarpEffects49">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects50" name="WarpEffects50">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects51" name="WarpEffects51">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap54" name="NormalMap54">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects52" name="WarpEffects52">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects53" name="WarpEffects53">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect5" name="warpEffect5">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects54" name="WarpEffects54">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap55" name="NormalMap55">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects55" name="WarpEffects55">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect6" name="warpEffect6">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect7" name="warpEffect7">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:02</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap56" name="NormalMap56">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap57" name="NormalMap57">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="filmRamp5" name="filmRamp5">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect8" name="warpEffect8">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects56" name="WarpEffects56">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap58" name="NormalMap58">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap59" name="NormalMap59">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap60" name="NormalMap60">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap61" name="NormalMap61">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap62" name="NormalMap62">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap63" name="NormalMap63">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects57" name="WarpEffects57">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap64" name="NormalMap64">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects58" name="WarpEffects58">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap65" name="NormalMap65">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap66" name="NormalMap66">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="filmRamp6" name="filmRamp6">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="NormalMap67" name="NormalMap67">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects59" name="WarpEffects59">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap68" name="NormalMap68">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects60" name="WarpEffects60">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap69" name="NormalMap69">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects61" name="WarpEffects61">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="normalMap14" name="normalMap14">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap70" name="NormalMap70">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap15" name="normalMap15">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap16" name="normalMap16">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap17" name="normalMap17">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap18" name="normalMap18">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects62" name="WarpEffects62">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap71" name="NormalMap71">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects63" name="WarpEffects63">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects64" name="WarpEffects64">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects65" name="WarpEffects65">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects66" name="WarpEffects66">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap72" name="NormalMap72">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap73" name="NormalMap73">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects67" name="WarpEffects67">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap74" name="NormalMap74">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap75" name="NormalMap75">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects68" name="WarpEffects68">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap76" name="NormalMap76">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects69" name="WarpEffects69">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects70" name="WarpEffects70">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects71" name="WarpEffects71">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects72" name="WarpEffects72">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects73" name="WarpEffects73">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap77" name="NormalMap77">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects74" name="WarpEffects74">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap78" name="NormalMap78">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap79" name="NormalMap79">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects75" name="WarpEffects75">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="normalMap19" name="normalMap19">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap20" name="normalMap20">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap80" name="NormalMap80">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap21" name="normalMap21">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects76" name="WarpEffects76">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects77" name="WarpEffects77">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects78" name="WarpEffects78">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects79" name="WarpEffects79">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects80" name="WarpEffects80">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects81" name="WarpEffects81">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap81" name="NormalMap81">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects82" name="WarpEffects82">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap82" name="NormalMap82">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap83" name="NormalMap83">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects83" name="WarpEffects83">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap84" name="NormalMap84">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects84" name="WarpEffects84">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap85" name="NormalMap85">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects85" name="WarpEffects85">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects86" name="WarpEffects86">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap86" name="NormalMap86">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects87" name="WarpEffects87">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp7" name="filmRamp7">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect9" name="warpEffect9">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects88" name="WarpEffects88">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap87" name="NormalMap87">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap88" name="NormalMap88">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects89" name="WarpEffects89">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap89" name="NormalMap89">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects90" name="WarpEffects90">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="NormalMap90" name="NormalMap90">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:03</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="NormalMap91" name="NormalMap91">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap22" name="normalMap22">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normalMap23" name="normalMap23">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="filmRamp8" name="filmRamp8">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect10" name="warpEffect10">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp9" name="filmRamp9">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="NormalMap92" name="NormalMap92">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="warpEffect11" name="warpEffect11">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp10" name="filmRamp10">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="filmRamp11" name="filmRamp11">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="NormalMap93" name="NormalMap93">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects91" name="WarpEffects91">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects92" name="WarpEffects92">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects93" name="WarpEffects93">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="WarpEffects94" name="WarpEffects94">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="normals" name="normals">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="normals1" name="normals1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects95" name="WarpEffects95">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>WarpEffects.tga</init_from>
+		</image>
+		<image id="normals2" name="normals2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.bmp</init_from>
+		</image>
+		<image id="WarpEffects97" name="WarpEffects97">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:42:20</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>WarpEffects.tga</init_from>
+		</image>
+		<image id="normals3" name="normals3">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:42:20</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.tga</init_from>
+		</image>
+		<image id="WarpEffects117" name="WarpEffects117">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:42:22</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>WarpEffects.tga</init_from>
+		</image>
+		<image id="normals4" name="normals4">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:42:22</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.tga</init_from>
+		</image>
+		<image id="WarpEffects101" name="WarpEffects101">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T14:02:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>WarpEffects.tga</init_from>
+		</image>
+		<image id="normals5" name="normals5">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T14:02:01</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>normals.tga</init_from>
+		</image>
+	</library_images>
+	<library_materials>
+		<material id="Material0" name="Skin2DirLightsWarpEffect">
+			<instance_effect url="#Skin2DirLightsWarpEffect0">
+				<technique_hint platform="PS3" ref="main"/>
+				<technique_hint platform="PC-D3D" ref="Constant"/>
+				<technique_hint platform="PC-OGL" ref="main"/>
+				<setparam ref="ViewProjTranspose">
+					<float4x4>7.39485e+031 2.00222e-019 2.03666e-019 0 1.50879e-019 4.37124e+024 6.80019e+022 0 7.15472e+022 1.84987e+020 4.17517e-041 0 7.22507e+028 1.76353e+014 0 0</float4x4>
+				</setparam>
+				<setparam ref="EyePos">
+					<float4>0 0 0 0</float4>
+				</setparam>
+				<setparam ref="MaterialDiffuse">
+					<float4>0 0 0 0</float4>
+				</setparam>
+				<setparam ref="WarpAlpha">
+					<float>0.3</float>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[0]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[1]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[2]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[3]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[4]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[5]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[6]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[7]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[8]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[9]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[10]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[11]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[12]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[13]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[14]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[15]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[16]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[17]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[18]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="SkinBoneMatrices[19]">
+					<float4x3>0 0 0 0 0 0 0 0 0 0 0 0</float4x3>
+				</setparam>
+				<setparam ref="Light1Direction">
+					<float3>1.80992e-041 0 0</float3>
+				</setparam>
+				<setparam ref="Light2Direction">
+					<float3>0 0 0</float3>
+				</setparam>
+				<setparam ref="Light1Color">
+					<float3>0 0 0</float3>
+				</setparam>
+				<setparam ref="Light2Color">
+					<float3>0 0 0</float3>
+				</setparam>
+				<setparam ref="time">
+					<float>0</float>
+				</setparam>
+				<setparam ref="BaseTexture">
+					<surface type="2D">
+						<init_as_null/>
+						<format>A8R8G8B8</format>
+						<size>0 0 1</size>
+					</surface>
+				</setparam>
+				<setparam ref="WarpEffects">
+					<surface type="2D">
+						<init_from>WarpEffects97</init_from>
+						<format>Unknown</format>
+						<size>0 0 1</size>
+					</surface>
+				</setparam>
+				<setparam ref="NormalMap">
+					<surface type="2D">
+						<init_from>normals3</init_from>
+						<format>Unknown</format>
+						<size>0 0 1</size>
+					</surface>
+				</setparam>
+			</instance_effect>
+		</material>
+	</library_materials>
+</COLLADA>

@@ -1,0 +1,201 @@
+//
+// GamebryoBuildShelf.mel
+//
+
+// Handles creation of Shelf Buttons for viewing, exporting, etc.
+
+global string $gShelfTopLevel;
+
+//---------------------------------------------------------------------------
+global proc GamebryoBuildShelf()
+{
+    global string $gShelfTopLevel;
+
+    //remove the old MyImmerseShelf
+    if(`shelfLayout -ex MyImmerseShelf`)
+    {
+        deleteUI MyImmerseShelf;
+    }
+
+    // remove the current one if it exists.
+    if(`shelfLayout -ex Gamebryo`)
+    {
+        deleteUI Gamebryo;
+    }
+
+    shelfLayout -p $gShelfTopLevel Gamebryo;
+
+    shelfButton -label "Export Options"
+                    -image1 "MyImmerseExportOptionsIcon.bmp"
+                    -style "iconOnly"
+                    -command "GamebryoLoadPlugins; eval \"GamebryoExportOptions\""
+                    -p "Gamebryo" GamebryoExportOptionsButton;
+
+    shelfButton -label "Export Scene"
+                    -image1 "MyImmerseExportIcon.bmp"
+                    -style "iconOnly"
+                    -command "GamebryoLoadPlugins; eval \"GamebryoExportWithCurrentOptions\""
+                    -p "Gamebryo" GamebryoExportButton;
+
+    shelfButton -label "Export Selected"
+                    -image1 "MyImmerseExportSelectedIcon.bmp"
+                    -style "iconOnly"
+                    -command "GamebryoLoadPlugins; eval \"GamebryoExportSelectedWithCurrentOptions\""
+                    -p "Gamebryo" GamebryoExportSelectedButton;
+
+    shelfButton -label "View Scene with Gamebryo Maya Viewer"
+                    -image1 "MyImmerseIcon1.bmp"
+                    -style "iconOnly"
+                    -command "GamebryoLoadPlugins; eval \"MyImmerseQuickView 0\""
+                    -p "Gamebryo" GamebryoViewButton;
+
+    shelfButton -label "View Selected in Scene with Gamebryo Maya Viewer"
+                    -image1 "MyImmerseViewSelectedIcon.bmp"
+                    -style "iconOnly"
+                    -command "GamebryoLoadPlugins; eval \"MyImmerseQuickView 1\""
+                    -p "Gamebryo" GamebryoViewSelectedButton;
+
+    shelfButton -label "Create Light Attenuation Dialog"
+                -image1 "MyImmerseLightAttenuationIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateNiLightAttenuationDialog(\\\"\\\")\""
+                -p "Gamebryo" GamebryoCreateLightAttenuationButton;
+
+    shelfButton -label "Create Switch Node"
+                -image1 "MyImmerseSwitchNodeIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateSwitchNode(\\\"\\\")\""
+                -p "Gamebryo" GamebryoCreateSwitchNodeButton;
+
+    shelfButton -label "Create Billboard Node"
+                -image1 "MyImmerseBillboardIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateBillboardNode(\\\"\\\")\""
+                -p "Gamebryo" GamebryoCreateBillboardNodeButton;
+
+    shelfButton -label "Create Dynamic Texture Light"
+                -image1 "MyImmerseDynamicTextureIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateDynamicTextureMap()\""
+                -p "Gamebryo" GamebryoCreateDynamicTextureButton;
+
+    shelfButton -label "Create Character Sequence"
+                -image1 "MyImmerseSequenceIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseSequenceEditor()\""
+                -p "Gamebryo" GamebryoCreateSequenceButton;
+
+    shelfButton -label "Key Frame Reduction"
+                -image1 "MyImmerseKeyFrameReductionIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateKeyFrameReductionDialog()\""
+                -p "Gamebryo" GamebryoCreateKeyFrameReductionButton;
+
+    shelfButton -label "Character Animation Compression"
+                -image1 "MyImmerseCreateCharacterKeyReductionIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateCharacterAnimationCompressionDialog()\""
+                -p "Gamebryo" GamebryoCreateCharacterAnimationCompressionButton;
+
+    shelfButton -label "Toggle NiMultiShader To Base Map"
+                -image1 "MyImmerseSetBaseMapOnlyIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"GamebryoToggleBaseMap()\""
+                -p "Gamebryo" GamebryoSetAllSelectedBaseMapOnlyButton;
+
+    shelfButton -label "Create Centered LOD Group"
+                -image1 "MyImmerseCreateCenteredLODGroupIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateCenteredLODGroup\""
+                -p "Gamebryo" GamebryoCreateCenteredLODGroupButton;
+
+    shelfButton -label "Create ABV Bounding Box"
+                -image1 "MyImmerseCreateABVBoundingBoxIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateABVAxisAlignedBoundingBox(\\\"\\\")\""
+                -p "Gamebryo" GamebryoCreateABVBoundingBoxButton;
+
+    shelfButton -label "Create Emitter and Particles with Gamebryo Attributes"
+                -image1 "MyImmerseParticleSystemIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateEmitterWithAttributes\""
+                -p "Gamebryo" GamebryoCreateEmitterWithAttributesButton;
+
+    shelfButton -label "Create Surface Emitter and Particles with Gamebryo Attributes"
+                -image1 "MyImmerseSurfaceParticleSystemIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateSurfaceEmitterWithAttributes\""
+                -p "Gamebryo" GamebryoCreateSurfaceEmitterWithAttributesButton;
+
+    shelfButton -label "Proxy Spherical Collider with Gamebryo Attributes"
+                -image1 "MyImmerseCreateProxySphericalColliderIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateProxySphericalCollider(\\\"\\\")\""
+                -p "Gamebryo" GamebryoCreateProxySphericalColliderButton;
+
+    shelfButton -label "Planar Collider with Gamebryo Attributes"
+                -image1 "MyImmerseCreatePlanarColliderIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreatePlanarCollider\""
+                -p "Gamebryo" GamebryoCreatePlanarColliderButton;
+
+    shelfButton -label "Spherical Collider with Gamebryo Attributes"
+                -image1 "MyImmerseCreateSphericalColliderIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateSphericalCollider\""
+                -p "Gamebryo" GamebryoCreateSphericalColliderButton;
+
+    shelfButton -label "Setup / Edit Bone LOD"
+                -image1 "MyImmerseBoneLODDialogIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseBoneLODDialog(\\\"\\\")\""
+                -p "Gamebryo" GamebryoBoneLODDialogButton;
+
+    shelfButton -label "Setup / Edit Skins with Bone LOD"
+                -image1 "MyImmerseSkinLODDialogIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseSkinLODDialog(\\\"\\\")\""
+                -p "Gamebryo" GamebryoSkinLODDialogButton;
+
+    shelfButton -label "Create Portal Room Group"
+                -image1 "MyImmerseCreatePortalRoomGroupIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreatePortalSystemRoomGroup\""
+                -p "Gamebryo" GamebryoCreatePortalRoomGroupButton;
+
+    shelfButton -label "Create Portal Room"
+                -image1 "MyImmerseCreatePortalRoomIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreatePortalSystemRoom\""
+                -p "Gamebryo" GamebryoCreatePortalRoomButton;
+
+    shelfButton -label "Create Portal Room Walls"
+                -image1 "MyImmerseCreatePortalWallsIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateAxisAlignedPortalWalls\""
+                -p "Gamebryo" GamebryoCreatePortalRoomWallsButton;
+
+    shelfButton -label "Create Portal"
+                -image1 "MyImmerseCreatePortalIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateAxisAlignedPortal\""
+                -p "Gamebryo" GamebryoCreatePortalButton;
+
+    shelfButton -label "Toggle Portal Walls And Portals"
+                -image1 "MyImmersePortalShowWallsAndPortalsIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"GamebryoTogglePortals()\""
+                -p "Gamebryo" GamebryoPortalShowWallsAndPortalButton;
+
+    shelfButton -label "Multi-NIF Export"
+                -image1 "MyImmerseMultiNifExportIcon.bmp"
+                -style "iconOnly"
+                -command "GamebryoLoadPlugins; eval \"MyImmerseCreateMultiNIFExportAttributesDialog\""
+                -p "Gamebryo" GamebryoMultiNIFExportButton;
+
+    shelfButton -label "Recursively Export From Selected Diectory"
+                    -image1 "MyImmerseRecursiveExportIcon.bmp"
+                    -style "iconOnly"
+                    -command "GamebryoLoadPlugins; eval \"fileBrowserDialog -m 4 -fc \\\"MyImmerseRecursiveExport\\\" -an \\\"Export All Maya files as NIF\\\"\""
+                    -p "Gamebryo" GamebryoRecursiveExportButton;
+}

@@ -1,0 +1,49 @@
+//
+// MyImmerseResetAllNiMultiShaderBaseMapOnly.mel
+//
+// Loop through each NiMultiShader and set
+// the scene graph connections associated with only
+// showing the base map.
+
+
+global proc MyImmerseAddColorFilterToMayaMaterials(string $nodeName)
+{
+    int $intVal;
+
+    string $szShaderNodes[];
+    if($nodeName == "")
+    {
+        $szShaderNodes = `ls -l -sl -typ phong -typ phongE -typ blinn -typ lambert -typ anisotropic`;
+    }
+    else
+    {
+        $szShaderNodes[0] = $nodeName;
+    }
+     
+    // Check for Nothing Selected
+    if(size($szShaderNodes) == 0)
+    {
+        print("WARNING:: No Maya Shaders Selected\n");
+    }
+
+    int $iCount = 0;
+    while( $iCount < size($szShaderNodes))
+    {
+        if(`attributeExists "Ni_TextureFilter" $szShaderNodes[$iCount]` == 0)
+        {
+            addAttr -ln Ni_TextureFilter -at enum -enumName "Nearest:BiLerp:TriLerp:Nearest MIP Nearest:Nearest MIP Lerp:BiLerp MIP Nearest:Anisotropic" $szShaderNodes[$iCount];
+
+            // Devault to TryiLerp
+            setAttr ($szShaderNodes[$iCount] + ".Ni_TextureFilter") 2;
+            
+            
+        }
+        if(`attributeExists "Ni_MaxAnisotropy" $szShaderNodes[$iCount]` == 0)
+        {
+            addAttr -ln Ni_MaxAnisotropy -at short -min 1 -max 16 -dv 1 $szShaderNodes[$iCount];
+        }
+        
+        $iCount = $iCount + 1;
+    }
+
+}

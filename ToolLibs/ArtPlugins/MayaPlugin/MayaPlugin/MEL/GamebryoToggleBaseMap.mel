@@ -1,0 +1,18 @@
+global int $g_BaseMapVisibility = 1;
+
+global proc GamebryoToggleBaseMap()
+{
+	global int $g_BaseMapVisibility;
+	
+	string $szPluginName = MyImmerseGetPluginName();
+
+	if (MyImmerseCheckAndLoadPlugin($szPluginName))
+	{
+		error("Couldn't load the MyImmerse Plugin!");
+	}
+
+	$g_BaseMapVisibility = !$g_BaseMapVisibility; 
+	
+	MyImmerseSetAllSelectedNiMultiShaderBaseMapOnly($g_BaseMapVisibility);
+
+}

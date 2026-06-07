@@ -1,0 +1,260 @@
+// MyImmerseAddGamebryoParticlesAttributes.mel
+//
+// Mel script for applying Gamebryo Attributes to a Particles
+
+
+global proc MyImmerseAddGamebryoParticlesAttributes(string $szParticles)
+{
+    if (`attributeExists Ni_ParticleVertexColor $szParticles` == 0)
+        addAttr -ln Ni_ParticleVertexColor -nc 3 -at float3 -uac $szParticles;
+        
+    if (`attributeExists Ni_ParticleVertexColorR $szParticles` == 0)            
+        addAttr -ln Ni_ParticleVertexColorR -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_ParticleVertexColor $szParticles;
+        
+    if (`attributeExists Ni_ParticleVertexColorG $szParticles` == 0)
+        addAttr -ln Ni_ParticleVertexColorG -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_ParticleVertexColor $szParticles;
+        
+    if (`attributeExists Ni_ParticleVertexColorB $szParticles` == 0)
+        addAttr -ln Ni_ParticleVertexColorB -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_ParticleVertexColor $szParticles;
+        
+    if (`attributeExists Ni_ParticleVertexColorAlpha $szParticles` == 0)
+        addAttr -ln Ni_ParticleVertexColorAlpha -at "float" -min 0.0 -max 1.0 -dv 1.0 $szParticles;
+        
+    if (`attributeExists Ni_ParticleSizeVariance $szParticles` == 0)
+        addAttr -ln Ni_ParticleSizeVariance -at "float" -min 0.0 -dv 0.0 $szParticles;
+        
+    if (`attributeExists Ni_ParticleGrowFrames $szParticles` == 0)
+        addAttr -ln Ni_ParticleGrowFrames -at "float" -dv 0.0 -k false $szParticles;
+        
+    if (`attributeExists Ni_ParticleShrinkFrames $szParticles` == 0)
+        addAttr -ln Ni_ParticleShrinkFrames -at "float" -dv 0.0 -k false $szParticles;
+        
+    if (`attributeExists Ni_ParticleRotateRandomAxis $szParticles` == 0)
+        addAttr -ln Ni_ParticleRotateRandomAxis -at bool -dv true -k false $szParticles;
+        
+    if (`attributeExists Ni_ParticleRotateAxisX $szParticles` == 0)
+        addAttr -ln Ni_ParticleRotateAxisX -at "float" -dv 1.0 -k false $szParticles;
+        
+    if (`attributeExists Ni_ParticleRotateAxisY $szParticles` == 0)
+        addAttr -ln Ni_ParticleRotateAxisY -at "float" -dv 0.0 -k false $szParticles;
+        
+    if (`attributeExists Ni_ParticleRotateAxisZ $szParticles` == 0)
+        addAttr -ln Ni_ParticleRotateAxisZ -at "float" -dv 0.0 -k false $szParticles;
+        
+    if (`attributeExists Ni_ParticleRotateSpeedDegrees $szParticles` == 0)
+        addAttr -ln Ni_ParticleRotateSpeedDegrees -at "float" -dv 0.0 $szParticles;
+        
+    if (`attributeExists Ni_ParticleRotationSpeedVarDegrees $szParticles` == 0)
+        addAttr -ln Ni_ParticleRotationSpeedVarDegrees -at "float" -dv 0.0 -min 0.0 $szParticles;
+        
+    if (`attributeExists Ni_ParticleBiDirectionalRotation $szParticles` == 0)
+        addAttr -ln Ni_ParticleBiDirectionalRotation -at bool -dv 0 -k false $szParticles;
+        
+    if (`attributeExists Ni_ParticleRotationInitialAngle $szParticles` == 0)
+        addAttr -ln Ni_ParticleRotationInitialAngle -at "float" -dv 0.0 -min -180.0 -max 180.0 $szParticles;
+        
+    if (`attributeExists Ni_ParticleRotationInitialAngleVar $szParticles` == 0)
+        addAttr -ln Ni_ParticleRotationInitialAngleVar -at "float" -dv 0.0 -min 0 -max 180.0 $szParticles;
+
+    if (`attributeExists Ni_ParticleSpawnOnDeath $szParticles` == 0)
+        addAttr -ln Ni_ParticleSpawnOnDeath -at bool -dv 0 -k false  $szParticles;
+        
+    if (`attributeExists Ni_ParticleNumGenerations $szParticles` == 0)
+        addAttr -ln Ni_ParticleNumGenerations -at byte -dv 0 -k false  $szParticles;
+        
+    if (`attributeExists Ni_ParticleMinNumToSpawn $szParticles` == 0)
+        addAttr -ln Ni_ParticleMinNumToSpawn -at short -dv 0 -k false  $szParticles;
+        
+    if (`attributeExists Ni_ParticleMaxNumToSpawn $szParticles` == 0)
+        addAttr -ln Ni_ParticleMaxNumToSpawn -at short -dv 0 -k false  $szParticles;
+        
+    if (`attributeExists Ni_ParticlePercentageSpawned $szParticles` == 0)
+        addAttr -ln Ni_ParticlePercentageSpawned -at "float" -dv 1.0 -k false -min 0.0 -max 1.0 $szParticles;
+        
+    if (`attributeExists Ni_ParticleSpawnedSpread $szParticles` == 0)
+        addAttr -ln Ni_ParticleSpawnedSpread -at "float" -dv 0.0 -k false -min 0.0 -max 1.0 $szParticles;
+        
+    if (`attributeExists Ni_ParticleSpawnedSpeedChaos $szParticles` == 0)
+        addAttr -ln Ni_ParticleSpawnedSpeedChaos -at "float" -dv 0.0 -k false $szParticles;
+        
+    if (`attributeExists Ni_ParticleTargetParticle $szParticles` == 0)
+        addAttr -ln Ni_ParticleTargetParticle -dt "string" $szParticles;
+
+    if (`attributeExists Ni_ParticleSkipBoundUpdate $szParticles` == 0)
+        addAttr -ln Ni_ParticleSkipBoundUpdate -at byte -dv 0 $szParticles;
+        
+    if (`attributeExists Ni_ParticlesInWorldSpace $szParticles` == 0)
+        addAttr -ln Ni_ParticlesInWorldSpace -at bool -dv 0 -k false $szParticles;
+
+    // Add the ZBuffer property
+    if (`attributeExists Ni_ZBufferProperty $szParticles` == 0)
+    {
+        addAttr -ln Ni_ZBufferProperty -at enum -enumName "Test-ON Write-ON:Test-ON Write-OFF:Test-OFF Write-ON:Test-OFF Write-OFF" $szParticles;
+        setAttr ($szParticles + ".Ni_ZBufferProperty") 1;
+    }
+    
+    if (`attributeExists Ni_ParticleMeshFillPoolsOnLoad $szParticles` == 0)
+        addAttr -ln Ni_ParticleMeshFillPoolsOnLoad -at bool -dv false -k false $szParticles;
+        
+    if (`attributeExists Ni_ParticleMeshDefaultPoolSize $szParticles` == 0)
+        addAttr -ln Ni_ParticleMeshDefaultPoolSize -at long -dv -1 -min -1 -k false $szParticles;
+    
+}
+
+
+//Can't delete because of compound 
+//global proc MyImmerseAddGamebryoParticlesAttributes(string $szParticles)
+//{
+//    if (`attributeExists Ni_ParticleVertexColor $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleVertexColor $szParticles;
+//    }
+//
+//    if (`attributeExists Ni_ParticleVertexColorR $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleVertexColorR -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_ParticleVertexColor $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleVertexColorG $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleVertexColorG -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_ParticleVertexColor $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleVertexColorB $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleVertexColorB -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_ParticleVertexColor $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleVertexColorAlpha $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleVertexColorAlpha -at "float" -min 0.0 -max 1.0 -dv 1.0 $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleSizeVariance $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleSizeVariance -at "float" -min 0.0 -dv 0.0 $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleGrowFrames $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleGrowFrames -at "float" -dv 0.0 -k false $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleShrinkFrames $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleShrinkFrames -at "float" -dv 0.0 -k false $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleRotateRandomAxis $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleRotateRandomAxis -at bool -dv true -k false $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleRotateAxisX $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleRotateAxisX -at "float" -dv 1.0 -k false $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleRotateAxisY $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleRotateAxisY -at "float" -dv 0.0 -k false $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleRotateAxisZ $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleRotateAxisZ -at "float" -dv 0.0 -k false $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleRotateSpeedDegrees $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleRotateSpeedDegrees -at "float" -dv 0.0 $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleRotationSpeedVarDegrees $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleRotationSpeedVarDegrees -at "float" -dv 0.0 -min 0.0 $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleBiDirectionalRotation $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleBiDirectionalRotation -at bool -dv 0 -k false $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleRotationInitialAngle $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleRotationInitialAngle -at "float" -dv 0.0 -min -180.0 -max 180.0 $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleRotationInitialAngleVar $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleRotationInitialAngleVar -at "float" -dv 0.0 -min 0 -max 180.0 $szParticles;
+//    }
+//
+//    if (`attributeExists Ni_ParticleSpawnOnDeath $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleSpawnOnDeath -at bool -dv 0 -k false  $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleNumGenerations $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleNumGenerations -at byte -dv 0 -k false  $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleMinNumToSpawn $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleMinNumToSpawn -at short -dv 0 -k false  $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleMaxNumToSpawn $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleMaxNumToSpawn -at short -dv 0 -k false  $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticlePercentageSpawned $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticlePercentageSpawned -at "float" -dv 1.0 -k false -min 0.0 -max 1.0 $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleSpawnedSpread $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleSpawnedSpread -at "float" -dv 0.0 -k false -min 0.0 -max 1.0 $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleSpawnedSpeedChaos $szParticles` == 1)
+//    {    
+//        deleteAttr -at Ni_ParticleSpawnedSpeedChaos -at "float" -dv 0.0 -k false $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleTargetParticle $szParticles` == 1)
+//    {    
+//        deleteAttr -at Ni_ParticleTargetParticle -dt "string" $szParticles;
+//    }
+//
+//    if (`attributeExists Ni_ParticleSkipBoundUpdate $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleSkipBoundUpdate -at byte -dv 0 $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticlesInWorldSpace $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticlesInWorldSpace -at bool -dv 0 -k false $szParticles;
+//    }
+//
+//    // Add the ZBuffer property
+//    if (`attributeExists Ni_ZBufferProperty $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ZBufferProperty -at enum -enumName "Test-ON Write-ON:Test-ON Write-OFF:Test-OFF Write-ON:Test-OFF Write-OFF" $szParticles;
+//        setAttr ($szParticles + ".Ni_ZBufferProperty") 1;
+//    }
+//
+//    if (`attributeExists Ni_ParticleMeshFillPoolsOnLoad $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleMeshFillPoolsOnLoad -at bool -dv false -k false $szParticles;
+//    }
+//        
+//    if (`attributeExists Ni_ParticleMeshDefaultPoolSize $szParticles` == 1)
+//    {
+//        deleteAttr -at Ni_ParticleMeshDefaultPoolSize -at long -dv -1 -min -1 -k false $szParticles;
+//    }
+//
+//}

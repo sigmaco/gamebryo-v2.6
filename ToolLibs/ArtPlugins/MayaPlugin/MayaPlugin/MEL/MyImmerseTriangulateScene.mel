@@ -1,0 +1,44 @@
+//
+// MyImmerseTriangulateScene.mel
+//
+// Mel script for triangulating all of the meshes in the scene
+// this is called by the MyImmerse exporter to prepare the scene
+// for export.
+
+global proc MyImmerseTriangulateScene()
+{
+    // Save the selection list
+    string $szSelection[] = `ls -l -sl`;
+
+
+    string $asShapes[] = `ls -typ mesh -ni`;
+
+    int $iLoop = 0;
+    while($iLoop < size($asShapes))
+    {
+
+        // Check to see if it is already triangulated
+        string $szInMesh[] = `listConnections -d off -s on -t polyTriangulate ($asShapes[$iLoop] + ".inMesh")`;
+
+        if (size( $szInMesh ) == 0) 
+        {    
+            select -replace $asShapes[$iLoop];
+            string $asResults[];
+        
+            if( catch($asResults = `polyTriangulate -name $asShapes[$iLoop]`))
+            {
+                print("Failed to Triangulate::" + $asShapes[$iLoop] + "\n");
+            }
+        }
+        else
+        {
+            print ("Mesh Already Triangulated ::" + $asShapes[$iLoop] + "\n");
+        }
+
+        $iLoop = $iLoop + 1;
+    }
+
+
+    // reset the selection
+    select -replace $szSelection;
+}

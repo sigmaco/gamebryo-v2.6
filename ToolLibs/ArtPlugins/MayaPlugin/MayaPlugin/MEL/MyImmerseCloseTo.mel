@@ -1,0 +1,22 @@
+//
+// MyImmerseCloseTo.mel
+//
+// Mel script determining if two values are close to each other.
+
+global proc int MyImmerseCloseTo(float $fValue1, float $fValue2, float $fEpsilon)
+{
+    if ($fEpsilon < 0.0)
+    {
+        $fEpsilon = -$fEpsilon;
+    }
+
+
+    if ((($fValue1 - $fValue2) <= $fEpsilon) &&
+        (($fValue1 - $fValue2) >= -$fEpsilon))
+    {
+        return true;
+    }
+
+
+    return false;
+}

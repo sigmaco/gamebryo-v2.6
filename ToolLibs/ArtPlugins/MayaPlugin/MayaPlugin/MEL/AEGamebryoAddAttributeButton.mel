@@ -1,0 +1,302 @@
+source AEGamebryoCommonUtils;
+
+global proc AddGamebryoFileAttributes(string $nodeName)
+{
+    columnLayout;
+        text -label "Add Gamebryo Attributes";
+    setParent..;
+
+    rowColumnLayout -numberOfColumns 2 
+        -columnWidth 1 45
+        -columnWidth 2 200;
+
+
+        iconTextButton -label "Create Platform Texture Properties"
+                -image1 "MyImmerseCreatePlatformTexturePropertiesIcon.bmp"
+                -style "iconOnly"
+                -command ("AEGamebryoToggleFileAttributes(\"" + $nodeName + "\")")
+                AddGamebryoFileAttributesButton;
+
+        text -label "Create Platform Texture Properties";
+
+            //iconTextButton -label "Create Color Filter Attribute For Maya Materials"
+            //        -image1 "MyImmerseMayaTextureFilterIcon.bmp"
+            //        -style "iconOnly"
+            //        -command ("GamebryoAddFilterAttributes(\"" + $nodeName + "\")")
+            //        AddColorFilterToMayaMaterialAttributes;
+
+    setParent..;
+}
+
+global proc ReplaceGamebryoFileAttributes(string $nodeName)
+{
+    iconTextButton -e -command ("AEGamebryoToggleFileAttributes(\"" + $nodeName + "\")") 
+        AddGamebryoFileAttributesButton;
+}
+
+//global proc GamebryoAddFilterAttributes(string $nodeName)
+//{
+//    
+//
+//}
+
+global proc GamebryoAddFileAttributes(string $node)
+{
+    // Convert the PC to Generic if you come across it
+    if((`attributeExists Ni_PC_Format $node` == true) &&
+       (`attributeExists Ni_Generic_Format $node` == false))
+    {
+        addAttr -ln Ni_Generic_Format -at enum -enumName "Platform Default (Match Default Platform Format):Texture Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $node;
+        setAttr ($node + ".Ni_Generic_Format") `getAttr ($node + ".Ni_PC_Format")`;
+    }
+
+    if((`attributeExists Ni_PC_Texture_Size $node` == true) &&
+       (`attributeExists Ni_Generic_Texture_Size $node` == false))
+    {
+        addAttr -ln Ni_Generic_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $node;
+        setAttr ($node + ".Ni_Generic_Texture_Size") `getAttr ($node + ".Ni_PC_Texture_Size")`;
+    }
+    
+    if((`attributeExists Ni_PC_Location $node` == true) &&
+       (`attributeExists Ni_Generic_Location $node` == false))
+    {
+        addAttr -ln Ni_Generic_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $node;
+        setAttr ($node + ".Ni_Generic_Location") `getAttr ($node + ".Ni_PC_Location")`;
+    }
+
+    if((`attributeExists Ni_PC_Load_Directly_To_Renderer $node` == true) &&
+       (`attributeExists Ni_Generic_Load_Directly_To_Renderer $node` == false))
+    {
+        addAttr -ln Ni_Generic_Load_Directly_To_Renderer -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $node;
+        setAttr ($node + ".Ni_Generic_Load_Directly_To_Renderer") `getAttr ($node + ".Ni_PC_Load_Directly_To_Renderer")`;
+    }
+    // ***** End Conversion Code *****
+
+    if(`attributeExists Ni_Generic_Format $node` == false)
+    {
+        addAttr -ln Ni_Generic_Format -at enum -enumName "Platform Default (Match Default Platform Format):Texture Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $node;
+    }
+
+    if(`attributeExists Ni_Generic_Texture_Size $node` == false)
+    {
+        addAttr -ln Ni_Generic_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $node;
+    }
+    
+    if(`attributeExists Ni_Generic_Location $node` == false)
+    {
+        addAttr -ln Ni_Generic_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $node;
+    }
+
+    if(`attributeExists Ni_Generic_Load_Directly_To_Renderer $node` == false)
+    {
+        addAttr -ln Ni_Generic_Load_Directly_To_Renderer -at bool -dv false $node;
+    }
+
+    if(`attributeExists Ni_Next_Gen_XBox_Format $node` == false)
+    {
+        addAttr -ln Ni_Next_Gen_XBox_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $node;
+    }
+
+    if(`attributeExists Ni_Next_Gen_XBox_Texture_Size $node` == false)
+    {
+        addAttr -ln Ni_Next_Gen_XBox_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $node;
+    }
+    
+    if(`attributeExists Ni_Next_Gen_XBox_Location $node` == false)
+    {
+        addAttr -ln Ni_Next_Gen_XBox_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $node;
+    }
+
+    if(`attributeExists Ni_Next_Gen_XBox_Load_Directly_To_Renderer $node` == false)
+    {
+        addAttr -ln Ni_Next_Gen_XBox_Load_Directly_To_Renderer -at bool -dv false $node;
+    }
+
+
+    if(`attributeExists Ni_DX9_Format $node` == false)
+    {
+        addAttr -ln Ni_DX9_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $node;
+    }
+
+    if(`attributeExists Ni_DX9_Texture_Size $node` == false)
+    {
+        addAttr -ln Ni_DX9_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $node;
+    }
+    
+    if(`attributeExists Ni_DX9_Location $node` == false)
+    {
+        addAttr -ln Ni_DX9_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $node;
+    }
+
+    if(`attributeExists Ni_DX9_Load_Directly_To_Renderer $node` == false)
+    {
+        addAttr -ln Ni_DX9_Load_Directly_To_Renderer -at bool -dv false $node;
+    }
+
+    if(`attributeExists Ni_D3D10_Format $node` == false)
+    {
+        addAttr -ln Ni_D3D10_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $node;
+    }
+
+    if(`attributeExists Ni_D3D10_Texture_Size $node` == false)
+    {
+        addAttr -ln Ni_D3D10_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $node;
+    }
+    
+    if(`attributeExists Ni_D3D10_Location $node` == false)
+    {
+        addAttr -ln Ni_D3D10_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $node;
+    }
+
+    if(`attributeExists Ni_D3D10_Load_Directly_To_Renderer $node` == false)
+    {
+        addAttr -ln Ni_D3D10_Load_Directly_To_Renderer -at bool -dv false $node;
+    }
+
+    if(`attributeExists Ni_PS3_Format $node` == false)
+    {
+        addAttr -ln Ni_PS3_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $node;
+    }
+
+    if(`attributeExists Ni_PS3_Texture_Size $node` == false)
+    {
+        addAttr -ln Ni_PS3_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $node;
+    }
+    
+    if(`attributeExists Ni_PS3_Location $node` == false)
+    {
+        addAttr -ln Ni_PS3_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $node;
+    }
+    
+    if(`attributeExists Ni_Wii_Format $node` == false)
+    {
+        addAttr -ln Ni_Wii_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $node;
+    }
+
+    if(`attributeExists Ni_Wii_Texture_Size $node` == false)
+    {
+        addAttr -ln Ni_Wii_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $node;
+    }
+    
+    if(`attributeExists Ni_Wii_Location $node` == false)
+    {
+        addAttr -ln Ni_Wii_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $node;
+    }    
+}
+
+global proc AEGamebryoToggleFileAttributes(string $nodeName)
+{
+    string $attributeArray[] = {
+    "Ni_PC_Format",
+    "Ni_Generic_Format",
+    "Ni_PC_Texture_Size",
+    "Ni_Generic_Texture_Size",
+    "Ni_PC_Location",
+    "Ni_Generic_Location",
+    "Ni_PC_Load_Directly_To_Renderer",
+    "Ni_Generic_Load_Directly_To_Renderer",
+    "Ni_Generic_Format",
+    "Ni_Generic_Texture_Size",
+    "Ni_Generic_Location",
+    "Ni_Generic_Load_Directly_To_Renderer",
+    "Ni_Next_Gen_XBox_Format",
+    "Ni_Next_Gen_XBox_Texture_Size",
+    "Ni_Next_Gen_XBox_Location",
+    "Ni_Next_Gen_XBox_Load_Directly_To_Renderer",
+    "Ni_DX9_Format",
+    "Ni_DX9_Texture_Size",
+    "Ni_DX9_Location",
+    "Ni_DX9_Load_Directly_To_Renderer",
+    "Ni_D3D10_Format",
+    "Ni_D3D10_Texture_Size",
+    "Ni_D3D10_Location",
+    "Ni_D3D10_Load_Directly_To_Renderer",
+    "Ni_PS3_Format",
+    "Ni_PS3_Texture_Size",
+    "Ni_PS3_Location",
+    "Ni_Wii_Format",
+    "Ni_Wii_Texture_Size",
+    "Ni_Wii_Location"};
+
+    AEGamebryoToggle($nodeName, $attributeArray,                               
+    "GamebryoAddFileAttributes",
+    ("AEGamebryoDeleteAttrList({\"Ni_PC_Format\"," +
+    "\"Ni_PC_Format\"," +
+    "\"Ni_Generic_Format\"," +
+    "\"Ni_PC_Texture_Size\"," +
+    "\"Ni_Generic_Texture_Size\"," +
+    "\"Ni_PC_Location\"," +
+    "\"Ni_Generic_Location\"," +
+    "\"Ni_PC_Load_Directly_To_Renderer\"," +
+    "\"Ni_Generic_Load_Directly_To_Renderer\"," +
+    "\"Ni_Generic_Format\"," +
+    "\"Ni_Generic_Texture_Size\"," +
+    "\"Ni_Generic_Location\"," +
+    "\"Ni_Generic_Load_Directly_To_Renderer\"," +
+    "\"Ni_Next_Gen_XBox_Format\"," +
+    "\"Ni_Next_Gen_XBox_Texture_Size\"," +
+    "\"Ni_Next_Gen_XBox_Location\"," +
+    "\"Ni_Next_Gen_XBox_Load_Directly_To_Renderer\"," +
+    "\"Ni_DX9_Format\"," +
+    "\"Ni_DX9_Texture_Size\"," +
+    "\"Ni_DX9_Location\"," +
+    "\"Ni_DX9_Load_Directly_To_Renderer\"," +
+    "\"Ni_D3D10_Format\"," +
+    "\"Ni_D3D10_Texture_Size\"," +
+    "\"Ni_D3D10_Location\"," +
+    "\"Ni_D3D10_Load_Directly_To_Renderer\"," +
+    "\"Ni_PS3_Format\"," +
+    "\"Ni_PS3_Texture_Size\"," +
+    "\"Ni_PS3_Location\"," +
+    "\"Ni_Wii_Format\"," +
+    "\"Ni_Wii_Texture_Size\"," +
+    "\"Ni_Wii_Location\"})"));
+}
+
+
+global proc AEGamebryoAddAttributeCommand(string $nodeNameAndType, int $isAdd)
+{
+    string $buffer[];    
+
+    tokenize $nodeNameAndType "." $buffer;
+    string $nodeName = $buffer[0];
+    string $type = $buffer[1];
+
+    switch($type)
+    {
+    case "file":
+        if($isAdd)
+        {
+            AddGamebryoFileAttributes($nodeName);
+        }
+        else
+        {
+            ReplaceGamebryoFileAttributes($nodeName);
+        }
+        break;
+
+    case "transform":
+        break;
+
+    case "dagNode":
+        break;
+
+    case "dagNodeWithShape":
+        break;
+
+    default:
+        error "AEGamebryoAddAttributeButton: Type not found.";
+        break;
+    }
+
+}
+
+global proc AEGamebryoAddAttributeButton(string $nodeNameAndType)
+{
+    AEGamebryoAddAttributeCommand($nodeNameAndType, true);
+}
+
+global proc AEGamebryoAddAttributeButtonReplace(string $nodeNameAndType)
+{
+    AEGamebryoAddAttributeCommand($nodeNameAndType, false);
+}

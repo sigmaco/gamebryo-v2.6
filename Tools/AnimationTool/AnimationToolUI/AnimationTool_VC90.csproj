@@ -1,0 +1,702 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release DLL PhysX|AnyCPU' ">
+    <OutputPath>..\Application\VC90\Release\</OutputPath>
+    <DefineConstants>TRACE;EE_PHYSX_BUILD</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>
+    </DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{56EDF427-4FE0-414F-A83E-F73D462F64BA}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>Resources\AnimationTool.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>AnimationTool_VC90</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>AnimationToolUI</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug DLL|AnyCPU' ">
+    <OutputPath>..\Application\VC90\Debug_NoPhysX\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release DLL|AnyCPU' ">
+    <OutputPath>..\Application\VC90\Release_NoPhysX\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug DLL PhysX|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Application\VC90\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;EE_PHYSX_BUILD</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Shipping DLL|AnyCPU' ">
+    <OutputPath>..\Application\VC90\Shipping_NoPhysX\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Shipping DLL PhysX|AnyCPU' ">
+    <OutputPath>..\Application\VC90\Shipping\</OutputPath>
+    <DefineConstants>TRACE;EE_PHYSX_BUILD</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>
+    </DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SourceLibrary">
+      <Name>SourceLibrary</Name>
+      <HintPath>..\SourceGrid2\References\SourceLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Design">
+      <Name>System.Design</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=0.99.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyCode\DockPanel\WinFormsUI\VC80\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+    <ProjectReference Include="..\NiManagedToolInterface\Win32\VC80\NiManagedToolInterface.vcproj">
+      <Name>NiManagedToolInterface</Name>
+      <Project>{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}</Project>
+      <Package>{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\SegmentedTrackBar\SegmentedTrackBar_VC90.csproj">
+      <Project>{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}</Project>
+      <Name>SegmentedTrackBar_VC90</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SourceGrid2\SourceGrid\SourceGrid2_VC90.csproj">
+      <Project>{9A20C33C-9D58-492B-B155-75409190E166}</Project>
+      <Name>SourceGrid2_VC90</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\SequenceEvaluators.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ChooseSequenceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Physics\AddRemovePhysicsSequenceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\CharacterEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ImageButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\InteractivePreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\KeystrokeBindings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NoEditableProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NumericSlider.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RenderPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RollBarControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceCommon.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceFolderEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceGroupCommon.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceGroupFolderEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceGroupMixer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceGroupProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceIDOverview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceTextKeys.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SliderBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TimeSlider.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TransitionChainEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TransitionDefaultEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TransitionDelayedBlendEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TransitionEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TransitionImmediateBlendEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\WorkSheet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutBoxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddRemoveSeqToGrpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CharacterEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DefaultTransitionSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FileOverwriteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MessageBoxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MessageBoxRegistryEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OutputViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PopupForSliderBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProjectViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RenderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SceneOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SelectTransitionTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TransitionChainEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TransitionsViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TransitionTableSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Physics\PhysicsViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\AnimationHelpers.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\AppEvents.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\AppUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\AssociateFileTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\ColumnSort.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\EditorSliderBar.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\HelpManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\InputManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\InterfacePostShow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\Invalidator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\ListViewUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\MessageBoxManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\MRUManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\ProjectData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\ProjectTreeNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\TimeSliderBlend.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\TimeSliderBlendDelayed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\TimeSliderBlendImmediate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\TimeSliderChain.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\TimeSliderCrossFade.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\TimeSliderMorph.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\TimeSliderSequence.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\TimeSliderTransitionInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\User32.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\UserLogs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Controls\SequenceEvaluators.resx">
+      <DependentUpon>SequenceEvaluators.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChooseSequenceForm.resx">
+      <DependentUpon>ChooseSequenceForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Physics\AddRemovePhysicsSequenceForm.resx">
+      <DependentUpon>AddRemovePhysicsSequenceForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CharacterEdit.resx">
+      <DependentUpon>CharacterEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ImageButton.resx">
+      <DependentUpon>ImageButton.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InteractivePreview.resx">
+      <DependentUpon>InteractivePreview.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\KeystrokeBindings.resx">
+      <DependentUpon>KeystrokeBindings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\NoEditableProperties.resx">
+      <DependentUpon>NoEditableProperties.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\NumericSlider.resx">
+      <DependentUpon>NumericSlider.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RenderPanel.resx">
+      <DependentUpon>RenderPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RollBarControl.resx">
+      <DependentUpon>RollBarControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceCommon.resx">
+      <DependentUpon>SequenceCommon.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceFolderEdit.resx">
+      <DependentUpon>SequenceFolderEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceGroupCommon.resx">
+      <DependentUpon>SequenceGroupCommon.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceGroupFolderEdit.resx">
+      <DependentUpon>SequenceGroupFolderEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceGroupMixer.resx">
+      <DependentUpon>SequenceGroupMixer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceGroupProperties.resx">
+      <DependentUpon>SequenceGroupProperties.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceIDOverview.resx">
+      <DependentUpon>SequenceIDOverview.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceTextKeys.resx">
+      <DependentUpon>SequenceTextKeys.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SliderBar.resx">
+      <DependentUpon>SliderBar.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TimeSlider.resx">
+      <DependentUpon>TimeSlider.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TransitionChainEdit.resx">
+      <DependentUpon>TransitionChainEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TransitionDefaultEdit.resx">
+      <DependentUpon>TransitionDefaultEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TransitionDelayedBlendEdit.resx">
+      <DependentUpon>TransitionDelayedBlendEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TransitionEdit.resx">
+      <DependentUpon>TransitionEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TransitionImmediateBlendEdit.resx">
+      <DependentUpon>TransitionImmediateBlendEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\WorkSheet.resx">
+      <DependentUpon>WorkSheet.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutBoxForm.resx">
+      <DependentUpon>AboutBoxForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddRemoveSeqToGrpForm.resx">
+      <DependentUpon>AddRemoveSeqToGrpForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CharacterEditForm.resx">
+      <DependentUpon>CharacterEditForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DefaultTransitionSettingsForm.resx">
+      <DependentUpon>DefaultTransitionSettingsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EditViewForm.resx">
+      <DependentUpon>EditViewForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FileOverwriteForm.resx">
+      <DependentUpon>FileOverwriteForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MessageBoxForm.resx">
+      <DependentUpon>MessageBoxForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MessageBoxRegistryEdit.resx">
+      <DependentUpon>MessageBoxRegistryEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OutputViewForm.resx">
+      <DependentUpon>OutputViewForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PopupForSliderBar.resx">
+      <DependentUpon>PopupForSliderBar.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProjectViewForm.resx">
+      <DependentUpon>ProjectViewForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RenderForm.resx">
+      <DependentUpon>RenderForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SceneOptionsForm.resx">
+      <DependentUpon>SceneOptionsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SelectTransitionTypeForm.resx">
+      <DependentUpon>SelectTransitionTypeForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TransitionChainEditForm.resx">
+      <DependentUpon>TransitionChainEditForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TransitionsViewForm.resx">
+      <DependentUpon>TransitionsViewForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TransitionTableSettingsForm.resx">
+      <DependentUpon>TransitionTableSettingsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Physics\PhysicsViewForm.resx">
+      <DependentUpon>PhysicsViewForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DefaultDockManager.config" />
+    <EmbeddedResource Include="Resources\MessageBoxes\CannotCompleteOperationDueToIncompleteProj.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\CannotFindKFError.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\CannotFindResourceError.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\CannotFindKFResourceError.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\CannotSaveIncompleteProject.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\ChainCreateDefaultTransitions.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\ChangeTransitionWarning.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DeleteFolder.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DeleteLastBlendPair.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DeleteSequence.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DeleteSequenceGroup.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DependentChainsFoundDeleteDelete.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DependentChainsFoundModifyDelete.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DependentChainsFoundModifyModify.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DependentSequenceGroupsFound.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DependentSequenceInSequenceGroupFound.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\DependentSequenceInSequenceGroupFoundOnDeletion.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\FileHasChanged.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\FileOverwrite.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\GroupIDAlreadyInUse.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\InvalidTransitionError.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\KeystrokeMappingAlreadyInUse.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\LoadKFError.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\LoadKFMError.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\MakeUnique.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\MorphSequenceIsClamp.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\MorphsHavingClampTypeWarning.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\NestedChainError.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\RootInterpolatorMismatches.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\SaveKFMError.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\SequenceIDAlreadyInUse.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\TooFewIntermediates.rtf" />
+    <EmbeddedResource Include="Resources\MessageBoxes\UnableToChangeTransitionWarning.rtf" />
+    <Content Include="Resources\AboutBox Images\NDL Logo.bmp" />
+    <Content Include="Resources\Add.ico" />
+    <Content Include="Resources\AnimationTool.ico" />
+    <Content Include="Resources\AnimationToolDoc.ico" />
+    <Content Include="Resources\ArrowDown.ICO" />
+    <Content Include="Resources\ArrowLeft.ICO" />
+    <Content Include="Resources\ArrowRight.ICO" />
+    <Content Include="Resources\ArrowUp.ICO" />
+    <Content Include="Resources\Delete.ICO" />
+    <Content Include="Resources\Error.bmp" />
+    <Content Include="Resources\folder.png" />
+    <Content Include="Resources\Info.bmp" />
+    <Content Include="Resources\Left.bmp" />
+    <Content Include="Resources\MainForm Images\00_new project.bmp" />
+    <Content Include="Resources\MainForm Images\01_project open.bmp" />
+    <Content Include="Resources\MainForm Images\02_save project.bmp" />
+    <Content Include="Resources\MainForm Images\03_sequence add multiple.bmp" />
+    <Content Include="Resources\MainForm Images\04_view project.bmp" />
+    <Content Include="Resources\MainForm Images\05_view edit.bmp" />
+    <Content Include="Resources\MainForm Images\06_view render.bmp" />
+    <Content Include="Resources\MainForm Images\07_view transitions.bmp" />
+    <Content Include="Resources\MainForm Images\08_view output log.bmp" />
+    <Content Include="Resources\MainForm Images\10_view physics.bmp" />
+    <Content Include="Resources\Minus.bmp" />
+    <Content Include="Resources\NavigationPanel Images\00_orbit cam.bmp" />
+    <Content Include="Resources\NavigationPanel Images\01_pan cam.bmp" />
+    <Content Include="Resources\NavigationPanel Images\02_adjust background height.bmp" />
+    <Content Include="Resources\NavigationPanel Images\03_zoom extents.bmp" />
+    <Content Include="Resources\NavigationPanel Images\04_+lod.bmp" />
+    <Content Include="Resources\NavigationPanel Images\05_-lod.bmp" />
+    <Content Include="Resources\NavigationPanel Images\06_wireframe mode.bmp" />
+    <Content Include="Resources\NavigationPanel Images\07_default lights.bmp" />
+    <Content Include="Resources\NavigationPanel Images\08_toggle background.bmp" />
+    <Content Include="Resources\NavigationPanel Images\09_toggle fps.bmp" />
+    <Content Include="Resources\NavigationPanel Images\10_toggle abv.bmp" />
+    <Content Include="Resources\NavigationPanel Images\11_toggle trajectory.bmp" />
+    <Content Include="Resources\NavigationPanel Images\12_reload shaders.bmp" />
+    <Content Include="Resources\NavigationPanel Images\13_reset character position.bmp" />
+    <Content Include="Resources\NavigationPanel Images\14_options.bmp" />
+    <Content Include="Resources\NavigationPanel Images\15_move orbit center.bmp" />
+    <Content Include="Resources\node.png" />
+    <Content Include="Resources\Plus.bmp" />
+    <Content Include="Resources\Physics Images\01_force mode.bmp" />
+    <Content Include="Resources\Question.bmp" />
+    <Content Include="Resources\Right.bmp" />
+    <Content Include="Resources\TimeSlider Images\AnimationOptions.bmp" />
+    <Content Include="Resources\TimeSlider Images\FinalFrame.bmp" />
+    <Content Include="Resources\TimeSlider Images\FirstFrame.bmp" />
+    <Content Include="Resources\TimeSlider Images\Pause.bmp" />
+    <Content Include="Resources\TimeSlider Images\Play.bmp" />
+    <Content Include="Resources\TreeView Images\00_character model.bmp" />
+    <Content Include="Resources\TreeView Images\01_sequence root.bmp" />
+    <Content Include="Resources\TreeView Images\02_folder sequence.bmp" />
+    <Content Include="Resources\TreeView Images\03_sequence.bmp" />
+    <Content Include="Resources\TreeView Images\04_sequence group root.bmp" />
+    <Content Include="Resources\TreeView Images\05_folder sequence group.bmp" />
+    <Content Include="Resources\TreeView Images\06_sequence group.bmp" />
+    <Content Include="Resources\TreeView Images\07_sequence ID.bmp" />
+    <Content Include="Resources\TreeView Images\08_sequence group ID.bmp" />
+    <Content Include="Resources\TreeView Images\09_interactive preview.bmp" />
+    <Content Include="Resources\TreeView Images\10_transitions preview.bmp" />
+    <Content Include="Resources\View Icons\EditView.ico" />
+    <Content Include="Resources\View Icons\OutputView.ico" />
+    <Content Include="Resources\View Icons\ProjectView.ico" />
+    <Content Include="Resources\View Icons\RenderView.ico" />
+    <Content Include="Resources\View Icons\TransitionsView.ico" />
+    <Content Include="Resources\Warning.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)$(TargetFileName).manifest" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

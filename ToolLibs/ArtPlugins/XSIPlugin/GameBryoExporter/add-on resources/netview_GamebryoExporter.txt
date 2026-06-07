@@ -1,0 +1,1 @@
+Gamebryo exporter v1.1 add-on for Softimage|XSI 6.5. Exports a scene to the Gamebryo NIF file format for use with the Gamebryo engine.

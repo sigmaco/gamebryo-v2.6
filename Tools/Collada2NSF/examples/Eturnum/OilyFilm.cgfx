@@ -1,0 +1,301 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+//Thin Film shader.  We're going to calculate the specular intensity and 
+//pass that into the pixel shader to use as a scalar of a lookup into the 
+//thin film ramp.  Diffuse lighting is done as well.  These values will 
+//go through oD0 and oD1.  N dot V is passed through as a texture coordinate
+//to be used in the pixel shader.
+
+//Constant map from the NSF.  The last four constants for the lights are
+//globals that should be updated by the application.  Exponent and WarpAlpha
+//are attributes that hang off the object.
+
+// Artist Description
+string description
+<
+	string detail0 = "This shader applies a base map lit with two lights, and then uses the ";
+    string detail1 = "specular component of the lighting to generate a thin film ";
+    string detail2 = "interference effect. Finally, the entire effect is modified by a ";
+    string detail3 = "warping effect that allows the shader to fade out over time. ";
+    string detail4 = "The 'Exponent' attribute is the power of the specular effect. ";
+    string detail5 = "The thin film texture should be a 1D thin film destuctive interference ";
+    string detail6 = "pattern. The warp effect is a 2D texture that will be sampled using ";
+    string detail7 = "(N dot V) as the U coordinate and 'warpAlpha' as the V coordinate. ";
+    string detail8 = "This shader was used for the alien's gauntlets in the Eturnum sample.";
+> = "Oily Film Effect";
+
+float4x4 WorldViewProj : WorldViewProjection 
+<
+	string UIWidget="None";
+>;
+float4x4 InvWorld : WorldInverse
+<
+	string UIWidget="None";
+>;
+float4 EyePos : EyePos 
+<
+	string UIWidget="None";
+>;
+float4 Zoze 
+<
+	string UIWidget="None";
+> = {0.0, 1.0, 0.0, 1.0} ;
+
+float Exponent
+<
+	string UIName = "Specular Exponent";
+	string UIWidget = "Slider";
+	float UIMin = 8.0;
+	float UIMax = 64.0;
+	float UIStep = 1.0;
+> = 48.0;
+
+float WarpAlpha
+<
+	string UIName = "V coordinate";
+	string UIWidget = "Slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+	float UIStep = 1.0;
+> = 1.0;
+
+// Light1: Dynamic Effect
+string Light1
+<
+	string UIWidget="None";
+	string VarType = "Object";
+	string ObjectIndex="0";
+	string Object="GeneralLight";
+> = "Light1";
+
+// Light2: Dynamic Effect
+string Light2
+<
+	string UIWidget="None";
+	string VarType = "Object";
+	string ObjectIndex="1";
+	string Object="GeneralLight";
+> = "Light2";
+
+float3 Light1Direction
+<
+	string UIWidget="None";
+	string VarType = "Object";
+	string ObjectName="Light1";
+	string ObjectProperty="ModelDirection";
+>;
+float3 Light2Direction
+<
+	string UIWidget="None";
+	string VarType = "Object";
+	string ObjectName="Light2";
+	string ObjectProperty="ModelDirection";
+>;
+float3 Light1Color 
+<
+	string UIWidget="None";
+	string VarType = "Object";
+	string ObjectName="Light1";
+	string ObjectProperty="Diffuse";
+>;
+float3 Light2Color 
+<
+	string UIWidget="None";
+	string VarType = "Object";
+	string ObjectName="Light2";
+	string ObjectProperty="Diffuse";
+>;
+
+struct VS_INPUT 
+{
+    float3 Pos          : POSITION;
+    float3 Normal       : NORMAL;
+    float2 TexCoord     : TEXCOORD0;
+};
+
+struct VS_OUTPUT
+{
+    float4 Pos          : POSITION;
+    float2 TexCoord     : TEXCOORD0;
+    float3 Diffuse      : COLOR0;
+    float3 Specular     : TEXCOORD1;
+    float2 Lighting     : TEXCOORD2;
+};
+
+void Light(float3 LightVector, float3 ViewVector, float3 Normal,
+    out float DiffuseLightIntensity, out float SpecularLightIntensity)
+{    
+    // Get the half vector.
+    float3 LightHalfVector = normalize(LightVector + ViewVector);
+
+    // Take N dot L as intensity.
+    float LightNDotL = dot(LightVector, Normal);
+    DiffuseLightIntensity = max(0, LightNDotL);
+        
+    // Determine specular intensity.
+    float LightNDotH = max(0, dot(Normal, LightHalfVector));
+    SpecularLightIntensity = pow(LightNDotH, Exponent);
+        
+    //if (LightNDotL < 0.0)
+    //    SpecularLightIntensity = 0.0;
+    // Must use the code below rather than code above.
+    // Using previous lines will cause the compiler to generate incorrect
+    // output.
+    float SpecularMultiplier = LightNDotL > 0.0 ? 1.0 : 0.0;
+    
+    // Attenuate Here
+    SpecularLightIntensity *= SpecularMultiplier;   
+}
+
+
+VS_OUTPUT vmain(VS_INPUT In)
+{
+    VS_OUTPUT Out;
+	float4 InPos = float4(In.Pos, 1.0);
+    Out.Pos = mul(InPos, WorldViewProj);
+        
+    //Get eye pos in obj space - view space eye pos assumed 0,0,0    
+    float3 ObjSpaceEyePos = mul(EyePos, InvWorld).xyz;
+    
+    //Find normalized view vector(V)
+    float3 ViewVector = normalize(ObjSpaceEyePos - InPos.xyz);
+    
+    // compute diffuse and specular lighting - light 1
+    float DiffuseLightIntensity;
+    float SpecularLightIntensity;
+    Light(-Light1Direction, ViewVector, In.Normal, DiffuseLightIntensity, 
+        SpecularLightIntensity);
+        
+    // Multiply out diffuse color.        
+    float3 AccumDiffuse = DiffuseLightIntensity * Light1Color;
+    
+    //Copy out specular.  We scale by green since we
+    //only care about intensity.  Green contributes
+    //most to intensity in YUV conversion.
+    float3 AccumSpecular = SpecularLightIntensity * Light1Color.ggg;
+        
+    // compute diffuse and specular lighting - light 2
+    Light(-Light2Direction, ViewVector, In.Normal, DiffuseLightIntensity, 
+        SpecularLightIntensity);
+    AccumDiffuse += DiffuseLightIntensity * Light2Color;
+    AccumSpecular += SpecularLightIntensity * Light2Color.ggg;
+    
+    // output diffuse & specular
+    Out.Diffuse = AccumDiffuse;
+    Out.Specular = AccumSpecular;
+    
+    //Output packed texture coordinates
+    Out.TexCoord = In.TexCoord;
+    
+    // Output N dot V
+    Out.Lighting = dot(In.Normal, ViewVector).xx;
+    
+    return Out;
+}
+
+// Here we set three samplers. We want to disable mipmapping on
+// the warp texture since it will cause visible artifacts as the
+// box filtering downsamples it. The warp texture is essentially
+// an array of 1D textures.  Box filtering violates that 
+// assumption.
+// NTM_Base texture and sampler
+texture BaseTexture
+<
+	string NTM = "base";
+	string ResourceType = "2D";
+>;
+sampler2D BaseMapSampler: register(s0) = sampler_state 
+{
+	WrapS = Wrap;
+    WrapT = Wrap;
+	Texture = <BaseTexture>;
+	MinFilter = LinearMipMapLinear;
+	MagFilter = Linear;
+};
+
+// Film 
+texture filmRamp
+<
+	string ResourceName = "thinFilmRamp.bmp";
+	string ResourceType = "2D";
+>;
+sampler2D OilyFilm: register(s1) = sampler_state 
+{
+	WrapS = Wrap;
+    WrapT = Wrap;
+	Texture = <filmRamp>;
+	MinFilter = Linear;
+	MagFilter = Linear;
+};
+
+// NTM_Glow texture and sampler
+texture warpEffect
+<
+	string ResourceName = "WarpEffects.tga";
+	string ResourceType = "2D";
+>;
+sampler2D WarpSampler: register(s2) = sampler_state 
+{
+	WrapS = Wrap;
+    WrapT = Wrap;
+	Texture = <warpEffect>;
+	MinFilter = Linear;
+	MagFilter = Linear;
+};
+
+float4 fmain(VS_OUTPUT In) : COLOR
+{
+    float4 Out;
+    
+    // Set up WarpEffectUV.x with N dot V
+    // WarpEffectUV.y is WarpAlpha.  
+    float2 WarpEffectUV;
+    WarpEffectUV.x = In.Lighting.x;
+    WarpEffectUV.y = WarpAlpha;
+
+    //Sample filmRamp based off of thickness in t1
+    float3 Film = tex2D(OilyFilm, In.Lighting).xyz;
+    
+    //Sample baseMap with t0
+    Out.rgb = tex2D(BaseMapSampler, In.TexCoord).xyz;
+    
+    //Sample warp effect map
+    float3 WarpEffect = tex2D(WarpSampler, WarpEffectUV).xyz;
+
+    //Modulate base map by diffuse lighting.
+    Out.rgb *= In.Diffuse;
+        
+    //Multiply the film interference by the specular color and add interference
+    Out.rgb += Film * In.Specular;
+
+    //Add warp effect color.
+    Out.rgb += WarpEffect;
+
+    // Move in warp alpha
+    Out.a = WarpAlpha; 
+
+    return Out;
+}
+
+technique main 
+{
+	pass p0 
+	{
+		VertexProgram = compile arbvp1 vmain();
+		BlendEnable = true;
+		BlendFunc = int2(SrcAlpha,InvSrcAlpha);
+    	PolygonMode = int2(Front, Fill);
+		FragmentProgram = compile arbfp1 fmain();
+	}
+}

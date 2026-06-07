@@ -1,0 +1,337 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+
+string description
+<
+	string detail0 = "This shader skins a model using 20 bones per partition, applies a base ";
+    string detail1 = "map, and lights it with two directional lights using a normal map. ";
+    string detail2 = "Then, the entire effect is modified by a warping effect that allows ";
+    string detail3 = "the shader to fade out over time. The warp effect is a 2D texture that ";
+    string detail4 = "will be sampled using (N dot V) as the U coordinate and 'warpAlpha' as ";
+    string detail5 = "the V coordinate. This shader was used for the alien's skin in the "; 
+    string detail6 = "Eturnum sample.";
+> = "Skin With 2 Directional Lights and Warp Effect";
+
+// Parameters
+float4x4 ViewProjTranspose : ViewProjTranspose
+<
+	string UIWidget="None";
+>;
+float4 EyePos : EyePos 
+<
+	string UIWidget="None";
+>;
+
+// This will come from the application
+float4 MaterialDiffuse : MaterialDiffuse 
+<
+	string UIWidget = "None";
+>;
+
+// Effectively the V coordinate of the WarpEffects texture lookup.
+float WarpAlpha 
+<
+ 	string UIName = "Warp Alpha";
+	string UIWidget = "Slider";
+	float UIMin = -2.0;
+	float UIMax = 2.0;
+	float UIStep = 1.0;
+> = 0.3;
+
+float3x4 SkinBoneMatrices[30] : SkinBoneMatrix3 
+<
+	string UIWidget = "None";
+	string Semantic = "SkinBoneMatrix3";
+>;
+
+// Light1: Dynamic Effect
+string Light1
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectIndex="0";
+	string Object="GeneralLight";
+> = "Light1";
+
+// Light2: Dynamic Effect
+string Light2
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectIndex="1";
+	string Object="GeneralLight";
+> = "Light2";
+
+float3 Light1Direction
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectName="Light1";
+	string ObjectProperty="WorldDirection";
+>;
+float3 Light2Direction
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectName="Light2";
+	string ObjectProperty="WorldDirection";
+>;
+
+float3 Light1Color
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectName="Light1";
+	string ObjectProperty="Diffuse";
+>;
+
+float3 Light2Color
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectName="Light2";
+	string ObjectProperty="Diffuse";
+>;
+
+float time: time
+<
+	string UIWidget="None";
+>;
+
+	
+struct VS_INPUT 
+{
+    float3 Position : 		POSITION;
+	float3 BlendWeights : 	BLENDWEIGHT;
+    int4 BlendIndices : 	BLENDINDICES;
+    float3 Normal : 		NORMAL;
+    float3 Binormal : 		BINORMAL;
+    float3 Tangent : 		TANGENT;
+    float2 TexCoord : 		TEXCOORD0;
+    
+};
+
+struct VS_OUTPUT
+{
+    float4 Pos          : POSITION;
+    float3 Diffuse      : COLOR0;
+    float2 TexCoord     : TEXCOORD0;
+    float3 ViewVector   : TEXCOORD1;
+    float3 Light1Vector : TEXCOORD3;
+    float3 Light2Vector : TEXCOORD4;
+};
+
+VS_OUTPUT vmain(VS_INPUT In)
+{
+    VS_OUTPUT Out;
+    
+    //Determine the 4th weight.  We only pack 3, and this insures that the 
+    //weights sum to 1.  
+    float fWeight3 = 1.0 - In.BlendWeights.x - In.BlendWeights.y - In.BlendWeights.z;
+
+    float3x4 ShortSkinBoneTransform;
+    ShortSkinBoneTransform  = 
+        SkinBoneMatrices[In.BlendIndices.x] * In.BlendWeights.x;
+    ShortSkinBoneTransform += 
+        SkinBoneMatrices[In.BlendIndices.y] * In.BlendWeights.y;
+    ShortSkinBoneTransform += 
+        SkinBoneMatrices[In.BlendIndices.z] * In.BlendWeights.z;
+    ShortSkinBoneTransform += 
+        SkinBoneMatrices[In.BlendIndices.w] * fWeight3;
+
+    float4x4 SkinBoneTransform = float4x4(ShortSkinBoneTransform[0],
+        ShortSkinBoneTransform[1],
+        ShortSkinBoneTransform[2],
+        float4(0.0f, 0.0f, 0.0f, 1.0f));
+
+    // Transform into world space.
+    Out.Pos.xyz = mul(ShortSkinBoneTransform, float4(In.Position.xyz, 1.0));
+    Out.Pos = mul(ViewProjTranspose, float4(Out.Pos.xyz, 1.0));
+    
+    //Get eye pos in world space
+    
+    //Find normalized view vector(V)
+    float3 WorldViewVector = normalize(EyePos.xyz - Out.Pos.xyz);    
+        
+    float3 WorldNormal = mul(In.Normal, (float3x3)SkinBoneTransform);
+    WorldNormal = normalize(WorldNormal);
+
+    //We need to deform B and T now.  We're taking B and T to world space.  Then
+    //we can use them to deform back into tangent space bypassing the object space
+    //of the skin which can be problematic.
+    
+    // Transform the normal into world space for lighting
+    float3 WorldNrm      = mul( In.Normal, (float3x3)SkinBoneTransform);
+    float3 WorldBinormal = mul( In.Binormal, (float3x3)SkinBoneTransform);
+    float3 WorldTangent  = mul( In.Tangent, (float3x3)SkinBoneTransform);
+    WorldNrm      = normalize(WorldNrm);     
+    WorldBinormal = normalize(WorldBinormal);
+    WorldTangent  = normalize(WorldTangent);
+
+    //The vectors for the 2 directional lights come to us in world space so we can
+    //use N, B, and T to transform into tangent space.  We'll use oT3, and oT4
+    Out.Light1Vector.x = dot(-Light1Direction, WorldTangent);
+    Out.Light1Vector.y = dot(-Light1Direction, WorldBinormal);
+    Out.Light1Vector.z = dot(-Light1Direction, WorldNormal);
+
+    Out.Light2Vector.x = dot(-Light2Direction, WorldTangent);
+    Out.Light2Vector.y = dot(-Light2Direction, WorldBinormal);
+    Out.Light2Vector.z = dot(-Light2Direction, WorldNormal);
+    
+    //Move material color into oD0 for use in the pixel shader.
+    Out.Diffuse = MaterialDiffuse.rgb;
+   
+    // Texture coordinates for the base map and normal map.
+    Out.TexCoord = In.TexCoord;
+
+    // Place V in tangent space into oT1 for per pixel N dot V in pixel shader. 
+    Out.ViewVector.x = dot(WorldViewVector, WorldTangent);
+    Out.ViewVector.y = dot(WorldViewVector, WorldBinormal);
+    Out.ViewVector.z = dot(WorldViewVector, WorldNormal);
+
+    return Out;
+}
+
+// NTM_Base texture and sampler
+texture BaseTexture
+<
+	string NTM = "base";
+	string ResourceType = "2D";
+>;
+sampler2D BaseMapSampler: register(s0) = sampler_state 
+{
+	WrapS = Clamp;
+    WrapT = Clamp;
+	Texture = <BaseTexture>;
+	MinFilter = LinearMipMapLinear;
+	MagFilter = Linear;
+};
+
+// The texture for the effect.  WarpAlpha will be used as V.  
+// N dot V will be used for U
+texture WarpEffects
+<
+	string ResourceName = "WarpEffects.tga";
+	string ResourceType = "2D";
+>;
+sampler2D WarpEffectSampler: register(s1) = sampler_state 
+{
+	WrapS = Clamp;
+    WrapT = Clamp;
+	Texture = <WarpEffects>;
+	MinFilter = Linear;
+	MagFilter = Linear;
+};
+
+// The texture for the normals.  
+texture NormalMap
+<
+	string ResourceName = "normals.tga";
+	string ResourceType = "2D";
+>;
+sampler2D NormalMapSampler: register(s2) = sampler_state 
+{
+	WrapS = Clamp;
+    WrapT = Clamp;
+	Texture = <NormalMap>;
+	MinFilter = LinearMipMapLinear;
+	MagFilter = Linear;
+};
+
+float4 fmain(VS_OUTPUT In) : COLOR
+{
+    float4 Out;
+    
+    float3 Normal = tex2D(NormalMapSampler, In.TexCoord).xyz * 2.0 - 1.0;
+        
+    // N dot L.  The light vector is not biased coming out of the vertex shader.
+    float NdotL1 = saturate(dot(Normal, In.Light1Vector));
+    float3 Lighting = saturate(NdotL1 * Light1Color);
+    float NdotL2 = saturate(dot(Normal, In.Light2Vector));
+    Lighting = saturate(Lighting + (NdotL2 * Light2Color));
+    
+    //Perform per pixel N dot V calc
+    float2 WarpEffectUV;
+    WarpEffectUV.x = saturate(dot(Normal, In.ViewVector));
+    WarpEffectUV.y = WarpAlpha;
+    
+    float4 WarpEffect = tex2D(WarpEffectSampler, WarpEffectUV);
+    
+    //Modulate lighting by material
+    Lighting *= In.Diffuse;
+    
+    //Modulate base by lighting and add warp
+    Out = tex2D(BaseMapSampler, In.TexCoord);
+    
+    Out.rgb = Out.rgb * Lighting + WarpEffect.rgb;
+            
+    //Modulate in alpha from WE
+    Out.a *= WarpEffect.a;
+    
+    return Out;
+}
+float4 fmain_pass2(VS_OUTPUT In) : COLOR
+{
+	float4 Out;
+	float3 Normal = tex2D(NormalMapSampler, In.TexCoord).xyz * 2.0 - 1.0;
+    
+    float NdotL2 = saturate(dot(Normal, In.Light2Vector));
+    float3 Lighting = saturate(Lighting + (NdotL2 * Light2Color));
+    
+    //Perform per pixel N dot V calc
+    float2 WarpEffectUV;
+    WarpEffectUV.x = saturate(dot(Normal, In.ViewVector));
+    WarpEffectUV.y = lerp(0.5, 1, cos(time * 10));
+
+    float4 WarpEffect = tex2D(WarpEffectSampler, WarpEffectUV);
+    WarpEffect.r = WarpEffect.b;
+	WarpEffect.g -= 0.2;
+	        
+    //Modulate base by lighting and add warp
+    Out = tex2D(BaseMapSampler, In.TexCoord);
+    
+    Out.rgb = Out.rgb * (In.Diffuse * Lighting) + WarpEffect.rgb;
+    
+    
+    // Move in warp alpha
+    Out.a = lerp(0.1, 0.3, cos(time * 5)); 
+
+	return Out;
+}
+
+technique main 
+{
+	pass p0 
+	{
+		// We are writing Z which can cause problems with alpha
+        // sorting. We sidestep this in the application by turning off
+        // alpha sorting for the alien when he's opaque. There are 
+        // artifacts as he warps in, but they are hard to notice with
+        // so much going on visually.
+		VertexProgram = compile arbvp1 vmain();
+		BlendEnable = true;
+		BlendFunc = int2(SrcAlpha,InvSrcAlpha);
+        PolygonMode = int2(Front, Fill);
+		
+		FragmentProgram = compile arbfp1 fmain();
+	}
+	pass p1
+	{
+		VertexProgram = compile arbvp1 vmain();
+		BlendEnable = true;
+		BlendFunc = int2(One,One);
+        PolygonMode = int2(Front, Fill);
+		FragmentProgram = compile arbfp1 fmain_pass2();
+	}
+}

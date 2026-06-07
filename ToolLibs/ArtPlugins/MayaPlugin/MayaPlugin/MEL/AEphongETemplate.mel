@@ -1,0 +1,8 @@
+//Gamebryo Forwarding File DO NOT MODIFY!
+
+global proc AEphongETemplate ( string $nodeName )
+{
+    GamebryoLoadPlugins();
+    eval AEGamebryoMaterialCommon $nodeName;
+    eval _gb_AEphongETemplate $nodeName;
+}

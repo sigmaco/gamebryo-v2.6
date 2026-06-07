@@ -1,0 +1,868 @@
+SPDL
+Version = "1.0.0.0";
+Reference = "{43cc61d4-97e4-4fe3-b6f8-a60fc1b5c2e7}";
+PropertySet "GamebryoFX"
+{
+	Parameter "out" output
+	{
+		title = "realtime";
+		guid = "{E02B34BF-C042-476e-A438-86C92AEE5632}";
+		type = rtrendercontext;
+	}
+
+	Parameter "GamebryoShaders" input
+	{
+		title = "GamebryoShaders";
+		guid = "{93489835-d64a-4398-b57d-6a70e43c0e10}";
+		type = string;
+		value = "GamebryoShaders";
+		texturable = off;
+		inspectable = off;
+	}
+
+	Parameter "GamebryoFX" input
+	{
+		title = "GamebryoFX";
+		guid = "{fd6bed90-85b5-4e92-8749-281522b669f8}";
+		type = string;
+		value = "GamebryoFX";
+		texturable = off;
+		inspectable = off;
+	}
+
+	Parameter "previous" input
+	{
+		title = "realtime";
+		guid = "{57368A7D-B491-4aee-BB9F-B7E0EE54349C}";
+		type = rtrendercontext;
+		texturable = on;
+	}
+	
+	Parameter "selected_shader" input
+	{
+		title = "Selected Shader";
+		guid = "{7f2b602d-d6d3-4a60-91a4-aff3f4a8b1fc}";
+		type = string;
+		texturable = off;
+		animatable = off;		
+	}	
+	
+	Parameter "nb_textures" input
+	{
+		title = "nb_textures";
+		guid = "{e495ce9f-7732-456c-9b10-588f34d86a4c}";
+		type = integer;
+		animatable = off;
+		value = 0;
+	}
+
+	Parameter "refresh_flag" input
+	{
+		title = "refresh_flag";
+		guid = "{da9a8187-7021-446e-8875-3a9f531153b1}";
+		type = integer;
+		animatable = off;
+		value = 0;
+	}
+
+	Parameter "Texture_0" input
+	{
+		title = "Texture";
+		guid = "{f9120c83-5959-4f38-b390-c51bf2ba0657}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_0" input
+	{
+		title = "Texture Space";
+		guid = "{f062af4f-958f-4c3a-8c7a-a945c5615b29}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_3D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_1" input
+	{
+		title = "Texture";
+		guid = "{dcc1c41f-c127-4d4a-9350-1a197a5b4840}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_1" input
+	{
+		title = "Texture Space";
+		guid = "{74dcb1a1-6e0a-4d3a-9e45-fb5b7b4e7489}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_3D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_2" input
+	{
+		title = "Texture";
+		guid = "{0315cca3-4883-4ba6-b9d1-6f54b32eb68e}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_2" input
+	{
+		title = "Texture Space";
+		guid = "{022fa436-f7df-4e91-80ae-184fc6c1b6f1}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_3D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_3" input
+	{
+		title = "Texture";
+		guid = "{5e60a776-d11d-4887-8338-f5f365963b02}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_3" input
+	{
+		title = "Texture Space";
+		guid = "{02e8245d-5f97-4fc9-8e5d-86bce7977725}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_3D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_4" input
+	{
+		title = "Texture";
+		guid = "{0e862a8c-3d8a-4937-8561-24a6936fa8fc}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_4" input
+	{
+		title = "Texture Space";
+		guid = "{cb29e419-56ad-4673-a1b0-0b7b367d74f8}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_3D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_5" input
+	{
+		title = "Texture";
+		guid = "{c89590e6-ce73-4b51-99d1-91480be3ecc1}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_5" input
+	{
+		title = "Texture Space";
+		guid = "{e534a1f6-ea8f-4fcf-a991-4809838223bf}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_3D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_6" input
+	{
+		title = "Texture";
+		guid = "{febdc7cf-0561-4416-bd9f-e97435dd7c10}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_6" input
+	{
+		title = "Texture Space";
+		guid = "{0bc0b4bf-e7f0-46c8-a6a2-cd040e87c84b}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_3D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}	
+
+	Parameter "Texture_7" input
+	{
+		title = "Texture";
+		guid = "{17fae5f1-a9a4-40d4-9135-7ad6ddf590c6}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_7" input
+	{
+		title = "Texture Space";
+		guid = "{2bee4d64-ccbe-4e29-9b8c-cc57ebcf1c7a}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_10D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_8" input
+	{
+		title = "Texture";
+		guid = "{cf8c461b-3a36-4f66-9c51-bac5fa6d7412}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_8" input
+	{
+		title = "Texture Space";
+		guid = "{08224386-969a-403b-af18-698c104c44ac}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_10D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_9" input
+	{
+		title = "Texture";
+		guid = "{4bf99b53-f671-4d9f-95c0-16e8446837f8}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_9" input
+	{
+		title = "Texture Space";
+		guid = "{4a230aa8-e94a-4846-9ce6-2b9cc810e6b8}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_10D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_10" input
+	{
+		title = "Texture";
+		guid = "{d7f1e6ee-9547-4166-bfd2-50621867b0a4}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_10" input
+	{
+		title = "Texture Space";
+		guid = "{56834276-b806-4747-a7dc-1693dfd532b2}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_10D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_11" input
+	{
+		title = "Texture";
+		guid = "{e5eff38a-8b66-4e73-a0cc-d2942b450fde}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_11" input
+	{
+		title = "Texture Space";
+		guid = "{4e74285a-119c-45bc-9785-6e0b686362da}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_10D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_12" input
+	{
+		title = "Texture";
+		guid = "{8a202418-9623-492d-b413-272654a92216}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_12" input
+	{
+		title = "Texture Space";
+		guid = "{2be43f69-1265-400f-9d41-81a9be61aa46}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_10D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_13" input
+	{
+		title = "Texture";
+		guid = "{05270495-56be-4e51-8c04-6d5861408f7f}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_13" input
+	{
+		title = "Texture Space";
+		guid = "{34cfc619-201d-43e1-80e4-c209a6f634a6}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_10D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}	
+
+	Parameter "Texture_14" input
+	{
+		title = "Texture";
+		guid = "{ce45803b-0b73-4189-ae4f-ee8c1b6c9d44}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_14" input
+	{
+		title = "Texture Space";
+		guid = "{208567d1-a57e-4426-ae99-f7c00ebad5e2}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_10D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}
+
+	Parameter "Texture_15" input
+	{
+		title = "Texture";
+		guid = "{7bf71be9-6f42-410d-8aa6-f23ae4b6dbf1}";
+		type = texture;
+		texturable = on;
+		flags  = 1;
+	}
+
+	Parameter "tspace_id_15" input
+	{
+		title = "Texture Space";
+		guid = "{d92732cf-2706-4382-b4a7-0a99d58faa5d}";
+		ui "mapping" = "{B6531F00-412A-11D4-AE63-00A0C96E63E1}"; # GUID_10D_UVDEF_SELECT
+		type = texturespace;
+		value = -1;
+		flags  = 1;
+		texturable = off;
+		animatable = off;
+	}	
+}
+
+MetaShader "CgProgram_declare"
+{
+	Name = "CgProgram";
+	Type = rtrendercontext;
+	Renderer "realtime"
+	{
+		Name = "CgProgram";
+		FileName = "Cg_Shaders";
+		Options
+		{
+			"displaymode" = "OpenGL";
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Define some UI logic
+/////////////////////////////////////////////////////////////////////////////
+Logic
+{
+	Sub OnInit()
+		UpdateShaderDir
+		selected_shader_OnChanged		
+		nb_textures_OnChanged
+	End Sub
+
+	Sub nb_textures_OnChanged()
+		dim textures(16)
+		dim tspaceids(16)
+		
+		set textures(0) = Texture_0
+		set textures(1) = Texture_1
+		set textures(2) = Texture_2
+		set textures(3) = Texture_3
+		set textures(4) = Texture_4
+		set textures(5) = Texture_5
+		set textures(6) = Texture_6
+		set textures(7) = Texture_7
+		set textures(8) = Texture_8
+		set textures(9) = Texture_9
+		set textures(10) = Texture_10
+		set textures(11) = Texture_11
+		set textures(12) = Texture_12
+		set textures(13) = Texture_13
+		set textures(14) = Texture_14
+		set textures(15) = Texture_15
+		
+		set tspaceids(0) = tspace_id_0
+		set tspaceids(1) = tspace_id_1
+		set tspaceids(2) = tspace_id_2
+		set tspaceids(3) = tspace_id_3
+		set tspaceids(4) = tspace_id_4
+		set tspaceids(5) = tspace_id_5
+		set tspaceids(6) = tspace_id_6
+		set tspaceids(7) = tspace_id_7
+		set tspaceids(8) = tspace_id_8
+		set tspaceids(9) = tspace_id_9
+		set tspaceids(10) = tspace_id_10
+		set tspaceids(11) = tspace_id_11
+		set tspaceids(12) = tspace_id_12
+		set tspaceids(13) = tspace_id_13
+		set tspaceids(14) = tspace_id_14
+		set tspaceids(15) = tspace_id_15	
+		
+		for i = 0 to 15 
+			if nb_textures > i then 
+				textures(i).Show(true)
+				tspaceids(i).Show(true)			
+			else
+				textures(i).Show(false)
+				tspaceids(i).Show(false)
+			end if
+		next	
+	End Sub
+	
+	Sub ReloadButton_OnClicked()
+		nb_textures = -1
+		PPG.Refresh
+	End Sub
+	
+	Sub refresh_flag_OnChanged()
+		refresh
+	End Sub
+	
+	Sub selected_shader_OnChanged()
+		Dim sh, foldername, fso, f, f1, s, sf
+		Set sh = CreateObject("WScript.Shell")
+		foldername = sh.ExpandEnvironmentStrings("%EGB_SHADER_LIBRARY_PATH%")
+		foldername = foldername + "\data\"		
+		Set fso = CreateObject("Scripting.FileSystemObject")	  
+		Set f   = fso.GetFolder(foldername)	  
+		Set sf  = f.Files	   
+	   
+		dim ncount
+		ncount = 0
+		For Each f1 in sf			  	
+			if f1.type = "FX File" or f1.type = "NSF File" or f1.type = "Effect File" or f1.type = "FXL File" then
+			  	ncount = ncount + 1
+			End if 		  	
+		Next
+	   
+		ReDim oShaderList( ncount * 2 + 1 )
+		ncount = 0
+		For Each f1 in sf			  	
+			if f1.type = "FX File" or f1.type = "NSF File" or f1.type = "Effect File" or f1.type = "FXL File" then
+			  	oShaderList( ncount * 2 + 0 ) = f1.Name
+				oShaderList( ncount * 2 + 1 ) = f1.Name
+			  	ncount = ncount + 1
+			End if 		  	
+		Next
+				
+		ReDim Preserve oShaderList( ncount * 2 - 1 )				
+		
+		PPG.Refresh
+	End Sub
+	
+	Sub UpdateShaderDir()
+		Dim sh, foldername, fso, f, f1, s, sf
+		Set sh = CreateObject("WScript.Shell")
+		foldername = sh.ExpandEnvironmentStrings("%EGB_SHADER_LIBRARY_PATH%")
+		foldername = foldername + "\data\"		
+		Set fso = CreateObject("Scripting.FileSystemObject")	  
+		Set f   = fso.GetFolder(foldername)	  
+		Set sf  = f.Files	   
+	   
+		dim ncount
+		ncount = 0
+		For Each f1 in sf			  	
+			if f1.type = "FX File" or f1.type = "NSF File" or f1.type = "Effect File" or f1.type = "FXL File" then
+			  	ncount = ncount + 1
+			End if 		  	
+		Next
+	   
+		ReDim oShaderList( ncount * 2 + 1 )
+		ncount = 0
+		For Each f1 in sf			  	
+			if f1.type = "FX File" or f1.type = "NSF File" or f1.type = "Effect File" or f1.type = "FXL File" then
+			  	oShaderList( ncount * 2 + 0 ) = f1.Name
+				oShaderList( ncount * 2 + 1 ) = f1.Name
+			  	ncount = ncount + 1
+			End if 		  	
+		Next
+				
+		ReDim Preserve oShaderList( ncount * 2 - 1 )		
+		
+		Dim oShaderCombo
+		Set oShaderCombo = PPG.PPGLayout.Item( "selected_shader" )
+		oShaderCombo.UIItems = oShaderList	
+		
+		PPG.Refresh  		 		  
+	End Sub
+}
+BEGIN "{24810490-56FF-11d2-BF23-00A0C982CE5D}"
+HelpFile = "<FactoryPath>/Doc/<DocLangPref>/XSI/xsidocs.chm::/shaderpresets751.htm";
+
+Defaults
+{
+	GamebryoShaders
+	{
+		Name = "GamebryoShaders";
+		Description = "Name of the shader DLL";
+	}
+	GamebryoFX
+	{
+		Name = "GamebryoFX";
+		Description = "Prefix for the callbacks";
+	}
+
+	previous
+	{
+		Name = "previous";
+		Description = "RT Render Context";
+	}		
+	
+	selected_shader  
+	{
+		Name		= "Selected Shader";		
+		UIType		= "combo";		
+	}	
+
+	Texture_0
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_0
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_1
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_1
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_2
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_2
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_3
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_3
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_4
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_4
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_5
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_5
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+	
+	Texture_6
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_6
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_7
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_7
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+	
+	Texture_8
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_8
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_9
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_9
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}	
+
+	Texture_10
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_10
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_11
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_11
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_12
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_12
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_13
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_13
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_14
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_14
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+
+	Texture_15
+	{
+		Name = "Image";
+		Description = "Image";
+		UIType = "ImageBrowserItem.ImageBrowserItem.1";
+	}
+	
+	tspace_id_15
+	{
+		Name = "Texture Space";
+		Description = "Allows choosing the source space for projections";
+		UIType = "TextureSpaceItem.TextureSpaceItem.1";
+	}
+				
+	nb_textures
+	{
+		Name = "nb_textures";
+		Description = "reserved usage";
+	}	
+
+	refresh_flag
+	{
+		Name = "refresh_flag";
+		Description = "reserved usage";
+	}		
+}
+Layout "Default"
+{
+	Group "General"
+	{
+		selected_shader;
+		Button ReloadButton,continue = "Reload";
+	}
+	
+	Tab "Images"
+	{
+		Texture_0;
+		tspace_id_0;
+		Texture_1;	
+		tspace_id_1;	
+		Texture_2;
+		tspace_id_2;
+		Texture_3;	
+		tspace_id_3;
+		Texture_4;
+		tspace_id_4;
+		Texture_5;	
+		tspace_id_5;	
+		Texture_6;
+		tspace_id_6;
+		Texture_7;	
+		tspace_id_7;
+		Texture_8;
+		tspace_id_8;
+		Texture_9;	
+		tspace_id_9;	
+		Texture_10;
+		tspace_id_10;
+		Texture_11;	
+		tspace_id_11;
+		Texture_12;
+		tspace_id_12;
+		Texture_13;	
+		tspace_id_13;	
+		Texture_14;
+		tspace_id_14;
+		Texture_15;	
+		tspace_id_15;	
+	}
+	
+	previous;
+}
+
+END

@@ -1,0 +1,19 @@
+global proc MyImmerseTestForMeshCaches()
+{
+	string $allMesh[] = `ls -type mesh`;
+	string $mesh;
+	for($mesh in $allMesh)
+	{
+		string $inMeshAttrString = $mesh + .inMesh;
+		string $connections[] = `listConnections $inMeshAttrString`;
+		string $connectedObject;
+		for($connectedObject in $connections)
+		{
+			if(`nodeType $connectedObject` == historySwitch)
+			{
+				error (A history switch is attached to  + $inMeshAttrString + . Remove and before exporting.n);
+			}
+						 
+		}	
+	}
+}

@@ -1,0 +1,9 @@
+//Gamebryo Forwarding File DO NOT MODIFY!
+
+global proc AElayeredShaderTemplate ( string $nodeName )
+{
+    GamebryoLoadPlugins();
+    eval AEGamebryoMaterialCommon $nodeName;
+    eval _gb_AElayeredShaderTemplate $nodeName;
+}
+

@@ -1,0 +1,850 @@
+<?xml version="1.0" ?>
+<GSA Major="2" Minor="0" Patch="0">
+    <LAYERS />
+    <DEPENDENCIES />
+    <SCENE Class="NiScene" Name="General">
+        <SELECTIONS />
+        <ENTITY RefLinkID="bc,04,df,03,67,f0,e0,49,88,9e,de,9d,13,7d,5a,aa" />
+        <ENTITY RefLinkID="77,4f,4a,c3,7f,37,d5,45,bf,78,05,b6,c9,69,82,4b" />
+        <ENTITY RefLinkID="78,f5,4c,29,80,d6,b9,4a,92,f8,51,ce,fb,ac,4f,cd" />
+        <ENTITY RefLinkID="a1,a7,0e,f4,5d,9d,63,4e,ad,27,fe,5b,17,38,89,a2" />
+        <ENTITY RefLinkID="1a,1c,9c,a6,dd,4a,97,4f,95,6a,a8,65,1c,91,96,b3" />
+        <ENTITY RefLinkID="18,d9,a1,6f,1c,ea,eb,46,b7,84,f2,4a,96,20,eb,eb" />
+        <ENTITY RefLinkID="28,81,95,c7,0c,29,22,4e,bf,6c,20,ff,5a,fa,7f,b5" />
+        <ENTITY RefLinkID="5e,21,02,63,c9,f8,a6,40,9a,0f,97,b7,91,e3,15,8f" />
+        <ENTITY RefLinkID="bc,de,b8,dc,99,4d,13,47,9f,80,8f,05,08,fb,98,3d" />
+        <ENTITY RefLinkID="a5,f8,f7,5e,80,8f,0a,4f,b6,db,49,2d,59,bb,c3,bb" />
+        <ENTITY RefLinkID="73,57,9c,f8,0f,1b,36,4d,92,64,f6,ef,3d,cd,0c,41" />
+        <ENTITY RefLinkID="12,40,68,25,0b,de,04,48,bf,fe,33,d3,50,33,6b,81" />
+        <ENTITY RefLinkID="71,87,43,f0,9d,9c,cc,4a,88,b5,b7,d8,aa,e0,41,eb" />
+        <ENTITY RefLinkID="1b,f1,60,df,e1,55,5b,4a,ab,04,41,7b,c4,93,78,5c" />
+        <ENTITY RefLinkID="c2,37,2e,a4,73,67,63,44,a9,24,c6,f1,e9,57,5b,1c" />
+        <ENTITY RefLinkID="a0,75,f8,e6,33,40,28,45,80,89,33,df,ce,1a,c3,d3" />
+        <ENTITY RefLinkID="f3,d4,9c,f7,0d,5a,26,4d,9e,be,b5,92,5e,5c,ac,13" />
+        <ENTITY RefLinkID="fd,f7,05,c2,bd,13,96,45,bd,49,cb,42,e7,5a,74,31" />
+        <ENTITY RefLinkID="94,9f,8b,f7,1e,1f,8a,4c,b4,87,98,3c,c2,f0,87,88" />
+        <ENTITY RefLinkID="43,d9,74,1e,0b,9b,ab,44,92,b5,74,0e,d7,c7,ca,cc" />
+    </SCENE>
+    <OBJECTS>
+        <COMPONENT LinkID="21,d3,b6,50,dd,3d,22,44,96,8e,41,15,d1,c0,ae,df" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="1a,1c,9c,a6,dd,4a,97,4f,95,6a,a8,65,1c,91,96,b3" Class="NiGeneralEntity" Name="[General]Lights.Directional Light - white" TemplateID="db,73,76,0f,ac,36,a7,4e,a7,91,3e,6a,8b,f7,0b,64">
+            <COMPONENT RefLinkID="e7,6b,9e,ba,dc,b1,58,48,aa,3d,c1,26,b7,50,18,60" />
+            <COMPONENT RefLinkID="d7,f8,a4,93,fe,0d,d6,47,9e,cc,dd,1b,35,19,35,0a" />
+        </ENTITY>
+        <COMPONENT LinkID="28,e4,43,34,75,79,ed,4c,a6,40,e9,ec,56,fb,b7,37" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Directional</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="a5,f8,f7,5e,80,8f,0a,4f,b6,db,49,2d,59,bb,c3,bb" Class="NiGeneralEntity" Name="[General]Lights.Shadowing Lights.Shadowing Directional Light - white - PCF" TemplateID="8c,e5,99,ce,de,b4,11,4c,96,72,aa,39,a2,6c,d1,10">
+            <COMPONENT RefLinkID="6e,61,a0,b4,f2,29,4c,4d,80,9e,da,47,5e,cf,40,2d" />
+            <COMPONENT RefLinkID="28,e4,43,34,75,79,ed,4c,a6,40,e9,ec,56,fb,b7,37" />
+            <COMPONENT RefLinkID="b8,00,84,ff,3b,88,b7,46,83,20,1d,04,4f,9d,77,31" />
+        </ENTITY>
+        <COMPONENT LinkID="71,3a,65,3d,e1,6e,36,4d,ba,52,f3,f0,0f,ef,ac,2e" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Spot</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">25.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="04,06,f4,05,4b,8f,15,43,9a,29,bd,c8,08,4e,28,ef" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="84,08,37,9f,a3,54,69,4e,8e,f5,71,61,36,68,87,7a" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="43,d9,74,1e,0b,9b,ab,44,92,b5,74,0e,d7,c7,ca,cc" Class="NiGeneralEntity" Name="[General]Terrain.DefaultTerrain" TemplateID="00,2a,d3,77,63,cc,d6,4e,af,8e,da,43,d5,8c,27,12">
+            <COMPONENT RefLinkID="21,d3,b6,50,dd,3d,22,44,96,8e,41,15,d1,c0,ae,df" />
+            <COMPONENT RefLinkID="08,a0,4f,1b,f3,88,f6,46,a1,51,d9,e6,9d,ca,b8,32" />
+        </ENTITY>
+        <ENTITY LinkID="94,9f,8b,f7,1e,1f,8a,4c,b4,87,98,3c,c2,f0,87,88" Class="NiGeneralEntity" Name="[General]Terrain.Sun" TemplateID="eb,99,19,b3,a4,25,20,40,ba,f9,c1,90,52,ac,aa,9a">
+            <COMPONENT RefLinkID="f1,86,0b,8a,b0,5b,5e,41,a3,7d,a5,e6,95,39,6f,ab" />
+            <COMPONENT RefLinkID="ba,c0,2f,b4,83,49,3e,46,9d,28,47,f4,81,68,de,68" />
+        </ENTITY>
+        <COMPONENT LinkID="37,e9,2f,90,f4,6c,71,48,96,3f,2d,48,af,0d,86,96" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="18,a9,4b,2c,3b,e6,74,42,a3,8f,7b,28,9e,81,15,17" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Point</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">22.5000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">21.5000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="bc,04,df,03,67,f0,e0,49,88,9e,de,9d,13,7d,5a,aa" Class="NiGeneralEntity" Name="[General]Lights.Point Light - constant white" TemplateID="d7,75,de,66,92,54,e6,4e,88,63,90,39,d5,1b,64,ba">
+            <COMPONENT RefLinkID="1f,30,60,4a,04,22,cc,49,9c,85,23,8c,85,a7,05,df" />
+            <COMPONENT RefLinkID="18,a9,4b,2c,3b,e6,74,42,a3,8f,7b,28,9e,81,15,17" />
+        </ENTITY>
+        <COMPONENT LinkID="92,43,ad,ee,4f,f3,58,4f,b7,f1,c5,cc,a7,22,1d,14" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Spot</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">25.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="cb,b4,08,15,61,fc,79,48,a3,99,ba,0e,24,b4,da,fd" Class="NiShadowGeneratorComponent" Name="Shadow Generator">
+            <PROPERTY Class="Boolean" Name="Cast Shadows">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Static Shadows">FALSE</PROPERTY>
+            <PROPERTY Class="Unsigned Short" Name="Size Hint">1024</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Strictly Observe Size Hint">FALSE</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Casters">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Receivers">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="String" Name="Shadow Technique">NiStandardShadowTechnique</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Render Backfaces">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Use Default Depth Bias">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="6e,61,a0,b4,f2,29,4c,4d,80,9e,da,47,5e,cf,40,2d" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="83,e3,d2,80,5f,06,a8,42,a1,aa,3b,ca,21,82,be,77" Class="NiShadowGeneratorComponent" Name="Shadow Generator">
+            <PROPERTY Class="Boolean" Name="Cast Shadows">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Static Shadows">FALSE</PROPERTY>
+            <PROPERTY Class="Unsigned Short" Name="Size Hint">1024</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Strictly Observe Size Hint">FALSE</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Casters">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Receivers">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="String" Name="Shadow Technique">NiStandardShadowTechnique</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Render Backfaces">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Use Default Depth Bias">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="17,50,3a,06,b0,b8,ef,4d,af,f9,9e,36,26,03,3e,12" Class="NiWaterComponent" Name="Water">
+            <PROPERTY Class="Entity Pointer" Name="Terrain entity" RefLinkID="NULL" />
+            <PROPERTY Class="Unsigned Integer" Name="Surface length">128</PROPERTY>
+            <PROPERTY Class="Unsigned Integer" Name="Surface width">128</PROPERTY>
+            <PROPERTY Class="Unsigned Integer" Name="Max vertices per side">50</PROPERTY>
+            <PROPERTY Class="Color (RGBA)" Name="Color deep">0.0000000000000000, 0.2000000029802322, 0.4000000059604645, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Depth threshold">50.0000000000000000</PROPERTY>
+            <PROPERTY Class="String" Name="Normal map directory" />
+            <PROPERTY Class="String" Name="Normal map file name mask">filename_%d.bmp</PROPERTY>
+            <PROPERTY Class="Color (RGBA)" Name="Color shallow">0.0000000000000000, 0.5000000000000000, 0.5000000000000000, 0.1500000059604645</PROPERTY>
+            <PROPERTY Class="Unsigned Integer" Name="Resolution">64</PROPERTY>
+            <PROPERTY Class="Point2" Name="Map velocity">0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="String" Name="Environment map" />
+            <PROPERTY Class="Float" Name="Reflection factor">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Map x repetition factor">4.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Map y repetition factor">4.0000000000000000</PROPERTY>
+            <PROPERTY Class="String" Name="Refraction map path" />
+            <PROPERTY Class="Float" Name="Specular factor">3.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Disturbance">25.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Density">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Distance">1000.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="FallOff">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Normal animation speed">25.0000000000000000</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="a1,05,ef,50,19,bb,b0,47,89,f1,b3,3d,c4,52,b3,8c" Class="NiShadowGeneratorComponent" Name="Shadow Generator">
+            <PROPERTY Class="Boolean" Name="Cast Shadows">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Static Shadows">FALSE</PROPERTY>
+            <PROPERTY Class="Unsigned Short" Name="Size Hint">1024</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Strictly Observe Size Hint">FALSE</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Casters">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Receivers">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="String" Name="Shadow Technique">NiStandardShadowTechnique</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Render Backfaces">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Use Default Depth Bias">TRUE</PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="fd,f7,05,c2,bd,13,96,45,bd,49,cb,42,e7,5a,74,31" Class="NiGeneralEntity" Name="[General]Terrain.DefaultWater" TemplateID="33,99,35,35,64,8e,29,45,a5,53,2d,86,a7,04,7d,1d">
+            <COMPONENT RefLinkID="ba,cf,25,41,70,84,a0,44,af,89,1a,fe,c9,cd,56,ab" />
+            <COMPONENT RefLinkID="ac,ae,b6,a4,fd,b1,3d,49,af,c1,0c,27,29,c5,40,fc" />
+        </ENTITY>
+        <COMPONENT LinkID="b8,00,84,ff,3b,88,b7,46,83,20,1d,04,4f,9d,77,31" Class="NiShadowGeneratorComponent" Name="Shadow Generator">
+            <PROPERTY Class="Boolean" Name="Cast Shadows">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Static Shadows">FALSE</PROPERTY>
+            <PROPERTY Class="Unsigned Short" Name="Size Hint">1024</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Strictly Observe Size Hint">FALSE</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Casters">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Receivers">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="String" Name="Shadow Technique">NiPCFShadowTechnique</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Render Backfaces">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Use Default Depth Bias">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="e7,6a,18,f1,5f,63,67,48,aa,f5,b6,84,a0,a4,91,6b" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Spot</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">25.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="28,81,95,c7,0c,29,22,4e,bf,6c,20,ff,5a,fa,7f,b5" Class="NiGeneralEntity" Name="[General]SceneApp.SceneAppCameraController" TemplateID="c7,fc,30,e8,b9,02,94,42,89,d2,98,a9,8b,47,02,4a">
+            <COMPONENT RefLinkID="d3,94,5f,fa,58,df,d4,40,ab,e0,d3,72,53,46,8e,d0" />
+        </ENTITY>
+        <ENTITY LinkID="a1,a7,0e,f4,5d,9d,63,4e,ad,27,fe,5b,17,38,89,a2" Class="NiGeneralEntity" Name="[General]Cameras.Camera" TemplateID="31,e4,f1,ae,7f,4f,58,4e,87,63,e3,36,31,5c,49,3a">
+            <COMPONENT RefLinkID="74,6d,88,30,fd,6c,01,4f,81,48,79,46,bc,57,9e,c4" />
+            <COMPONENT RefLinkID="5c,b8,46,e2,49,a6,a2,4c,b3,e6,03,09,c8,61,0a,a2" />
+        </ENTITY>
+        <COMPONENT LinkID="02,e8,03,02,8b,73,5e,47,b8,db,d0,39,eb,89,7c,44" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Point</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0005000000237487</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="1f,30,60,4a,04,22,cc,49,9c,85,23,8c,85,a7,05,df" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="e7,6b,9e,ba,dc,b1,58,48,aa,3d,c1,26,b7,50,18,60" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="78,f5,4c,29,80,d6,b9,4a,92,f8,51,ce,fb,ac,4f,cd" Class="NiGeneralEntity" Name="[General]Lights.Point Light - linear white" TemplateID="9a,34,6e,19,83,62,99,4e,8c,41,8e,cc,32,d9,ff,cb">
+            <COMPONENT RefLinkID="60,3f,18,eb,a4,a0,b5,40,99,19,8f,4b,e2,f1,07,6a" />
+            <COMPONENT RefLinkID="d9,4d,4f,62,76,be,f0,44,89,74,06,99,38,5f,8c,75" />
+        </ENTITY>
+        <COMPONENT LinkID="08,a0,4f,1b,f3,88,f6,46,a1,51,d9,e6,9d,ca,b8,32" Class="NiTerrainComponent" Name="Terrain">
+            <PROPERTY Class="String" Name="Terrain Archive" />
+            <PROPERTY Class="Point2" Name="Sector List">
+                <ITEM>0.0000000000000000, 0.0000000000000000</ITEM>
+            </PROPERTY>
+            <PROPERTY Class="Unsigned Integer" Name="Block Side Length">16</PROPERTY>
+            <PROPERTY Class="Unsigned Integer" Name="Number of block sub-divisions">4</PROPERTY>
+            <PROPERTY Class="Integer" Name="Min. Elevation">-100</PROPERTY>
+            <PROPERTY Class="Integer" Name="Max. Elevation">200</PROPERTY>
+            <PROPERTY Class="Unsigned Integer" Name="Default Surface Mask Size">512</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Cook PhysX Data">FALSE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="68,bb,f9,68,e2,e3,78,4c,80,1f,82,d1,2b,53,9e,fe" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="d3,94,5f,fa,58,df,d4,40,ab,e0,d3,72,53,46,8e,d0" Class="NiGeneralComponent" Name="SceneAppCameraController" TemplateID="33,62,95,84,9c,29,a8,44,8d,98,9e,be,6b,3c,9e,f0">
+            <PROPERTY Class="Entity Pointer" Name="Start Camera" SemanticType="Entity Pointer" DisplayName="Start Camera" Description="Select a camera entity to use as the initial camera location in a SceneApp" RefLinkID="NULL" />
+            <PROPERTY Class="Float" Name="Max Camera Raise" SemanticType="Float" DisplayName="Max Camera Raise" Description="Largest step up the camera can make while walking in the scene.">30.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Max Camera Drop" SemanticType="Float" DisplayName="Max Camera Drop" Description="Largest step down the camera can make while walking in the scene.">30.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Walk Velocity" SemanticType="Float" DisplayName="Walk Velocity" Description="Speed to use when walking">150.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Run Velocity" SemanticType="Float" DisplayName="Run Velocity" Description="Speed to use when running">350.0000000000000000</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Invert Pitch" SemanticType="Boolean" DisplayName="Invert Pitch" Description="Inverts the camera control for pitch (up down)">FALSE</PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="5e,21,02,63,c9,f8,a6,40,9a,0f,97,b7,91,e3,15,8f" Class="NiGeneralEntity" Name="[General]Lights.Spot Light - 25 degrees white" TemplateID="62,59,8d,c4,41,40,03,4e,b2,cf,b8,e3,b4,08,36,e8">
+            <COMPONENT RefLinkID="5b,cc,b5,38,99,ee,c8,40,81,5c,f5,e5,8b,50,f8,f9" />
+            <COMPONENT RefLinkID="e7,6a,18,f1,5f,63,67,48,aa,f5,b6,84,a0,a4,91,6b" />
+        </ENTITY>
+        <ENTITY LinkID="1b,f1,60,df,e1,55,5b,4a,ab,04,41,7b,c4,93,78,5c" Class="NiGeneralEntity" Name="[General]Lights.Shadowing Lights.Shadowing Spot Light - 25 degrees white - PCF" TemplateID="ef,51,8e,c1,70,13,cd,47,8b,7a,c3,b2,ae,53,e5,c2">
+            <COMPONENT RefLinkID="37,e9,2f,90,f4,6c,71,48,96,3f,2d,48,af,0d,86,96" />
+            <COMPONENT RefLinkID="71,3a,65,3d,e1,6e,36,4d,ba,52,f3,f0,0f,ef,ac,2e" />
+            <COMPONENT RefLinkID="5a,79,62,89,b9,eb,69,45,88,b3,8d,2b,22,e6,6f,de" />
+        </ENTITY>
+        <COMPONENT LinkID="ba,c0,2f,b4,83,49,3e,46,9d,28,47,f4,81,68,de,68" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Directional</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">22.5000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">21.5000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="f3,d4,9c,f7,0d,5a,26,4d,9e,be,b5,92,5e,5c,ac,13" Class="NiGeneralEntity" Name="[General]Lights.Shadowing Lights.Shadowing Point Light - quadratic white - standard" TemplateID="c7,56,e4,f6,87,80,96,4b,80,6c,3f,f4,30,f1,a7,71">
+            <COMPONENT RefLinkID="93,f3,85,bc,23,23,7a,44,92,f1,1a,25,42,83,d2,89" />
+            <COMPONENT RefLinkID="99,de,d4,f2,12,cc,60,4d,a1,f6,c1,9e,fe,ca,ed,ff" />
+            <COMPONENT RefLinkID="83,e3,d2,80,5f,06,a8,42,a1,aa,3b,ca,21,82,be,77" />
+        </ENTITY>
+        <COMPONENT LinkID="b6,c7,b4,f0,c2,67,e4,4c,a1,f4,67,e3,79,32,9e,8c" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Point</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0099999997764826</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="4a,57,79,66,e3,b2,52,40,bd,e1,44,20,ea,e2,80,e0" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Spot</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">25.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="93,f3,85,bc,23,23,7a,44,92,f1,1a,25,42,83,d2,89" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="e5,1c,9f,18,e2,38,c4,4c,b8,dd,59,ff,81,f0,6d,44" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Point</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">22.5000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">21.5000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="48,80,ac,6c,aa,69,77,4f,98,57,2a,f2,f6,fb,fe,85" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Ambient</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">0.3000000119209290</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">22.5000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">21.5000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="5c,b8,46,e2,49,a6,a2,4c,b3,e6,03,09,c8,61,0a,a2" Class="NiCameraComponent" Name="Camera">
+            <PROPERTY Class="Float" Name="Field of View">90.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Aspect Ratio">1.3333300352096558</PROPERTY>
+            <PROPERTY Class="Float" Name="Near Clipping Plane">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Far Clipping Plane">10000.0000000000000000</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Orthographic">FALSE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="74,6d,88,30,fd,6c,01,4f,81,48,79,46,bc,57,9e,c4" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="a0,75,f8,e6,33,40,28,45,80,89,33,df,ce,1a,c3,d3" Class="NiGeneralEntity" Name="[General]Lights.Shadowing Lights.Shadowing Spot Light - 25 degrees white - standard" TemplateID="91,04,4b,66,19,7a,04,4c,8a,f1,73,67,27,d9,6e,c4">
+            <COMPONENT RefLinkID="be,d3,66,47,19,fc,c4,4b,9e,24,05,52,31,f0,85,38" />
+            <COMPONENT RefLinkID="92,43,ad,ee,4f,f3,58,4f,b7,f1,c5,cc,a7,22,1d,14" />
+            <COMPONENT RefLinkID="d7,e9,a8,54,c9,a2,d7,49,9c,29,48,71,6b,66,e5,30" />
+        </ENTITY>
+        <ENTITY LinkID="12,40,68,25,0b,de,04,48,bf,fe,33,d3,50,33,6b,81" Class="NiGeneralEntity" Name="[General]Lights.Shadowing Lights.Shadowing Point Light - constant white - standard" TemplateID="34,b7,a5,2a,d4,51,a7,41,8b,14,c4,12,26,c9,0a,04">
+            <COMPONENT RefLinkID="84,08,37,9f,a3,54,69,4e,8e,f5,71,61,36,68,87,7a" />
+            <COMPONENT RefLinkID="e5,1c,9f,18,e2,38,c4,4c,b8,dd,59,ff,81,f0,6d,44" />
+            <COMPONENT RefLinkID="a1,05,ef,50,19,bb,b0,47,89,f1,b3,3d,c4,52,b3,8c" />
+        </ENTITY>
+        <COMPONENT LinkID="ac,ae,b6,a4,fd,b1,3d,49,af,c1,0c,27,29,c5,40,fc" Class="NiWaterComponent" Name="Water" MasterLinkID="17,50,3a,06,b0,b8,ef,4d,af,f9,9e,36,26,03,3e,12">
+            <PROPERTY Class="Entity Pointer" Name="Terrain entity" RefLinkID="NULL" />
+            <PROPERTY Class="Unsigned Integer" Name="Surface length">256</PROPERTY>
+            <PROPERTY Class="Unsigned Integer" Name="Surface width">256</PROPERTY>
+            <PROPERTY Class="Unsigned Integer" Name="Max vertices per side">50</PROPERTY>
+            <PROPERTY Class="Color (RGBA)" Name="Color deep">0.0000000000000000, 0.2000000029802322, 0.4000000059604645, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Depth threshold">50.0000000000000000</PROPERTY>
+            <PROPERTY Class="String" Name="Normal map directory" />
+            <PROPERTY Class="String" Name="Normal map file name mask">filename_%d.bmp</PROPERTY>
+            <PROPERTY Class="Color (RGBA)" Name="Color shallow">0.0000000000000000, 0.5000000000000000, 0.5000000000000000, 0.1500000059604645</PROPERTY>
+            <PROPERTY Class="Unsigned Integer" Name="Resolution">64</PROPERTY>
+            <PROPERTY Class="Point2" Name="Map velocity">0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="String" Name="Environment map" />
+            <PROPERTY Class="Float" Name="Reflection factor">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Map x repetition factor">4.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Map y repetition factor">4.0000000000000000</PROPERTY>
+            <PROPERTY Class="String" Name="Refraction map path" />
+            <PROPERTY Class="Float" Name="Specular factor">3.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Disturbance">25.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Density">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Distance">1000.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="FallOff">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Normal animation speed">25.0000000000000000</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="70,89,e7,b7,7e,5e,a1,43,a6,e0,f3,50,20,47,81,7c" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="d7,f8,a4,93,fe,0d,d6,47,9e,cc,dd,1b,35,19,35,0a" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Directional</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="9d,0c,13,e0,ad,55,ea,45,91,a9,5e,4d,2b,fe,37,10" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Directional</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="eb,b4,12,7f,3b,e8,95,4a,8a,89,ac,06,d8,2e,f4,02" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="7c,70,a7,fb,dc,c1,63,44,ad,40,34,fd,5f,68,91,43" Class="NiShadowGeneratorComponent" Name="Shadow Generator">
+            <PROPERTY Class="Boolean" Name="Cast Shadows">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Static Shadows">FALSE</PROPERTY>
+            <PROPERTY Class="Unsigned Short" Name="Size Hint">1024</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Strictly Observe Size Hint">FALSE</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Casters">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Receivers">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="String" Name="Shadow Technique">NiVSMShadowTechnique</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Render Backfaces">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Use Default Depth Bias">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="f1,86,0b,8a,b0,5b,5e,41,a3,7d,a5,e6,95,39,6f,ab" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="be,d3,66,47,19,fc,c4,4b,9e,24,05,52,31,f0,85,38" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="71,87,43,f0,9d,9c,cc,4a,88,b5,b7,d8,aa,e0,41,eb" Class="NiGeneralEntity" Name="[General]Lights.Shadowing Lights.Shadowing Spot Light - 25 degrees white - VSM" TemplateID="ff,83,5e,3b,0f,c8,70,4d,af,eb,0e,5e,57,fb,03,01">
+            <COMPONENT RefLinkID="70,89,e7,b7,7e,5e,a1,43,a6,e0,f3,50,20,47,81,7c" />
+            <COMPONENT RefLinkID="4a,57,79,66,e3,b2,52,40,bd,e1,44,20,ea,e2,80,e0" />
+            <COMPONENT RefLinkID="72,50,72,d2,f5,4a,1a,4f,81,74,ea,88,89,5a,f8,ef" />
+        </ENTITY>
+        <COMPONENT LinkID="f5,d2,55,0d,db,8b,1f,49,8d,26,77,b2,08,3e,18,48" Class="NiShadowGeneratorComponent" Name="Shadow Generator">
+            <PROPERTY Class="Boolean" Name="Cast Shadows">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Static Shadows">FALSE</PROPERTY>
+            <PROPERTY Class="Unsigned Short" Name="Size Hint">1024</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Strictly Observe Size Hint">FALSE</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Casters">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Receivers">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="String" Name="Shadow Technique">NiStandardShadowTechnique</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Render Backfaces">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Use Default Depth Bias">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="80,1d,2c,be,3c,4b,4e,44,87,80,12,90,86,d3,92,c4" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="18,d9,a1,6f,1c,ea,eb,46,b7,84,f2,4a,96,20,eb,eb" Class="NiGeneralEntity" Name="[General]Lights.Point Light - quadratic white" TemplateID="82,76,04,38,8c,e1,07,42,a6,d2,1d,dd,27,48,60,67">
+            <COMPONENT RefLinkID="eb,b4,12,7f,3b,e8,95,4a,8a,89,ac,06,d8,2e,f4,02" />
+            <COMPONENT RefLinkID="02,e8,03,02,8b,73,5e,47,b8,db,d0,39,eb,89,7c,44" />
+        </ENTITY>
+        <ENTITY LinkID="c2,37,2e,a4,73,67,63,44,a9,24,c6,f1,e9,57,5b,1c" Class="NiGeneralEntity" Name="[General]Lights.Shadowing Lights.Shadowing Point Light - linear white - standard" TemplateID="27,9d,40,19,87,90,93,45,b4,d4,a0,24,a4,a3,69,2a">
+            <COMPONENT RefLinkID="04,06,f4,05,4b,8f,15,43,9a,29,bd,c8,08,4e,28,ef" />
+            <COMPONENT RefLinkID="b6,c7,b4,f0,c2,67,e4,4c,a1,f4,67,e3,79,32,9e,8c" />
+            <COMPONENT RefLinkID="cb,b4,08,15,61,fc,79,48,a3,99,ba,0e,24,b4,da,fd" />
+        </ENTITY>
+        <ENTITY LinkID="bc,de,b8,dc,99,4d,13,47,9f,80,8f,05,08,fb,98,3d" Class="NiGeneralEntity" Name="[General]Lights.Shadowing Lights.Shadowing Directional Light - white - standard" TemplateID="4a,6e,83,ba,f0,72,ab,4c,a4,d0,6d,2d,d5,2e,5f,b4">
+            <COMPONENT RefLinkID="80,1d,2c,be,3c,4b,4e,44,87,80,12,90,86,d3,92,c4" />
+            <COMPONENT RefLinkID="9d,0c,13,e0,ad,55,ea,45,91,a9,5e,4d,2b,fe,37,10" />
+            <COMPONENT RefLinkID="f5,d2,55,0d,db,8b,1f,49,8d,26,77,b2,08,3e,18,48" />
+        </ENTITY>
+        <COMPONENT LinkID="d9,4d,4f,62,76,be,f0,44,89,74,06,99,38,5f,8c,75" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Point</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0099999997764826</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="60,3f,18,eb,a4,a0,b5,40,99,19,8f,4b,e2,f1,07,6a" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="13,db,5b,01,b8,16,33,43,81,80,f4,ff,ea,66,a7,c0" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="72,50,72,d2,f5,4a,1a,4f,81,74,ea,88,89,5a,f8,ef" Class="NiShadowGeneratorComponent" Name="Shadow Generator">
+            <PROPERTY Class="Boolean" Name="Cast Shadows">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Static Shadows">FALSE</PROPERTY>
+            <PROPERTY Class="Unsigned Short" Name="Size Hint">1024</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Strictly Observe Size Hint">FALSE</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Casters">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Receivers">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="String" Name="Shadow Technique">NiVSMShadowTechnique</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Render Backfaces">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Use Default Depth Bias">TRUE</PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="73,57,9c,f8,0f,1b,36,4d,92,64,f6,ef,3d,cd,0c,41" Class="NiGeneralEntity" Name="[General]Lights.Shadowing Lights.Shadowing Directional Light - white - VSM" TemplateID="5b,54,93,30,2b,7a,64,42,a8,29,75,e9,e4,ca,4d,73">
+            <COMPONENT RefLinkID="68,bb,f9,68,e2,e3,78,4c,80,1f,82,d1,2b,53,9e,fe" />
+            <COMPONENT RefLinkID="8b,85,a1,b0,b2,a5,0d,4e,8a,b7,02,04,79,07,09,5b" />
+            <COMPONENT RefLinkID="7c,70,a7,fb,dc,c1,63,44,ad,40,34,fd,5f,68,91,43" />
+        </ENTITY>
+        <COMPONENT LinkID="d7,e9,a8,54,c9,a2,d7,49,9c,29,48,71,6b,66,e5,30" Class="NiShadowGeneratorComponent" Name="Shadow Generator">
+            <PROPERTY Class="Boolean" Name="Cast Shadows">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Static Shadows">FALSE</PROPERTY>
+            <PROPERTY Class="Unsigned Short" Name="Size Hint">1024</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Strictly Observe Size Hint">FALSE</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Casters">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Receivers">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="String" Name="Shadow Technique">NiStandardShadowTechnique</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Render Backfaces">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Use Default Depth Bias">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="5a,79,62,89,b9,eb,69,45,88,b3,8d,2b,22,e6,6f,de" Class="NiShadowGeneratorComponent" Name="Shadow Generator">
+            <PROPERTY Class="Boolean" Name="Cast Shadows">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Static Shadows">FALSE</PROPERTY>
+            <PROPERTY Class="Unsigned Short" Name="Size Hint">1024</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Strictly Observe Size Hint">FALSE</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Casters">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Unaffected Receivers">
+                <ITEM />
+            </PROPERTY>
+            <PROPERTY Class="String" Name="Shadow Technique">NiPCFShadowTechnique</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Render Backfaces">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Use Default Depth Bias">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="8b,85,a1,b0,b2,a5,0d,4e,8a,b7,02,04,79,07,09,5b" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Directional</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="ba,cf,25,41,70,84,a0,44,af,89,1a,fe,c9,cd,56,ab" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="5b,cc,b5,38,99,ee,c8,40,81,5c,f5,e5,8b,50,f8,f9" Class="NiTransformationComponent" Name="Transformation">
+            <PROPERTY Class="Point3" Name="Translation">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Matrix3" Name="Rotation">
+                <ROW>1.0000000000000000, 0.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 1.0000000000000000, 0.0000000000000000</ROW>
+                <ROW>0.0000000000000000, 0.0000000000000000, 1.0000000000000000</ROW>
+            </PROPERTY>
+            <PROPERTY Class="Float" Name="Scale">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Source Entity" RefLinkID="NULL" />
+            <PROPERTY Class="String" Name="Attachment Point Name" />
+            <PROPERTY Class="Boolean" Name="Inherit Translation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Rotation">TRUE</PROPERTY>
+            <PROPERTY Class="Boolean" Name="Inherit Scale">TRUE</PROPERTY>
+        </COMPONENT>
+        <COMPONENT LinkID="99,de,d4,f2,12,cc,60,4d,a1,f6,c1,9e,fe,ca,ed,ff" Class="NiLightComponent" Name="Light">
+            <PROPERTY Class="String" Name="Light Type">Point</PROPERTY>
+            <PROPERTY Class="Float" Name="Dimmer">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Ambient)">0.0000000000000000, 0.0000000000000000, 0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Diffuse)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Color (RGB)" Name="Color (Specular)">1.0000000000000000, 1.0000000000000000, 1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Constant)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Linear)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Attenuation (Quadratic)">0.0005000000237487</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Outer)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Angle (Inner)">0.0000000000000000</PROPERTY>
+            <PROPERTY Class="Float" Name="Spot Exponent">1.0000000000000000</PROPERTY>
+            <PROPERTY Class="Entity Pointer" Name="Affected Entities">
+                <ITEM />
+            </PROPERTY>
+        </COMPONENT>
+        <ENTITY LinkID="77,4f,4a,c3,7f,37,d5,45,bf,78,05,b6,c9,69,82,4b" Class="NiGeneralEntity" Name="[General]Lights.Ambient Light - 30% white" TemplateID="1a,56,7d,ab,39,12,91,47,ab,16,1f,91,23,bf,71,38">
+            <COMPONENT RefLinkID="13,db,5b,01,b8,16,33,43,81,80,f4,ff,ea,66,a7,c0" />
+            <COMPONENT RefLinkID="48,80,ac,6c,aa,69,77,4f,98,57,2a,f2,f6,fb,fe,85" />
+        </ENTITY>
+    </OBJECTS>
+</GSA>

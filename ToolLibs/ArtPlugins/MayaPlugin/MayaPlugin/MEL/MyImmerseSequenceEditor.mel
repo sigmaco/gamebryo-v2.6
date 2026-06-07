@@ -1,0 +1,2682 @@
+//Global Declarations
+global string $g_Window;
+
+global int $g_UntitledIndex = 0;
+
+global string $g_CharacterDropDown;
+global string $g_LayerRootDropDown;
+global string $g_SequenceDropDown;
+global string $g_MorphTagsDropDown;
+global string $g_TextKeysDropDown;
+
+//This is sort of a hack but it works
+global int $g_CurrentMorphTagIndices[];
+global int $g_CurrentTextKeyIndices[];
+
+//Cr8z Instrumentation Start
+global int $g_Indentation = 0;
+global int $g_GlobalInstrumentation = 0;
+global int $g_FunctionInstrumentation = 0;
+
+//Instrumentation Functions Start
+proc Cr8zIncrementIndentation()
+{
+	global int $g_Indentation;
+	
+	$g_Indentation = $g_Indentation + 1;
+}
+
+proc Cr8zDecrementIndentation()
+{
+	global int $g_Indentation;
+	
+	$g_Indentation = $g_Indentation - 1;
+}
+
+proc Cr8zPrintIdentation()
+{
+	global int $g_Indentation;
+	
+	int $index = 0;
+	for($index; $index < $g_Indentation; $index++)
+	{
+		print(" ");
+	}
+}
+
+proc Cr8zPrintVariable(string $variableName, string $value)
+{
+	//string $cmd = "print(\"" + $variableName + "= \"); print(" + $variableName + "); print(\"\\n\");";
+	//eval($cmd);
+	
+	print($variableName + " = " + $value + "\n");
+}
+
+proc Cr8zFunctionOutputter(string $functionName, string $argumentNames[], string $argumentValues[])
+{
+	global int $g_GlobalInstrumentation;
+	global int $g_FunctionInstrumentation;
+	
+	if($g_FunctionInstrumentation == 1)
+	{
+		Cr8zIncrementIndentation();
+		Cr8zPrintIdentation(); print("Entering " + $functionName +"\n");
+		Cr8zPrintIdentation(); print("Arguments\n");
+		
+		Cr8zIncrementIndentation();
+			int $argumentIndex = 0;
+			for($argumentIndex; $argumentIndex < size($argumentNames); $argumentIndex++)
+			{
+				Cr8zPrintIdentation(); Cr8zPrintVariable($argumentNames[$argumentIndex], 
+					$argumentValues[$argumentIndex]);
+			}
+			
+			
+			if($g_GlobalInstrumentation == 1)
+			{
+				Cr8zGlobalOutputter();
+			}
+		
+			
+		Cr8zDecrementIndentation();	
+	}
+	
+}
+
+proc Cr8zReturnOutputter(string $functionName, string $returnVariableName, 
+	string $returnValue)
+{
+	global int $g_FunctionInstrumentation;
+	
+	if($g_FunctionInstrumentation == 1)
+	{
+		Cr8zPrintIdentation(); print("Leaving " + $functionName +"\n");
+		Cr8zPrintIdentation(); Cr8zPrintVariable($returnVariableName, $returnValue);
+		Cr8zDecrementIndentation();
+	}
+}
+
+proc Cr8zGlobalOutputter()
+{
+	global string $g_CharacterDropDown;
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	global string $g_MorphTagsDropDown;
+	global string $g_TextKeysDropDown;
+	
+	Cr8zPrintIdentation(); print("Globals\n");
+	Cr8zPrintIdentation(); Cr8zPrintVariable("$g_CharacterDropDown", "" + $g_CharacterDropDown);
+	Cr8zPrintIdentation(); Cr8zPrintVariable("$g_LayerRootDropDown", "" + $g_LayerRootDropDown);
+	Cr8zPrintIdentation(); Cr8zPrintVariable("$g_SequenceDropDown", "" + $g_SequenceDropDown);
+	Cr8zPrintIdentation(); Cr8zPrintVariable("$g_MorphTagsDropDown", "" + $g_MorphTagsDropDown);
+	Cr8zPrintIdentation(); Cr8zPrintVariable("$g_TextKeysDropDown", "" + $g_TextKeysDropDown);
+}
+
+proc string Cr8zConvertIntArrayToString(int $intArray[])
+{
+    string $outputString = "";
+    int $element;
+    for($element in $intArray)
+    {
+        $outputString += $element + " ";
+    }
+
+    return $outputString;
+}
+
+//Cr8z Instrumentation End
+
+
+//
+// HELPER FUNCTIONS START
+//
+
+
+global proc int round(float $number)
+{
+    Cr8zFunctionOutputter("round", {"$number"}, {"" + $number});
+    
+    int $integerPortion = trunc($number);
+    
+    float $decimalPortion = $number - $integerPortion;
+
+    if($decimalPortion > .5)
+    {
+        $decimalPortion = 1;
+    }
+    else
+    {
+        $decimalPortion = 0;
+    }
+    
+    int $roundedFloat = ($integerPortion + $decimalPortion);
+
+    return $roundedFloat; 
+
+    Cr8zReturnOutputter("round", "$roundedFloat", "" + $roundedFloat);
+}  	
+
+
+global proc float scaleForTimeStorage(float $time)
+{
+    Cr8zFunctionOutputter("scaleForTimeStorage", {"$time"}, {"" + $time});
+
+    float $scaledTime = $time / MyImmerseGetCurrentFrameRate();
+
+    Cr8zReturnOutputter("scaleForTimeStorage", "$scaledTime", "" + $scaledTime);
+    return $scaledTime;
+}
+
+global proc float scaleTimeForDisplay(float $time)
+{
+    Cr8zFunctionOutputter("scaleTimeForDisplay", {"$time"}, {"" + $time});
+
+    float $scaledTime = round($time * MyImmerseGetCurrentFrameRate());
+
+    Cr8zReturnOutputter("scaleTimeForDisplay", "$scaledTime", "" + $scaledTime);
+    return $scaledTime;
+}
+
+global proc updateDropDown(string $dropDownName, string $options[])
+{
+	string $bigOptionsString = stringArrayToString($options, "   ");
+	Cr8zFunctionOutputter("updateDropDown", {"dropDownName", "options"}, 
+        {("" + $dropDownName), $bigOptionsString});
+	
+	string $option;
+	
+	string $items[] = `optionMenu -q -itemListLong $dropDownName`;
+	
+	int $itemIndex = 0;
+	for($itemIndex; $itemIndex < size($items); $itemIndex++)
+	{
+		deleteUI -menuItem $items[$itemIndex];
+	}
+	
+	for($option in $options)
+	{
+		menuItem -parent ($dropDownName) -label $option;
+	}
+	
+	Cr8zReturnOutputter("updateDropDown", "", "");
+}
+
+global proc setToOption(string $dropDownName, string $optionName)
+{
+    string $items[] = `optionMenu -q -itemListLong $dropDownName`;
+	
+	int $itemIndex = 0;
+	for($itemIndex; $itemIndex < size($items); $itemIndex++)
+	{
+        optionMenu -e -sl ($itemIndex + 1) $dropDownName;
+
+        string $selected = getSelected($dropDownName);
+
+        if(endsWith(getSelected($dropDownName), $optionName))
+        {
+            break;
+        }
+	}
+}
+
+global proc string getSelected(string $optionGroupName)
+{
+	Cr8zFunctionOutputter("getSelected", {}, {});
+	
+	string $selected = "";
+	
+	if(`optionMenu -q -numberOfItems $optionGroupName` > 0)
+	{
+		$selected = `optionMenu -q -v $optionGroupName`;
+	}
+	
+    Cr8zReturnOutputter("getSelected", "selected", "" + $selected);
+	return $selected;
+}
+
+global proc float GetCurrentIndexAttrInt(string $baseName, string $childAttr)
+{
+	Cr8zFunctionOutputter("GetCurrentIndexAttrInt", {"$baseName", "$childAttr"}, {$baseName, $childAttr});
+	
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	global string $g_MorphTagsDropDown;
+	global string $g_TextKeysDropDown;
+	
+	string $selectedLayer = getSelected($g_LayerRootDropDown);
+	
+	string $layerAndAttr;
+	
+	switch($baseName)
+	{
+		case "MorphTag":
+			$layerAndAttr = ConstructLayerAndAttr($g_MorphTagsDropDown, $baseName, $childAttr);
+			break;
+		
+		case "TextKey":
+			$layerAndAttr = ConstructLayerAndAttr($g_TextKeysDropDown, $baseName, $childAttr);
+			break;
+		
+        case "Sequence":
+			$layerAndAttr = ConstructLayerAndAttr($g_SequenceDropDown, $baseName, $childAttr);
+			break;
+		
+		default:
+			error "GetCurrentIndexAttrInt bad choice";
+	}
+	
+	float $result = `getAttr $layerAndAttr`;
+	
+	Cr8zReturnOutputter("GetCurrentIndexAttrInt", "$result", $result);
+	return $result;
+}
+
+global proc string ConstructLayerAndAttr(string $dropDown, string $baseName, string $childAttr)
+{
+	Cr8zFunctionOutputter("ConstructLayerAndAttr", {"$dropDown", "$baseName", "$childAttr"}, {$dropDown, $baseName, $childAttr});
+	
+	global string $g_LayerRootDropDown;
+    global int $g_CurrentMorphTagIndices[];
+    global int $g_CurrentTextKeyIndices[];
+
+    string $selectedLayer = getSelected($g_LayerRootDropDown);
+
+    int $dropDownIndex = `optionMenu -q -select $dropDown`;
+    
+    //This is sort of hacky. the morph tags and the text keys
+    //don't have the drop down and attribute indices match up
+
+    string $layerAndAttr;
+
+    int $attrIndex = GetPhysicalIndexFromLogical($selectedLayer, $dropDownIndex,
+        $baseName);
+
+    if($childAttr != "")
+    {
+        $layerAndAttr = $selectedLayer + ".Ni_" + $baseName + "[" + ($attrIndex) + "]." + $childAttr;
+    }
+    else
+    {
+        $layerAndAttr = $selectedLayer + ".Ni_" + $baseName + "[" + ($attrIndex) + "]";
+    }
+	
+	Cr8zReturnOutputter("ConstructLayerAndAttr", "$layerAndAttr", $layerAndAttr);
+	return $layerAndAttr;
+}
+
+global proc int GetPhysicalIndexFromLogical(string $object, int $dropDownIndex, 
+                                   string $baseName)
+{
+    Cr8zFunctionOutputter("GetPhysicalIndexFromLogical", {"$object", "$dropDownIndex", "$baseName"}, {$object, $dropDownIndex, $baseName});
+
+    global int $g_CurrentMorphTagIndices[];
+    global int $g_CurrentTextKeyIndices[];
+
+    //go through the 
+    int $attrCount = `getAttr -s ($object + ".Ni_" + $baseName)`;
+    
+    $dropDownIndex = $dropDownIndex - 1;
+
+    int $attrIndex = 0;
+
+    if($baseName == "MorphTag")
+    {
+        $attrIndex = $g_CurrentMorphTagIndices[$dropDownIndex];
+    }
+    else if($baseName == "TextKey")
+    {
+        $attrIndex = $g_CurrentTextKeyIndices[$dropDownIndex];
+    }
+    else
+    {
+        int $validAttrIndex = 0;
+        
+        for($attrIndex; $attrIndex < $attrCount; $attrIndex++)
+        {
+            if(`getAttr ($object + ".Ni_" + $baseName + "[" + $attrIndex + "].Ni_" + $baseName + "_Valid")` == true)
+            {
+                if($validAttrIndex == $dropDownIndex)  
+                {
+                    break;
+                }
+                else
+                {
+                    $validAttrIndex = $validAttrIndex + 1;
+                }
+            }
+        }
+    }
+
+    Cr8zReturnOutputter("GetPhysicalIndexFromLogical", "$attrIndex", $attrIndex);
+    return $attrIndex;
+}
+
+global proc int getCurrentAttrPhysicalIndex(string $baseName)
+{
+    Cr8zFunctionOutputter("getCurrentAttrPhysicalIndex", {"$baseName"}, {$baseName});
+
+    global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	global string $g_MorphTagsDropDown;
+	global string $g_TextKeysDropDown;
+
+
+    string $selectedLayer = getSelected($g_LayerRootDropDown);
+	
+    int $dropDownIndex;
+
+	int $physicalIndex;
+	
+	switch($baseName)
+	{
+		case "MorphTag":
+            $dropDownIndex = `optionMenu -q -select $g_MorphTagsDropDown`;
+			$physicalIndex = GetPhysicalIndexFromLogical($selectedLayer, $dropDownIndex, $baseName);
+			break;
+		
+		case "TextKey":
+			$dropDownIndex = `optionMenu -q -select $g_TextKeysDropDown`;
+			$physicalIndex = GetPhysicalIndexFromLogical($selectedLayer, $dropDownIndex, $baseName);
+			break;
+		
+        case "Sequence":
+			$dropDownIndex = `optionMenu -q -select $g_SequenceDropDown`;
+			$physicalIndex = GetPhysicalIndexFromLogical($selectedLayer, $dropDownIndex, $baseName);
+			break;
+		
+		default:
+			error "GetCurrentIndexAttrInt bad choice";
+	}
+	
+	Cr8zReturnOutputter("getCurrentAttrPhysicalIndex", "$physicalIndex", $physicalIndex);
+    return $physicalIndex;
+}
+
+global proc string[] GetStringAttrFromIndexArray(string $baseName, string $attr, int $indices[])
+{
+    Cr8zFunctionOutputter("GetStringAttrFromIndexArray", {"$baseName", "$attr"}, {$baseName, $attr});
+    global string $g_LayerRootDropDown;
+
+    string $results[];
+
+    string $selectedLayer = getSelected($g_LayerRootDropDown);
+
+    int $index;
+    for($index in $indices)
+    {
+        $results[size($results)] = `getAttr ($selectedLayer + ".Ni_" + $baseName + "[" + $index + "]." + $attr)`;
+    }
+
+    Cr8zReturnOutputter("GetStringAttrFromIndexArray", "$results", stringArrayToString($results, "     "));
+    return $results;
+
+}
+global proc deleteAll(string $attr, string $optionMenu)
+{
+    Cr8zFunctionOutputter("deleteAll", {"$attr", "$optionMenu"}, {$attr, $optionMenu});
+
+    int $optionCount = `optionMenu -q -ni $optionMenu`;
+
+    if($optionCount == 0)
+    {
+        Cr8zReturnOutputter("deleteAll", "", "");
+        return;
+    }
+
+    
+
+    global string $g_LayerRootDropDown;
+
+    string $selectedLayer = getSelected($g_LayerRootDropDown);
+
+    //This is bizarrely necessary to allow Ni_Sequence attributes to get added.
+    //I can not explain that.
+    if($attr == "Sequence")
+    {
+        if(`attributeExists Ni_Sequence_Animation_Accumulation $selectedLayer`)
+        {
+            deleteAttr ($selectedLayer + ".Ni_Sequence_Animation_Accumulation");
+        }
+        //need to make the sequences invalid since I can't add them back
+        int $sequenceCount = `getAttr -s ($selectedLayer + ".Ni_Sequence") `;
+        int $sequenceIndex = 0;
+        for($sequenceIndex; $sequenceIndex < $sequenceCount; $sequenceIndex++)
+        {
+            string $objectAndAttr = $selectedLayer + ".Ni_Sequence[" + $sequenceIndex + "].Ni_Sequence_Valid";
+            setAttr $objectAndAttr false;
+        }
+
+    }
+    else
+    {
+        string $objectAndAttr = $selectedLayer + ".Ni_" + $attr;
+
+        deleteAttr $objectAndAttr;
+    }
+
+    Cr8zReturnOutputter("deleteAll", "", "");
+}
+global proc string[] findAllWithAttribute(string $attrName, string $objects[])
+{
+	string $bigObjectsString = stringArrayToString($objects, "     ");
+	Cr8zFunctionOutputter("findAllWithAttribute", {"attrName", "objects"}, {"" + $attrName, $bigObjectsString });
+		
+	string $results[];	
+	
+	for($object in $objects)
+	{
+		if(`attributeExists $attrName $object`)
+		{
+			$results[size($results)] = $object;
+		}
+	} 
+	
+	Cr8zReturnOutputter("findAllWithAttribute", "results", stringArrayToString($results, "     "));
+	return $results; 
+}
+
+//
+// Chararcter Helper Functions
+//
+
+
+global proc string[] findAllCharacters()
+{
+	Cr8zFunctionOutputter("findAllCharacters", {}, {});
+	
+	string $dagNodes[] = `ls -dagObjects`;
+	string $characters[] = findAllWithAttribute("Ni_CharacterRoot", 
+		$dagNodes);
+	Cr8zReturnOutputter("findAllCharacters", "characters", stringArrayToString($characters, "     "));
+	
+	return $characters;
+}
+
+global proc string[] findAllLayerRoots(string $character)
+{
+	Cr8zFunctionOutputter("findAllLayerRoots", {"character"}, {"" + $character});
+	
+	string $layerRoots[];
+
+    if($character != "")
+    {
+        string $descentsOfCharacter[] =`listRelatives -allDescendents -f $character`;
+        $descentsOfCharacter[size($descentsOfCharacter)] = $character;
+	    string $potentialLayerRoots[] = findAllWithAttribute("Ni_Sequence", $descentsOfCharacter);
+        string $potentialLayerRoot;
+        for($potentialLayerRoot in $potentialLayerRoots)
+        {
+            if(isLayerRoot($potentialLayerRoot))
+            {
+                $layerRoots[size($layerRoots)] = $potentialLayerRoot;
+            }
+        }
+    }
+
+	Cr8zReturnOutputter("findAllLayerRoots", "layers", stringArrayToString($layerRoots, "      "));
+	return $layerRoots;
+}
+
+global proc string[] getValidSequenceNames(string $objectName)
+{
+    Cr8zFunctionOutputter("getValidSequenceNames", {"objectName"}, {"" + $objectName});
+    
+    //This function has to look for all sequences that are below this node
+    //in the hierarchy that are not below another node
+    
+    string $szSequenceNames[] = {};
+
+    if (`attributeExists "Ni_Sequence" $objectName` == 0)
+    {
+		Cr8zReturnOutputter("getValidSequenceNames early out", "szSequenceNames", stringArrayToString($szSequenceNames, "    "));
+        return $szSequenceNames;
+    }
+
+    // Get the Sequence Times
+    int $iNumSequences = `getAttr -s ($objectName + ".Ni_Sequence")`;
+    
+
+    int $iSequence = 0;
+    int $iLoop;
+
+    for( $iLoop = 0; $iLoop < $iNumSequences; $iLoop++)
+    {
+        if(`getAttr ($objectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            $szSequenceNames[$iSequence++] = `getAttr ($objectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Name")`;
+        }
+        else
+        {
+            //print($objectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid is false");
+        }
+    }
+
+    Cr8zReturnOutputter("getValidSequenceNames", "szSequenceNames", stringArrayToString($szSequenceNames, "    "));
+    return $szSequenceNames;
+}
+
+global proc string[] findAllSequences(string $characterOrLayer)
+{
+	Cr8zFunctionOutputter("findAllSequences", {}, {});
+
+    string $sequences[];
+	if($characterOrLayer != "")
+    {
+	     $sequences = getValidSequenceNames($characterOrLayer);
+    }
+	
+	Cr8zReturnOutputter("findAllSequences", "sequences", stringArrayToString($sequences, "     "));
+	return $sequences;
+}
+
+global proc int[] findAllInTimeRange(string $objectName, 
+    string $attrTypeName, float $startTime, float $endTime)
+{
+	Cr8zFunctionOutputter("findAllInRange", {"$objectName", "$attrTypeName", 
+        "$startTime", "$endTime"}, {"" + $objectName, "" + $attrTypeName, "" + 
+        $startTime, "" + $endTime});	
+
+	int $result[];
+	
+	// verify the object has MorphTags
+    if(`attributeExists ("Ni_" + $attrTypeName) $objectName` == false)
+    {
+       Cr8zReturnOutputter("findAllInRange early out", "$result", "");
+        return $result;
+    }
+
+    $iNumAttrs = `getAttr -s ($objectName + ".Ni_" + $attrTypeName)`;
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop < $iNumAttrs; $iLoop++)
+    {
+        if(`getAttr ($objectName + ".Ni_" + $attrTypeName + "[" + 
+            $iLoop + "].Ni_" + $attrTypeName + "_Valid")` == true)
+        {
+			float $time = `getAttr ($objectName + ".Ni_" + $attrTypeName + "[" + 
+                $iLoop + "].Ni_" + $attrTypeName + "_Time")`;
+
+            if(($time >= $startTime) && ($time < $endTime))
+			{
+                $result[size($result)] = $iLoop;
+			}  
+        }
+    }
+   
+   Cr8zReturnOutputter("findAllInRange", "$result", Cr8zConvertIntArrayToString($result));
+
+   return $result;  
+
+}
+
+global proc int[] findAllOfType(string $objectName, string $typeName)
+{
+	Cr8zFunctionOutputter("findAllOfType", {"$objectName", "$typeName"}, 
+        {"" + $objectName, "" + $typeName});
+	int $values[];
+    if($objectName == "")
+    {
+        Cr8zReturnOutputter("findAllOfType", "$values", "NOT IMPLEMENTED");
+        return $values;
+    }
+	
+    float $startTime = GetCurrentIndexAttrInt("Sequence", 
+        "Ni_Sequence_Start_Time");
+	float $endTime	= GetCurrentIndexAttrInt("Sequence", 
+        "Ni_Sequence_End_Time");
+	
+	int $values[] = findAllInTimeRange($objectName, $typeName, $startTime, 
+        $endTime);
+	
+	Cr8zReturnOutputter("findAllOfType", "$values", Cr8zConvertIntArrayToString($values));
+        
+	return $values;
+}
+
+global proc float MyImmerseGetCurrentFrameRate()
+{
+    Cr8zFunctionOutputter("MyImmerseGetCurrentFrameRate", {}, {});
+    
+    string $sFrameUnit = `currentUnit -q -t`;
+    float $result;
+
+    if($sFrameUnit == "game")
+    {
+        $result =  15.0;
+    }
+    else if($sFrameUnit == "film")
+    {
+        $result = 24.0;
+    }
+    else if($sFrameUnit == "pal")
+    {
+        $result = 25.0;
+    }
+    else if($sFrameUnit == "ntsc")
+    {
+        $result = 30.0;
+    }
+    else if($sFrameUnit == "show")
+    {
+        $result = 48.0;
+    }
+    else if($sFrameUnit == "palf")
+    {
+        $result = 50.0;
+    }
+    else if($sFrameUnit == "ntscf")
+    {
+        $result = 60.0;
+    }
+    else 
+    {
+        catch(error ("Can't read current working unit for time: " + $sFrameUnit + " is not supported.\n"));
+        $result = 1.0;
+    }
+
+    Cr8zReturnOutputter("MyImmerseGetCurrentFrameRate", "$result", "" + $result);
+    return $result; 
+}
+
+//
+// HELPER FUNCTIONS END
+//
+
+//
+//Gui element update and reset functions
+//
+
+//The basic way this work is as follows
+//when a combobox changes the combobox's "changed"
+//function is called. The change function will call the reset
+//function of all the dependent comboBox's which will change
+//what strings make up its options.
+//The when the comboBoxes are updated their respective "change"
+//function is called.
+
+
+//
+
+
+//MORPH TAG FUNCTIONS START
+global proc morphTagChanged()
+{
+	Cr8zFunctionOutputter("morphTagChanged", {}, {});
+	
+	//update the frame value
+	if(getEnabledStateOfMorphTag() == true)
+	{
+		setEnabledStateOfMorphTag(true);
+		
+		float $morphTagFrame = GetCurrentIndexAttrInt("MorphTag", "Ni_MorphTag_Time");
+		
+        $morphTagFrame = scaleTimeForDisplay($morphTagFrame);
+		
+		intFieldGrp -e -en 1 -v1 $morphTagFrame morphTagFrameIntField;
+	}
+
+	Cr8zReturnOutputter("morphTagChanged", "", "");
+}
+
+global proc int getEnabledStateOfMorphTag()
+{
+	global string $g_MorphTagsDropDown;
+
+    int $result = `optionMenu -q -en $g_MorphTagsDropDown`;
+	return $result;
+}
+
+global proc setEnabledStateOfMorphTag(int $isOn)
+{
+	global string $g_MorphTagsDropDown;
+	
+	if($isOn)
+	{
+		optionMenu -e -en 1 $g_MorphTagsDropDown;
+        intFieldGrp -e -en 1 morphTagFrameIntField;
+        button -e -en 1 EditMorphTagButton;
+        button -e -en 1 DeleteMorphTagButton;
+        button -e -en 1 JumpToMorphTagTimeButton;
+	}
+	else
+	{
+		optionMenu -e -en 0 $g_MorphTagsDropDown;
+		intFieldGrp -e -en 0 -v1 0 morphTagFrameIntField;
+        button -e -en 0 EditMorphTagButton;
+        button -e -en 0 DeleteMorphTagButton;
+        button -e -en 0 JumpToMorphTagTimeButton;
+
+	}
+}
+
+global proc updateMorphTags(string $objectName, string $selectedSequence, string $morphTagName)
+{
+	global string $g_MorphTagsDropDown;
+    global int $g_CurrentMorphTagIndices[];
+	
+	Cr8zFunctionOutputter("updateMorphTags", {"$objectName", "$selectedSequence"}, {"" + $objectName, "" + $selectedSequence});
+	
+	$g_CurrentMorphTagIndices = findAllOfType($objectName, "MorphTag");
+    
+    string $morphTagsNames[] = GetStringAttrFromIndexArray("MorphTag", "Ni_MorphTag_Name", $g_CurrentMorphTagIndices);
+
+	if(size($morphTagsNames) > 0)
+	{
+		setEnabledStateOfMorphTag(true);
+	}
+	else
+	{
+		setEnabledStateOfMorphTag(false);
+	}
+	
+	updateDropDown($g_MorphTagsDropDown, $morphTagsNames);
+	
+    setToOption($g_MorphTagsDropDown, $morphTagName);
+
+	morphTagChanged();
+	
+	Cr8zReturnOutputter("updateMorphTags", "", "");
+}
+
+global proc resetMorphTags(string $morphTagName)
+{
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	
+	Cr8zFunctionOutputter("resetMorphTags", {}, {});
+	
+	string $selectedLayer = getSelected($g_LayerRootDropDown);
+	string $selectedSequence = getSelected($g_SequenceDropDown);
+
+	updateMorphTags($selectedLayer, $selectedSequence, $morphTagName);
+	
+	Cr8zReturnOutputter("resetMorphTags", "", "");
+}
+
+global proc addMorphTag()
+{
+    global string $g_MorphTagsDropDown;
+	global string $g_LayerRootDropDown;
+	
+	Cr8zFunctionOutputter("addMorphTag", {}, {});
+	
+	string $result = `promptDialog 
+
+							-title "Morph Tag Entry"
+
+							-message "Enter Morph Tag:"
+
+							-button "OK" -button "Cancel"
+
+							-defaultButton "OK" -cancelButton "Cancel"
+
+							-dismissString "Cancel"`;
+ 												
+	string $morphTagName;
+	if ($result == "OK") 
+	{
+ 		$morphTagName = `promptDialog -query -text`;
+ 		 
+ 		string $layerRoot = getSelected($g_LayerRootDropDown);
+ 	
+ 		createMorphTag($layerRoot, $morphTagName);
+
+        resetMorphTags($morphTagName);
+ 	}
+ 	
+ 	Cr8zReturnOutputter("addMorphTag", "", "");
+	
+}
+global proc editMorphTag()
+{
+    global string $g_MorphTagsDropDown;
+
+	Cr8zFunctionOutputter("editMorphTag", {}, {});
+	
+	string $result = `promptDialog 
+
+					-title "Morph Tag Entry"
+
+					-message "Enter Morph Tag:"
+
+					-button "OK" -button "Cancel"
+
+					-defaultButton "OK" -cancelButton "Cancel"
+
+					-dismissString "Cancel"`;
+ 												
+	string $morphTagName;
+	if ($result == "OK") 
+	{
+        $morphTagName = `promptDialog -query -text`;
+
+	    string $morphTagAttr = ConstructLayerAndAttr($g_MorphTagsDropDown, 
+            "MorphTag", "Ni_MorphTag_Name");
+
+        setAttr $morphTagAttr -type "string" $morphTagName;
+ 		
+        resetMorphTags($morphTagName);
+ 	}
+ 	
+ 	Cr8zReturnOutputter("editMorphTag", "", "");
+}
+
+global proc morphTagFrameChanged()
+{
+	global string $g_MorphTagsDropDown;
+	global string $g_LayerRootDropDown;
+	
+	Cr8zFunctionOutputter("morphTagFrameChanged", {}, {});
+	
+	string $layerRoot = getSelected($g_LayerRootDropDown);
+	
+	int $morphTagMenuSelectIndex = getCurrentAttrPhysicalIndex("MorphTag");
+	float $startTime = `intFieldGrp -q -v1 morphTagFrameIntField`;
+	
+    $startTime = scaleForTimeStorage($startTime);
+	
+	setAttr ($layerRoot + ".Ni_MorphTag[" + $morphTagMenuSelectIndex + "].Ni_MorphTag_Time") $startTime;
+	
+	Cr8zReturnOutputter("morphTagFrameChanged", "", "");
+}
+
+global proc deleteMorphTag()
+{
+    global string $g_MorphTagsDropDown;
+
+    Cr8zFunctionOutputter("deleteMorphTag", {}, {});
+
+    string $result = `confirmDialog 
+
+					-title "Deletion Confirmation"
+
+                    -message ("Are you sure that you want to delete the" +
+                             "Morph Tag?")
+
+					-button "OK" -button "Cancel"
+
+					-defaultButton "Cancel" -cancelButton "Cancel"
+
+					-dismissString "Cancel"`;
+ 												
+	if ($result == "OK") 
+	{
+        string $morphTag = ConstructLayerAndAttr($g_MorphTagsDropDown, 
+            "MorphTag", "Ni_MorphTag_Valid");
+
+        setAttr $morphTag false;
+
+        resetMorphTags("");
+ 	} 
+
+    Cr8zReturnOutputter("deleteMorphTag", "", "");
+}
+
+global proc createMorphTag(string $layerRoot, string $morphTagName)
+{
+    Cr8zFunctionOutputter("createMorphTag", {"layerRoot", "morphTagName"}, {$layerRoot, $morphTagName});
+    
+    int $MorphTagNumber = MyImmerseFindFirstAvailableMorphTagNumber($layerRoot);
+
+	 if(`attributeExists Ni_MorphTag $layerRoot` == false)
+	{ 
+		addAttr -ln Ni_MorphTag -nc 3 -at compound -m -im true $layerRoot;
+		addAttr -ln Ni_MorphTag_Valid -at bool -p Ni_MorphTag $layerRoot;
+		addAttr -ln Ni_MorphTag_Name -dt "string" -p Ni_MorphTag $layerRoot;
+		addAttr -ln Ni_MorphTag_Time -at "float" -p Ni_MorphTag $layerRoot;
+	}
+   
+    //We should add morph tag times that are within the currently selected sequence
+    float $startTime = GetCurrentIndexAttrInt("Sequence", "Ni_Sequence_Start_Time");    
+    //print("TextKey $startTime = " + $startTime + "\n"); 
+
+    setAttr ($layerRoot + ".Ni_MorphTag[" + $MorphTagNumber + "].Ni_MorphTag_Valid") true;
+    setAttr ($layerRoot + ".Ni_MorphTag[" + $MorphTagNumber + "].Ni_MorphTag_Name") -type "string" $morphTagName;
+    setAttr ($layerRoot + ".Ni_MorphTag[" + $MorphTagNumber + "].Ni_MorphTag_Time") $startTime;
+    
+    Cr8zReturnOutputter("createMorphTag", "", "");
+    
+}
+
+global proc jumpToMorphTagTime()
+{
+    $morphTagTime = `intFieldGrp -q -v1 morphTagFrameIntField`;
+    currentTime $morphTagTime;
+}
+global proc int MyImmerseFindFirstAvailableMorphTagNumber(string $objectName)
+{
+    Cr8zFunctionOutputter("MyImmerseFindFirstAvailableMorphTagNumber", {"$objectName"}, {"" + $objectName});
+    
+    int $szMorphTagCount = 0;
+
+    if (`attributeExists "Ni_MorphTag" $objectName` == 0)
+    {
+		Cr8zReturnOutputter("getValidMorphTagNames", "$szMorphTagCount", $szMorphTagCount);
+        return $szMorphTagCount;
+    }
+    else
+    {
+        $szMorphTagCount = `getAttr -s ($objectName + ".Ni_MorphTag")`;
+    }
+
+    Cr8zReturnOutputter("MyImmerseFindFirstAvailableMorphTagNumber", "$szMorphTagCount", "" + $szMorphTagCount);
+    return $szMorphTagCount;
+}
+
+//MORPH TAG FUNCTIONS END
+
+//TEXT KEY FUNCTIONS START
+global proc textKeyChanged()
+{	
+	Cr8zFunctionOutputter("textKeyChanged", {}, {});
+	
+	//update the frame value
+	if(getEnabledStateOfTextKey())
+	{
+
+		float $textKeyFrame = GetCurrentIndexAttrInt("TextKey", "Ni_TextKey_Time");
+		
+		$textKeyFrame = scaleTimeForDisplay($textKeyFrame);
+		
+		intFieldGrp -e -v1 $textKeyFrame textKeyFrameIntField;
+	}
+	
+	Cr8zReturnOutputter("textKeyChanged", "", "");
+}
+
+global proc int getEnabledStateOfTextKey()
+{
+	global string $g_TextKeysDropDown;
+
+	int $result = `optionMenu -q -en $g_TextKeysDropDown`;
+	
+	return $result;
+}
+
+global proc setEnabledStateOfTextKey(int $isOn)
+{
+	global string $g_TextKeysDropDown;
+	
+	if($isOn)
+	{
+		optionMenu -e -en 1 $g_TextKeysDropDown;
+        intFieldGrp -e -en 1 textKeyFrameIntField;
+        button -e -en 1 EditTextKeyButton;
+        button -e -en 1 DeleteTextKeyButton;
+        button -e -en 1 JumpToTextKeyTimeButton;
+
+
+	}
+	else
+	{
+		optionMenu -e -en 0 $g_TextKeysDropDown;
+		intFieldGrp -e -en 0 -v1 0 textKeyFrameIntField;
+        button -e -en 0 EditTextKeyButton;
+        button -e -en 0 DeleteTextKeyButton;
+        button -e -en 0 JumpToTextKeyTimeButton;
+
+	}
+}
+
+global proc updateTextKeys(string $objectName, string $selectedSequence, string $textKeyName)
+{
+	global string $g_TextKeysDropDown;
+    global int $g_CurrentTextKeyIndices[];
+
+	Cr8zFunctionOutputter("updateTextKeys", {"$objectName", "$selectedSequence"}, {"" + $objectName, "" + $selectedSequence});
+
+	$g_CurrentTextKeyIndices = findAllOfType($objectName, "TextKey");
+    
+    string $textKeysNames[] = GetStringAttrFromIndexArray("TextKey", "Ni_TextKey_Name", $g_CurrentTextKeyIndices);
+    
+	if(size($textKeysNames) > 0)
+	{
+		setEnabledStateOfTextKey(true);
+	}
+	else
+	{
+		setEnabledStateOfTextKey(false);
+	}
+	
+	updateDropDown($g_TextKeysDropDown, $textKeysNames);
+
+    if($textKeyName != "")
+    {
+        setToOption($g_TextKeysDropDown, $textKeyName);
+    }
+
+	textKeyChanged();
+	
+	Cr8zReturnOutputter("updateTextKeys", "", "");
+}
+
+global proc resetTextKeys(string $textKeyName)
+{
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	
+	Cr8zFunctionOutputter("resetTextKeys", {}, {});
+	
+	string $selectedLayer = getSelected($g_LayerRootDropDown);
+	string $selectedSequence = getSelected($g_SequenceDropDown);
+
+	updateTextKeys($selectedLayer, $selectedSequence, $textKeyName);
+	
+	Cr8zReturnOutputter("resetTextKeys", "", "");
+}
+
+global proc addTextKey()
+{
+	global string $g_LayerRootDropDown;
+    global string $g_TextKeysDropDown;
+	
+	Cr8zFunctionOutputter("addTextKey", {}, {});
+	
+	string $result = `promptDialog 
+
+							-title "Text Key Entry"
+
+							-message "Enter Text Key:"
+
+							-button "OK" -button "Cancel"
+
+							-defaultButton "OK" -cancelButton "Cancel"
+
+							-dismissString "Cancel"`;
+ 												
+	string $textKeyName;
+	if ($result == "OK") 
+	{
+ 		$textKeyName = `promptDialog -query -text`;
+ 		 
+ 		string $layerRoot = getSelected($g_LayerRootDropDown);
+ 	
+ 		createTextKey($layerRoot, $textKeyName);
+ 		
+        resetTextKeys($textKeyName);
+ 	}
+ 	
+ 	Cr8zReturnOutputter("addTextKey", "", "");
+}
+
+
+global proc editTextKey()
+{
+    Cr8zFunctionOutputter("editTextKey", {}, {});
+
+    global string $g_TextKeysDropDown;
+
+	string $result = `promptDialog 
+
+						-title "Sequence Name Entry"
+
+						-message "Enter Text Key Name:"
+
+						-button "OK" -button "Cancel"
+
+						-defaultButton "OK" -cancelButton "Cancel"
+
+						-dismissString "Cancel"`;
+ 												
+	string $textKeyName;
+	if ($result == "OK") 
+	{
+	    $textKeyName = `promptDialog -query -text`;
+
+	    string $textKeyAttr = ConstructLayerAndAttr($g_TextKeysDropDown, 
+            "TextKey", "Ni_TextKey_Name");
+
+        setAttr $textKeyAttr -type "string" $textKeyName;
+
+        resetTextKeys($textKeyName);
+    }
+	
+	Cr8zReturnOutputter("editTextKey", "", ""); 	
+}
+
+global proc textKeyFrameChanged()
+{
+	global string $g_TextKeysDropDown;
+	global string $g_LayerRootDropDown;
+	
+	Cr8zFunctionOutputter("textKeyFrameChanged", {}, {});
+	
+	string $layerRoot = getSelected($g_LayerRootDropDown);
+	
+	int $textKeyMenuSelectIndex = getCurrentAttrPhysicalIndex("TextKey");
+	float $startTime = `intFieldGrp -q -v1 textKeyFrameIntField`;
+	
+	$startTime = scaleForTimeStorage($startTime);
+	
+	setAttr($layerRoot + ".Ni_TextKey[" + $textKeyMenuSelectIndex + "].Ni_TextKey_Time") $startTime;
+	
+	Cr8zReturnOutputter("textKeyFrameChanged", "", "");
+}
+
+global proc deleteTextKey()
+{
+    Cr8zFunctionOutputter("deleteTextKey", {}, {});
+    
+    global string $g_TextKeysDropDown;
+
+    string $result = `confirmDialog 
+
+							-title "Deletion Confirmation"
+
+                            -message ("Are you sure that you want to delete" +
+                                     "the Text Key?")
+
+							-button "OK" -button "Cancel"
+
+							-defaultButton "Cancel" -cancelButton "Cancel"
+
+							-dismissString "Cancel"`;
+ 												
+	if ($result == "OK") 
+	{
+        string $textKeyAttr = ConstructLayerAndAttr($g_TextKeysDropDown, 
+            "TextKey", "Ni_TextKey_Valid");
+
+        setAttr $textKeyAttr false;
+
+        resetTextKeys("");
+ 	} 	
+
+    Cr8zFunctionOutputter("deleteTextKey", {}, {});
+}
+
+global proc createTextKey(string $layerRoot, string $textKeyName)
+{
+	Cr8zFunctionOutputter("createTextKey", {"layerRoot", "textKeyName"}, {$layerRoot, $textKeyName});
+	
+	int $textKeyIndex = 0;
+	
+	if(`attributeExists Ni_TextKey $layerRoot` == false)
+    {
+        addAttr -ln Ni_TextKey -nc 3 -at compound -m -im true $layerRoot;
+        addAttr -ln Ni_TextKey_Valid -at bool -p Ni_TextKey $layerRoot;
+        addAttr -ln Ni_TextKey_Name -dt "string" -p Ni_TextKey $layerRoot;
+        addAttr -ln Ni_TextKey_Time -at "float" -p Ni_TextKey $layerRoot;
+	}
+	else
+	{
+		$textKeyIndex = `getAttr -s ($layerRoot + ".Ni_TextKey")`;
+	}
+
+    float $startTime = GetCurrentIndexAttrInt("Sequence", "Ni_Sequence_Start_Time"); 
+   
+    setAttr ($layerRoot + ".Ni_TextKey[" + $textKeyIndex + "].Ni_TextKey_Valid") true;
+    setAttr ($layerRoot + ".Ni_TextKey[" + $textKeyIndex + "].Ni_TextKey_Name") -type "string" $textKeyName;
+    setAttr ($layerRoot + ".Ni_TextKey[" + $textKeyIndex + "].Ni_TextKey_Time") $startTime; 
+    
+    Cr8zReturnOutputter("createTextKey", "", "");
+}
+
+
+global proc jumpToTextKeyTime()
+{
+    $textKeyTime = `intFieldGrp -q -v1 textKeyFrameIntField`;
+    currentTime $textKeyTime;
+}
+//TEXT KEY FUNCTIONS END
+
+//SEQUENCE FUNCTIONS START
+global proc sequenceChanged()
+{
+	global string $g_Window;
+	
+	Cr8zFunctionOutputter("sequenceChanged", {}, {});
+	
+	//Update dependent drop downs
+	resetMorphTags("");
+	resetTextKeys("");
+	
+	//update all of the sequence attributes
+	
+	if(GetEnableStateOfSequence())
+	{
+		int $startTime	= scaleTimeForDisplay(GetCurrentIndexAttrInt("Sequence", "Ni_Sequence_Start_Time"));
+		int $endTime	= scaleTimeForDisplay(GetCurrentIndexAttrInt("Sequence", "Ni_Sequence_End_Time"));
+		
+        if(GetEnableStateOfSequenceAccumulation())
+        {
+		    int $accumulateTransX = GetCurrentIndexAttrInt("Sequence", "Ni_Sequence_Tran_X");
+		    int $accumulateTransY = GetCurrentIndexAttrInt("Sequence", "Ni_Sequence_Tran_Y");
+		    int $accumulateTransZ = GetCurrentIndexAttrInt("Sequence", "Ni_Sequence_Tran_Z");
+
+            checkBoxGrp -e -v1 $accumulateTransX AccumulateTranslateCheckBox;
+		    checkBoxGrp -e -v2 $accumulateTransY AccumulateTranslateCheckBox;
+		    checkBoxGrp -e -v3 $accumulateTransZ AccumulateTranslateCheckBox;
+
+            int $accumulateRotation = GetCurrentIndexAttrInt("Sequence", "Ni_Sequence_Rot");
+            checkBoxGrp -e -v1 $accumulateRotation AccumulateRotationCheckBox;
+        }
+        else
+        {
+            checkBoxGrp -e -v1 false AccumulateTranslateCheckBox;
+		    checkBoxGrp -e -v2 false AccumulateTranslateCheckBox;
+		    checkBoxGrp -e -v3 false AccumulateTranslateCheckBox;
+
+            checkBoxGrp -e -v1 false AccumulateRotationCheckBox;
+        }
+
+		int $looping = GetCurrentIndexAttrInt("Sequence", "Ni_Sequence_Looping");
+
+		//other values
+		
+		checkBoxGrp -e -v1 $looping loopingCheckBox;
+		
+		intField -e -v $endTime ($g_Window + "|MainLayout|seqTimeColumn|seqEndRowLayout|endTimeIntField");
+		intField -e -v $startTime ($g_Window + "|MainLayout|seqTimeColumn|seqStartRowLayout|startTimeIntField");
+	}
+
+	Cr8zReturnOutputter("sequenceChanged", "", "");
+}
+
+global proc int GetEnableStateOfSequence()
+{
+	global string $g_SequenceDropDown;
+	
+	int $result = `optionMenu -q -en $g_SequenceDropDown`;
+	
+	return $result;
+}
+
+global proc SetEnableStateOfSequence(int $isOn)
+{
+	global string $g_SequenceDropDown;
+	
+	if($isOn)
+	{
+		optionMenu -e -en 1 $g_SequenceDropDown;
+		
+      //  if(getAccumulationRootEnableState())
+      //  {
+      //      checkBoxGrp -en 1 -e AccumulateTranslateCheckBox;  
+		    //checkBoxGrp -en 1 -e AccumulateRotationCheckBox;
+      //  }
+      //  else
+      //  {
+      //      checkBoxGrp -en 0 -e AccumulateTranslateCheckBox;  
+		    //checkBoxGrp -en 0 -e AccumulateRotationCheckBox;  
+      //  }
+
+		checkBoxGrp -en 1 -e loopingCheckBox; 
+
+		intField -e -en 1 endTimeIntField;
+		intField -e -en 1 startTimeIntField; 
+
+        button -e -en 1 EditSequenceButton;
+        button -e -en 1 DeleteSequenceButton;
+        button -e -en 1 MakeTimeRangeFitButton;
+
+	}
+	else
+	{
+		optionMenu -e -en 0 $g_SequenceDropDown;
+		
+		checkBoxGrp -en 0 -e AccumulateTranslateCheckBox;  
+		
+		//other values
+		checkBoxGrp -en 0 -e AccumulateRotationCheckBox;
+		checkBoxGrp -en 0 -e loopingCheckBox; 
+
+		intField -e -en 0 endTimeIntField;
+		intField -e -en 0 startTimeIntField;
+
+        button -e -en 0 EditSequenceButton;
+        button -e -en 0 DeleteSequenceButton;
+        button -e -en 0 MakeTimeRangeFitButton;
+	}
+}
+
+global proc int GetEnableStateOfSequenceAccumulation()
+{
+    return `checkBoxGrp -q -en AccumulateTranslateCheckBox`;
+}
+global proc SetEnableStateOfSequenceAccumulation(int $isOn)
+{
+	Cr8zFunctionOutputter("SetEnableStateOfSequenceAccumulation", {"$isOn"}, {"" + $isOn});
+    
+    if($isOn)
+    {
+        checkBoxGrp -en 1 -e AccumulateTranslateCheckBox; 
+
+		//other values
+		checkBoxGrp -en 1 -e AccumulateRotationCheckBox;
+    }
+    else
+    {
+        checkBoxGrp -en 0 -e AccumulateTranslateCheckBox; 
+
+		//other values
+		checkBoxGrp -en 0 -e AccumulateRotationCheckBox;
+    }
+
+	Cr8zReturnOutputter("SetEnableStateOfSequenceAccumulation", "", "");
+    
+}
+global proc updateSequence(string $selectedCharacterOrLayer, string $sequenceName)
+{
+	global string $g_SequenceDropDown;
+    global string $g_LayerRootDropDown;
+	
+	Cr8zFunctionOutputter("updateSequence", {"$selectedCharacterOrLayer"}, {"" + $selectedCharacterOrLayer});
+	
+	string $sequenceNames[] = findAllSequences($selectedCharacterOrLayer);
+	
+	if(size($sequenceNames) > 0)
+	{
+		SetEnableStateOfSequence(true);
+        //is this sequence on the accumulation root
+        string $selectedLayer = getSelected($g_LayerRootDropDown);
+        string $accumulationRoot = `textFieldGrp -q -text AccumulationRootTextField`;
+        //print("$accumulationRoot = " + $accumulationRoot + "\n");
+        if($accumulationRoot != "Resolve Duplicates!")
+        {
+            if(isParentOf($selectedLayer, $accumulationRoot) || 
+                $accumulationRoot == $selectedLayer)
+            {
+                SetEnableStateOfSequenceAccumulation(true);
+            }
+            else
+            {
+                SetEnableStateOfSequenceAccumulation(false);
+            }
+        }
+        else
+        {
+            SetEnableStateOfSequenceAccumulation(false);
+        }
+        
+	}
+	else
+	{
+		SetEnableStateOfSequence(false);
+        SetEnableStateOfSequenceAccumulation(false);
+	}
+	
+	updateDropDown($g_SequenceDropDown, $sequenceNames);
+
+    if($sequenceName != "")
+    {
+        setToOption($g_SequenceDropDown, $sequenceName);
+    }
+	
+	sequenceChanged();
+	
+	Cr8zReturnOutputter("updateSequence", "", "");
+}
+
+global proc int isAChildOf(string $parent, string $child)
+{
+    Cr8zFunctionOutputter("isAChildOf", {"$parent", "$child"}, {"" + $parent, "" + $child});
+
+    int $returnValue = 0;
+
+    if($parent == "Resolve Duplicates!")
+    {
+        Cr8zReturnOutputter("isAChildOf early out", "$returnValue", "" + $returnValue);
+        return $returnValue;
+    }
+
+    string $children[] = `listRelatives -allDescendents -fullPath $parent`;
+
+    string $testChild;
+    for($testChild in $children)
+    {
+        //print("$testChild = " + $testChild + "\n");
+        if($child == $testChild)
+        {
+            $returnValue = true;
+            break;
+        }
+    }
+
+    Cr8zReturnOutputter("isAChildOf", "$returnValue", "" + $returnValue);
+    return $returnValue;
+}
+
+
+global proc resetSequences(string $sequenceName)
+{
+	global string $g_LayerRootDropDown;
+	
+	Cr8zFunctionOutputter("resetSequences", {}, {});
+	
+	string $selectedLayer = getSelected($g_LayerRootDropDown);
+	
+	updateSequence($selectedLayer, $sequenceName);
+
+	Cr8zReturnOutputter("resetSequences", "", "");
+}
+
+global proc addSequence()
+{
+	global string $g_LayerRootDropDown;
+    
+
+	//pops up a dialog that allows for a name to be entered
+	
+	//adds a sequence with the start as the end of the last sequence
+	
+	Cr8zFunctionOutputter("addSequence", {}, {});
+	
+ 	string $layerRoot = getSelected($g_LayerRootDropDown);
+
+    addSequencePrompt($layerRoot);
+
+ 	Cr8zReturnOutputter("addSequence", "", "");
+ 	
+}
+
+global proc addSequencePrompt(string $layerRoot)
+{
+
+    global string $g_SequenceDropDown;
+    global int $g_UntitledIndex;
+
+	string $result = `promptDialog 
+
+						-title "Sequence Name Entry"
+
+						-message "Enter Sequence Name:"
+
+						-button "OK" -button "Cancel"
+
+						-defaultButton "OK" -cancelButton "Cancel"
+
+						-dismissString "Cancel"`;
+ 												
+	string $sequenceName;
+	if ($result == "OK") 
+	{
+ 		$sequenceName = `promptDialog -query -text`;
+
+        if($sequenceName == "")
+        {
+            $sequenceName = "Untitled" + $g_UntitledIndex;
+            $g_UntitledIndex++;
+        }
+ 		
+        GamebryoCreateSequence($layerRoot, $sequenceName);
+
+ 		resetSequences($sequenceName);
+ 	}
+}
+
+global proc editSequence()
+{
+	//Changes the name of the sequence
+
+	//pops up a dialog that allows for a name to be entered
+	
+	//adds a sequence with the start as the end of the last sequence
+    global string $g_SequenceDropDown;
+	
+	Cr8zFunctionOutputter("editSequence", {}, {});
+	
+	string $result = `promptDialog 
+
+					-title "Sequence Name Entry"
+
+					-message "Enter Sequence Name:"
+
+					-button "OK" -button "Cancel"
+
+					-defaultButton "OK" -cancelButton "Cancel"
+
+					-dismissString "Cancel"`;
+ 												
+	string $sequenceName;
+	if ($result == "OK") 
+	{
+ 		$sequenceName = `promptDialog -query -text`;
+ 		 
+	    string $sequenceAttr = ConstructLayerAndAttr($g_SequenceDropDown, 
+            "Sequence", "Ni_Sequence_Name");
+
+        setAttr $sequenceAttr -type "string" $sequenceName;
+ 		
+ 		resetSequences($sequenceName);
+ 	}
+ 	
+ 	Cr8zReturnOutputter("editSequence", "", "");
+}
+
+global proc int currentSequenceIsOverlapping(int $startTime, int $endTime)
+{
+    global string $g_SequenceDropDown;
+    global string $g_LayerRootDropDown;
+    //go through every sequence
+
+    Cr8zFunctionOutputter("currentSequenceIsOverlapping", {}, {});
+    int $returnValue = false;
+
+    int $numberOfSequences = `optionMenu -q -ni $g_SequenceDropDown`;
+
+    string $selectedLayer = getSelected($g_LayerRootDropDown);
+
+    int $sequenceIndex = 0;
+    int $physicalIndex;
+    for($sequenceIndex; $sequenceIndex < $numberOfSequences; $sequenceIndex++)
+    {
+        $physicalIndex = GetPhysicalIndexFromLogical($selectedLayer, $sequenceIndex, "Sequence");
+        //getAttr sequence start time
+        int $startTimeOfSeq = `getAttr ($selectedLayer + ".Ni_Sequence[" + $physicalIndex + "].Ni_Sequence_Start_Time")`;
+        int $endTimeOfSeq = `getAttr ($selectedLayer + ".Ni_Sequence[" + $physicalIndex + "].Ni_Sequence_End_Time")`;
+
+        if(($startTime > $startTimeOfSeq && $startTime < $endTimeOfSeq) ||
+            ($endTime > $startTimeOfSeq && $endTime < $endTimeOfSeq))
+        {
+            $returnValue = true;
+            break;
+        }
+    }
+
+    Cr8zReturnOutputter("currentSequenceIsOverlapping", "$returnValue", "" + $returnValue);
+
+    return $returnValue;
+}
+
+global proc int GetFirstStartTimeAvailable()
+{
+	global string $g_LayerRootDropDown;
+
+    Cr8zFunctionOutputter("GetFirstStartTimeAvailable", {}, {});
+    
+    string $layerRoot = getSelected($g_LayerRootDropDown);
+    int $sequenceCount = MyImmerseGetNextValidSequence($layerRoot, 0);
+    //Need to make this work and then I can fix invalid 
+
+    int $sequenceIndex = 0;
+
+    float $latestEndTime = 0;
+
+    for($sequenceIndex; $sequenceIndex < $sequenceCount; $sequenceIndex++)
+    {
+        if(`getAttr ($layerRoot + ".Ni_Sequence[" + $sequenceIndex + "].Ni_Sequence_Valid")`)
+        {
+            float $endTime = `getAttr ($layerRoot + ".Ni_Sequence[" + $sequenceIndex + "].Ni_Sequence_End_Time")`;
+            //find the latested end time
+            $latestEndTime = `max $latestEndTime $endTime`;
+        }
+    }
+
+    int $nextAvailableStartTime = scaleTimeForDisplay($latestEndTime) + 1;
+
+    Cr8zReturnOutputter("GetFirstStartTimeAvailable", "$nextAvailableStartTime", "" + $nextAvailableStartTime);
+
+    return $nextAvailableStartTime;
+}
+
+global proc int GetFirstEndTimeAvailable()
+{
+    return (GetFirstStartTimeAvailable() + 1);
+}
+
+global proc startTimeChange()
+{
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	global string $g_Window;
+	
+	Cr8zFunctionOutputter("startTimeChange", {}, {});
+	
+	int $startTime = `intField -q -v ($g_Window + "|MainLayout|seqTimeColumn|seqStartRowLayout|startTimeIntField")`;
+    int $endTime = `intField -q -v ($g_Window + "|MainLayout|seqTimeColumn|seqEndRowLayout|endTimeIntField")`;
+
+    if($startTime >= $endTime)
+    { 
+        $endTime = $startTime + 1;
+        intField -e -v $endTime ($g_Window + "|MainLayout|seqTimeColumn|seqEndRowLayout|endTimeIntField");
+    }
+
+	
+    if(!currentSequenceIsOverlapping($startTime, $endTime))
+    {
+	    string $layerRoot = getSelected($g_LayerRootDropDown);
+	
+	    int $selectedMenuIndex = getCurrentAttrPhysicalIndex("Sequence");
+	
+	    string $startTimeAttr = $layerRoot + ".Ni_Sequence[" + $selectedMenuIndex + "].Ni_Sequence_Start_Time";
+        float $scaledStartTime = scaleForTimeStorage($startTime);
+        setAttr $startTimeAttr $scaledStartTime;
+
+        string $endTimeAttr = $layerRoot + ".Ni_Sequence[" + $selectedMenuIndex + "].Ni_Sequence_End_Time";
+        float $scaledEndTime = scaleForTimeStorage($endTime);
+        setAttr $endTimeAttr $scaledEndTime;
+    }
+    else
+    {
+        catch(`error "New end time causes sequence to overlap with another sequence"`);
+        int $firstAvailableTime = GetFirstStartTimeAvailable();
+        intField -e -v $firstAvailableTime ($g_Window + "|MainLayout|seqTimeColumn|seqStartRowLayout|startTimeIntField");
+        intField -e -v ($firstAvailableTime + 1) ($g_Window + "|MainLayout|seqTimeColumn|seqEndRowLayout|endTimeIntField");
+    }
+	Cr8zReturnOutputter("startTimeChange", "", "");
+}
+
+global proc endTimeChange()
+{
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	global string $g_Window;
+	
+	Cr8zFunctionOutputter("endTimeChange", {}, {});
+	
+    startTimeChange();
+
+	Cr8zReturnOutputter("endTimeChange", "", "");
+}
+
+global proc loopingChanged()
+{
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	
+	Cr8zFunctionOutputter("loopingChanged", {}, {});
+	
+	int $looping = `checkBoxGrp -q -v1 loopingCheckBox`;
+	
+	string $layerRoot = getSelected($g_LayerRootDropDown);
+	
+	int $selectedMenuIndex = getCurrentAttrPhysicalIndex("Sequence");
+	
+	string $attr = $layerRoot + ".Ni_Sequence[" + $selectedMenuIndex + "].Ni_Sequence_Looping"; 
+	
+	setAttr $attr $looping;
+	
+	Cr8zReturnOutputter("loopingChanged", "", "");
+}
+global proc deleteSequence()
+{
+   	global string $g_SequenceDropDown;
+    global string $g_LayerRootDropDown;
+
+    Cr8zFunctionOutputter("deleteSequence", {}, {});
+
+    string $layerRoot = getSelected($g_LayerRootDropDown);
+    string $sequence = getSelected($g_SequenceDropDown);
+
+    string $result;
+    
+    if(size(getValidSequenceNames($layerRoot)) > 1)
+    {
+        $result= `confirmDialog 
+
+				-title "Deletion Confirmation"
+
+                -message ("Are you sure that you want to delete" +
+                         " the " + $sequence + " sequence?")
+
+				-button "OK" -button "Cancel"
+
+				-defaultButton "Cancel" -cancelButton "Cancel"
+
+				-dismissString "Cancel"`;
+    }
+    else
+    {
+        $result= `confirmDialog 
+
+				-title "Deletion Confirmation"
+
+                -message ("Are you sure that you want to delete" +
+                         " the " + $sequence + " sequence?\nDeleting this last sequence will also delete the Layer Root.")
+
+				-button "OK" -button "Cancel"
+
+				-defaultButton "Cancel" -cancelButton "Cancel"
+
+				-dismissString "Cancel"`;
+    }
+ 												
+	if ($result == "OK") 
+	{
+        string $sequenceAttr = ConstructLayerAndAttr($g_SequenceDropDown, 
+            "Sequence", "Ni_Sequence_Valid");
+
+        setAttr $sequenceAttr false;
+
+        resetLayerRoots("");
+ 	} 
+
+    Cr8zReturnOutputter("deleteSequence", "", "");
+}
+
+
+global proc makeTimeRangeFit()
+{
+    //I need to either make this the norm or get rid of this
+    global string $g_Window;
+
+    //get the time range for the sequence and set the range slider
+
+    int $startTime = `intField -q -v startTimeIntField`;
+    int $endTime = `intField -q -v endTimeIntField`;
+
+    playbackOptions -min $startTime -max $endTime;
+    currentTime $startTime;
+    //for some reason it starts playing?
+    play -state false;
+}
+
+global proc int MyImmerseGetNextValidSequence (string $sObject, 
+    int $iSequenceNumber) 
+{
+    //go through and try to find an invalid sequence number
+    //or add a new sequence to the end
+    int $sequenceCount = `getAttr -s ($sObject + ".Ni_Sequence")`;
+    int $sequenceIndex = $iSequenceNumber;
+    for($sequenceIndex; $sequenceIndex < $sequenceCount; $sequenceIndex++)
+    {
+        string $objectAndAttr = $sObject + ".Ni_Sequence[" + $sequenceIndex + "].Ni_Sequence_Valid";
+        if(`getAttr $objectAndAttr` == false)
+        {
+            break;
+        }
+    }
+
+    return $sequenceIndex;
+}
+
+global proc GamebryoCreateSequence (string $sObject, string $sequenceName) 
+{
+    Cr8zFunctionOutputter("GamebryoCreateSequence", {"$sObject", "$sequenceName"}, {"" + $sObject, "" + $sequenceName});
+    
+    MyImmerseCreateSequenceAttribute($sObject);
+
+    // Find the Next ValidSequenceNumber
+    int $iSequenceNumber = -1;
+    
+    // Look for the first available whole
+    //while(MyImmerseGetNextValidSequence($sObject, $iSequenceNumber) == ($iSequenceNumber + 1))
+    //{
+    //    $iSequenceNumber++;    
+    //}
+    
+    $iSequenceNumber = MyImmerseGetNextValidSequence($sObject, 0);
+
+    float $unscaledStartTime = GetFirstStartTimeAvailable();
+    float $unscaledEndTime = GetFirstEndTimeAvailable();
+
+    float $startTime = scaleForTimeStorage($unscaledStartTime);
+    float $endTime = scaleForTimeStorage($unscaledEndTime);
+
+    // Create a New Sequence with the defaults
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Valid") true;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Name") -type "string" $sequenceName;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Start_Time") $startTime;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_End_Time") $endTime;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Looping") false;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Rot") false;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_X") false;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_Y") false;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_Z") false;
+    
+    Cr8zReturnOutputter("GamebryoCreateSequence", "", "");
+}
+
+global proc MyImmerseCreateSequenceAttribute (string $sObject) 
+{
+    Cr8zFunctionOutputter("MyImmerseCreateSequenceAttribute", {"$sObject"}, {"" + $sObject});
+    
+    if(`attributeExists Ni_Sequence $sObject` == false)
+    {
+        addAttr -ln Ni_Sequence -nc 9 -at compound -m -im true $sObject;
+        addAttr -ln Ni_Sequence_Valid -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Name -dt "string" -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Start_Time -at "float" -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_End_Time -at "float" -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Looping -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Rot -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Tran_X -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Tran_Y -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Tran_Z -at bool -p Ni_Sequence $sObject;
+
+        setAttr ($sObject + ".Ni_Sequence[0].Ni_Sequence_Valid") false;
+        
+    }
+    
+    Cr8zReturnOutputter("MyImmerseCreateSequenceAttribute", "", "");
+}
+
+//SEQUENCE FUNCTIONS END
+
+//ACCUMULATION ROOT FUNCTIONS BEGIN
+global proc accumulationRootChanged()
+{
+     resetSequences("");
+}
+global proc updateAccumulationRoot(string $selectedCharacter)
+{
+    Cr8zFunctionOutputter("updateAccumulationRoot", {"$selectedCharacter"}, {$selectedCharacter});
+    //Find the Sequence highest in the hierarchy that 
+    //has accumulation
+
+    global string $g_LayerRootDropDown;
+    global string $g_CharacterDropDown;
+
+    string $accumulationRoot = "";
+
+    //go through the layer
+    if($selectedCharacter != "")
+    {
+        string $characterRoot = getSelected($g_CharacterDropDown);
+
+        string $childrenAndParent[] = `listRelatives -allDescendents -f $characterRoot`;
+        $childrenAndParent[size($childrenAndParent)] = $characterRoot;
+        string $roots[] = findAllWithAttribute("Ni_Sequence_Animation_Accumulation", $childrenAndParent);
+
+        if(size($roots) > 1)
+        {
+            catch(`error "More than one object is set as the Accumulation Root! Delete Duplicates."`);
+            setAccumulationRootEnableState(false);
+            $accumulationRoot = "Resolve Duplicates!";
+        }
+        else if(size($roots) == 1)
+        {
+            setAccumulationRootEnableState(true);
+            $accumulationRoot = $roots[0];
+        }
+    }
+    else
+    {
+        setAccumulationRootEnableState(false);
+    }
+
+    textFieldGrp -e -text $accumulationRoot AccumulationRootTextField;
+    
+    accumulationRootChanged();
+
+    Cr8zReturnOutputter("updateAccumulationRoot", "", "");
+}
+
+global proc setAccumulationRoot()
+{
+    global string $g_LayerRootDropDown;
+    global string $g_CharacterDropDown;
+ 
+    Cr8zFunctionOutputter("setAccumulationRoot", {}, {});
+
+    string $selectionList[] = `ls -sl -l`;
+
+    if(size($selectionList) == 1)
+    {
+        if(`attributeExists "Ni_Sequence_Animation_Accumulation" $selectionList[0]`)
+        {
+            warning ($selectionList[0] + " is already an Accumulation Root");
+            setAccumulationRootEnableState(true);
+        }
+           
+    }
+    else if(size($selectionList) == 0)
+    {
+        error "No objects selected";
+        return;
+    }
+    else
+    {
+        error "Multiple objects selected";
+        return;
+    }
+
+    string $selected = $selectionList[0];
+
+    //if there were old accumulation roots get rid of them
+    string $characterRoot = getSelected($g_CharacterDropDown);
+
+    makeAccumulationRoot($characterRoot, $selected);
+
+    Cr8zReturnOutputter("setAccumulationRoot", "", "");	
+}
+
+global proc makeAccumulationRoot(string $characterRoot, string $object)
+{
+    Cr8zFunctionOutputter("makeAccumulationRoot", {"$characterRoot", "$object"}, {$characterRoot, $object});
+
+    string $childrenAndParent[] = `listRelatives -allDescendents -f $characterRoot`;
+    $childrenAndParent[size($childrenAndParent)] = longNameOf($characterRoot);
+
+    int $found = false;
+    string $childInHierarchy = "";
+
+    for($childInHierarchy in $childrenAndParent)
+    {
+        if(longNameOf($childInHierarchy) == longNameOf($object))
+        {
+            $found = true;
+            break;
+        }
+    }
+
+    if($found != true)
+    {
+        error "Accumulation Root is not a child of the Character Root's hierarchy";
+    }
+
+    string $roots[] = findAllWithAttribute("Ni_Sequence_Animation_Accumulation", $childrenAndParent);
+   
+    string $accumRoot;
+    for($accumRoot in $roots)
+    {
+        if(`attributeExists "Ni_Sequence_Animation_Accumulation" $accumRoot`)
+        {
+            deleteAttr ($accumRoot + ".Ni_Sequence_Animation_Accumulation");
+        }
+    }
+
+    if(!`attributeExists "Ni_Sequence_Animation_Accumulation" $object`)
+    {
+        addAttr -ln Ni_Sequence_Animation_Accumulation -dv 1 -at bool $object;
+    }
+
+    accumulationRootChanged();
+
+    setAccumulationRootEnableState(true);
+    SetEnableStateOfSequenceAccumulation(true);
+
+    textFieldGrp -e -text $object AccumulationRootTextField;
+
+    Cr8zReturnOutputter("makeAccumulationRoot", "", "");	
+}
+
+global proc setAccumulationRootEnableState(int $isOn)
+{
+    if($isOn)
+    {
+        button -e -en 1 SelectAccumulationRootButton;
+    }
+    else
+    {
+        button -e -en 0 SelectAccumulationRootButton;
+    }
+}
+
+global proc int getAccumulationRootEnableState()
+{
+    return `button -q -en SelectAccumulationRootButton`;
+}
+
+global proc accumulateRotationChanged()
+{
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	
+	Cr8zFunctionOutputter("accumulateRotationChanged", {}, {});
+	
+	int $accumulateRotation = `checkBoxGrp -q -v1 AccumulateRotationCheckBox`;
+	
+	string $layerRoot = getSelected($g_LayerRootDropDown);
+	
+    int $selectedMenuIndex = getCurrentAttrPhysicalIndex("Sequence");
+	
+	string $attr = $layerRoot + ".Ni_Sequence[" + $selectedMenuIndex + 
+        "].Ni_Sequence_Rot"; 
+	
+	setAttr $attr $accumulateRotation;
+	
+	Cr8zReturnOutputter("accumulateRotationChanged", "", "");
+}
+
+global proc accumulateTranslateChanged()
+{
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	
+	Cr8zFunctionOutputter("accumulateTranslateChanged", {}, {});
+	
+	int $accumulateTransX = `checkBoxGrp -q -v1 AccumulateTranslateCheckBox`;
+	int $accumulateTransY = `checkBoxGrp -q -v2 AccumulateTranslateCheckBox`;
+	int $accumulateTransZ = `checkBoxGrp -q -v3 AccumulateTranslateCheckBox`;
+	
+	string $layerRoot = getSelected($g_LayerRootDropDown);
+	
+	int $selectedMenuIndex = getCurrentAttrPhysicalIndex("Sequence");
+	
+	string $attrX = $layerRoot + ".Ni_Sequence[" + $selectedMenuIndex + "].Ni_Sequence_Tran_X";
+	setAttr $attrX $accumulateTransX;
+	
+	string $attrY = $layerRoot + ".Ni_Sequence[" + $selectedMenuIndex + "].Ni_Sequence_Tran_Y";
+	setAttr $attrY $accumulateTransY;
+	
+	string $attrZ = $layerRoot + ".Ni_Sequence[" + $selectedMenuIndex + "].Ni_Sequence_Tran_Z"; 
+	setAttr $attrZ $accumulateTransZ;
+	
+	Cr8zReturnOutputter("accumulateTranslateChanged", "", "");
+}
+
+
+global proc selectAccumulationRoot()
+{
+    //get the selected character and select it
+    string $accumulationRoot = `textFieldGrp -q -text AccumulationRootTextField`;
+    select $accumulationRoot;
+}
+//ACCUMULATION ROOT FUNCTIONS END
+
+//LAYER ROOT FUNCTIONS START
+global proc layerChanged()
+{
+	global string $g_LayerRootDropDown;
+	
+	Cr8zFunctionOutputter("layerChanged", {}, {});
+
+	updateSequence(getSelected($g_LayerRootDropDown), "");
+	
+	Cr8zReturnOutputter("layerChanged", "", "");	
+}
+
+global proc int getEnableStateOfLayerRoots()
+{
+    Cr8zFunctionOutputter("getEnableStateOfLayerRoots", {}, {});
+    global string $g_CharacterDropDown;
+
+    int $result = `optionMenu -q -en $g_CharacterDropDown`;
+	
+    Cr8zReturnOutputter("getEnableStateOfLayerRoots", "$result", "" + $result);
+	return $result;
+}
+
+global proc setEnableStateOfLayerRoots(int $isOn)
+{
+    Cr8zFunctionOutputter("setEnableStateOfLayerRoots", {}, {});
+    global string $g_LayerRootDropDown;
+	
+	if($isOn == true)
+	{
+        optionMenu -e -en 1 $g_LayerRootDropDown;
+		
+        //Accumulation Roots can be made
+        button -e -en 1 SetAccumulationRootButton;
+
+		//Sequence Buttons
+		button -e -en 1 AddSequenceButton;
+		button -e -en 1 DeleteSequenceButton;
+		button -e -en 1 EditSequenceButton;
+		
+		//Morph Tag Buttons
+		button -e -en 1 AddMorphTagButton;
+		button -e -en 1 DeleteMorphTagButton;
+		button -e -en 1 EditMorphTagButton;
+		
+		//Text Key Buttons
+		button -e -en 1 AddTextKeyButton;
+		button -e -en 1 DeleteTextKeyButton;
+		button -e -en 1 EditTextKeyButton;
+	}
+	else
+	{
+		optionMenu -e -en 0 $g_LayerRootDropDown;
+		
+        //No Accumulation Root can be set
+        button -e -en 0 SetAccumulationRootButton;
+
+		//Sequence Buttons
+		button -e -en 0 AddSequenceButton;
+		button -e -en 0 DeleteSequenceButton;
+		button -e -en 0 EditSequenceButton;
+		
+		//Morph Tag Buttons
+		button -e -en 0 AddMorphTagButton;
+		button -e -en 0 DeleteMorphTagButton;
+		button -e -en 0 EditMorphTagButton;
+		
+		//Text Key Buttons
+		button -e -en 0 AddTextKeyButton;
+		button -e -en 0 DeleteTextKeyButton;
+		button -e -en 0 EditTextKeyButton;
+        
+	}
+    Cr8zReturnOutputter("setEnableStateOfLayerRoots", "", "");
+}
+
+global proc updateLayerRoots(string $selectedCharacter, string $layerName)
+{
+	global string $g_LayerRootDropDown;
+	
+	Cr8zFunctionOutputter("updateLayerRoots", {"$selectedCharacter"}, {"" + $selectedCharacter});
+	
+	string $layerNames[] = findAllLayerRoots($selectedCharacter);
+	
+    if(size($layerNames) == 0)
+    {
+        //BUGFIX for some reason the first time through the command getAttr -s ATTR does return the correct value.
+        //The second time might work
+        $layerNames = findAllLayerRoots($selectedCharacter);
+    }
+
+	if(size($layerNames) != 0)
+	{
+		setEnableStateOfLayerRoots(true);
+	}
+	else
+	{
+		setEnableStateOfLayerRoots(false);
+	}
+    
+    //This order is important
+    //first we add the new options
+	updateDropDown($g_LayerRootDropDown, $layerNames);
+	
+    //Then we pick the currently selected one
+    if($layerName != "")
+    {
+        setToOption($g_LayerRootDropDown, $layerName);
+    }
+
+    //Than we update all the dependent comboboxes
+	layerChanged();
+	
+	Cr8zReturnOutputter("updateLayerRoots", "", "");
+}
+
+global proc resetLayerRoots(string $layerName)
+{
+	global string $g_CharacterDropDown;
+	
+	Cr8zFunctionOutputter("resetLayerRoots", {}, {});
+	
+	string $selectedCharacter = getSelected($g_CharacterDropDown);
+	
+	updateLayerRoots($selectedCharacter, $layerName);
+	
+	Cr8zReturnOutputter("resetLayerRoots", "", "");
+}
+
+global proc addLayerRoot()
+{
+	global string $g_LayerRootDropDown;
+
+    Cr8zFunctionOutputter("addLayerRoot", {}, {});
+	//This adds a dummy sequence to the selected object
+    //
+    string $selected[] = `ls -sl`;
+
+    if(size($selected) == 0)
+    {
+        error "No objects selected";
+        return;
+    }
+    else if(size($selected) > 1)
+    {
+        error "Multiple objects selected";
+        return;
+    }
+
+    if(!isLayerRoot($selected[0]))
+    {
+        MyImmerseCreateSequenceAttribute($selected[0]);
+
+        addSequencePrompt($selected[0]);
+
+	    resetLayerRoots($selected[0]);
+
+        //get the index for the newly added name and set it
+    }
+    else
+    {
+        error ($selected[0] + " is already a Layer Root");
+    }
+	
+	Cr8zReturnOutputter("addLayerRoot", "", "");
+}
+global proc editLayerRoot()
+{
+	Cr8zFunctionOutputter("editLayerRoot", {}, {});
+	//This what the layerRoot
+	resetLayerRoot("");
+	
+	Cr8zReturnOutputter("editLayerRoot", "", "");
+}
+
+global proc deleteLayerRoot()
+{
+
+
+    Cr8zFunctionOutputter("deleteLayerRoot", {}, {});
+    //This does more than just delete an attribute
+    //it deletes all of the sequences and morph keys assiocated with
+    //layer root
+
+    //prompt user
+	
+	string $result = `confirmDialog 
+
+					-title "Deletion Confirmation"
+
+                    -message ("Are you sure that you want to delete the" +
+                             "layer root? Doing so will delete all " +
+                             "sequence, morph tags, and text keys " +
+                             "under the layer root in the hierarchy.")
+
+					-button "OK" -button "Cancel"
+
+					-defaultButton "Cancel" -cancelButton "Cancel"
+
+					-dismissString "Cancel"`;
+ 												
+	if ($result == "OK") 
+	{
+        deleteUnderLayerRoot();
+
+        //This should reset everything I deleted
+        resetLayerRoots("");
+    }
+ 	
+ 	Cr8zReturnOutputter("deleteLayerRoot", "", "");
+}
+
+global proc deleteUnderLayerRoot()
+{
+    global string $g_SequenceDropDown;
+    global string $g_MorphTagsDropDown;
+    global string $g_TextKeysDropDown;
+
+    deleteAll("MorphTag", $g_MorphTagsDropDown);
+    deleteAll("TextKey", $g_TextKeysDropDown);
+    deleteAll("Sequence", $g_SequenceDropDown);
+
+    
+}
+global proc deleteAllLayerRoots()
+{
+    global string $g_LayerRootDropDown;
+
+    int $layerCount = `optionMenu -q -ni $g_LayerRootDropDown`;
+
+    int $layerIndex = 0;
+    for($layerIndex; $layerIndex < $layerCount; $layerIndex++)
+    {
+        optionMenu -e -select ($layerIndex + 1) $g_LayerRootDropDown;
+
+        deleteUnderLayerRoot();
+    }
+}
+
+global proc selectLayerRoot()
+{
+    global string $g_LayerRootDropDown;
+    //get the selected character and select it
+    string $layerRoot = getSelected($g_LayerRootDropDown);
+    select $layerRoot;
+}
+global proc int isLayerRoot(string $potentialLayerRoot)
+{
+    int $validSequenceSize = size(getValidSequenceNames($potentialLayerRoot));
+
+    if($validSequenceSize > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+//LAYER ROOT FUNCTIONS END
+
+//CHARACTER FUNCTIONS START
+global proc characterChanged()
+{
+	global string $g_CharacterDropDown;
+	
+	Cr8zFunctionOutputter("characterChanged", {}, {});
+	
+	string $selectedCharacter = getSelected($g_CharacterDropDown);
+	
+	//Update dependent drop downs
+	
+    updateAccumulationRoot($selectedCharacter);
+	updateLayerRoots($selectedCharacter, "");
+    
+
+	Cr8zReturnOutputter("characterChanged", "", "");
+}
+
+global proc int getEnableStateOfCharacters()
+{
+    global string $g_CharacterDropDown;
+
+    int $result = `optionMenu -q -en $g_CharacterDropDown`;
+	
+	return $result;
+}
+global proc setEnableStateOfCharacters(int $isOn)
+{
+    Cr8zFunctionOutputter("setEnableStateOfCharacters", {"$isOn"}, {"" + $isOn});
+    global string $g_CharacterDropDown;
+    global string $g_Window;
+    
+    if($isOn)
+    {
+        optionMenu -e -en 1 $g_CharacterDropDown;
+
+        button -e -en 1 ReloadButton;
+        button -e -en 1 DeleteCharacterRootButton;
+        button -e -en 1 SelectCharacterButton;
+        
+        //Sequence Buttons
+		button -e -en 1 AddLayerRootButton;
+		button -e -en 1 DeleteLayerRootButton;
+        button -e -en 1 SelectLayerButton;
+    }
+    else
+    {
+        optionMenu -e -en 0 $g_CharacterDropDown;
+
+        button -e -en 0 ReloadButton;
+        button -e -en 0 DeleteCharacterRootButton;
+        button -e -en 0 SelectCharacterButton;
+
+        //Sequence Buttons
+		button -e -en 0 AddLayerRootButton;
+		button -e -en 0 DeleteLayerRootButton;
+        button -e -en 0 SelectLayerButton;
+    }
+
+    Cr8zReturnOutputter("setEnableStateOfCharacters", "", "");
+}
+global proc updateCharacterDropDown(string $sequenceName)
+{
+	global string $g_CharacterDropDown;
+	
+	Cr8zFunctionOutputter("updateCharacterDropDown", {}, {});
+	
+	string $characterNames[] = findAllCharacters();
+	
+	if(size($characterNames) != 0)
+	{
+		setEnableStateOfCharacters(true);
+	}
+	else
+	{
+		setEnableStateOfCharacters(false);
+	}
+	
+	updateDropDown($g_CharacterDropDown, $characterNames);
+	
+    if($sequenceName != "")
+    {
+        setToOption($g_CharacterDropDown, $sequenceName);
+    }
+
+	characterChanged();
+	
+	Cr8zReturnOutputter("updateCharacterDropDown", "", "");
+}
+
+global proc resetCharacterRoot(string $sequenceName)
+{
+	Cr8zFunctionOutputter("resetCharacterRoot", {}, {});
+	updateCharacterDropDown($sequenceName);
+	Cr8zReturnOutputter("resetCharacterRoot", "", "");
+}
+
+global proc addCharacterRoot()
+{
+	global string $g_CharacterDropDown;
+    
+    Cr8zFunctionOutputter("addCharacterRoot", {}, {});
+	//This adds the character Attribute to the node.
+    string $selected[] = `ls -sl`;
+
+    if(size($selected) == 1)
+    {
+        if(`attributeExists "Ni_CharacterRoot" $selected[0]`)
+        {
+            error ($selected[0] + " is already a Character Root");
+            return;
+        }
+           
+        //make it the character root
+        addAttr -ln "Ni_CharacterRoot" $selected[0];
+
+        //make it a layer root
+        addLayerRoot();
+
+        //make it the accumulation root
+        makeAccumulationRoot($selected[0], longNameOf($selected[0]));
+
+
+    }
+    else if(size($selected) == 0)
+    {
+        error "No objects selected";
+        return;
+    }
+    else
+    {
+        error "Multiple objects selected";
+        return;
+    }
+
+	resetCharacterRoot($selected[0]);
+	
+	Cr8zReturnOutputter("addCharacterRoot", "", "");
+	
+}
+global proc editCharacterRoot()
+{
+	Cr8zFunctionOutputter("editCharacterRoot", {}, {});
+	//This makes the current Character the parent of the Sequences
+	//This might not be possible
+	resetCharacterRoot("");
+	
+	Cr8zReturnOutputter("editCharacterRoot", "", "");
+}
+
+global proc deleteCharacterRoot()
+{
+    global string $g_CharacterDropDown;
+
+    Cr8zFunctionOutputter("deleteCharacterRoot", {}, {});
+    //This does more than just delete an attribute
+    //it deletes all of the sequences and morph keys assiocated with
+    //layer root
+
+    //prompt user
+	
+	string $result = `confirmDialog 
+
+					-title "Deletion Confirmation"
+
+                    -message ("Are you sure that you want to delete the \n" + 
+                             "character root? Doing so will delete all layer \n" +
+                             "roots, sequences, morph tags, and text keys \n" + 
+                             "under the character root in the hierarchy.\n" +
+                             "This operation can NOT be undone.")
+
+					-button "OK" -button "Cancel"
+
+					-defaultButton "Cancel" -cancelButton "Cancel"
+
+					-dismissString "Cancel"`;
+ 												
+	if ($result == "OK") 
+	{
+        deleteAllLayerRoots();
+
+    	string $character = getSelected($g_CharacterDropDown);
+
+        //Totally wierd workaround to funny maya thing
+        //Maya has trouble deleting compound attributes and 
+        //adding them back if they are not first renamed.
+        //renameAttr ($character + ".Ni_CharacterRoot") "deleteme";
+        deleteAttr ($character + ".Ni_CharacterRoot");
+
+        resetCharacterRoot("");
+    }
+ 	
+ 	Cr8zReturnOutputter("deleteCharacterRoot", "", "");
+
+}
+
+
+global proc selectCharacter()
+{
+    global string $g_CharacterDropDown;
+    //get the selected character and select it
+    string $character = getSelected($g_CharacterDropDown);
+    select $character;
+}
+//CHARACTER FUNCTIONS END
+
+
+
+global proc reload()
+{
+    resetCharacterRoot("");
+}
+
+global proc MyImmerseSequenceEditor()
+{
+	global string $g_Window;
+	global string $g_CharacterDropDown;
+	global string $g_LayerRootDropDown;
+	global string $g_SequenceDropDown;
+	global string $g_MorphTagsDropDown;
+	global string $g_TextKeysDropDown;
+	
+	Cr8zFunctionOutputter("MyImmerseSequenceEditor", {}, {});
+	
+	$g_Window = `window -title "Sequence Editor"
+
+ 		-iconName "Sequence Editor"
+
+ 		-widthHeight 660 330`;
+ 		
+		columnLayout -adjustableColumn 1 MainLayout;
+ 			rowLayout -adjustableColumn 1 -numberOfColumns 5
+ 					  -columnAttach5 "both" "both" "both" "both" "both" 
+ 					  -columnAlign5 "center" "center" "center" "center" "center";
+ 				$g_CharacterDropDown = `optionMenu -l "Character Roots" -cc characterChanged`;
+                button -label "Reload" -c reload ReloadButton;
+                button -label "Add Selected" -c addCharacterRoot AddCharacterRootButton;
+                button -label "Delete" -c deleteCharacterRoot DeleteCharacterRootButton;
+                button -label "Select" -c selectCharacter SelectCharacterButton;
+			setParent..;
+			
+			separator;	
+
+            rowLayout -adjustableColumn 1 -numberOfColumns 3
+                      -columnAttach3 "left" "both" "both" 
+                      -columnAlign3 "left" "center" "center";
+                      textFieldGrp  -editable false
+                                    -columnAttach 1 "left" 0
+                                    -columnAlign 1 "left"
+                                    -label "Accumulation Root"
+                                    -text ""
+                                    AccumulationRootTextField;
+                      button -label "Add Selected" -c setAccumulationRoot SetAccumulationRootButton;
+                      button -label "Select" -c selectAccumulationRoot SelectAccumulationRootButton;
+            setParent..;
+
+            separator;	
+		
+			rowLayout	-adjustableColumn 1 -numberOfColumns 4
+						-columnAttach4 "both" "both" "both" "both"
+						-columnAlign4 "center" "center" "center" "center" LayerRootColumnLayout;
+				$g_LayerRootDropDown = `optionMenu -l "Layer Roots" -cc layerChanged`;
+				button -label "Add Selected" -c addLayerRoot AddLayerRootButton;
+				button -label "Delete" -c deleteLayerRoot DeleteLayerRootButton;
+                button -label "Select" -c selectLayerRoot SelectLayerButton;
+			setParent..;
+
+
+               
+			
+			separator;	
+		
+		//Sequence Stuff
+	
+			rowLayout -adjustableColumn 1 -numberOfColumns 4 
+							-columnAttach4 "both" "both" "both" "both"
+							-columnAlign4 "center" "center" "center" "center";
+				$g_SequenceDropDown = `optionMenu -label "Sequences"  -cc sequenceChanged`;
+				button -label "Add" -c addSequence AddSequenceButton;
+				button -label "Rename" -c editSequence EditSequenceButton;
+				button -label "Delete" -c deleteSequence DeleteSequenceButton;
+			setParent..;
+			
+			columnLayout seqTimeColumn;
+			
+				rowLayout -numberOfColumns 2 seqStartRowLayout;
+					text -label "Start Time";
+					intField -cc startTimeChange -ec startTimeChange startTimeIntField;
+				setParent..;
+				
+				rowLayout -numberOfColumns 3 seqEndRowLayout;
+					text -label "End Time";
+                    intField -cc endTimeChange -ec endTimeChange endTimeIntField;
+                    button -label "Make Time Range Fit" -c makeTimeRangeFit MakeTimeRangeFitButton;
+				setParent..;
+				
+			setParent..;
+			
+			
+			
+			checkBoxGrp	-numberOfCheckBoxes 1  
+								-label "Looping" 
+								-cc loopingChanged 
+								loopingCheckBox;
+			
+			checkBoxGrp	-numberOfCheckBoxes 1 
+								-label "Accumulate Rotation" 
+								-cc accumulateRotationChanged
+								AccumulateRotationCheckBox;
+
+			checkBoxGrp	-numberOfCheckBoxes 3 
+								-label "Accumulate Translate" 
+								-label1 "X" -label2 "Y" -label3 "Z" 
+								-cc accumulateTranslateChanged
+								AccumulateTranslateCheckBox;
+				
+			separator;	
+			
+			rowLayout -adjustableColumn 1 -numberOfColumns 4 
+							-columnAttach4 "both" "both" "both" "both"
+							-columnAlign4 "center" "center" "center" "center";
+				$g_MorphTagsDropDown = `optionMenu -l "Morph Tags" -cc morphTagChanged`;
+				button -label "Add" -c addMorphTag AddMorphTagButton;
+				button -label "Rename" -c editMorphTag EditMorphTagButton;
+				button -label "Delete" -c deleteMorphTag DeleteMorphTagButton;
+			setParent..;
+			
+            rowLayout -adjustableColumn 1 -numberOfColumns 2
+                 -columnAttach2 "both" "both"
+                -columnAlign2 "center" "center";
+			    intFieldGrp -label "Frame" -cc morphTagFrameChanged morphTagFrameIntField;
+                button -label "Jump To Time" -c jumpToMorphTagTime JumpToMorphTagTimeButton;
+			setParent ..;
+			
+			separator;	
+
+			rowLayout -adjustableColumn 1 -numberOfColumns 4 
+							-columnAttach4 "both" "both" "both" "both"
+							-columnAlign4 "center" "center" "center" "center";		
+				$g_TextKeysDropDown = `optionMenu -l "Text Keys" -cc textKeyChanged`;
+				button -label "Add" -c addTextKey AddTextKeyButton;
+				button -label "Rename" -c editTextKey EditTextKeyButton;
+				button -label "Delete" -c deleteTextKey DeleteTextKeyButton;
+			setParent ..;
+			
+            rowLayout -adjustableColumn 1 -numberOfColumns 2
+                -columnAttach2 "both" "both"
+                -columnAlign2 "center" "center";
+                intFieldGrp -label "Frame" -cc textKeyFrameChanged textKeyFrameIntField;
+                button -label "Jump To Time" -c jumpToTextKeyTime JumpToTextKeyTimeButton;
+			setParent ..;
+
+			separator;	
+
+		setParent..;
+		
+		
+ 	showWindow $g_Window;
+
+    updateCharacterDropDown("");
+ 	
+ 	Cr8zReturnOutputter("MyImmerseSequenceEditor", "", "");
+}

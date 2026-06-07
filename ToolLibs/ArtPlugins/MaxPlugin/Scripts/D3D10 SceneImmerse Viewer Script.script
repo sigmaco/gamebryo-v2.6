@@ -1,0 +1,8 @@
+Version: 1
+Script ("D3D10 SceneImmerse Viewer Script","Viewer")
+{
+	Plugin ("NiSceneImmerseViewerPlugin","NiD3D10SceneImmerseViewer","1.0","Viewer")
+	{
+			Parameter ("NiPluginToolkit Renderer","3");
+	}
+}

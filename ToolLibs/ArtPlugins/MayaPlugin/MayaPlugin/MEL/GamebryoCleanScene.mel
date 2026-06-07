@@ -1,0 +1,52 @@
+//---------------------------------------------------------------------------
+global proc GamebryoCleanSkins()
+{
+    string $skins[] = `ls -type mesh`;
+    for ($skin in $skins)
+    {
+        string $skinClusters[] = `listConnections -type skinCluster $skin`;
+
+        if (size($skinClusters) > 0)
+        {
+            string $infObj[] = `skinCluster -q -inf $skin`;
+            select -r $infObj;
+            string $bind[] = `dagPose -q -bindPose`;
+            dagPose -restore -global $bind[0];
+            dagPose -restore $bind[0];
+            dagPose -reset $bind[0] $infObj;
+            select -cl;
+        }
+    }
+}
+//---------------------------------------------------------------------------
+global proc GamebryoCleanTransforms()
+{
+    string $meshes[] = `ls -type mesh`;
+    for ($mesh in $meshes)
+    {
+        string $meshParent[] = `listRelatives -p $mesh`;
+        setAttr -lock off ($meshParent[0] + ".translateX");
+        setAttr -lock off ($meshParent[0] + ".translateY");
+        setAttr -lock off ($meshParent[0] + ".translateZ");
+        setAttr -lock off ($meshParent[0] + ".rotateX");
+        setAttr -lock off ($meshParent[0] + ".rotateY");
+        setAttr -lock off ($meshParent[0] + ".rotateZ");
+        setAttr -lock off ($meshParent[0] + ".scaleX");
+        setAttr -lock off ($meshParent[0] + ".scaleY");
+        setAttr -lock off ($meshParent[0] + ".scaleZ");
+    }
+
+    for ($mesh in $meshes)
+    {
+        string $meshParent[] = `listRelatives -p $mesh`;
+        makeIdentity -apply true $meshParent[0];
+    }
+}
+//---------------------------------------------------------------------------
+global proc GamebryoCleanScene()
+{
+    bakePartialHistory -prePostDeformers -all;
+    GamebryoCleanSkins();
+    GamebryoCleanTransforms();
+}
+//---------------------------------------------------------------------------

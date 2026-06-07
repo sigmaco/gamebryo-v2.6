@@ -1,0 +1,92 @@
+<project>
+  <current_configuration value="Debug" />
+  <configurations>
+    <configuration name="Debug">
+      <settings category="Project\Direct3D\HLSL Compiler">
+        <CompilerOptions value="" />
+      </settings>
+      <settings category="Project\OpenGL\CgCompiler">
+        <CompilerOptions value="" />
+      </settings>
+      <settings category="Project\PLAYSTATION®3\PS3™ Cg Compiler">
+        <FragmentShaderCompilerOptions value="" />
+        <VertexShaderCompilerOptions value="" />
+        <CompilerProfile value="rsx" />
+        <CompilerOptions value="" />
+      </settings>
+      <settings category="Project\PLAYSTATION®3\PS3™ Compiler">
+        <CompilerOptions value="" />
+      </settings>
+      <settings category="Project\Paths">
+        <Includes value="" />
+        <Models value="" />
+        <Scripts value="" />
+        <Shaders value="" />
+        <Textures value="" />
+      </settings>
+      <settings category="Project\Settings">
+        <BindLightToUnboundMaterials value="False" />
+      </settings>
+      <settings category="Project\COLLADA Common Profile">
+        <EnvironmentMap value="" />
+        <DisableCommonProfileTransparency value="False" />
+      </settings>
+    </configuration>
+    <configuration name="Release">
+      <settings category="Project\Direct3D\HLSL Compiler">
+        <CompilerOptions value="" />
+      </settings>
+      <settings category="Project\OpenGL\CgCompiler">
+        <CompilerOptions value="" />
+      </settings>
+      <settings category="Project\PLAYSTATION®3\PS3™ Cg Compiler">
+        <FragmentShaderCompilerOptions value="" />
+        <VertexShaderCompilerOptions value="" />
+        <CompilerProfile value="rsx" />
+        <CompilerOptions value="" />
+      </settings>
+      <settings category="Project\PLAYSTATION®3\PS3™ Compiler">
+        <CompilerOptions value="" />
+      </settings>
+      <settings category="Project\Paths">
+        <Includes value="" />
+        <Models value="" />
+        <Scripts value="" />
+        <Shaders value="" />
+        <Textures value="" />
+      </settings>
+      <settings category="Project\Settings">
+        <BindLightToUnboundMaterials value="False" />
+      </settings>
+      <settings category="Project\COLLADA Common Profile">
+        <EnvironmentMap value="" />
+        <DisableCommonProfileTransparency value="False" />
+      </settings>
+    </configuration>
+  </configurations>
+  <assetFile uri="BaseBumpWithSpatialGlow.dae" />
+  <assetFile uri="WarpBars.dae" />
+  <assetFile uri="Swoosh.dae" />
+  <assetFile uri="OilyFilm.dae" />
+  <assetFile uri="Skin2DirLightsWarpEffect.dae" />
+  <activeAssetCollection uri="BaseBumpWithSpatialGlow.dae" />
+  <customConfigurations>
+    <FXComposer.Debugger.DebuggerService>
+      <settings>
+        <fragkill mode="a" color="1, 0, 1, 1" />
+        <enablealpha value="False" />
+      </settings>
+      <devices />
+      <profiles />
+      <files />
+    </FXComposer.Debugger.DebuggerService>
+    <FXComposer.Scene.Services.FXSceneService>
+      <background_color color="0.5 0.5 0.5 1" />
+    </FXComposer.Scene.Services.FXSceneService>
+    <FXComposer.Scene.Services.FXRenderPortService>
+      <renderPort name="Direct3D9" />
+      <renderPort name="OpenGL" />
+      <renderPort name="PLAYSTATION_3" />
+    </FXComposer.Scene.Services.FXRenderPortService>
+  </customConfigurations>
+</project>

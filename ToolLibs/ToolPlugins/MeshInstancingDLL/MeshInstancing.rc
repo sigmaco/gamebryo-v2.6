@@ -1,0 +1,108 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "MeshInstancing_resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "MeshInstancing_resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_OPT_MESH_INSTANCING_OPTIONS DIALOGEX 0, 0, 211, 134
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Mesh Instancing"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,48,113,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,113,113,50,14
+    LTEXT           "Min Number of Instanced Objects:",IDC_STATIC,7,13,108,8
+    EDITTEXT        IDC_OPT_EDIT_NUM_INSTANCED_OBJECTS,127,9,40,12,ES_AUTOHSCROLL
+    LTEXT           "D3D10:",IDC_STATIC,96,68,26,8
+    EDITTEXT        IDC_OPT_EDIT_D3D10_NUM_INSTANCED_VERTS,128,64,40,12,ES_AUTOHSCROLL
+    LTEXT           "XBOX 360:",IDC_STATIC,86,81,36,8
+    EDITTEXT        IDC_OPT_EDIT_XENON_NUM_INSTANCED_VERTS,128,77,40,12,ES_AUTOHSCROLL
+    LTEXT           "PS3:",IDC_STATIC,106,94,16,8
+    EDITTEXT        IDC_OPT_EDIT_PS3_NUM_INSTANCED_VERTS,128,90,40,12,ES_AUTOHSCROLL
+    LTEXT           "DX9:",IDC_STATIC,105,55,17,8
+    EDITTEXT        IDC_OPT_EDIT_DX9_NUM_INSTANCED_VERTS,128,51,40,12,ES_AUTOHSCROLL
+    GROUPBOX        "Min Number of Instanced Vertices Per Renderer",IDC_STATIC,16,36,178,74
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_OPT_MESH_INSTANCING_OPTIONS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 204
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 127
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

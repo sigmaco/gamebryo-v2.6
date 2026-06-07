@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<Shortcuts>
+    <Shortcut name="NewFile">
+        <Command name="NewFile"/>
+        <Key name="Control"/>
+        <Key name="N"/>
+    </Shortcut>
+    <Shortcut name="OpenFile">
+        <Command name="OpenFile"/>
+        <Key name="Control"/>
+        <Key name="O"/>
+    </Shortcut>
+    <Shortcut name="SaveFile">
+        <Command name="SaveFile"/>
+        <Key name="Control"/>
+        <Key name="S"/>
+    </Shortcut>
+    <Shortcut name="CreateTemplateFromFiles">
+        <Command name="CreateTemplateFromFiles"/>
+        <Key name="Control"/>
+        <Key name="Alt"/>
+        <Key name="A"/>
+    </Shortcut>
+    <Shortcut name="Undo">
+        <Command name="Undo"/>
+        <Key name="Control"/>
+        <Key name="Z"/>     
+    </Shortcut>
+    <Shortcut name="Redo">
+        <Command name="Redo"/>
+        <Key name="Control"/>
+        <Key name="Y"/>     
+    </Shortcut>
+    <Shortcut name="TranslateInteractionMode">
+        <Command name="TranslateInteractionMode"/>
+        <Key name="Shift"/>
+        <Key name="Control"/>
+        <Key name="T"/>
+    </Shortcut>
+    <Shortcut name="RotateInteractionMode">
+        <Command name="RotateInteractionMode"/>
+        <Key name="Shift"/>
+        <Key name="Control"/>
+        <Key name="R"/>     
+    </Shortcut>
+    <Shortcut name="ScaleInteractionMode">
+        <Command name="ScaleInteractionMode"/>
+        <Key name="Shift"/>
+        <Key name="Control"/>
+        <Key name="S"/>     
+    </Shortcut>
+    <Shortcut name="DeleteSelectedEntities">
+        <Command name="DeleteSelectedEntities"/>
+        <Key name="Control"/>
+        <Key name="Delete"/> 
+    </Shortcut>
+    <Shortcut name="SelectAllEntities">
+		<Command name="SelectAllEntities"/>
+		<Key name="Control"/>
+		<Key name="A"/>
+    </Shortcut>
+    <Shortcut name="DeselectAllEntities">
+		<Command name="DeselectAllEntities"/>
+		<Key name="Control"/>
+		<Key name="D"/>
+    </Shortcut>
+    <Shortcut name="Clone">
+		<Command name="CloneSelection"/>
+		<Key name="Control"/>
+		<Key name="Shift"/>
+		<Key name="C"/>
+    </Shortcut>
+    <Shortcut name="Launch External Application">
+        <Command name="LaunchExternalApplication"/>
+        <Key name="F5"/>
+    </Shortcut>
+    <Shortcut name="Create Camera From Viewport">
+        <Command name="CreateCameraFromViewport"/>
+        <Key name="Control"/>
+        <Key name="C"/>
+    </Shortcut>
+</Shortcuts>

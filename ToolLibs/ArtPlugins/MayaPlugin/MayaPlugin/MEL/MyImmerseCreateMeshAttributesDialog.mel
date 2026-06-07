@@ -1,0 +1,292 @@
+//
+// MyImmerseCreateMeshAttributesDialog.mel
+//
+// Mel script for applying Net Immerse Attributes to an particle system
+
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateMeshAttributesDialog(string $nodeName)
+{
+
+    // ONLY ALLOW ONE WINDOW AT A TIME SO WE WILL DELETE IT IF IT EXISTS
+
+    // Check if the window exists
+    if( MyImmerseWindowExists("GamebryoMeshAttributesWindow") )
+    {
+        deleteUI GamebryoMeshAttributesWindow;
+    }
+
+    // Return dag objects only
+    string $dagnodes[];
+    if($nodeName == "")
+    {
+        $dagnodes = `selectedNodes -dagObjects`;
+    }
+    else
+    {
+        $dagnodes[0] = $nodeName;
+    }
+
+    if(size($dagnodes) != 1)
+    {
+        if(size($dagnodes) <= 0)
+        {
+            error "MyImmerseCreateMeshAttributesDialog::No Objects Selected";
+        }
+        else
+        {
+            error "MyImmerseCreateMeshAttributesDialog::Multiple Objects Selected";
+        }
+
+        return;
+    }
+
+    // Create the Attributes if they aren't already there
+
+    MyImmerseCreateMeshStabilityAttribute("");
+
+    window -title "Gamebryo Mesh Attributes" -widthHeight 300 360 GamebryoMeshAttributesWindow;
+
+    columnLayout;
+
+
+    string $sObject = $dagnodes[0];
+    int $iLeftMargin = 20;
+    int $iLeftIndentedMargin = 30;
+
+ 
+    text -label "";
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftMargin 200;
+        
+        text -label "";
+        
+        text 
+            -label ("Object=  " + $sObject) 
+            -fn "boldLabelFont" 
+            -w 300
+            -al "left"
+            CurrentObject;
+
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftMargin 200;
+        
+        text -label "";
+
+        attrEnumOptionMenu 
+            -l "Mesh Stability"
+            -at ($sObject + ".Ni_MeshStability")
+            MeshStabilityEnum;
+
+    setParent ..; // rowLayout
+
+
+    text -label "";
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftMargin 200;
+        
+        text -label "";
+
+        text 
+            -label "Static Mesh Keep Options" 
+            -w 300
+            -fn "boldLabelFont";
+
+    
+    setParent ..; // rowLayout
+
+    
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_MeshStaticKeepPositions")`
+        -onc ("setAttr " + $sObject + ".Ni_MeshStaticKeepPositions 1")
+        -ofc ("setAttr " + $sObject + ".Ni_MeshStaticKeepPositions 0")
+        -l1 "Keep Positions" KeepPositions;
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_MeshStaticKeepNormals")`
+        -onc ("setAttr " + $sObject + ".Ni_MeshStaticKeepNormals 1")
+        -ofc ("setAttr " + $sObject + ".Ni_MeshStaticKeepNormals 0")
+        -l1 "Keep Normals" KeepNormals;
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_MeshStaticKeepColors")`
+        -onc ("setAttr " + $sObject + ".Ni_MeshStaticKeepColors 1")
+        -ofc ("setAttr " + $sObject + ".Ni_MeshStaticKeepColors 0")
+        -l1 "Keep Colors" KeepColor;
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_MeshStaticKeepUVs")`
+        -onc ("setAttr " + $sObject + ".Ni_MeshStaticKeepUVs 1")
+        -ofc ("setAttr " + $sObject + ".Ni_MeshStaticKeepUVs 0")
+        -l1 "Keep UVs" KeepUVs;
+
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_MeshStaticKeepIndices")`
+        -onc ("setAttr " + $sObject + ".Ni_MeshStaticKeepIndices 1")
+        -ofc ("setAttr " + $sObject + ".Ni_MeshStaticKeepIndices 0")
+        -l1 "Keep Indices" KeepIndices;
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_MeshStaticKeepBoneData")`
+        -onc ("setAttr " + $sObject + ".Ni_MeshStaticKeepBoneData 1")
+        -ofc ("setAttr " + $sObject + ".Ni_MeshStaticKeepBoneData 0")
+        -l1 "Keep Bone Data" KeepBoneData;
+
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftMargin 200;
+        
+        text -label "";
+
+        text 
+            -label "Renderer Mesh Compression Options"
+            -w 300
+            -fn "boldLabelFont";
+ 
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_RendererMeshUseCompressedPositions")`
+        -onc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedPositions 1")
+        -ofc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedPositions 0")
+        -l1 "Compress Position" CompressPosition;
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_RendererMeshUseCompressedNormals")`
+        -onc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedNormals 1")
+        -ofc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedNormals 0")
+        -l1 "Compress Normals" CompressNormals;
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_RendererMeshUseCompressedColors")`
+        -onc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedColors 1")
+        -ofc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedColors 0")
+        -l1 "Compress Colors" CompressColors;
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_RendererMeshUseCompressedUVs")`
+        -onc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedUVs 1")
+        -ofc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedUVs 0")
+        -l1 "Compress UVs" CompressUVs;
+
+    setParent ..; // rowLayout
+
+    rowLayout 
+        -nc 2
+        -cw2 $iLeftIndentedMargin 200;
+        
+        text -label "";
+        
+    checkBoxGrp
+        -ncb 1
+        -v1 `getAttr ($sObject + ".Ni_RendererMeshUseCompressedWeights")`
+        -onc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedWeights 1")
+        -ofc ("setAttr " + $sObject + ".Ni_RendererMeshUseCompressedWeights 0")
+        -l1 "Compress Weights" CompressWeights;
+
+    setParent ..; // rowLayout
+
+    showWindow GamebryoMeshAttributesWindow;
+
+}
+

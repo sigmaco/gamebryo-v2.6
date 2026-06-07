@@ -1,0 +1,1718 @@
+source AEGamebryoCommonUtils;
+
+global proc AEGamebryoAddMeshAttributesButtons(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+        columnLayout GamebryoTransformAttrButtons;
+
+            text -label "Add Gamebryo Attributes";
+
+            rowColumnLayout -numberOfColumns 10 
+                -columnWidth 1 40
+                -columnWidth 2 40
+                -columnWidth 3 40
+                -columnWidth 4 40
+                -columnWidth 5 40
+                -columnWidth 6 40
+                -columnWidth 7 40
+                -columnWidth 8 40
+                -columnWidth 9 40
+                -columnWidth 10 40;
+
+                iconTextButton -label "No Stripify"
+                    -image1 "MyImmerseNoStripifyIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleNoStripifyAttribute(\"" + $nodeName + "\")")
+                    AEGamebryoStripifyButton;
+                
+                iconTextButton -label "Keep Object"
+                    -image1 "MyImmerseOptimizeKeepNodeIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleNoKeepNodeControls(\"" + $nodeName + "\")")
+                    AEGamebryoOptimizeKeepNodeButton;
+
+                iconTextButton -label "Create Double Sided Node"
+                    -image1 "MyImmerseDoubleSidedNodeIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleDoubleSidedNodeControls(\"" + $nodeName + "\")")
+                    AEGamebryoDoubleSidedButton;
+
+                iconTextButton -label "Create Animation Looping Controls"
+                    -image1 "MyImmerseAnimationLoopingIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleAnimationLoopingControls(\"" + $nodeName + "\")")
+                    AEGamebryoAnimationLoopingButton;
+                
+                iconTextButton -label "Create Z Buffer Properties"
+                    -image1 "MyImmerseZBufferIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleZBufferProperty(\"" + $nodeName + "\")")
+                    AEGamebryoAnimationZBufferProperties;
+
+               iconTextButton -label "Create Alternate Bounding Volume Properties"
+                    -image1 "MyImmerseABVIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleABVAttributes(\"" + $nodeName + "\")")
+                    AEGamebryoAnimationABVAttributes;
+
+                iconTextButton -label "Create Switch Node"
+                        -image1 "MyImmerseSwitchNodeIcon.bmp"
+                        -style "iconOnly"
+                        -command ("AEGamebryoToggleSwitchNodeControls(\"" + $nodeName + "\")")
+                        AEGamebryoSwitchAttributes;
+
+                iconTextButton -label "Mesh Attributes"
+                    -image1 "MyImmerseMeshStabilityAttributeIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleMeshAttributes(\"" + $nodeName + "\")")
+                    AEGamebryoAnimationMeshAttributes;
+
+                iconTextButton -label "Mesh Packing Profile"
+                    -image1 "GamebryoMeshProfile.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleMeshPackingProfileAttributes(\"" + $nodeName + "\")")
+                    AEGamebryoMeshPackingProfileButton;
+
+                iconTextButton -label "Create Sort Adjust Node"
+                    -image1 "MyImmerseSortAdjustNodeIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoToggleSortAdjustNode(\"" + $nodeName + "\")")
+                    AEGamebryoSortAdjustNodeButton;
+            
+            setParent..;
+        
+        setParent..;
+    
+
+}
+
+global proc AEGamebryoResetMeshAttributesButtons(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(!`columnLayout -ex GamebryoTransformAttrButtons`)
+    {
+        AEGamebryoAddMeshAttributesButtons $nodeAndAttr;
+    }
+    else
+    {
+        iconTextButton -e -command ("AEGamebryoToggleNoStripifyAttribute(\"" + $nodeName + "\")")
+            AEGamebryoStripifyButton;
+        
+        iconTextButton -e -command ("AEGamebryoToggleNoKeepNodeControls(\"" + $nodeName + "\")")
+            AEGamebryoOptimizeKeepNodeButton;
+
+        iconTextButton -e -command ("AEGamebryoToggleDoubleSidedNodeControls(\"" + $nodeName + "\")")
+            AEGamebryoDoubleSidedButton;
+
+        iconTextButton -e -command ("AEGamebryoToggleAnimationLoopingControls(\"" + $nodeName + "\")")
+            AEGamebryoAnimationLoopingButton;
+        
+        iconTextButton -e -command ("AEGamebryoToggleZBufferProperty(\"" + $nodeName + "\")")
+            AEGamebryoAnimationZBufferProperties;
+
+       iconTextButton -e -command ("AEGamebryoToggleABVAttributes(\"" + $nodeName + "\")")
+            AEGamebryoAnimationABVAttributes;
+
+       iconTextButton -e -command ("AEGamebryoToggleSwitchNodeControls(\"" + $nodeName + "\")")
+             AEGamebryoSwitchAttributes;
+
+        iconTextButton -e -command ("AEGamebryoToggleMeshAttributes(\"" + $nodeName + "\")")
+            AEGamebryoAnimationMeshAttributes;
+
+        iconTextButton -e -command ("AEGamebryoToggleMeshPackingProfileAttributes(\"" + $nodeName + "\")")
+            AEGamebryoMeshPackingProfileButton;
+
+        iconTextButton -e -command ("AEGamebryoToggleSortAdjustNode(\"" + $nodeName + "\")")
+            AEGamebryoSortAdjustNodeButton;
+    }
+
+}
+
+global proc TransAddButtonsAndDescriptions(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    columnLayout GamebryoTransformButtonsAndDescriptions;
+
+        rowColumnLayout -numberOfColumns 4 
+            -columnWidth 1 40
+            -columnWidth 2 140
+            -columnWidth 3 40
+            -columnWidth 4 165;
+
+        iconTextButton -label "No Stripify"
+            -image1 "MyImmerseNoStripifyIcon.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleNoStripifyAttribute(\"" + $nodeName + "\")")
+            AEGamebryoStripifyButtonDesc;
+
+        text -label "No Stripify";
+     
+        iconTextButton -label "Keep Object"
+            -image1 "MyImmerseOptimizeKeepNodeIcon.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleNoKeepNodeControls(\"" + $nodeName + "\")")
+            AEGamebryoOptimizeKeepNodeButtonDesc;
+                    
+        text -label "Keep Object";
+
+        iconTextButton -label "Create Double Sided Node"
+            -image1 "MyImmerseDoubleSidedNodeIcon.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleDoubleSidedNodeControls(\"" + $nodeName + "\")")
+            AEGamebryoDoubleSidedButtonDesc;
+
+        text -label "Create Double Sided Node";
+
+        iconTextButton -label "Create Animation Looping Controls"
+            -image1 "MyImmerseAnimationLoopingIcon.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleAnimationLoopingControls(\"" + $nodeName + "\")")
+            AEGamebryoAnimationLoopingButtonDesc;
+
+        text -label "Create Animation Looping Controls";
+
+        iconTextButton -label "Create Z Buffer Properties"
+            -image1 "MyImmerseZBufferIcon.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleZBufferProperty(\"" + $nodeName + "\")")
+            AEGamebryoAnimationZBufferPropertiesDesc;
+
+        text -label "Create Z Buffer Properties";
+
+       iconTextButton -label "Create Alternate Bounding Volume Properties"
+            -image1 "MyImmerseABVIcon.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleABVAttributes(\"" + $nodeName + "\")")
+            AEGamebryoAnimationABVAttributesDesc;
+
+        text -label "Create Alternate Bounding Volume Properties";
+
+        iconTextButton -label "Create Switch Node"
+            -image1 "MyImmerseSwitchNodeIcon.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleSwitchNodeControls(\"" + $nodeName + "\")")
+            AEGamebryoSwitchAttributesDesc;
+
+        text -label "Create Switch Node";
+
+        iconTextButton -label "Mesh Attributes"
+            -image1 "MyImmerseMeshStabilityAttributeIcon.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleMeshAttributes(\"" + $nodeName + "\")")
+            AEGamebryoAnimationMeshAttributesDesc;
+
+         text -label "Mesh Attributes";
+
+        iconTextButton -label "Mesh Packing Profile"
+            -image1 "GamebryoMeshProfile.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleMeshPackingProfileAttributes(\"" + $nodeName + "\")")
+            AEGamebryoMeshPackingProfileButtonDesc;
+
+        text -label "Mesh Packing Profile";
+
+        iconTextButton -label "Create Sort Adjust Node"
+            -image1 "MyImmerseSortAdjustNodeIcon.bmp"
+            -style "iconOnly"
+            -command ("AEGamebryoToggleSortAdjustNode(\"" + $nodeName + "\")")
+            AEGamebryoSortAdjustNodeButtonDesc;
+
+        text -label "Create Sort Adjust Node";
+
+        setParent..;
+        
+    setParent..;
+    
+}
+
+global proc TransResetButtonsAndDescriptions(string $nodeAndAttr)
+{
+ string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(!`columnLayout -ex GamebryoTransformButtonsAndDescriptions`)
+    {
+        AEGamebryoAddMeshAttributesButtons $nodeAndAttr;
+    }
+    else
+    {
+        iconTextButton -e -command ("AEGamebryoToggleNoStripifyAttribute(\"" + $nodeName + "\")")
+            AEGamebryoStripifyButtonDesc;
+        
+        iconTextButton -e -command ("AEGamebryoToggleNoKeepNodeControls(\"" + $nodeName + "\")")
+            AEGamebryoOptimizeKeepNodeButtonDesc;
+
+        iconTextButton -e -command ("AEGamebryoToggleDoubleSidedNodeControls(\"" + $nodeName + "\")")
+            AEGamebryoDoubleSidedButtonDesc;
+
+        iconTextButton -e -command ("AEGamebryoToggleAnimationLoopingControls(\"" + $nodeName + "\")")
+            AEGamebryoAnimationLoopingButtonDesc;
+        
+        iconTextButton -e -command ("AEGamebryoToggleZBufferProperty(\"" + $nodeName + "\")")
+            AEGamebryoAnimationZBufferPropertiesDesc;
+
+        iconTextButton -e -command ("AEGamebryoToggleABVAttributes(\"" + $nodeName + "\")")
+            AEGamebryoAnimationABVAttributesDesc;
+
+        iconTextButton -e -command ("AEGamebryoToggleSwitchNodeControls(\"" + $nodeName + "\")")
+            AEGamebryoSwitchAttributesDesc;
+
+        iconTextButton -e -command ("AEGamebryoToggleMeshAttributes(\"" + $nodeName + "\")")
+            AEGamebryoAnimationMeshAttributesDesc;
+
+        iconTextButton -e -command ("AEGamebryoToggleMeshPackingProfileAttributes(\"" + $nodeName + "\")")
+            AEGamebryoMeshPackingProfileButtonDesc;
+                
+        iconTextButton -e -command ("AEGamebryoToggleSortAdjustNode(\"" + $nodeName + "\")")
+            AEGamebryoSortAdjustNodeButtonDesc;
+    }
+}
+
+global proc AEGamebryoToggleNoStripifyAttribute(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_No_Stripify"}, 
+        "MyImmerseCreateNoStripifyAttribute",
+        "deleteAttr -at Ni_No_Stripify");
+}
+
+global proc AEGamebryoToggleNoKeepNodeControls(string $nodeName)
+{
+    if(`attributeExists "Gb_ShowSgoKeepControl" $nodeName`)
+    {
+       deleteAttr -at Gb_ShowSgoKeepControl $nodeName;
+       if(`attributeExists Ni_SgoKeepNode $nodeName`)
+       {
+            deleteAttr -at Ni_SgoKeepNode $nodeName;
+       }
+    }
+    else
+    {
+       addAttr -ln Gb_ShowSgoKeepControl -at bool -dv 1 $nodeName;
+       MyImmerseAddOptimizeKeepNodeAttribute($nodeName);
+    }
+}
+global proc AEGamebryoToggleNoKeepNodeAttribute(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_SgoKeepNode"}, 
+        "MyImmerseAddOptimizeKeepNodeAttribute",
+        "deleteAttr -at Ni_SgoKeepNode");
+}
+
+global proc AEGamebryoToggleDoubleSidedNode(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_DoubleSidedNode"}, 
+        "MyImmerseCreateDoubleSidedNode",
+        "deleteAttr -at Ni_DoubleSidedNode");
+}
+
+global proc AEGamebryoToggleDoubleSidedNodeControls(string $nodeName)
+{
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) < 1)
+    {   
+        $dagnodes[0] = $nodeName;
+    }
+
+    string $node;
+    for($node in $dagnodes)
+    {
+        if(`attributeExists "Gb_ShowDoubleSided" $node`)
+        {
+           deleteAttr -at Gb_ShowDoubleSided $node;
+           if(`attributeExists Ni_DoubleSidedNode $node`)
+           {
+                deleteAttr -at Ni_DoubleSidedNode $node;
+           }
+        }
+        else
+        {
+            // Create the Attribute
+           addAttr -ln Gb_ShowDoubleSided -at bool -dv 1 $node;
+           if(!`attributeExists Ni_DoubleSidedNode $node`)
+           {
+                MyImmerseCreateDoubleSidedNode($node);
+           }
+           
+        }
+    }
+}
+
+global proc AEGamebryoCreateTwoAttribute(string $nodeName)
+{
+
+    if(`attributeExists "NiData_TwoWay" $nodeName` ==0)
+    {
+        addAttr -ln NiData_TwoWay -dt "string" $nodeName;
+
+        setAttr -type "string" ($nodeName + ".NiData_TwoWay") "NDLTWOWAY";
+    }
+}
+
+global proc AEGamebryoToggleTwoWay(string $nodeName)
+{
+      AEGamebryoToggle($nodeName, {"NiData_TwoWay"}, 
+        "AEGamebryoCreateTwoAttribute",
+        "deleteAttr -at NiData_TwoWay");  
+}
+
+
+global proc AEGamebryoToggleSwitchNode(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_SwitchNode"}, 
+    "addAttr -ln Ni_SwitchNode -at bool",
+    "deleteAttr -at Ni_SwitchNode");
+}
+
+global proc AEGamebryoToggleSwitchNodeControls(string $nodeName)
+{
+    if(`attributeExists "Gb_ShowSwitch" $nodeName`)
+    {
+        deleteAttr -at Gb_ShowSwitch $nodeName;
+    }
+    else
+    {
+       addAttr -ln Gb_ShowSwitch -at bool $nodeName;
+    }
+
+    AEGamebryoToggle($nodeName, {"Ni_SwitchNode", "Ni_SwitchChildIndex"}, 
+        "MyImmerseCreateSwitchNode",
+        "AEGamebryoDeleteAttrList {\"Ni_SwitchNode\", \"Ni_SwitchChildIndex\"}");
+}
+
+global proc AEGamebryoToggleAnimationLoopingControls(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_AnimationLoopingType", 
+        "Ni_AnimationLoopingForAllChildren"}, 
+        "MyImmerseCreateAnimationLoopingControls",
+        ("AEGamebryoDeleteAttrList {\"Ni_AnimationLoopingType\", \"" +
+        "Ni_AnimationLoopingForAllChildren\"}"));
+}
+
+global proc AEGamebryoToggleZBufferProperty(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_ZBufferProperty"}, 
+        "MyImmerseCreateZBufferProperty",
+        "deleteAttr -at Ni_ZBufferProperty");
+}
+
+global proc AEGamebryoToggleABVAttributes(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_EnableABVCollisionData", 
+        "Ni_ABV_Propogate", "Ni_ABV_CollisionShape"}, 
+        "MyImmerseAddABVAttributes",
+        ("AEGamebryoDeleteAttrList {\"Ni_EnableABVCollisionData\"," +  
+        "\"Ni_ABV_Propogate\", \"Ni_ABV_CollisionShape\"}"));
+}
+
+global proc AEGamebryoToggleABVAxisAlignedBoundingBox(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_EnableABVCollisionData", 
+        "Ni_ABV_Propogate", "Ni_ABV_CollisionShape"}, 
+        "MyImmerseAddABVAttributes",
+        ("AEGamebryoDeleteAttrList {\"Ni_EnableABVCollisionData\"," +  
+        "\"Ni_ABV_Propogate\", \"Ni_ABV_CollisionShape\"}"));
+}
+
+global proc AEGamebryoToggleMeshAttributes(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Ni_MeshStaticKeepPositions", "Ni_MeshStaticKeepNormals", 
+        "Ni_MeshStaticKeepColors", "Ni_MeshStaticKeepUVs", "Ni_MeshStaticKeepIndices", 
+        "Ni_MeshStaticKeepBoneData"}, 
+        "MyImmerseCreateMeshStabilityAttribute", ("AEGamebryoDeleteAttrList" +
+        "{\"Ni_MeshStaticKeepPositions\"," +
+        "\"Ni_MeshStaticKeepNormals\", \"Ni_MeshStaticKeepColors\"," + 
+        "\"Ni_MeshStaticKeepUVs\", \"Ni_MeshStaticKeepIndices\"," + 
+        "\"Ni_MeshStaticKeepBoneData\"}"));
+}
+
+global proc AEGamebryoToggleMeshPackingProfileAttributes(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"Gb_PackingProfile"}, 
+        "GamebryoCreatePackingProfileAttr",
+        "deleteAttr -at Gb_PackingProfile");
+}
+
+global proc AEGamebryoCreateSortAdjustNode(string $nodeName)
+{
+
+    if(`attributeExists "NiData_NiSortAdjustNode" $nodeName` == 0)
+    {
+        addAttr -ln NiData_NiSortAdjustNode -dt "string" $nodeName;
+
+        setAttr -type "string" ($nodeName + ".NiData_NiSortAdjustNode") "SORTING_INHERIT";
+    }
+
+}
+
+global proc AEGamebryoToggleSortAdjustNode(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, {"NiData_NiSortAdjustNode"}, 
+        "AEGamebryoCreateSortAdjustNode", 
+        "deleteAttr -at NiData_NiSortAdjustNode");
+}
+
+global proc AEGamebryoToggle(string $nodeName, string $testAttrs[],
+                                     string $createFunction,
+                                     string $deleteFunction)
+{
+    if(!HasAnyAttrs($nodeName, $testAttrs))
+    {
+        eval($createFunction + " " + $nodeName);
+    }
+    else
+    {
+        eval($deleteFunction + " " + $nodeName);
+    }
+}
+
+global proc int HasAnyAttrs(string $nodeName, string $attrs[])
+{
+    int $attrIndex = 0;
+    int $sizeOfAttrs = size($attrs);
+    for($attrIndex; $attrIndex < $sizeOfAttrs; $attrIndex++)
+    {
+        if(`attributeExists $attrs[$attrIndex] $nodeName`)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+global proc AEGamebryoDeleteAttrList(string $attrs[], string $nodeName)
+{
+    string $currentAttr = "";
+    for($currentAttr in $attrs)
+    {
+        if(`attributeExists $currentAttr $nodeName`)
+        {
+            deleteAttr -at $currentAttr $nodeName;
+        }
+    }
+}
+
+//
+//Optimization Frame Start
+//
+
+
+
+global proc int AEGamebryoHasOptimizationOverrides(string $nodeName)
+{
+    global int $g_HasSgoKeepNode;
+
+    if(`attributeExists Gb_ShowSgoKeepControl $nodeName` ||
+       `attributeExists Ni_SgoKeepNode $nodeName` ||
+       `attributeExists Ni_No_Stripify $nodeName`)
+    {
+        //weird sort of hack to handle the case of attributes that were added
+        //before 2.3
+        if(`attributeExists Ni_SgoKeepNode $nodeName` &&
+            `attributeExists Gb_ShowSgoKeepControl $nodeName` == 0)
+        {
+            addAttr -ln Gb_ShowSgoKeepControl -at bool $nodeName;
+        }
+
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddOptimizationOverridesAttrs(string $nodeName)
+{
+    global int $g_HasSgoKeepNode;
+
+    string $labels[] = {"Prevent Stripification", 
+                        "Prevent Removal During Optimization"};
+    string $attrNames[] = {"Ni_No_Stripify", "Ni_SgoKeepNode"};
+    
+    //I need to do this one manually because it has a special boolean
+
+    if(`columnLayout -ex ("Ni_No_Stripify" + "ColumnLayout")`)
+    {
+        deleteUI ("Ni_No_Stripify" + "ColumnLayout");
+    }
+
+    if(`attributeExists "Ni_No_Stripify" $nodeName`)
+    {
+        columnLayout -p ("OptimizationOverrides" + "ColumnLayout") 
+            ("Ni_No_Stripify" + "ColumnLayout");
+
+            attrControlGrp 
+                -label "Prevent Stripification"
+                -a ($nodeName + "." + "Ni_No_Stripify") ("Ni_No_Stripify" + "Control");
+
+        setParent..;
+    }
+
+    if(`columnLayout -ex ("Ni_SgoKeepNode" + "ColumnLayout")`)
+    {
+        deleteUI ("Ni_SgoKeepNode" + "ColumnLayout");
+    }
+
+    if(`attributeExists "Gb_ShowSgoKeepControl" $nodeName`)
+    {
+        int $hasAttr = `attributeExists "Ni_SgoKeepNode" $nodeName `;
+
+        columnLayout -p ("OptimizationOverrides" + "ColumnLayout") 
+            -cal "center"
+            -columnOffset "left" 40
+            -cat "left" 146
+            ("Ni_SgoKeepNode" + "ColumnLayout");
+
+            checkBox
+                -label "Prevent Removal During Optimization"
+                -v $hasAttr
+                -cc ("AEGamebryoToggleNoKeepNodeAttribute(\"" + $nodeName + "\")");
+        setParent..;
+    }
+}
+
+global proc AEGamebryoAddOptimizationOverrides(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Optimization Overrides", "OptimizationOverrides");
+    AEGamebryoSetEnableStateOframe(false, "OptimizationOverrides");
+
+    if(AEGamebryoHasOptimizationOverrides($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "OptimizationOverrides");
+        AEGamebryoAddOptimizationOverridesAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetOptimizationOverrides(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasOptimizationOverrides($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "OptimizationOverrides");
+        AEGamebryoAddOptimizationOverridesAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "OptimizationOverrides");
+    }
+}
+
+//
+//Optimization Overrides End
+//
+
+global proc int AEGamebryoHasAnimationLooping(string $nodeName)
+{
+    if(`attributeExists Ni_AnimationLoopingType $nodeName` || 
+        `attributeExists Ni_AnimationLoopingForAllChildren $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddAnimationLoopingAttrs(string $nodeName)
+{
+    string $labels[] = {"Looping Type", 
+                        "Propagate to Children"};
+    string $attrNames[] = {"Ni_AnimationLoopingType", 
+        "Ni_AnimationLoopingForAllChildren"};
+
+    AEGamebryoAddManyAttrs($nodeName, "AnimationLooping", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddAnimationLooping(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Animation Looping", "AnimationLooping");
+    AEGamebryoSetEnableStateOframe(false, "AnimationLooping");
+
+
+    if(AEGamebryoHasAnimationLooping($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "AnimationLooping");
+        AEGamebryoAddAnimationLoopingAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetAnimationLooping(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasAnimationLooping($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "AnimationLooping");
+        AEGamebryoAddAnimationLoopingAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "AnimationLooping");
+    }
+}
+
+//
+//
+//animation end
+
+//Mesh Packing Profile
+global proc int AEGamebryoHasPackingProfile(string $nodeName)
+{
+    if(`attributeExists Gb_PackingProfile $nodeName`)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoReloadPackingProfiles(string $nodeName)
+{
+    ReloadPackingProfiles;
+    AEGamebryoAddPackingProfileAttrs($nodeName);
+}
+
+global proc AEGamebryoAddPackingProfileAttrs(string $nodeName)
+{
+    string $label = "Mesh Packing Profile";
+    string $attrName = "Gb_PackingProfile";
+
+    if(`columnLayout -ex ($attrName + "ColumnLayout")`)
+    {
+        deleteUI ($attrName + "ColumnLayout");
+    }
+
+    int $hasAttr = `attributeExists $attrName $nodeName`;
+   
+    if($hasAttr)
+    {
+        columnLayout -p ("MeshPackingProfile" + "ColumnLayout") ($attrName + "ColumnLayout");
+
+        string $szPackingProfiles[] = `GetPackingProfiles`;
+        string $szSortedPackingProfiles[] = sort($szPackingProfiles);
+            
+            optionMenu -label $label -cc ("AEGamebryoUpdatePackingProfile(\"" + 
+                $nodeName + "\")") ($attrName + "Control");
+            string $sProfileName;
+            for($sProfileName in $szSortedPackingProfiles)
+            {
+                menuItem -label $sProfileName;
+            }
+
+            //set the default
+            string $currentOption = `getAttr ($nodeName + "." + $attrName)`;
+            print("$currentOption = " + $currentOption + "\n");
+            if(catchQuiet(`optionMenu -e -value $currentOption ($attrName + "Control")`))
+            {
+                catch(error("Could not set current profile falling back to \"Default\"!"));
+                $currentOption = "Default";
+                if(catchQuiet(`optionMenu -e -value $currentOption ($attrName + "Control")`))
+                {
+                    catch(error("Could not set default profile!"));
+                }
+            }
+            text -label "Description" -width 120;
+            scrollField -width 300 -height 150 -editable false -wordWrap true Gb_PackingProfileDescriptionControl;
+            string $description = "";
+            if(catchQuiet($description = `GetProfileDescription $currentOption`))
+            {
+                catch(error ("Could not get profile description for " + $currentOption));
+            }
+            scrollField -e -text $description Gb_PackingProfileDescriptionControl;
+
+            button -l "Reload Profiles" -c ("AEGamebryoReloadPackingProfiles(\"" + $nodeName + "\")");
+
+        setParent..;
+
+    }
+}
+
+global proc AEGamebryoUpdatePackingProfile(string $nodeName)
+{
+    string $sProfileName = `optionMenu -q -value ("Gb_PackingProfile" + "Control")`;
+    setAttr ($nodeName + ".Gb_PackingProfile") -type "string" $sProfileName;
+    string $description = "";
+    if(catchQuiet($description = `GetProfileDescription $sProfileName`))
+    {
+        error ("Could not get profile description for " + $sProfileName);
+    }
+    scrollField -e -text $description Gb_PackingProfileDescriptionControl;
+}
+
+global proc AEGamebryoAddPackingProfile(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Mesh Packing Profile", "MeshPackingProfile");
+    AEGamebryoSetEnableStateOframe(false, "MeshPackingProfile");
+
+    if(AEGamebryoHasPackingProfile($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "MeshPackingProfile");
+        AEGamebryoAddPackingProfileAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetPackingProfile(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasPackingProfile($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "MeshPackingProfile");
+        AEGamebryoAddPackingProfileAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "MeshPackingProfile");
+    }
+}
+
+//
+//
+//Mesh Profile End
+
+
+global proc int AEGamebryoHasCharacter(string $nodeName)
+{
+    if(`attributeExists Ni_CharacterRoot $nodeName` || 
+        `attributeExists Ni_Sequence_Animation_Accumulation $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddCharacterAttrs(string $nodeName)
+{
+    string $labels[] = {"Character Root", 
+                        "Accumulation Root"};
+    string $attrNames[] = {"Ni_CharacterRoot", 
+        "Ni_Sequence_Animation_Accumulation"};
+
+    AEGamebryoAddManyAttrs($nodeName, "Character", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddCharacter(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Character", "Character");
+    AEGamebryoSetEnableStateOframe(false, "Character");
+
+
+    if(AEGamebryoHasCharacter($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Character");
+        AEGamebryoAddCharacterAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetCharacter(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasCharacter($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Character");
+        AEGamebryoAddCharacterAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Character");
+    }
+}
+
+//
+//Character End
+//
+
+global proc int AEGamebryoHasABV(string $nodeName)
+{
+    if(`attributeExists Ni_EnableABVCollisionData $nodeName` || 
+        `attributeExists Ni_ABV_Propogate $nodeName` ||
+        `attributeExists Ni_ABV_CollisionShape $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddABVAttr(string $nodeName)
+{
+    string $labels[] = {"Enable Collision Data", 
+                        "Propagate To Children",
+                        "Collision Shape"};
+    string $attrNames[] = {"Ni_EnableABVCollisionData", 
+        "Ni_ABV_Propogate", "Ni_ABV_CollisionShape"};
+
+    AEGamebryoAddManyAttrs($nodeName, "AlternateBoundingVolume", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddABV(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Alternate Bounding Volume", "AlternateBoundingVolume");
+    AEGamebryoSetEnableStateOframe(false, "AlternateBoundingVolume");
+
+    if(AEGamebryoHasABV($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "AlternateBoundingVolume");
+        AEGamebryoAddABVAttr($nodeName);
+    }
+}
+
+global proc AEGamebryoResetABV(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasABV($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "AlternateBoundingVolume");
+        AEGamebryoAddABVAttr($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "AlternateBoundingVolume");
+    }
+}
+
+global proc int AEGamebryoHasSwitch(string $nodeName)
+{
+    if(`attributeExists Ni_SwitchNode $nodeName` ||
+       `attributeExists Ni_SwitchChildIndex $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AddSwitchNodeCheckBox(string $nodeName)
+{
+
+    int $hasAttr = `attributeExists "Ni_SwitchNode" $nodeName`;
+
+    columnLayout
+        -p "SwitchColumnLayout"
+        -cal "center"
+        -columnOffset "left" 40
+        -cat "left" 146
+        ("Ni_SwitchNode" + "ColumnLayout");
+
+        checkBox
+            -label "Enable Switch"
+            -v $hasAttr
+            -cc ("AEGamebryoToggleSwitchNode(\"" + $nodeName + "\")")
+            AEGamebryoSwitchNodeCheckBox;
+    setParent..;
+}
+
+global proc AEGamebryoAddSwitchAttr(string $nodeName)
+{
+    string $labels[] = {"Child Index"};
+    string $attrNames[] = {"Ni_SwitchChildIndex"};
+
+    AEGamebryoAddManyAttrs($nodeName, "Switch", $labels, 
+        $attrNames);
+
+    if(`attributeExists "Gb_ShowSwitch" $nodeName`)
+    {
+        if(`checkBox -ex AEGamebryoSwitchNodeCheckBox`)
+        {
+            checkBox -e -cc ("AEGamebryoToggleSwitchNode(\"" + $nodeName + "\")")
+                AEGamebryoSwitchNodeCheckBox;
+        }
+        else
+        {
+            AddSwitchNodeCheckBox($nodeName);
+        }
+    }
+    else
+    {
+        if(`columnLayout -ex ("Ni_SwitchNode" + "ColumnLayout")`)
+        {
+            deleteUI ("Ni_SwitchNode" + "ColumnLayout");
+        }
+    }
+}
+
+global proc AEGamebryoAddSwitch(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Switch", "Switch");
+    AEGamebryoSetEnableStateOframe(false, "Switch");
+
+    if(AEGamebryoHasSwitch($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Switch");
+        AEGamebryoAddSwitchAttr($nodeName);
+    }
+}
+
+global proc AEGamebryoResetSwitch(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasSwitch($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Switch");
+        AEGamebryoAddSwitchAttr($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Switch");
+    }
+}
+
+
+global proc int AEGamebryoHasSkinLOD(string $nodeName)
+{
+    if(`attributeExists Ni_SkinLODLevelMinimum $nodeName` ||
+       `attributeExists Ni_SkinLODLevelMaximum $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddSkinLODAttr(string $nodeName)
+{
+    string $labels[] = {"Minimum Level", 
+                        "Maximum Level"};
+    string $attrNames[] = {"Ni_SkinLODLevelMinimum", 
+        "Ni_SkinLODLevelMaximum"};
+
+    AEGamebryoAddManyAttrs($nodeName, "SkinLOD", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddSkinLOD(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Skin LOD", "SkinLOD");
+    AEGamebryoSetEnableStateOframe(false, "SkinLOD");
+
+    if(AEGamebryoHasSkinLOD($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "SkinLOD");
+        AEGamebryoAddSkinLODAttr($nodeName);
+    }
+}
+
+global proc AEGamebryoResetSkinLOD(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasSkinLOD($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "SkinLOD");
+        AEGamebryoAddSkinLODAttr($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "SkinLOD");
+    }
+}
+
+global proc int AEGamebryoHasMeshOverrides(string $nodeName)
+{
+    if(`attributeExists Ni_MeshStaticKeepPositions $nodeName` ||
+       `attributeExists Ni_MeshStaticKeepNormals $nodeName` ||
+       `attributeExists Ni_MeshStaticKeepColors $nodeName` ||
+       `attributeExists Ni_MeshStaticKeepUVs $nodeName` ||
+       `attributeExists Ni_MeshStaticKeepIndices $nodeName` ||
+       `attributeExists Ni_MeshStaticKeepBoneData $nodeName` ||
+       `attributeExists Ni_MeshStaticKeepPositions $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddMeshOverridesAttr(string $nodeName)
+{
+    string $labels[] = {"Keep Positions",
+                        "Keep Normals",
+                        "Keep Colors",
+                        "Keep UVs",
+                        "Keep Indices",
+                        "Keep Bone Data"};
+    string $attrNames[] = {"Ni_MeshStaticKeepPositions", 
+        "Ni_MeshStaticKeepNormals",
+        "Ni_MeshStaticKeepColors", 
+        "Ni_MeshStaticKeepUVs", 
+        "Ni_MeshStaticKeepIndices", 
+        "Ni_MeshStaticKeepBoneData"};
+
+    AEGamebryoAddManyAttrs($nodeName, "MeshOverrides", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddMeshOverrides(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Mesh Overrides", "MeshOverrides");
+    AEGamebryoSetEnableStateOframe(false, "MeshOverrides");
+
+    if(AEGamebryoHasMeshOverrides($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "MeshOverrides");
+        AEGamebryoAddMeshOverridesAttr($nodeName);
+    }
+}
+
+global proc AEGamebryoResetMeshOverrides(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasMeshOverrides($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "MeshOverrides");
+        AEGamebryoAddMeshOverridesAttr($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "MeshOverrides");
+    }
+}
+
+global proc int AEGamebryoHasLighting(string $nodeName)
+{
+    if(`attributeExists Ni_DynamicTextureMap $nodeName` ||
+       `attributeExists Ni_TextureType $nodeName` ||
+       `attributeExists Ni_CoordinateType $nodeName` ||
+       `attributeExists Ni_ParallelRadius $nodeName` ||
+       `attributeExists Ni_PerspectiveAngle $nodeName` ||
+       `attributeExists Ni_ClampMode $nodeName` ||
+       `attributeExists Ni_Filter $nodeName` ||
+       `attributeExists Ni_Use_Clipping_Plane $nodeName`
+        )
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddLightingAttr(string $nodeName)
+{
+    string $labels[] = {"Use Dynamic Texture Map", 
+                        "Texture Type",
+                        "Coordinate Type",
+                        "Parallel Radius",
+                        "Perspective Angle",
+                        "Clamp Mode",
+                        "Filter",
+                        "Use Clipping Plane"};
+    string $attrNames[] = {"Ni_DynamicTextureMap", 
+        "Ni_TextureType",
+        "Ni_CoordinateType",
+        "Ni_ParallelRadius",
+        "Ni_PerspectiveAngle",
+        "Ni_ClampMode",
+        "Ni_Filter",
+        "Ni_Use_Clipping_Plane"};
+
+    AEGamebryoAddManyAttrs($nodeName, "Lighting", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddLighting(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Lighting", "Lighting");
+    AEGamebryoSetEnableStateOframe(false, "Lighting");
+
+    if(AEGamebryoHasLighting($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Lighting");
+        AEGamebryoAddLightingAttr($nodeName);
+    }
+}
+
+global proc AEGamebryoResetLighting(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasLighting($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Lighting");
+        AEGamebryoAddLightingAttr($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Lighting");
+    }
+}
+
+global proc int AEGamebryoHasSortAdjustNode(string $nodeName)
+{
+    if(`attributeExists NiData_NiSortAdjustNode $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddSortAdjustNode(string $nodeName)
+{
+    string $labels[] = {"Sort Adjust Node"};
+
+    string $attrNames[] = {"NiData_NiSortAdjustNode"};
+
+    if(`columnLayout -ex ("SortAdjustNodeColumnLayout")`)
+    {
+        deleteUI ("SortAdjustNodeColumnLayout");
+    }
+
+    columnLayout -p SortAdjustColumnLayout SortAdjustNodeColumnLayout;
+        optionMenuGrp -cc ("AEGamebryoSortAdjustControlChanged(\"" + $nodeName + "\")") -l "Sort Adjust Node" SortAdjustOptionMenu;
+ 	        menuItem -label "Sorting Inherit";
+            menuItem -label "Sorting Off";
+    
+    string $value = `getAttr ($nodeName + ".NiData_NiSortAdjustNode")`;
+
+    if($value == "SORTING_INHERIT")
+    {
+        optionMenuGrp -e -sl 1 SortAdjustOptionMenu;
+    }
+    else if($value == "SORTING_OFF")
+    {
+        optionMenuGrp -e -sl 2 SortAdjustOptionMenu;
+    }
+
+    
+
+}
+
+global proc AEGamebryoSortAdjustControlChanged(string $nodeName)
+{
+    string $value = `optionMenuGrp -q -v SortAdjustOptionMenu`;
+
+    if($value == "Sorting Inherit")
+    {
+        setAttr -type "string" ($nodeName + ".NiData_NiSortAdjustNode") "SORTING_INHERIT";
+    }
+    else if($value == "Sorting Off")
+    {
+        setAttr -type "string" ($nodeName + ".NiData_NiSortAdjustNode") "SORTING_OFF";
+    }
+    
+    
+}
+
+global proc AEGamebryoAddSortAdjust(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Sort Adjust", "SortAdjust");
+    AEGamebryoSetEnableStateOframe(false, "SortAdjust");
+
+    if(AEGamebryoHasSortAdjustNode($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "SortAdjust");
+        AEGamebryoAddSortAdjustNode($nodeName);
+    }
+}
+
+global proc AEGamebryoResetSortAdjust(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasSortAdjustNode($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "SortAdjust");
+        AEGamebryoAddSortAdjustNode($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "SortAdjust");
+    }
+}
+
+global proc int AEGamebryoHasCollider(string $nodeName)
+{
+    if(`attributeExists Ni_SphericalCollider $nodeName` ||
+        `attributeExists Ni_PlanarCollider $nodeName` ||
+       `attributeExists Ni_ColliderDeleteOnExport $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddColliderAttr(string $nodeName)
+{
+    string $labels[] = {"Spherical Collider",
+                        "Planar Collider",
+                        "Delete Collider On Export"};
+    string $attrNames[] = {"Ni_SphericalCollider",
+                           "Ni_PlanarCollider",
+                           "Ni_ColliderDeleteOnExport"};
+
+    AEGamebryoAddManyAttrs($nodeName, "Collider", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddCollider(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Collider", "Collider");
+    AEGamebryoSetEnableStateOframe(false, "Collider");
+
+    if(AEGamebryoHasCollider($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Collider");
+        AEGamebryoAddColliderAttr($nodeName);
+    }
+}
+
+global proc AEGamebryoResetCollider(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasCollider($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Collider");
+        AEGamebryoAddColliderAttr($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Collider");
+    }
+}
+
+global proc ChooseTypeOfAdd(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    //print("ChooseTypeOfAdd $nodeAndAttr " + $nodeAndAttr + " \n ");
+    string $nodeType = `objectType $nodeName`;
+
+    //string $shapes[] = `listRelatives -shapes -ni $nodeName`;
+
+    //print("ChooseTypeOfAdd $shapes ");
+    //print($shapes);
+    //print(" \n ");
+
+    //There should only be one non hidden node 
+    //if(size($shapes) > 1)
+    //{
+    //    error ("AEGamebryoTransformCommon: There are too many shapes under " + 
+    //           "this transform. Expected 1 or 0, found " + size($shapes));
+    //}
+
+    //string $shapeNodeType = `objectType $shapes[0]`;
+
+    //if($shapeNodeType == "mesh" && $nodeType == "transform")
+    if($nodeType == "transform")
+    {
+        AEGamebryoAddMeshAttributesButtons $nodeAndAttr;
+    }
+    else
+    {
+        //remove the buttons if they exist
+        if(`columnLayout -ex GamebryoTransformAttrButtons`)
+        {
+            deleteUI GamebryoTransformAttrButtons;
+        }
+    }
+}
+
+global proc ChooseTypeOfReset(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    //print("ChooseTypeOfReset $nodeAndAttr " + $nodeAndAttr + " \n ");
+    string $nodeType = `objectType $nodeName`;
+    //print("$nodeType  = " + $nodeType +"!\n");
+
+    //string $shapes[] = `listRelatives -shapes -ni $nodeName`;
+
+   // print("ChooseTypeOfReset $shapes ");
+   // print($shapes);
+   // print(" \n ");
+
+    //There should only be one non hidden node 
+    //if(size($shapes) > 1)
+    //{
+    //    error ("AEGamebryoTransformCommon: There are too many shapes under " + 
+               //"this transform. Expected 1 or 0, found " + size($shapes));
+    //}
+  
+    //THIS COMMAND STOPS EXECUTION...it doesn't work in maya 7 I think?
+    //string $shapeNodeType = `objectType $shapes[0]`;
+
+    //if($shapeNodeType == "mesh" && $nodeType == "transform")
+    if($nodeType == "transform")
+    {
+        AEGamebryoResetMeshAttributesButtons $nodeAndAttr;
+    }
+    else
+    {
+        //remove the buttons if they exist
+        if(`columnLayout -ex GamebryoTransformAttrButtons`)
+        {
+            deleteUI GamebryoTransformAttrButtons;
+        }
+    }
+}
+
+global proc AEGamebryoAddDoubleSided(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    //this state is possible with old assets
+    if(`attributeExists "Ni_DoubleSidedNode" $nodeName`
+        && `attributeExists "Gb_ShowDoubleSided" $nodeName` == 0)
+    {
+        addAttr -ln Gb_ShowDoubleSided -at bool $nodeName;
+    }
+    
+    if(`attributeExists "Gb_ShowDoubleSided" $nodeName`)
+    {
+        if(`checkBox -ex AEGamebryoDoubleSidedCheckBox`)
+        {
+            checkBox -e -cc ("AEGamebryoToggleDoubleSidedNode(\"" + $nodeName + "\")")
+                AEGamebryoDoubleSidedCheckBox;
+        }
+        else
+        {
+            AddDoubleSidedCheckBox($nodeName);
+        }
+    }
+    else
+    {
+        if(`columnLayout -ex ("Ni_DoubleSidedNode" + "ColumnLayout")`)
+        {
+            deleteUI ("Ni_DoubleSidedNode" + "ColumnLayout");
+        }
+    }
+}
+
+global proc AEGamebryoResetDoubleSided(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(`attributeExists "Gb_ShowDoubleSided" $nodeName`)
+    {
+        if(`checkBox -ex AEGamebryoDoubleSidedCheckBox`)
+        {
+            checkBox -e -cc ("AEGamebryoToggleDoubleSidedNode(\"" + $nodeName + "\")")
+                AEGamebryoDoubleSidedCheckBox;
+        }
+        else
+        {
+            AddDoubleSidedCheckBox($nodeName);
+        }
+    }
+    else
+    {
+        if(`columnLayout -ex ("Ni_DoubleSidedNode" + "ColumnLayout")`)
+        {
+            deleteUI ("Ni_DoubleSidedNode" + "ColumnLayout");
+        }
+    }
+}
+
+global proc AddDoubleSidedCheckBox(string $nodeName)
+{
+
+    int $hasAttr = `attributeExists "Ni_DoubleSidedNode" $nodeName`;
+
+    columnLayout
+        -cal "center"
+        -columnOffset "left" 40
+        -cat "left" 146
+        ("Ni_DoubleSidedNode" + "ColumnLayout");
+
+        checkBox
+            -label "Double Sided"
+            -v $hasAttr
+            -cc ("AEGamebryoToggleDoubleSidedNode(\"" + $nodeName + "\")")
+            AEGamebryoDoubleSidedCheckBox;
+    setParent..;
+}
+
+
+global proc AddTwoWayCheckBox(string $nodeName)
+{
+    if(`attributeExists NiData_Portal $nodeName`)
+    {
+        $hasAttr = `attributeExists NiData_TwoWay $nodeName`;
+
+        checkBox
+            -label "Two Way"
+            -v $hasAttr
+            -cc ("AEGamebryoToggleTwoWay(\"" + $nodeName + "\")")
+            -p "PortalColumnLayout"
+            AEGamebryoTwoWayCheckBox;
+        setParent..;
+    }
+}
+
+global proc int AEGamebryoHasPortal(string $nodeName)
+{
+ if(`attributeExists NiData_Portal $nodeName` ||
+    `attributeExists NiData_TwoWay $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddPortalAttr(string $nodeName)
+{
+    string $labels[] = {"Portal To"};
+    string $attrNames[] = {"NiData_Portal"};
+
+    AEGamebryoAddManyAttrs($nodeName, "Portal", $labels, 
+        $attrNames);
+
+    if(`attributeExists "NiData_Portal" $nodeName`)
+    {
+        if(`checkBox -ex AEGamebryoTwoWayCheckBox`)
+        {
+            checkBox -e -cc ("AEGamebryoToggleTwoWay(\"" + $nodeName + "\")")
+                AEGamebryoTwoWayCheckBox;
+        }
+        else
+        {
+            AddTwoWayCheckBox($nodeName);
+        }
+    }
+    else
+    {
+        deleteUI AEGamebryoTwoWayCheckBox;
+    }
+}
+
+global proc AEGamebryoAddPortal(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Portal", "Portal");
+    AEGamebryoSetEnableStateOframe(false, "Portal");
+
+    if(AEGamebryoHasPortal($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Portal");
+        AEGamebryoAddPortalAttr($nodeName);
+    }
+}
+
+global proc AEGamebryoResetPortal(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasPortal($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Portal");
+        AEGamebryoAddPortalAttr($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Portal");
+    }
+}
+
+global proc AEGamebryoAddCharacterCompressionAttr(string $nodeName)
+{
+    string $labels[] = {"Character Compact Global", 
+        "Compression Global"};
+    string $attrNames[] = {"Ni_CharacterCompactGlobal", 
+        "Ni_CharacterCompressionGlobal"};
+
+    AEGamebryoAddManyAttrs($nodeName, "CharacterCompression", $labels, 
+        $attrNames);
+}
+
+global proc int AEGamebryoHasCharacterCompression(string $nodeName)
+{
+     if(`attributeExists Ni_CharacterCompactGlobal $nodeName` ||
+        `attributeExists Ni_CharacterCompressionGlobal $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddPortal(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Character Compression", "CharacterCompression");
+    AEGamebryoSetEnableStateOframe(false, "CharacterCompression");
+
+    if(AEGamebryoHasCharacterCompression($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "CharacterCompression");
+        AEGamebryoAddCharacterCompressionAttr($nodeName);
+    }
+}
+
+global proc AEGamebryoResetPortal(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasCharacterCompression($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "CharacterCompression");
+        AEGamebryoAddCharacterCompressionAttr($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "CharacterCompression");
+    }
+}
+
+global proc AEGamebryoTransformCommon (string $nodeName) 
+{
+    editorTemplate -beginLayout "Gamebryo";
+    //all of this stuff should only appear if the attributes exists
+    //All of this stuff is just for transform nodes
+
+    editorTemplate -callCustom "ChooseTypeOfAdd" "ChooseTypeOfReset" "Nothing";
+    
+    editorTemplate -beginLayout "Gamebryo Attribute Descriptions";
+        editorTemplate -callCustom "TransAddButtonsAndDescriptions" "TransResetButtonsAndDescriptions" "Nothing";
+    editorTemplate -endLayout;
+
+    editorTemplate -label "Billboard Rotation" -addControl "Ni_BillboardNode";
+
+    editorTemplate -label "ZBuffer Usage" -addControl Ni_ZBufferProperty;
+
+    editorTemplate -callCustom "AEGamebryoAddDoubleSided" 
+        "AEGamebryoResetDoubleSided" "Nothing";
+
+    editorTemplate -callCustom "AEGamebryoAddOptimizationOverrides"
+        "AEGamebryoResetOptimizationOverrides" "Nothing";
+
+    editorTemplate -callCustom "AEGamebryoAddAnimationLooping"
+        "AEGamebryoResetAnimationLooping" "Nothing";
+
+    editorTemplate -callCustom "AEGamebryoAddPackingProfile"
+        "AEGamebryoResetPackingProfile" "Nothing";
+    
+    editorTemplate -callCustom "AEGamebryoAddABV"
+        "AEGamebryoResetABV" "Nothing";
+
+    editorTemplate -callCustom "AEGamebryoAddSwitch" 
+        "AEGamebryoResetSwitch" "Nothing";
+
+    editorTemplate -callCustom "AEGamebryoAddSkinLOD"
+        "AEGamebryoResetSkinLOD" "Nothing";
+
+    editorTemplate -callCustom "AEGamebryoAddMeshOverrides"
+        "AEGamebryoResetMeshOverrides" "Nothing";
+
+    editorTemplate -callCustom "AEGamebryoAddCollider"
+        "AEGamebryoResetCollider" "Nothing";
+        
+    editorTemplate -callCustom "AEGamebryoAddSortAdjust"
+        "AEGamebryoResetSortAdjust" "Nothing";
+
+    editorTemplate -suppress Ni_No_Stripify;
+    
+    editorTemplate -suppress Ni_AnimationLoopingForAllChildren;
+    editorTemplate -suppress Ni_AnimationLoopingType;
+    
+    editorTemplate -suppress Ni_MeshStaticKeepPositions;
+    editorTemplate -suppress Ni_MeshStaticKeepNormals;
+    editorTemplate -suppress Ni_MeshStaticKeepColors;
+    editorTemplate -suppress Ni_MeshStaticKeepUVs;
+    editorTemplate -suppress Ni_MeshStaticKeepIndices;
+    editorTemplate -suppress Ni_MeshStaticKeepBoneData;
+
+    editorTemplate -suppress Ni_CharacterRoot;
+    editorTemplate -suppress Ni_Sequence_Animation_Accumulation;
+
+    editorTemplate -suppress Ni_Sequence;
+    editorTemplate -suppress Ni_TextKey;
+    editorTemplate -suppress Ni_MorphTag;
+    
+    editorTemplate -suppress Ni_SkinLODLevelMinimum;
+    editorTemplate -suppress Ni_SkinLODLevelMaximum;
+
+    editorTemplate -suppress Ni_SwitchNode;
+    editorTemplate -suppress Ni_SwitchChildIndex;
+ 
+    editorTemplate -suppress Ni_SphericalCollider;
+    editorTemplate -suppress Ni_PlanarCollider;
+    editorTemplate -suppress Ni_ColliderDeleteOnExport;
+        
+    editorTemplate -callCustom "AEGamebryoAddLighting"
+    "AEGamebryoResetLighting" "Nothing";
+
+    editorTemplate -suppress Ni_DynamicTextureMap;
+    editorTemplate -suppress Ni_TextureType;
+    editorTemplate -suppress Ni_CoordinateType;
+    editorTemplate -suppress Ni_ParallelRadius;
+    editorTemplate -suppress Ni_PerspectiveAngle;
+    editorTemplate -suppress Ni_ClampMode;
+    editorTemplate -suppress Ni_Filter;
+    editorTemplate -suppress Ni_Use_Clipping_Plane;
+
+    editorTemplate -suppress Ni_DoubleSidedNode;
+    editorTemplate -suppress Gb_ShowDoubleSided;
+
+    editorTemplate -suppress Ni_SgoKeepNode;
+    editorTemplate -suppress Gb_ShowSgoKeepControl;
+
+    editorTemplate -suppress Gb_PackingProfile;
+
+    editorTemplate -suppress NiData_NiSortAdjustNode;
+
+    editorTemplate -endLayout;
+}

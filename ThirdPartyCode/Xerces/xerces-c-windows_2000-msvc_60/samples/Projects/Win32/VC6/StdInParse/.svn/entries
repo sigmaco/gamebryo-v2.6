@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="232861"
+   name=""
+   committed-date="2005-08-15T19:24:56.805244Z"
+   url="https://svn.apache.org/repos/asf/xerces/c/branches/xerces-2.7/samples/Projects/Win32/VC6/StdInParse"
+   last-author="jberry"
+   kind="dir"
+   uuid="13f79535-47bb-0310-9956-ffa450edef68"
+   prop-time="2005-08-26T16:19:44.000000Z"
+   revision="240275"/>
+<entry
+   committed-rev="174193"
+   name="StdInParse.dsp"
+   text-time="2005-08-26T16:19:44.000000Z"
+   committed-date="2002-08-27T20:42:00.000000Z"
+   checksum="a1f2e712d10582ff0023a10a233ed435"
+   last-author="peiyongz"
+   kind="file"
+   prop-time="2005-08-26T16:19:44.000000Z"/>
+<entry
+   committed-rev="174193"
+   name="StdInParse.mak"
+   text-time="2005-08-26T16:19:44.000000Z"
+   committed-date="2002-08-27T20:42:00.000000Z"
+   checksum="791ee698486b701ca7d99e5612167374"
+   last-author="peiyongz"
+   kind="file"
+   prop-time="2005-08-26T16:19:44.000000Z"/>
+</wc-entries>

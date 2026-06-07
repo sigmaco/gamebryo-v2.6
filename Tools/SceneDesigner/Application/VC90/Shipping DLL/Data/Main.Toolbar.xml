@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<Toolbars>
+	<Toolbar name="00 FileManagement">
+        <Button name="New Scene">
+            <Command name="NewFile"/>
+            <Image>
+                <File>document_new.png</File>
+            </Image>
+        </Button>
+        <Button name="Open Scene">
+            <Command name="OpenFile"/>
+            <Image>
+                <File>document_open.png</File>
+            </Image>
+        </Button>
+        <Button name="Save Scene">
+            <Command name="SaveFile"/>
+            <Image>
+                <File>document_save.png</File>
+            </Image>
+        </Button>
+	</Toolbar>
+	<Toolbar name="01 Options">
+        <Button name="Options">
+            <Command name="Options"/>
+            <Image>
+                <File>options.png</File>
+            </Image>
+        </Button>
+	</Toolbar>
+	<Toolbar name="02 UndoRedo">
+        <Button name="Undo">
+            <Command name="Undo"/>
+            <Image>
+                <File>undo.png</File>
+            </Image>
+        </Button>
+        <Button name="Redo">
+            <Command name="Redo"/>
+            <Image>
+                <File>redo.png</File>
+            </Image>
+        </Button>
+	</Toolbar>
+</Toolbars>   

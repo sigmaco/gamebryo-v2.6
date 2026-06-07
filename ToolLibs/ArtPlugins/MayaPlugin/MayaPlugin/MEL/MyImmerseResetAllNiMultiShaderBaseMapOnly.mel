@@ -1,0 +1,27 @@
+//
+// MyImmerseResetAllNiMultiShaderBaseMapOnly.mel
+//
+// Loop through each NiMultiShader and reset 
+// the scene graph connections associated with only
+// showing the base map.
+
+
+global proc MyImmerseResetAllNiMultiShaderBaseMapOnly()
+{
+    string $szPluginName = MyImmerseGetPluginName();
+
+    if (MyImmerseCheckAndLoadPlugin($szPluginName))
+    {
+        error("Couldn't load the MyImmerse Plugin!");
+    }
+
+    string $szNiMultiShaderNodes[] = `ls -l -typ NiMultiShader`;
+    
+    int $iCount = 0;
+    while( $iCount < size($szNiMultiShaderNodes))
+    {
+        MyImmerseResetNiMultiShaderBaseMapOnly($szNiMultiShaderNodes[$iCount]);
+        $iCount = $iCount + 1;
+    }
+
+}

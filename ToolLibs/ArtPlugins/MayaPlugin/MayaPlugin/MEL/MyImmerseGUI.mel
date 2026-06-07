@@ -1,0 +1,2500 @@
+//
+// MEL Script for generating user interface and collecting
+// user data regarding viewing and exporting.
+//
+
+//---------------------------------------------------------------------------
+
+source "GamebryoExporting";
+
+global proc
+MayaNifBrowseForScript()
+{
+    string $file = `fileDialog`;
+    textField -e -text $file MayaNifScript;
+}
+
+//---------------------------------------------------------------------------
+proc string MyImmerseGetPluginAndGamebryoVersion()
+{
+    // Get the plugin name and version info.
+    string $szPluginName = MyImmerseGetPluginName();
+
+    if(catchQuiet(`pluginInfo -q -v $szPluginName`))
+    {
+        error "Plugin not Loaded!";
+    }
+
+    string $myImmerseVersion = `pluginInfo -q -v $szPluginName`;
+    
+    return $myImmerseVersion;
+}
+//---------------------------------------------------------------------------
+proc string MyImmerseGetPluginVersion()
+{
+    // Get the plugin name and version info.
+    string $myImmerseVersion = MyImmerseGetPluginAndGamebryoVersion();
+       
+    // The format of $myImmerseVersion is: 
+    // "Gamebryo Version:[a.b.c.d]\n Exporter Plugin Version:[e.f]"   
+    
+    // First, seperate the two version strings.
+    string $szArray[]; 
+    tokenize($myImmerseVersion,"\n", $szArray);
+    
+    // Next, seperate the string from the actual number
+    string $szExporterVersion[];
+    tokenize($szArray[1],":", $szExporterVersion);
+         
+    return $szExporterVersion[1];
+}
+//---------------------------------------------------------------------------
+proc string MyImmerseGetGamebryoVersion()
+{   
+    // Get the plugin name and version info.
+    string $myImmerseVersion = MyImmerseGetPluginAndGamebryoVersion();
+       
+    // The format of $myImmerseVersion is: 
+    // "Gamebryo Version:[a.b.c.d]\n Exporter Plugin Version:[e.f]"   
+    
+    // First, seperate the two version strings.
+    string $szArray[]; 
+    tokenize($myImmerseVersion,"\n", $szArray);
+    
+    // Next, seperate the string from the actual number
+    string $szGamebryoVersion[];
+    tokenize($szArray[0],":", $szGamebryoVersion);
+
+    return $szGamebryoVersion[1];
+}
+//---------------------------------------------------------------------------
+proc int MyImmerseIsLessThanExporter(string $ExporterVersion, int $iCheckMajor, int $iCheckMinor)
+{
+    if ($ExporterVersion == "")
+        return true;
+        
+    string $szVersionMajorMinor[];
+    tokenize($ExporterVersion,".",$szVersionMajorMinor);
+    
+    int $iMajor = (int)$szVersionMajorMinor[0];
+    int $iMinor = (int)$szVersionMajorMinor[1];
+
+    // Version is greater than $iCheckMajor.$iCheckMinor
+    if ($iMajor > $iCheckMajor)
+        return false;
+
+    // Version is less than $iCheckMajor.$iCheckMinor
+    if ($iMajor < $iCheckMajor)
+        return true;
+     
+    // Version is in the $iCheckMajor.x range where X less than $iCheckMinor    
+    if ($iMinor < $iCheckMinor)
+        return true;
+        
+    // Version is in the $iCheckMajor.x range, where x is >= than $iCheckMinor    
+    return false;
+}
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseIsViewerAvailable(string $szViewer)
+{
+    if (`optionVar -ex GamebryoAvailableViewers` == 0)
+        return 0;
+
+    string $szAvailableViewers[] = `optionVar -q GamebryoAvailableViewers`;
+
+    int $iLoop;
+
+    for ($iLoop = 0; $iLoop < size($szAvailableViewers); $iLoop++)
+    {
+        if ($szAvailableViewers[$iLoop] == $szViewer)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+//---------------------------------------------------------------------------
+global proc string MyImmerseGetPreviousVersion(string $initialSettings)
+{
+    // Slow function, call seldomly.
+    string  $optionList[];
+    string  $optionBreakDown[];
+    int     $index;
+
+    string $currentOptions = $initialSettings;
+    string $PreviousExportVersion = "";
+    
+    if (size($currentOptions) > 0) 
+    {
+        tokenize($currentOptions, ";", $optionList);
+        for ($index = 0; $index < size($optionList); $index++) 
+        {
+            tokenize($optionList[$index], "=", $optionBreakDown);
+            if ( $optionBreakDown[0] == "PreviousExportVersion") 
+            {
+                // Versioning didn't exist before Exporter7.3/GB2.2
+                // Check Previous Version
+                $PreviousExportVersion = $optionBreakDown[1];               
+            }
+        }
+    }
+    
+    return $PreviousExportVersion;              
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSetGUIOptions(string $initialSettings)
+{
+    int     $intVal;
+    int     $intVals[];
+    float   $floatVal;
+    string  $stringVal;
+    string  $stringVals[];
+    string  $currentOptions;
+    string  $optionList[];
+    string  $optionBreakDown[];
+    int     $index;
+
+
+    int     $iLegacyTexturePlatform;
+
+        // Now set to current settings.
+    
+    $currentOptions = $initialSettings;
+    
+    string $PreviousExportVersion = MyImmerseGetPreviousVersion($initialSettings);
+    string $CurrentExportVersion = MyImmerseGetPluginVersion();
+    if ($PreviousExportVersion != $CurrentExportVersion)
+    {
+        if ($PreviousExportVersion == "")
+        {
+            // Versions were not tracked pre-7.3
+            print("VERSION UPDATE from Pre-7.3 version" + " to version " + $CurrentExportVersion + "\n");
+        }
+        else
+        {
+            print("VERSION UPDATE from " + $PreviousExportVersion + " to version " + $CurrentExportVersion + "\n");
+        }
+    }    
+       
+    if (size($currentOptions) > 0) 
+    {
+        tokenize($currentOptions, ";", $optionList);            
+        
+        for ($index = 0; $index < size($optionList); $index++) 
+        {
+            tokenize($optionList[$index], "=", $optionBreakDown);
+
+            // Frame settings
+
+    // *************
+    //  Export - Display Options
+    // *************
+
+           if ( $optionBreakDown[0] == "ExportDisplayFrame") 
+           {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 1 ) {
+                    frameLayout -e -cl true MayaNifExportDisplayFrame;
+                } else {
+                    frameLayout -e -cl false MayaNifExportDisplayFrame;
+                }
+            }
+            else if ($optionBreakDown[0] == "ShouldPromptOnExport")
+            {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false PromptValueCheckbox;
+                } else { 
+                    checkBoxGrp -e -v1 true PromptValueCheckbox;
+                }
+            }
+            else if ($optionBreakDown[0] == "ExportFilePath")
+            {
+                text -e -label $optionBreakDown[1] FilePathText;
+            }
+            else if ( $optionBreakDown[0] == "ExportNonVisible" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifExportNonVisible;          
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifExportNonVisible;          
+                }
+             }
+             else if ( $optionBreakDown[0] == "MayaNifExportDefaultCameras" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifExportDefaultCameras;          
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifExportDefaultCameras;          
+                }
+             }  
+             else if ( $optionBreakDown[0] == "MayaNifExportWorkingUnits" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifExportWorkingUnits;          
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifExportWorkingUnits;          
+                }
+             }  
+             else if ( $optionBreakDown[0] == "MayaNifExportAutoCenterLODs" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifExportAutoCenterLODs;          
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifExportAutoCenterLODs;          
+                }
+             }  
+             else if ( $optionBreakDown[0] == "MayaNifExportFlipTexturesInsteadOfUVs" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifExportFlipTexturesInsteadOfUVs;          
+                    radioButtonGrp -e -en3 true MayaNifTextureSaveLocation;
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifExportFlipTexturesInsteadOfUVs; 
+                    radioButtonGrp -e -en3 false MayaNifTextureSaveLocation;
+                }
+             }  
+             else if ( $optionBreakDown[0] == "MayaNifExportAddDefaultAmbientForMayaLights" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifExportAddDefaultAmbientForMayaLights;          
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifExportAddDefaultAmbientForMayaLights; 
+                }
+             }  
+             else if ( $optionBreakDown[0] == "MayaNifExportGuaranteeObjectNamesAreUnique" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifExportGuaranteeObjectNamesAreUnique;          
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifExportGuaranteeObjectNamesAreUnique; 
+                }
+             }  
+             else if ( $optionBreakDown[0] == "MayaNifUseOldCameraFOV" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifUseOldCameraFOV;          
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifUseOldCameraFOV; 
+                }
+             } 
+             else if ( $optionBreakDown[0] == "MayaNifWindowSize" ) {
+                $intVal = $optionBreakDown[1];
+                switch( $intVal )
+                {
+                    case 1:
+                        radioButtonGrp -e -sl 1 MayaNifWindowSize;
+                        break;
+                    case 2:
+                        radioButtonGrp -e -sl 2 MayaNifWindowSize;
+                        break;
+                    case 3:
+                        radioButtonGrp -e -sl 3 MayaNifWindowSize;
+                        break;
+                    case 4:
+                        radioButtonGrp -e -sl 4 MayaNifWindowSize;
+                        break;
+                    default:
+                        // ERROR USE THE DEFAULT OF 640/480
+                        radioButtonGrp -e -sl 1 MayaNifWindowSize;  
+                        break;
+                }
+             }  
+             else if ( $optionBreakDown[0] == "MayaNifExportFullScreen" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifExportFullScreen;          
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifExportFullScreen;          
+                }
+             }  
+                // ***** LEGACY VIEWER CONVERSION
+            else if ($optionBreakDown[0] == "MayaNifViewerType") 
+            {
+                // Just Default to the Scene Viewer            
+                radioButtonGrp -e -sl 2 MayaNifGamebryoViewerType2;
+            }  
+                // ***** LEGACY VIEWER CONVERSION
+            else if ($optionBreakDown[0] == "MayaNifSceneViewerType") 
+            {
+                $intVal = $optionBreakDown[1];
+
+                if ( $intVal == 1 ) {
+                    radioButtonGrp -e -sl 1 MayaNifGamebryoViewerType;
+                } else if ( $intVal == 2 ) {
+                    radioButtonGrp -e -sl 1 MayaNifGamebryoViewerType;
+                } else if ( $intVal == 3 ) {
+                    radioButtonGrp -e -sl 1 MayaNifGamebryoViewerType2;
+                } else if ( $intVal == 4 ) {
+                    radioButtonGrp -e -sl 2 MayaNifGamebryoViewerType2;
+                } else
+                {
+                    radioButtonGrp -e -sl 2 MayaNifGamebryoViewerType2;
+                }
+            }  
+            else if ($optionBreakDown[0] == "MayaNifGamebryoViewerType") 
+            {
+                $intVal = $optionBreakDown[1];
+
+                if ( $intVal == 1 ) {
+                    radioButtonGrp -e -sl 1 MayaNifGamebryoViewerType;
+                } else if ( $intVal == 2 ) {
+                    radioButtonGrp -e -sl 1 MayaNifGamebryoViewerType;
+                } else if ( $intVal == 3 ) {
+                    radioButtonGrp -e -sl 1 MayaNifGamebryoViewerType2;
+                } else if ( $intVal == 4 ) {
+                    radioButtonGrp -e -sl 2 MayaNifGamebryoViewerType2;
+                } else if ( $intVal == 5 ) {
+                    radioButtonGrp -e -sl 1 MayaNifGamebryoViewerType3;
+                } else if ( $intVal == 6 ) {
+                    radioButtonGrp -e -sl 2 MayaNifGamebryoViewerType3;
+                } else if ( $intVal == 7 ) {
+                    radioButtonGrp -e -sl 3 MayaNifGamebryoViewerType3;                    
+                } else if ( $intVal == 8 ) {
+                    radioButtonGrp -e -sl 4 MayaNifGamebryoViewerType3;
+                } else if ( $intVal == 9 ) {
+
+                    if(`optionVar -arraySize CustomNIFViewers` == 0)
+                    {
+                        radioButtonGrp -e -sl 2 MayaNifGamebryoViewerType2;
+                        optionMenu -e -en false MayaNifCustomViewer;
+                    }
+                    else
+                    {
+                        radioButtonGrp -e -sl 1 MayaNifGamebryoViewerType4;
+                        optionMenu -e -en true MayaNifCustomViewer;
+                    }
+                }
+            }  
+            else if ($optionBreakDown[0] == "MayaNifGamebryoCustomViewerName") 
+            {
+                print("MayaNifGamebryoCustomViewerName\n");
+                $stringVal = $optionBreakDown[1];
+                print($stringVal);
+                print("\n");
+                
+                
+                string $szCustomViewers[];
+                
+                if(`optionVar -ex CustomNIFViewers` == 1)
+                {
+                    $szCustomViewers = `optionVar -q CustomNIFViewers`;
+                }
+
+                if(size($szCustomViewers) != 0)
+                {
+                    int $iLoop;
+                    int $iSelection = -1;
+                    for ($iLoop = 0; $iLoop < size($szCustomViewers); $iLoop++)
+                    {
+                        if ($stringVal == $szCustomViewers[$iLoop])
+                        {
+                            $iSelection = $iLoop;
+                        }                
+                    }
+                    if ($iSelection == -1)
+                        $iSelection = 1;
+                    else     
+                        $iSelection = $iSelection + 1;
+                    optionMenu -e -sl $iSelection MayaNifCustomViewer;
+               }
+    
+            }
+            // Legacy Options Conversion
+            else if ($optionBreakDown[0] == "MayaNifExportForPlatformType") 
+            {
+                // Default to DX8/DX9
+                radioButtonGrp -e -sl 1 MayaNifExportForGamebryoPlatformType;
+            } 
+            else if ($optionBreakDown[0] == "MayaNifExportForGamebryoPlatformType") 
+            {
+                $intVal = $optionBreakDown[1];
+
+                if ( $intVal == 1 ) {
+                    radioButtonGrp -e -sl 1 MayaNifExportForGamebryoPlatformType;
+                } else if ( $intVal == 2 ) {
+                    radioButtonGrp -e -sl 2 MayaNifExportForGamebryoPlatformType;
+                } else if ( $intVal == 3 ) {
+                    radioButtonGrp -e -sl 1 MayaNifExportForGamebryoPlatformType2;
+                } else if ( $intVal == 4 ) {
+                    radioButtonGrp -e -sl 2 MayaNifExportForGamebryoPlatformType2;
+                } else if ( $intVal == 5 ) {
+                    radioButtonGrp -e -sl 3 MayaNifExportForGamebryoPlatformType2;                 
+                } else {
+                    radioButtonGrp -e -sl 4 MayaNifExportForGamebryoPlatformType2;
+                }
+
+            } 
+             else if ( $optionBreakDown[0] == "MayaNifExportOptimizeMeshForViewer" ) {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 0 ) {
+                    checkBoxGrp -e -v1 false MayaNifExportOptimizeMeshForViewer;          
+                } else { 
+                    checkBoxGrp -e -v1 true MayaNifExportOptimizeMeshForViewer;          
+                }
+             }  
+            
+             
+    // *************
+    //  Background Color
+    // *************
+            else
+             if ( $optionBreakDown[0] == "Red" ) {
+                $intVal = $optionBreakDown[1];
+                intSliderGrp -e -v $intVal MayaNifRed;
+             }
+            else
+             if ( $optionBreakDown[0] == "Green" ) {
+                $intVal = $optionBreakDown[1];
+                intSliderGrp -e -v $intVal MayaNifGreen;
+             }
+            else
+             if ( $optionBreakDown[0] == "Blue" ) {
+                $intVal = $optionBreakDown[1];
+                intSliderGrp -e -v $intVal MayaNifBlue;
+             }
+
+
+    // *************
+    // Texture Options
+    // *************
+            else if ( $optionBreakDown[0] == "textureFrame") {
+                $intVal = $optionBreakDown[1];
+                if ( $intVal == 1 ) {
+                    frameLayout -e -cl true MayaNifTextureFrame;
+                } else {
+                    frameLayout -e -cl false MayaNifTextureFrame;
+                }
+            }
+            else
+             if ( $optionBreakDown[0] == "Xtexres" ) {
+                $intVal = $optionBreakDown[1];
+                intSliderGrp -e -v $intVal MayaNifXtexres;
+             }
+            else
+             if ( $optionBreakDown[0] == "Ytexres" ) {
+                $intVal = $optionBreakDown[1];
+                intSliderGrp -e -v $intVal MayaNifYtexres;
+             }
+            else
+             if ( $optionBreakDown[0] == "MaxXtexres" ) {
+                $intVal = $optionBreakDown[1];
+                intSliderGrp -e -v $intVal MayaNifMaxXtexres;
+             }
+            else
+             if ( $optionBreakDown[0] == "MaxYtexres" ) {
+                $intVal = $optionBreakDown[1];
+                intSliderGrp -e -v $intVal MayaNifMaxYtexres;
+             }
+             else if ($optionBreakDown[0] == "MayaNifTextureSaveLocation")
+             {
+                $intVal = $optionBreakDown[1];
+                radioButtonGrp -e -sl $intVal MayaNifTextureSaveLocation;
+
+             }  
+             else if ($optionBreakDown[0] == "MayaNifExportTextureAmbientDefault")
+             {
+                $intVal = $optionBreakDown[1];
+                if ($intVal == 1)
+                {
+                    checkBoxGrp -e -v1 true MayaNifExportTextureAmbientDefault;
+                } else 
+                {
+                    checkBoxGrp -e -v1 false MayaNifExportTextureAmbientDefault;
+                }
+
+             }  
+             else if ($optionBreakDown[0] == "MayaNifPlatformType")
+             {
+
+                $iLegacyTexturePlatform = $optionBreakDown[1];
+
+             }
+             else if ($optionBreakDown[0] == "MayaNifPlatformExportDirectory")
+             {
+                if ( $iLegacyTexturePlatform == 1 )
+                {
+                    // PC                        
+                    textFieldGrp -e -tx $optionBreakDown[1] MayaNifGenericTextureDirectory;
+                } 
+                else if ( $iLegacyTexturePlatform == 2 )
+                {
+                    print ("ERROR Invalid Legacy Texture Platform\n");
+                }
+                else if ( $iLegacyTexturePlatform == 3 )
+                {
+                    print ("ERROR Invalid Legacy Texture Platform\n");
+                }
+                else if ( $iLegacyTexturePlatform == 4 )
+                {
+                    // PS2
+                    textFieldGrp -e -tx $optionBreakDown[1] MayaNifPS2TextureDirectory;
+                }
+                else if ( $iLegacyTexturePlatform == 5 )
+                {
+                    // XBox
+                    textFieldGrp -e -tx $optionBreakDown[1] MayaNifXBoxTextureDirectory;
+                }
+                else
+                {
+                    print ("ERROR Invalid Legacy Texture Platform\n");
+                }
+             }
+             else if ($optionBreakDown[0] == "MayaNifTextureDefaultQuality")
+             {
+
+                $intVal = $optionBreakDown[1];
+
+                if ( $iLegacyTexturePlatform == 1 )
+                {
+                    // PC
+                    if ($intVal == 1)
+                    {
+                        // 16 bit
+                        textScrollList -e -selectIndexedItem 3 MayaNifGenericTextureType;
+                    }
+                    else if ($intVal == 2)
+                    {
+                        // 24 bit
+                        textScrollList -e -selectIndexedItem 2 MayaNifGenericTextureType;
+                    }
+                    else if ($intVal == 3)
+                    {
+                        // Compressed
+                        textScrollList -e -selectIndexedItem 7 MayaNifGenericTextureType;
+                    }
+                    else if ($intVal == 4)
+                    {
+                        // Default
+                        textScrollList -e -selectIndexedItem 1 MayaNifGenericTextureType;
+                    }
+                } 
+                else if ( $iLegacyTexturePlatform == 2 )
+                {
+                    print ("ERROR Invalid Legacy Texture Platform\n");
+                }
+                else if ( $iLegacyTexturePlatform == 3 )
+                {
+                    print ("ERROR Invalid Legacy Texture Platform\n");
+                }
+                else
+                {
+                    print ("ERROR Invalid Legacy Texture Platform\n");
+                }
+
+             }
+
+             // Generic
+             else if (($optionBreakDown[0] == "MayaNifGenericTextureType" ) ||
+                      ($optionBreakDown[0] == "MayaNifPCTextureType" ))
+             {            
+                //legacy test remove in versions greater then 2.5
+                if(size($optionBreakDown[1]) == 1)
+                {
+                    //old value, requires conversion
+                    $intVal = $optionBreakDown[1];
+                    switch($intVal)
+                    {
+                    case 1:
+                        $stringVal = "Default (Match Source Image)";
+                        break;
+
+                    case 2:
+                        $stringVal = "24/32 bit";
+                        break;
+
+                    case 3:
+                        $stringVal = "16 bit";
+                        break;
+
+                    case 4:
+                        //old 8 bit
+                        $stringVal = "Default (Match Source Image)";
+                        warning("8 bit palletized not supported using default.");
+                        break;
+
+                    case 5:
+                        $stringVal = "Compress DXT1";
+                        break;
+
+                    case 6:
+                        $stringVal = "Compress DXT3";
+                        break;
+
+                    case 7:
+                        $stringVal = "Compress DXT5";
+                        break;
+                    }
+                }
+                else
+                {
+                    $stringVal = $optionBreakDown[1];
+                    
+                }
+
+                textScrollList -e -selectItem $stringVal MayaNifGenericTextureType;
+                 
+              
+             }
+             else if (($optionBreakDown[0] == "MayaNifGenericTextureReduction" ) ||
+                      ( $optionBreakDown[0] == "MayaNifPCTextureReduction" ))
+             {            
+                $intVal = $optionBreakDown[1];
+                textScrollList -e -selectIndexedItem $intVal MayaNifGenericTextureReduction;
+             }
+             else if (($optionBreakDown[0] == "MayaNifGenericTextureDirectory" ) ||
+                      ($optionBreakDown[0] == "MayaNifPCTextureDirectory" ))
+             {
+                $strVal = $optionBreakDown[1];
+                textFieldGrp -e -text $strVal MayaNifGenericTextureDirectory;
+             }
+
+             // Xenon
+             else if ( $optionBreakDown[0] == "MayaNifXenonTextureType" )
+             {
+                //legacy test remove in versions greater then 2.5
+                if(size($optionBreakDown[1]) == 1)
+                {
+                    //old value, requires conversion
+                    $intVal = $optionBreakDown[1];
+                    switch($intVal)
+                    {
+                    case 1:
+                        $stringVal = "Default (Match Source Image)";
+                        break;
+
+                    case 2:
+                        $stringVal = "24/32 bit";
+                        break;
+
+                    case 3:
+                        $stringVal = "16 bit";
+                        break;
+
+                    case 4:
+                        //old 8 bit
+                        $stringVal = "Default (Match Source Image)";
+                        warning("8 bit palletized not supported using default.");
+                        break;
+
+                    case 5:
+                        $stringVal = "Compress DXT1";
+                        break;
+
+                    case 6:
+                        $stringVal = "Compress DXT3";
+                        break;
+
+                    case 7:
+                        $stringVal = "Compress DXT5";
+                        break;
+                    }
+                }
+                else
+                {
+                    $stringVal = $optionBreakDown[1];
+                    
+                }
+
+                textScrollList -e -selectItem $stringVal MayaNifXenonTextureType;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifXenonTextureReduction" )
+             {
+                $intVal = $optionBreakDown[1];
+                textScrollList -e -selectIndexedItem $intVal MayaNifXenonTextureReduction;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifXenonTextureDirectory" )
+             {
+                $strVal = $optionBreakDown[1];
+                textFieldGrp -e -text $strVal MayaNifXenonTextureDirectory;
+             }
+
+             // DX9
+             else if ( $optionBreakDown[0] == "MayaNifDX9TextureType" )
+             {
+                
+                //legacy test remove in versions greater then 2.5
+                if(size($optionBreakDown[1]) == 1)
+                {
+                    //old value, requires conversion
+                    $intVal = $optionBreakDown[1];
+                    switch($intVal)
+                    {
+                    case 1:
+                        $stringVal = "Default (Match Source Image)";
+                        break;
+
+                    case 2:
+                        $stringVal = "24/32 bit";
+                        break;
+                    
+                    case 3:
+                        $stringVal = "16 bit";
+                        break;
+
+                    case 4:
+                        //old 8 bit
+                        $stringVal = "Default (Match Source Image)";
+                        warning("8 bit palletized not supported using default.");
+                        break;
+
+                    case 6:
+                        $stringVal = "Compress DXT1";
+                        break;
+
+                    case 7:
+                        $stringVal = "Compress DXT3";
+                        break;
+
+                    case 8:
+                        $stringVal = "Compress DXT5";
+                        break;
+                    }
+                }
+                else
+                {
+                    $stringVal = $optionBreakDown[1];
+                }
+
+                textScrollList -e -selectItem $stringVal MayaNifDX9TextureType;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifDX9TextureReduction" )
+             {
+                $intVal = $optionBreakDown[1];
+                textScrollList -e -selectIndexedItem $intVal MayaNifDX9TextureReduction;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifDX9TextureDirectory" )
+             {
+                $strVal = $optionBreakDown[1];
+                textFieldGrp -e -text $strVal MayaNifDX9TextureDirectory;
+             }
+             
+             // D3D10
+             else if ( $optionBreakDown[0] == "MayaNifD3D10TextureType" )
+             {
+                //legacy test remove in versions greater then 2.5
+                if(size($optionBreakDown[1]) == 1)
+                {
+                    //old value, requires conversion
+                    $intVal = $optionBreakDown[1];
+                    switch($intVal)
+                    {
+                    case 1:
+                        $stringVal = "Default (Match Source Image)";
+                        break;
+
+                    case 2:
+                        $stringVal = "24/32 bit";
+                        break;
+
+                    case 3:
+                        $stringVal = "16 bit";
+                        break;
+
+                    case 4:
+                        //old 8 bit
+                        $stringVal = "Default (Match Source Image)";
+                        warning("8 bit palletized not supported using default.");
+                        break;
+
+                    case 5:
+                        $stringVal = "Compress DXT1";
+                        break;
+
+                    case 6:
+                        $stringVal = "Compress DXT3";
+                        break;
+
+                    case 7:
+                        $stringVal = "Compress DXT5";
+                        break;
+                    }
+                }
+                else
+                {
+                    $stringVal = $optionBreakDown[1];
+                }
+
+                textScrollList -e -selectItem $stringVal MayaNifD3D10TextureType;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifD3D10TextureReduction" )
+             {
+                $intVal = $optionBreakDown[1];
+                textScrollList -e -selectIndexedItem $intVal MayaNifD3D10TextureReduction;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifD3D10TextureDirectory" )
+             {
+                $strVal = $optionBreakDown[1];
+                textFieldGrp -e -text $strVal MayaNifD3D10TextureDirectory;
+             }
+
+             // PS3
+             else if ( $optionBreakDown[0] == "MayaNifPS3TextureType" )
+             {
+                //legacy test remove in versions greater then 2.5
+                if(size($optionBreakDown[1]) == 1)
+                {
+                    //old value, requires conversion
+                    $intVal = $optionBreakDown[1];
+                    switch($intVal)
+                    {
+                    case 1:
+                        $stringVal = "Default (Match Source Image)";
+                        break;
+
+                    case 2:
+                        $stringVal = "24/32 bit";
+                        break;
+
+                    case 3:
+                        $stringVal = "16 bit";
+                        break;
+
+                    case 4:
+                        //old 8 bit
+                        $stringVal = "Default (Match Source Image)";
+                        warning("8 bit palletized not supported using default.");
+                        break;
+
+                    case 5:
+                        $stringVal = "Compress DXT1";
+                        break;
+
+                    case 6:
+                        $stringVal = "Compress DXT3";
+                        break;
+
+                    case 7:
+                        $stringVal = "Compress DXT5";
+                        break;
+                    }
+                }
+                else
+                {
+                    $stringVal = $optionBreakDown[1];
+                }
+                textScrollList -e -selectItem $stringVal MayaNifPS3TextureType;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifPS3TextureReduction" )
+             {
+                $intVal = $optionBreakDown[1];
+                textScrollList -e -selectIndexedItem $intVal MayaNifPS3TextureReduction;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifPS3TextureDirectory" )
+             {
+                $strVal = $optionBreakDown[1];
+                textFieldGrp -e -text $strVal MayaNifPS3TextureDirectory;
+             }
+
+             // Wii
+             else if ( $optionBreakDown[0] == "MayaNifWiiTextureType" )
+             {
+                //$intVal = $optionBreakDown[1];
+                //textScrollList -e -selectIndexedItem $intVal MayaNifWiiTextureType;
+                //legacy test remove in versions greater then 2.5
+                print($optionBreakDown[1]);
+                if(size($optionBreakDown[1]) == 1)
+                {
+                    //old value, requires conversion
+                    $intVal = $optionBreakDown[1];
+                    switch($intVal)
+                    {
+                    case 1:
+                        $stringVal = "Default (Match Source Image)";
+                        break;
+
+                    case 2:
+                        $stringVal = "24/32 bit";
+                        break;
+
+                    case 3:
+                        $stringVal = "16 bit";
+                        break;
+
+                    case 4:
+                        //old 8 bit
+                        $stringVal = "Default (Match Source Image)";
+                        warning("8 bit palletized not supported using default.");
+                        break;
+
+                    case 5:
+                        $stringVal = "Compress DXT1";
+                        break;
+
+                    case 6:
+                        $stringVal = "Compress DXT3";
+                        break;
+
+                    case 7:
+                        $stringVal = "Compress DXT5";
+                        break;
+                    }
+                }
+                else
+                {
+                    $stringVal = $optionBreakDown[1];
+                }
+                textScrollList -e -selectItem $stringVal MayaNifWiiTextureType;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifWiiTextureReduction" )
+             {
+                $intVal = $optionBreakDown[1];
+                textScrollList -e -selectIndexedItem $intVal MayaNifWiiTextureReduction;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifWiiTextureDirectory" )
+             {
+                $strVal = $optionBreakDown[1];
+                textFieldGrp -e -text $strVal MayaNifWiiTextureDirectory;
+             }
+
+    // *************
+    // Lighting 
+    // *************
+
+             else if( $optionBreakDown[0] == "LightingFrame" )
+             {
+                $intVal = $optionBreakDown[1];
+                if( $intVal == 1 )
+                {
+                    frameLayout -e -cl true MayaNifLightingFrame;
+                }
+                else
+                { 
+                    frameLayout -e -cl false MayaNifLightingFrame;
+                }
+             }
+             else if( $optionBreakDown[0] == "LightingOptimizeSceneRoot" )
+             {
+                // Stubbing print("28\n");
+                $intVal = $optionBreakDown[1];
+
+                if($intVal == 1)
+                    checkBoxGrp -e -v1 true MayaNifExportLightingOptimizeSceneRoot;          
+                else
+                    checkBoxGrp -e -v1 false MayaNifExportLightingOptimizeSceneRoot;          
+
+             }
+
+
+
+
+          
+
+    // *************
+    // Animation Options
+    // *************
+             else if( $optionBreakDown[0] == "AnimationFrame" )
+             {
+                $intVal = $optionBreakDown[1];
+                if( $intVal == 1 )
+                {
+                    frameLayout -e -cl true MayaNifAnimationFrame;
+                }
+                else
+                { 
+                    frameLayout -e -cl false MayaNifAnimationFrame;
+                }
+             }
+             else if ($optionBreakDown[0] == "AnimationExportAnimationRange") 
+             {
+                 $intVal = $optionBreakDown[1];
+                 if ( $intVal == 1 ) 
+                 {
+                     radioButtonGrp -e -sl 1 MayaNifAnimationExportAnimationRange;
+                 } else if ($intVal == 2) 
+                 {
+                     radioButtonGrp -e -sl 2 MayaNifAnimationExportAnimationRange;
+                 }
+             }
+             else if ( $optionBreakDown[0] == "MayaNifAnimationLoopOverRange" ) {
+                $intVal = $optionBreakDown[1];
+                if($intVal == 1)
+                {
+                    checkBoxGrp -e -v1 true MayaNifAnimationLoopOverRange;
+                }
+                else
+                {
+                    checkBoxGrp -e -v1 false MayaNifAnimationLoopOverRange;
+                }
+             }
+             else if ( $optionBreakDown[0] == "AnimationMaxFrameRate" ) {
+                // Stubbing print("43\n");
+                $intVal = $optionBreakDown[1];
+                intSliderGrp -e -v $intVal MayaNifAnimationMaxFrameRate;
+             }
+             else if ( $optionBreakDown[0] == "MayaNifAnimationMinimumBoneInfluence" ) {
+                $intVal = $optionBreakDown[1];
+                intSliderGrp -e -v $intVal MayaNifAnimationMinimumBoneInfluence;
+             }
+            else if ( $optionBreakDown[0] == "MayaNifAnimationSampleAllRotation" ) {
+                $intVal = $optionBreakDown[1];
+                checkBoxGrp -e -v1 $intVal MayaNifAnimationSampleAllRotation;
+            }
+            else if ( $optionBreakDown[0] == "MayaNifAnimationSampleRotationAsQuaternions" ) {
+                $intVal = $optionBreakDown[1];
+                checkBoxGrp -e -v1 $intVal MayaNifAnimationSampleRotationAsQuaternions;
+            }
+            else if ( $optionBreakDown[0] == "MayaNifAnimationSampleAllTranslation" ) {
+                $intVal = $optionBreakDown[1];
+                checkBoxGrp -e -v1 $intVal MayaNifAnimationSampleAllTranslation;
+             }
+    
+        // *******
+        // Silent Export Options
+        // *******
+             else if ( $optionBreakDown[0] == "GamebryoRunSilently" ) 
+             {
+                $intVal = $optionBreakDown[1];
+                checkBoxGrp -e -v1 $intVal MayaNifSilentMode;
+                SetGamebryoRunSilently($intVal);
+             }
+             else if ( $optionBreakDown[0] == "GamebryoScriptOption" ) 
+             {
+                $intVal = $optionBreakDown[1];
+                radioButtonGrp -e -select $intVal MayaNifScriptOption;
+             }
+
+        // *******
+        // Mesh Profile Options
+        // *******
+            else if ( $optionBreakDown[0] == "MeshPackingProfile" )
+            {
+                $strVal = $optionBreakDown[1];
+                if (catchQuiet(`optionMenuGrp -e -v $strVal MeshPackingProfileGrp`))
+                {
+                    catchQuiet(`optionMenuGrp -e -v "Default" MeshPackingProfileGrp`);
+                }
+                
+                MyImmerseUpdateProfileDescription();
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseGUICreateCustomViewers()
+{
+    string $szCustomViewers[];
+    
+
+    if(`optionVar -ex CustomNIFViewers` == 1)
+    {
+        $szCustomViewers = `optionVar -q CustomNIFViewers`;
+    }
+
+    if(size($szCustomViewers) == 0)
+    {
+
+        optionMenu 
+            -label "                             Custom Viewer::" 
+            -en false
+            MayaNifCustomViewer;
+
+        radioButtonGrp -e -en1 false MayaNifGamebryoViewerType4;
+    }
+    else
+    {
+
+        string $szCommand = "optionMenu -en false -label \"                             Custom Viewer::\" MayaNifCustomViewer;";
+
+        int $iLoop;
+        for ($iLoop = 0; $iLoop < size($szCustomViewers); $iLoop++)
+        {
+            $szCommand = $szCommand + "menuItem -label \"" + $szCustomViewers[$iLoop] + "\";";
+        }
+
+        $szCommand = $szCommand + " ";
+
+        string $szReturn = `eval $szCommand`;
+
+        radioButtonGrp -e -en1 true MayaNifGamebryoViewerType4;
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseGUIChangeFilePath(string $filePath, string $callType)
+{
+    text -e -label $filePath FilePathText;
+    optionVar -sv "ExportFilePath" $filePath;
+}
+//---------------------------------------------------------------------------
+global proc SetPromptValue()
+{
+    int $promptValue = `checkBoxGrp -q -v1 PromptValueCheckbox`;
+    optionVar -iv "ShouldPromptOnExport" $promptValue;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseGUICreatePlatformTextureProperties()
+{
+    int $iEdgeWidth = 10;
+
+    // Generic TEXTURE PROPERTIES
+    
+    rowLayout -nc 2 -cw 1 $iEdgeWidth -cw 2 500;
+        text -l "" -w $iEdgeWidth;
+
+        frameLayout
+        -cll true
+        -cl true
+        -bv true
+        -bs "etchedIn"
+        -l "Generic Texture Properties";
+
+        columnLayout
+            -rs 10;
+    
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Default Texture Format" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "24/32 bit"
+                -append "16 bit"
+                -append "Compress DXT1"
+                -append "Compress DXT3"
+                -append "Compress DXT5"
+                -selectIndexedItem 1
+                MayaNifGenericTextureType;
+
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Reduce Texture Size" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "1 / 2"
+                -append "1 / 4"
+                -append "1 / 8"
+                -append "1 / 16"
+                -append "1 / 32"
+                -append "1 / 64"
+                -selectIndexedItem 1
+                MayaNifGenericTextureReduction;
+
+        setParent ..; // RowLayout
+
+        textFieldGrp
+            -label "Generic Directory"
+            MayaNifGenericTextureDirectory;
+
+        setParent ..; // ColumnLayout
+
+        setParent ..; // FrameLayout
+
+    setParent ..; // RowLayout
+
+    // XENON TEXTURE PROPERTIES
+    
+    rowLayout -nc 2 -cw 1 $iEdgeWidth -cw 2 500;
+        text -l "" -w $iEdgeWidth;
+
+        frameLayout
+        -cll true
+        -cl true
+        -bv true
+        -bs "etchedIn"
+        -l "Xbox 360 Texture Properties";
+
+        columnLayout
+            -rs 10;
+    
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Default Texture Format" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "24/32 bit"
+                -append "16 bit"
+                -append "Compress DXT1"
+                -append "Compress DXT3"
+                -append "Compress DXT5"
+                -selectIndexedItem 1
+                MayaNifXenonTextureType;
+
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Reduce Texture Size" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "1 / 2"
+                -append "1 / 4"
+                -append "1 / 8"
+                -append "1 / 16"
+                -append "1 / 32"
+                -append "1 / 64"
+                -selectIndexedItem 1
+                MayaNifXenonTextureReduction;
+
+        setParent ..; // RowLayout
+
+        textFieldGrp
+            -label "Xbox 360 Directory"
+            MayaNifXenonTextureDirectory;
+
+        setParent ..; // ColumnLayout
+
+        setParent ..; // FrameLayout
+
+    setParent ..; // RowLayout
+
+    // DX9 TEXTURE PROPERTIES
+    
+    rowLayout -nc 2 -cw 1 $iEdgeWidth -cw 2 500;
+        text -l "" -w $iEdgeWidth;
+
+        frameLayout
+        -cll true
+        -cl true
+        -bv true
+        -bs "etchedIn"
+        -l "DX9 Texture Properties";
+
+        columnLayout
+            -rs 10;
+    
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Default Texture Format" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "24/32 bit"
+                -append "16 bit"
+                -append "Compress DXT1"
+                -append "Compress DXT3"
+                -append "Compress DXT5"
+                -selectIndexedItem 1
+                MayaNifDX9TextureType;
+
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Reduce Texture Size" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "1 / 2"
+                -append "1 / 4"
+                -append "1 / 8"
+                -append "1 / 16"
+                -append "1 / 32"
+                -append "1 / 64"
+                -selectIndexedItem 1
+                MayaNifDX9TextureReduction;
+
+        setParent ..; // RowLayout
+
+        textFieldGrp
+            -label "DX9 Directory"
+            MayaNifDX9TextureDirectory;
+
+        setParent ..; // ColumnLayout
+
+        setParent ..; // FrameLayout
+
+    setParent ..; // RowLayout
+
+    // D3D10 TEXTURE PROPERTIES
+    rowLayout -nc 2 -cw 1 $iEdgeWidth -cw 2 500;
+        text -l "" -w $iEdgeWidth;
+
+        frameLayout
+        -cll true
+        -cl true
+        -bv true
+        -bs "etchedIn"
+        -l "D3D10 Texture Properties";
+
+        columnLayout
+            -rs 10;
+    
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Default Texture Format" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "24/32 bit"
+                -append "16 bit"
+                -append "Compress DXT1"
+                -append "Compress DXT3"
+                -append "Compress DXT5"
+                -selectIndexedItem 1
+                MayaNifD3D10TextureType;
+
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Reduce Texture Size" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "1 / 2"
+                -append "1 / 4"
+                -append "1 / 8"
+                -append "1 / 16"
+                -append "1 / 32"
+                -append "1 / 64"
+                -selectIndexedItem 1
+                MayaNifD3D10TextureReduction;
+
+        setParent ..; // RowLayout
+
+        textFieldGrp
+            -label "D3D10 Directory"
+            MayaNifD3D10TextureDirectory;
+
+        setParent ..; // ColumnLayout
+
+        setParent ..; // FrameLayout
+
+    setParent ..; // RowLayout
+
+
+    // PS3 TEXTURE PROPERTIES
+    
+    rowLayout -nc 2 -cw 1 $iEdgeWidth -cw 2 500;
+        text -l "" -w $iEdgeWidth;
+
+        frameLayout
+        -cll true
+        -cl true
+        -bv true
+        -bs "etchedIn"
+        -l "PS3 Texture Properties";
+
+        columnLayout
+            -rs 10;
+    
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Default Texture Format" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "24/32 bit"
+                -append "16 bit"
+                -append "Compress DXT1"
+                -append "Compress DXT3"
+                -append "Compress DXT5"
+                -selectIndexedItem 1
+                MayaNifPS3TextureType;
+
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Reduce Texture Size" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "1 / 2"
+                -append "1 / 4"
+                -append "1 / 8"
+                -append "1 / 16"
+                -append "1 / 32"
+                -append "1 / 64"
+                -selectIndexedItem 1
+                MayaNifPS3TextureReduction;
+
+        setParent ..; // RowLayout
+
+        textFieldGrp
+            -label "PS3 Directory"
+            MayaNifPS3TextureDirectory;
+
+        setParent ..; // ColumnLayout
+
+        setParent ..; // FrameLayout
+
+    setParent ..; // RowLayout
+
+
+    // Wii TEXTURE PROPERTIES
+    
+    rowLayout -nc 2 -cw 1 $iEdgeWidth -cw 2 500;
+        text -l "" -w $iEdgeWidth;
+
+        frameLayout
+        -cll true
+        -cl true
+        -bv true
+        -bs "etchedIn"
+        -l "Wii Texture Properties";
+
+        columnLayout
+            -rs 10;
+    
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Default Texture Format" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "24/32 bit"
+                -append "16 bit"
+                -append "Compress DXT1"
+                -append "Compress DXT3"
+                -append "Compress DXT5"
+                -selectIndexedItem 1
+                MayaNifWiiTextureType;
+
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -l "Reduce Texture Size" -fn "boldLabelFont" -w 300 -al "left";
+        setParent ..; // RowLayout
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            textScrollList
+                -numberOfRows 4
+                -allowMultiSelection false
+                -append "Default (Match Source Image)"
+                -append "1 / 2"
+                -append "1 / 4"
+                -append "1 / 8"
+                -append "1 / 16"
+                -append "1 / 32"
+                -append "1 / 64"
+                -selectIndexedItem 1
+                MayaNifWiiTextureReduction;
+
+        setParent ..; // RowLayout
+
+        textFieldGrp
+            -label "Wii Directory"
+            MayaNifWiiTextureDirectory;
+
+        setParent ..; // ColumnLayout
+
+        setParent ..; // FrameLayout
+
+    setParent ..; // RowLayout
+
+
+}
+global proc MyImmerseUpdateProfileDescription()
+{
+    string $sProfileName = `optionMenuGrp -q -value MeshPackingProfileGrp`;
+    string $description = "";
+    if(catchQuiet($description = `GetProfileDescription $sProfileName`))
+    {
+        catch(error ("Could not get profile description for " + $sProfileName));
+    }
+    scrollField -e -text $description MeshPackingProfileDescriptionControl;
+}
+
+global proc MyImmerseReloadPackingProfiles()
+{
+    ReloadPackingProfiles();
+    
+    MyImmerseAddMeshPackingProfileColumnLayout();
+}
+
+global proc MyImmerseOpenScriptSelectionWindow()
+{
+    OpenSelectScriptWindow();
+}
+
+global proc MyImmerseAddMeshPackingProfileColumnLayout()
+{
+    if(`frameLayout -ex ("OptionsMeshPackingProfileFrame")`)
+    {
+        deleteUI ("OptionsMeshPackingProfileFrame");
+        
+        frameLayout
+            -cll true
+            -cl false
+            -bv true
+            -bs "etchedIn"
+            -l "Mesh Packing Profile"
+            -en true
+            OptionsMeshPackingProfileFrame;
+    }
+    else
+    {
+        frameLayout
+            -cll true
+            -cl true
+            -bv true
+            -bs "etchedIn"
+            -l "Mesh Packing Profile"
+            -en true
+            OptionsMeshPackingProfileFrame;
+    }
+    
+    columnLayout -adj true OptionsMeshPackingProfileColumnLayout;
+
+    optionMenuGrp
+        -l "Mesh Packing Profile"
+        -cc "MyImmerseUpdateProfileDescription"
+        MeshPackingProfileGrp;
+
+    string $szPackingProfiles[];
+    if(catchQuiet($szPackingProfiles = `GetPackingProfiles`))
+    {
+        catch(error("Could not retrieve packing profiles. Reverting to default."));
+    }
+    string $szSortedPackingProfiles[] = sort($szPackingProfiles);
+
+    string $sPackingProfile;
+    for($sPackingProfile in $szSortedPackingProfiles)
+    {
+        menuItem -label $sPackingProfile;
+    }
+    if(catchQuiet(`optionMenuGrp -e -v "Default" MeshPackingProfileGrp`))
+    {
+        catch(error("Could not set the default scene profile"));
+    }
+
+    text -label "Description" -width 120;
+    scrollField -width 300 -height 150 -editable false -wordWrap true MeshPackingProfileDescriptionControl;
+    string $description;
+    if(catchQuiet($description = `GetProfileDescription "Default"`))
+    {
+        catch(error ("Could not get profile description for " + "Default"));
+    }
+    scrollField -e -text $description MeshPackingProfileDescriptionControl;
+    
+    button -l "Reload Profiles" -c ("MyImmerseReloadPackingProfiles");
+    
+    setParent ..; // columnLayout
+    setParent ..; // frameLayout
+}
+
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseGUI ( string $parent,
+                                string $action,
+                                string $initialSettings,
+                                string $resultCallback )
+//
+//  Description:
+//      This script posts the MayaNif file translator options.
+//      The optionsString is of the form:
+//          varName1=value1;varName2=value2;...
+//
+//  Parameters:
+//      $parent - the elf parent layout for this options layout. It is
+//                  always a scrollLayout.
+//      $action - the action that is to be performed with this invocation
+//                  of this proc. Valid options are:
+//                      "query" - construct the options string and pass it
+//                                  to the resultCallback.
+//                      "post"  - post all the elf controls.
+//      $initialSettings - the current options string in effect at the
+//                         time this script is invoked.
+//      $resultCallback -
+//              This is the proc to be called with the result string. 
+//              resultCallback ( string $optionsString )
+//
+//  Returns:
+//      1 if successfull.
+//      0 otherwise.
+//
+{
+    int     $intVal;
+    float   $floatVal;
+    int     $bResult;
+    string  $currentOptions;
+    string  $optionList[];
+    string  $optionBreakDown[];
+    int     $index;
+    int     $iEdgeWidth = 10;
+
+    // ---------------------------------------------------
+    // Use the settings from the scene if we find them,
+    // Otherwise, fall back to settings passed in
+    // ---------------------------------------------------
+    string $sceneSettings = GamebryoGetExportOptions();
+    if (size($sceneSettings) == 0)
+        $sceneSettings = $initialSettings;
+
+    // Grab version strings (format is: "x.y"
+    string $PreviousExportVersion = MyImmerseGetPreviousVersion($sceneSettings);
+    string $CurrentExportVersion = MyImmerseGetPluginVersion();
+
+
+    if ($action == "post") {
+        setParent $parent;
+
+        //
+        // Check for the plugins and load them if available
+        //
+        string $szPluginName = MyImmerseGetPluginName();
+        if( MyImmerseCheckAndLoadPlugin($szPluginName))
+            return 0;
+
+        // We would like to hide some of the generation of the UI here.
+        // So we are going to hide the current optionsBoxForm
+        // Will make it visible after all of this is done.
+        // The scroll bars update while doing this.
+
+        // Magic name of "optionsBoxForm"
+
+        setUITemplate -pushTemplate DefaultTemplate;
+
+        //Fun little hack to let me reuse this gui from the tool shelf
+        if($resultCallback != "GamebryoDoNothingFunction")
+        {
+            formLayout -e -vis false optionsBoxForm;
+        }
+
+        columnLayout -adj true;
+
+// 
+// VERSION INFORMATION
+//
+        string $myImmerseVersion = `pluginInfo -q -v $szPluginName`;
+        string $version = "\n          Gamebryo Maya Version Information:";
+
+        text -align "left" -label $version MyImmerseVersionTitleText;
+        text -align "center" -label $myImmerseVersion MyImmerseVersionText;
+
+        text -label "";        
+       
+       
+//
+// SCRIPT EDITOR SELECTION
+//
+        button -align "center" -l "Update Export Scripts" -c ("MyImmerseOpenScriptSelectionWindow");
+
+//
+// EXPORT/VISUAL OPTIONS
+//
+            frameLayout
+                    -cll true
+                    -cl true
+                    -bv true
+                    -bs "etchedIn"
+                    -l "Export-Display Options"
+                    MayaNifExportDisplayFrame;
+                    
+                columnLayout -adj true MayaNifExportDisplayOptions;
+
+                    // Spacer
+                    text -label "";
+
+                    // Create the Default Director for scripts and plug-ins
+                    string $szDefaultDirectory = `getenv MAYA_LOCATION`;
+                    $szDefaultDirectory = $szDefaultDirectory + "/bin/plug-ins/Gamebryo Scripts";
+
+                    string $szDefaultFilePath = GetDefaultExportPath(); 
+
+                    text -label "Exported File Path" -align "left";
+                    text -label $szDefaultFilePath -align "left" FilePathText;
+
+                    button 
+                        -label "Change File Export Path" 
+                        -align "center"
+                        -command "fileBrowserDialog -m 2 -fc \"MyImmerseGUIChangeFilePath\" -an \"Change File Export Path\""
+                        MayaNifFilePathDirectoryButton;
+
+                    checkBoxGrp
+                        -l1 "Prompt for File Path" 
+                        -ncb 1
+                        -v1 true 
+                        -changeCommand "SetPromptValue" PromptValueCheckbox;
+
+                    // Spacer
+                    text -label "";
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 true
+                        -l1 "Export NonVisible Objects (as culled)" MayaNifExportNonVisible;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 true
+                        -l1 "Export Default Maya Cameras" MayaNifExportDefaultCameras;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 false
+                        -l1 "Use Current Linear Working Units" MayaNifExportWorkingUnits;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 false
+                        -l1 "Auto Center LODs by Child Bounds" MayaNifExportAutoCenterLODs;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 false
+                        -l1 "Flip Textures instead of UV coordinates" MayaNifExportFlipTexturesInsteadOfUVs;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 true
+                        -l1 "Add default ambient for Maya lights" MayaNifExportAddDefaultAmbientForMayaLights;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 false
+                        -l1 "Guarantee object names are unique" MayaNifExportGuaranteeObjectNamesAreUnique;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 false
+                        -l1 "Use Old Camera FOV (Not Recommended)" MayaNifUseOldCameraFOV;
+
+                    radioButtonGrp
+                        -l "Window Size"
+                        -nrb 4
+                        -la4 "640/480" "800/600" "1024/768" "1280/1024" MayaNifWindowSize;
+                    radioButtonGrp -e -sl 1 MayaNifWindowSize;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 false
+                        -l1 "Full Screen" MayaNifExportFullScreen;
+
+                    // The New Scene Viewers
+
+                    radioButtonGrp
+                        -l "Scene Viewers:"
+                        -nrb 1
+                        -l1 "D3D9 Viewer" 
+                        -en1 `MyImmerseIsViewerAvailable("NiSceneViewerD3DPlugin")`
+                        MayaNifGamebryoViewerType;
+                    radioButtonGrp
+                        -nrb 2
+                        -la2 "Gamebryo Animation Tool" "Gamebryo Asset Viewer" 
+                        -en1 `MyImmerseIsViewerAvailable("KFMViewerPlugin")`
+                        -en2 `MyImmerseIsViewerAvailable("NIFViewerPlugin")`
+                        -scl MayaNifGamebryoViewerType 
+                        MayaNifGamebryoViewerType2;
+                    radioButtonGrp
+                        -nrb 4
+                        -la4 "Xbox 360" "PS3" "Wii" "D3D10"
+                        -en1 `MyImmerseIsViewerAvailable("NiXbox360ViewerPlugin")`
+                        -en2 `MyImmerseIsViewerAvailable("NiPS3ViewerPlugin")`
+                        -en3 `MyImmerseIsViewerAvailable("NiWiiViewerPlugin")`
+                        -en4 `MyImmerseIsViewerAvailable("NiSceneViewerD3D10Plugin")`
+                        -scl MayaNifGamebryoViewerType 
+                        MayaNifGamebryoViewerType3;
+                    radioButtonGrp
+                        -nrb 1
+                        -l1 "Custom Viewer"
+                        -on1 "optionMenu -e -en true MayaNifCustomViewer"
+                        -of1 "optionMenu -e -en false MayaNifCustomViewer"
+                        -scl MayaNifGamebryoViewerType 
+                        MayaNifGamebryoViewerType4;
+
+                    // Select AssetViewer by default
+                    radioButtonGrp -e -sl 2 MayaNifGamebryoViewerType2;
+
+                    // Create the Custom Viewers Drop Down
+                    MyImmerseGUICreateCustomViewers();
+
+
+                    // Export for Platform
+                    radioButtonGrp
+                        -l "Export for Platform/Renderer:"
+                        -nrb 2
+                        -la2 "Generic(Default)" "Xbox 360"
+                        MayaNifExportForGamebryoPlatformType;
+                    radioButtonGrp
+                        -nrb 4
+                        -la4 "DX9" "Playstation 3" "Wii" "D3D10"
+                        -scl MayaNifExportForGamebryoPlatformType
+                        MayaNifExportForGamebryoPlatformType2;
+
+
+                    radioButtonGrp -e -sl 1 MayaNifExportForGamebryoPlatformType;
+
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 false
+                        -l1 "Optimize Mesh For Viewer" MayaNifExportOptimizeMeshForViewer;
+
+                setParent ..; // columnLayout
+            setParent ..; // frameLayout
+
+//
+// BACKGROUND COLOR SLIDERS
+//
+            frameLayout
+                    -cll true
+                    -cl true
+                    -bv true
+                    -bs "etchedIn"
+                    -l "Background Color"
+                    MayaNifBackgroundFrame;
+
+                columnLayout -adj true MayaNifBackgroundOptions;
+
+                    intSliderGrp -l "Red:" -f true 
+                                    -min 0 -max 255 MayaNifRed;
+
+                    intSliderGrp -l "Green:" -f true 
+                                    -min 0 -max 255 MayaNifGreen;
+
+                    intSliderGrp -l "Blue:" -f true 
+                                    -min 0 -max 255 MayaNifBlue;
+
+                setParent ..; // columnLayout
+            setParent ..; // frameLayout
+
+
+// 
+// TEXTURE PROPERTIES
+//
+//The controls are the X/Y sizes of the procedural textures
+//The maximum X/Y sizes will ensure that the file textures 
+            frameLayout
+                    -cll true
+                    -cl true
+                    -bv true
+                    -bs "etchedIn"
+                    -l "Texture Options"
+                    MayaNifTextureFrame;
+
+                columnLayout -adj true MayaNifTextureOptions;
+
+                    frameLayout
+                        -cll false
+                        -cl false
+                        -bv true
+                        -bs "etchedIn"
+                        -label "Control the default X/Y sizes of procedural textures"
+                        MayaNifProceduralFrame;
+
+                        columnLayout -adj true MayaNifProceduralOptions;
+    
+                            intSliderGrp -l "X Texture Resolution" -field true 
+                                            -max 4096 -fmx 4096 MayaNifXtexres;
+    
+                            intSliderGrp -l "Y Texture Resolution" -field true 
+                                            -max 4096 -fmx 4096 MayaNifYtexres;
+
+                        setParent ..; // columnLayout
+    
+                    setParent ..; // frameLayout
+
+
+                    frameLayout
+                        -cll false
+                        -cl false
+                        -bv true
+                        -bs "etchedIn"
+                        -label "Control the maximum X/Y sizes of all textures"
+                        MayaNifTextureSizeFrame;
+
+                        columnLayout -adj true MayaNifTextureSizeOptions;
+
+                            intSliderGrp -l "Max X Texture Resolution" -field true 
+                                            -max 4096 -fmx 4096 MayaNifMaxXtexres;
+
+                            intSliderGrp -l "Max Y Texture Resolution" -field true 
+                                            -max 4096 -fmx 4096 MayaNifMaxYtexres;
+
+                        setParent ..; // columnLayout
+    
+                    setParent ..; // frameLayout
+
+                    intSliderGrp -e -v 256 MayaNifXtexres;
+                    intSliderGrp -e -v 256 MayaNifYtexres;
+                    intSliderGrp -e -v 4096 MayaNifMaxXtexres;
+                    intSliderGrp -e -v 4096 MayaNifMaxYtexres;
+
+                    radioButtonGrp
+                        -l "Save Location"
+                        -nrb 3
+                        -l1 "Internal" 
+                        -l2 "External NIF" 
+                        -l3 "External Original"
+                        MayaNifTextureSaveLocation;
+                    radioButtonGrp -e -sl 1 MayaNifTextureSaveLocation;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 true
+                        -l1 "Use default value for Ambient color in a Texture Material." MayaNifExportTextureAmbientDefault;
+
+                    
+                    // CREATE PLATFORM TEXTURE PROPERTIES
+
+                    MyImmerseGUICreatePlatformTextureProperties();
+
+                setParent ..; // columnLayout               
+
+            setParent ..; // frameLayout
+
+
+//
+// LIGHTING PROPERTIES
+//
+
+
+
+            frameLayout
+                    -cll true
+                    -cl true
+                    -bv true
+                    -bs "etchedIn"
+                    -l "Lighting Options"
+                    MayaNifLightingFrame;
+ 
+                columnLayout -adj true MayaNifLightingProperties;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 true
+                        -l1 "Optimize Scene Root Lights" MayaNifExportLightingOptimizeSceneRoot;
+
+                setParent ..;
+
+            setParent ..; // frameLayout
+
+
+
+//
+// ANIMATION PROPERTIES
+//
+
+
+            frameLayout
+                    -cll true
+                    -cl true
+                    -bv true
+                    -bs "etchedIn"
+                    -l "Animation Options"
+                    -en true
+                    MayaNifAnimationFrame;
+                    
+                columnLayout -adj true MayaAnimationOptions;
+
+                    radioButtonGrp
+                        -l "Export Animation Range:"
+                        -nrb 2
+                        -la2 "All" "Playback Start/End" 
+                        -sl 1
+                        MayaNifAnimationExportAnimationRange;
+
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 false
+                        -l1 "Loop over the Animation Range" MayaNifAnimationLoopOverRange;
+
+                    intSliderGrp 
+                        -l "Maximum Frame Rate" 
+                        -field true 
+                        -v 250
+                        -max 250 
+                        -fmx 250 MayaNifAnimationMaxFrameRate;
+
+                    intSliderGrp
+                        -l "Minimum Bone Influence %"
+                        -min 1
+                        -max 50
+                        -v 10
+                        MayaNifAnimationMinimumBoneInfluence;
+                    
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 true
+                        -onc "checkBoxGrp -e -en1 true MayaNifAnimationSampleRotationAsQuaternions;"
+                        -ofc "checkBoxGrp -e -en1 false MayaNifAnimationSampleRotationAsQuaternions;"
+                        -l1 "Sample All Rotation" MayaNifAnimationSampleAllRotation;
+                    
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 true
+                        -l1 "Sample Rotation As Quaternions" MayaNifAnimationSampleRotationAsQuaternions;
+                    
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 true
+                        -l1 "Sample all Translation" MayaNifAnimationSampleAllTranslation;
+                    
+
+                setParent ..; // columnLayout
+            setParent ..; // frameLayout
+
+//
+// SILENT EXPORT PROPERTIES
+//
+
+
+            frameLayout
+                    -cll true
+                    -cl true
+                    -bv true
+                    -bs "etchedIn"
+                    -l "Silent Export Options"
+                    -en true
+                    MayaNifSilentFrame;
+                    
+                columnLayout -adj true MayaSilentOptions;
+
+                    int $val = `GetGamebryoRunSilently`;
+                    checkBoxGrp
+                        -l " "
+                        -ncb 1
+                        -v1 $val
+                        -l1 "Silent Export(No Dialogs)" 
+                        -on1 "SetGamebryoRunSilently(1)"
+                        -of1 "SetGamebryoRunSilently(0)"
+                        MayaNifSilentMode;
+
+                    $val = `GetGamebryoUseLastSavedScript`;
+                    if ($val == 0)
+                    {
+                        $val = `GetGamebryoUseLastSavedScript`;
+                        if ($val)
+                        {
+                            $val = 3;
+                        }
+                        else
+                        {
+                            $val = 1;
+                        }
+                    }
+                    else
+                    {
+                        $val = 2;
+                    }
+                    radioButtonGrp -numberOfRadioButtons 3 -cl3 left
+                        -label "Export Script Options" 
+                        -labelArray3 "Template" "Saved Script" "Default Script"
+                        -on1 "SetGamebryoUseLastSavedScript(0);SetGamebryoForceDefaultScript(0);"
+                        -on2 "SetGamebryoUseLastSavedScript(1);SetGamebryoForceDefaultScript(0);"
+                        -on3 "SetGamebryoUseLastSavedScript(0);SetGamebryoForceDefaultScript(1);"
+                        -select $val
+                        MayaNifScriptOption;
+
+                    string $exportLogDefault = `workspace -q -directory` + "/exportLog.xml";
+
+                setParent ..; // columnLayout
+            setParent ..; // frameLayout
+
+//
+// MESH PACKING PROFILE
+//
+            
+                    
+            MyImmerseAddMeshPackingProfileColumnLayout();
+
+        // ---------------------------------------------------
+        //  Control to enable and disable items
+        // ---------------------------------------------------
+
+
+        checkBoxGrp
+            -e
+            -on1 ("radioButtonGrp -e -en3 false MayaNifTextureSaveLocation;")
+            -of1 ("radioButtonGrp -e -en3 true MayaNifTextureSaveLocation;")
+            MayaNifExportFlipTexturesInsteadOfUVs;
+
+        // ---------------------------------------------------
+        //
+        // End of the UI generation portion
+        //
+        // ---------------------------------------------------
+
+        // Set the state of our widgets based off of the export options stored in the scene
+        MyImmerseSetGUIOptions($sceneSettings);
+
+        $result = 1;
+    
+        if($resultCallback != "GamebryoDoNothingFunction")
+        {
+            formLayout -e -vis true optionsBoxForm;
+        }
+
+        setUITemplate -popTemplate;
+
+
+    } else if ($action == "query") {
+
+        // Record the Version at this time so we can track in the future.
+        string $myImmerseVersion = MyImmerseGetPluginVersion();
+        $currentOptions = $currentOptions + "PreviousExportVersion=" + $myImmerseVersion + ";";
+
+// Frame layouts
+//
+        $intVal = `frameLayout -q -cl MayaNifExportDisplayFrame`;
+        $currentOptions = $currentOptions + "ExportDisplayFrame=" + $intVal + ";";
+
+        $intVal = `frameLayout -q -cl MayaNifTextureFrame`;
+        $currentOptions = $currentOptions + "textureFrame=" + $intVal + ";";
+        
+        $intVal = `frameLayout -q -cl MayaNifLightingFrame`;
+        $currentOptions = $currentOptions + "LightingFrame=" + $intVal + ";";
+
+        $intVal = `frameLayout -q -cl MayaNifAnimationFrame`;
+        $currentOptions = $currentOptions + "AnimationFrame=" + $intVal + ";";
+
+// see about the file format  unix/dos style
+
+
+// Query RGB
+        $intVal = `intSliderGrp -q -v MayaNifRed`;
+        $currentOptions = $currentOptions + "Red=" + $intVal + ";";
+
+        $intVal = `intSliderGrp -q -v MayaNifGreen`;
+        $currentOptions = $currentOptions + "Green=" + $intVal + ";";
+        
+        $intVal = `intSliderGrp -q -v MayaNifBlue`;
+        $currentOptions = $currentOptions + "Blue=" + $intVal + ";";
+
+        $currentOptions = $currentOptions + "ExportFilePath=" + `text -q -l FilePathText` + ";";
+
+        $currentOptions = $currentOptions + "ShouldPromptOnExport=" + `checkBoxGrp -q -v1 PromptValueCheckbox` + ";";
+
+        if (`checkBoxGrp -q -v1 MayaNifExportNonVisible` == 1) {
+            $currentOptions = $currentOptions + "ExportNonVisible=1;";
+        } else {
+            $currentOptions = $currentOptions + "ExportNonVisible=0;";
+        }   
+
+
+        $intVal = `radioButtonGrp -q -sl MayaNifGamebryoViewerType`;
+        if ( $intVal == 1 )
+            $currentOptions = $currentOptions + "MayaNifGamebryoViewerType=2;";
+        else
+        {
+            $intVal = `radioButtonGrp -q -sl MayaNifGamebryoViewerType2`;
+            if ( $intVal == 1 )
+                $currentOptions = $currentOptions + "MayaNifGamebryoViewerType=3;";
+            else if ( $intVal == 2 )
+                $currentOptions = $currentOptions + "MayaNifGamebryoViewerType=4;";
+            else
+            {
+                $intVal = `radioButtonGrp -q -sl MayaNifGamebryoViewerType3`;
+
+                if ( $intVal == 1 )
+                    $currentOptions = $currentOptions + "MayaNifGamebryoViewerType=5;";
+                else if ($intVal == 2)
+                    $currentOptions = $currentOptions + "MayaNifGamebryoViewerType=6;";
+                else if ($intVal == 3)
+                    $currentOptions = $currentOptions + "MayaNifGamebryoViewerType=7;";
+                else if ($intVal == 4)
+                    $currentOptions = $currentOptions + "MayaNifGamebryoViewerType=8;";                
+                else                
+                {
+                    $intVal = `radioButtonGrp -q -sl MayaNifGamebryoViewerType4`;
+
+                    if ( $intVal == 1 )
+                        $currentOptions = $currentOptions + "MayaNifGamebryoViewerType=9;";
+                }
+            }
+        }
+        
+        string $szCommand = "optionMenu -q -v MayaNifCustomViewer;";
+        string $szReturn = `eval $szCommand`;
+        $currentOptions = $currentOptions + "MayaNifGamebryoCustomViewerName=" + $szReturn + ";";
+
+        $intVal = `radioButtonGrp -q -sl MayaNifExportForGamebryoPlatformType`;
+        if ( $intVal == 1 )
+            $currentOptions = $currentOptions + "MayaNifExportForGamebryoPlatformType=1;";
+        else if ( $intVal == 2 )
+            $currentOptions = $currentOptions + "MayaNifExportForGamebryoPlatformType=2;";
+        else
+        {
+            $intVal = `radioButtonGrp -q -sl MayaNifExportForGamebryoPlatformType2`;
+            if ( $intVal == 1 )
+                $currentOptions = $currentOptions + "MayaNifExportForGamebryoPlatformType=3;";
+            else if ( $intVal == 2 )
+                $currentOptions = $currentOptions + "MayaNifExportForGamebryoPlatformType=4;";
+            else if ( $intVal == 3 )
+                $currentOptions = $currentOptions + "MayaNifExportForGamebryoPlatformType=5;";
+            else if ( $intVal == 4 )
+                $currentOptions = $currentOptions + "MayaNifExportForGamebryoPlatformType=6;";
+            else
+                error "Unknown export platform radio button selected";
+        }
+
+
+        if (`checkBoxGrp -q -v1 MayaNifExportOptimizeMeshForViewer` == 1) {
+            $currentOptions = $currentOptions + "MayaNifExportOptimizeMeshForViewer=1;";
+        } else {
+            $currentOptions = $currentOptions + "MayaNifExportOptimizeMeshForViewer=0;";
+        }   
+
+        $intVal = `intSliderGrp -q -v MayaNifXtexres`;
+        $currentOptions = $currentOptions + "Xtexres=" + $intVal + ";";
+
+        $intVal = `intSliderGrp -q -v MayaNifYtexres`;
+        $currentOptions = $currentOptions + "Ytexres=" + $intVal + ";";
+
+        $intVal = `intSliderGrp -q -v MayaNifMaxXtexres`;
+        $currentOptions = $currentOptions + "MaxXtexres=" + $intVal + ";";
+        
+        $intVal = `intSliderGrp -q -v MayaNifMaxYtexres`;
+        $currentOptions = $currentOptions + "MaxYtexres=" + $intVal + ";";
+
+        $intVal = `radioButtonGrp -q -sl MayaNifTextureSaveLocation`;
+        $currentOptions = $currentOptions + "MayaNifTextureSaveLocation=" + $intVal + ";";
+
+        if (`checkBoxGrp -q -v1 MayaNifExportTextureAmbientDefault` == 1) 
+        {
+            $currentOptions = $currentOptions + "MayaNifExportTextureAmbientDefault=1;";
+        } else 
+        {
+            $currentOptions = $currentOptions + "MayaNifExportTextureAmbientDefault=0;";
+        }
+
+        // Generic
+ 
+        string $strVals[];
+
+        $strVals = `textScrollList -q -selectItem MayaNifGenericTextureType`;
+        $currentOptions = $currentOptions +  "MayaNifGenericTextureType=" + $strVals[0] + ";";       
+
+        $intVals = `textScrollList -q -selectIndexedItem MayaNifGenericTextureReduction`;
+        $currentOptions = $currentOptions +  "MayaNifGenericTextureReduction=" + $intVals[0] + ";";
+
+        $strVal = `textFieldGrp -q -text MayaNifGenericTextureDirectory`;
+        $currentOptions = $currentOptions +  "MayaNifGenericTextureDirectory=" + $strVal + ";";
+
+        // Xenon
+        $strVals = `textScrollList -q -selectItem MayaNifXenonTextureType`;
+        $currentOptions = $currentOptions +  "MayaNifXenonTextureType=" + $strVals[0] + ";";
+
+        $intVals = `textScrollList -q -selectIndexedItem MayaNifXenonTextureReduction`;
+        $currentOptions = $currentOptions +  "MayaNifXenonTextureReduction=" + $intVals[0] + ";";
+
+        $strVal = `textFieldGrp -q -text MayaNifXenonTextureDirectory`;
+        $currentOptions = $currentOptions +  "MayaNifXenonTextureDirectory=" + $strVal + ";";
+
+        // DX9
+        $strVals = `textScrollList -q -selectItem MayaNifDX9TextureType`;
+        $currentOptions = $currentOptions +  "MayaNifDX9TextureType=" + $strVals[0] + ";";
+
+        $intVals = `textScrollList -q -selectIndexedItem MayaNifDX9TextureReduction`;
+        $currentOptions = $currentOptions +  "MayaNifDX9TextureReduction=" + $intVals[0] + ";";
+
+        $strVal = `textFieldGrp -q -text MayaNifDX9TextureDirectory`;
+        $currentOptions = $currentOptions +  "MayaNifDX9TextureDirectory=" + $strVal + ";";
+
+        // D3D10
+        $strVals = `textScrollList -q -selectItem MayaNifD3D10TextureType`;
+        $currentOptions = $currentOptions +  "MayaNifD3D10TextureType=" + $strVals[0] + ";";
+
+        $intVals = `textScrollList -q -selectIndexedItem MayaNifD3D10TextureReduction`;
+        $currentOptions = $currentOptions +  "MayaNifD3D10TextureReduction=" + $intVals[0] + ";";
+
+        $strVal = `textFieldGrp -q -text MayaNifD3D10TextureDirectory`;
+        $currentOptions = $currentOptions +  "MayaNifD3D10TextureDirectory=" + $strVal + ";";
+
+        // PS3
+        $strVals = `textScrollList -q -selectItem MayaNifPS3TextureType`;
+        $currentOptions = $currentOptions +  "MayaNifPS3TextureType=" + $strVals[0] + ";";
+
+        $intVals = `textScrollList -q -selectIndexedItem MayaNifPS3TextureReduction`;
+        $currentOptions = $currentOptions +  "MayaNifPS3TextureReduction=" + $intVals[0] + ";";
+
+        $strVal = `textFieldGrp -q -text MayaNifPS3TextureDirectory`;
+        $currentOptions = $currentOptions +  "MayaNifPS3TextureDirectory=" + $strVal + ";";
+
+        // Wii
+        $strVals = `textScrollList -q -selectItem MayaNifWiiTextureType`;
+        $currentOptions = $currentOptions +  "MayaNifWiiTextureType=" + $strVals[0] + ";";
+
+        $intVals = `textScrollList -q -selectIndexedItem MayaNifWiiTextureReduction`;
+        $currentOptions = $currentOptions +  "MayaNifWiiTextureReduction=" + $intVals[0] + ";";
+
+        $strVal = `textFieldGrp -q -text MayaNifWiiTextureDirectory`;
+        $currentOptions = $currentOptions +  "MayaNifWiiTextureDirectory=" + $strVal + ";";
+
+// TEXTURE SAVE FORMATS
+// Here...
+
+// SAVE LIGHTING
+        $intVal = `checkBoxGrp -q -v1 MayaNifExportLightingOptimizeSceneRoot`;
+        $currentOptions = $currentOptions + "LightingOptimizeSceneRoot=" + $intVal + ";";
+
+
+// EXPORT DEFAULT MAYA CAMERAS
+        $intVal = `checkBoxGrp -q -v1 MayaNifExportDefaultCameras`;
+        $currentOptions = $currentOptions + "MayaNifExportDefaultCameras=" + $intVal + ";";
+
+// EXPORT WORKING UNITS
+        $intVal = `checkBoxGrp -q -v1 MayaNifExportWorkingUnits`;
+        $currentOptions = $currentOptions + "MayaNifExportWorkingUnits=" + $intVal + ";";
+
+// EXPORT AUTO CENTER LODS
+        $intVal = `checkBoxGrp -q -v1 MayaNifExportAutoCenterLODs`;
+        $currentOptions = $currentOptions + "MayaNifExportAutoCenterLODs=" + $intVal + ";";
+
+// EXPORT FLIP TEXTURES INSTEAD OF FLIPPING UV COORDINATES
+        $intVal = `checkBoxGrp -q -v1 MayaNifExportFlipTexturesInsteadOfUVs`;
+        $currentOptions = $currentOptions + "MayaNifExportFlipTexturesInsteadOfUVs=" + $intVal + ";";
+
+// EXPORT ADD DEFAULT AMBIENT FOR MAYA LIGHTS
+        $intVal = `checkBoxGrp -q -v1 MayaNifExportAddDefaultAmbientForMayaLights`;
+        $currentOptions = $currentOptions + "MayaNifExportAddDefaultAmbientForMayaLights=" + $intVal + ";";
+
+// EXPORT GUARANTEE OBJECT NAMES ARE UNIQUE
+        $intVal = `checkBoxGrp -q -v1 MayaNifExportGuaranteeObjectNamesAreUnique`;
+        $currentOptions = $currentOptions + "MayaNifExportGuaranteeObjectNamesAreUnique=" + $intVal + ";";
+
+// EXPORT USE OLD CAMERA FOV
+        $intVal = `checkBoxGrp -q -v1 MayaNifUseOldCameraFOV`;
+        $currentOptions = $currentOptions + "MayaNifUseOldCameraFOV=" + $intVal + ";";
+
+// SAVE WINDOW SIZE
+        $intVal = `radioButtonGrp -q -sl MayaNifWindowSize`;
+        $currentOptions = $currentOptions + "MayaNifWindowSize=" + $intVal + ";";
+
+// EXPORT FULL SCREEN
+        $intVal = `checkBoxGrp -q -v1 MayaNifExportFullScreen`;
+        $currentOptions = $currentOptions + "MayaNifExportFullScreen=" + $intVal + ";";
+
+
+// *******
+// Animation Options
+// *******
+
+        $intVal = `radioButtonGrp -q -sl MayaNifAnimationExportAnimationRange`;
+        switch ( $intVal )
+        {
+         case 1:    $currentOptions = $currentOptions + "AnimationExportAnimationRange=1;";break;
+         case 2:    $currentOptions = $currentOptions + "AnimationExportAnimationRange=2;";break;
+        }
+
+        $intVal = `checkBoxGrp -q -v1 MayaNifAnimationLoopOverRange`;
+        $currentOptions = $currentOptions + "MayaNifAnimationLoopOverRange=" + $intVal + ";";
+
+        $intVal = `intSliderGrp -q -v MayaNifAnimationMaxFrameRate`;
+        $currentOptions = $currentOptions + "AnimationMaxFrameRate=" + $intVal + ";";
+
+
+        $intVal = `intSliderGrp -q -v MayaNifAnimationMinimumBoneInfluence`;
+        $currentOptions = $currentOptions + "MayaNifAnimationMinimumBoneInfluence=" + $intVal + ";";
+
+        $intVal = `checkBoxGrp -q -v1 MayaNifAnimationSampleAllRotation`;
+
+        $currentOptions = $currentOptions + "MayaNifAnimationSampleAllRotation=" + $intVal + ";";
+
+        $intVal = `checkBoxGrp -q -v1 MayaNifAnimationSampleRotationAsQuaternions`;
+        $currentOptions = $currentOptions + "MayaNifAnimationSampleRotationAsQuaternions=" + $intVal + ";";
+
+        $intVal = `checkBoxGrp -q -v1 MayaNifAnimationSampleAllTranslation`;
+        $currentOptions = $currentOptions + "MayaNifAnimationSampleAllTranslation=" + $intVal + ";";
+
+// *******
+// Silent Export Options
+// *******
+
+        $intVal = `checkBoxGrp -q -v1 MayaNifSilentMode`;
+        $currentOptions = $currentOptions + "GamebryoRunSilently=" + $intVal + ";";
+        
+        $intVal = `radioButtonGrp -q -select MayaNifScriptOption`;
+        $currentOptions = $currentOptions + "GamebryoScriptOption=" + $intVal + ";";
+
+// *******
+// Mesh Profile Options
+// *******
+        $strVal = `optionMenuGrp -q -v MeshPackingProfileGrp`;
+        $currentOptions = $currentOptions + "MeshPackingProfile=" + $strVal + ";";
+
+// *******
+// CREATE THE SCENE GUI EXPORT OPTIONS
+// *******
+
+        MyImmerseSetLastSceneGUIOptions($currentOptions);
+
+        eval($resultCallback+" \""+$currentOptions+"\"");
+        
+        $result = 1;
+    } else {
+        
+        eval($resultCallback+" \""+$currentOptions+"\"");
+        $bResult = 0;
+    }
+    
+    return $bResult;
+}

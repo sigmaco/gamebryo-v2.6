@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="232861"
+   name=""
+   committed-date="2005-08-15T19:24:56.805244Z"
+   url="https://svn.apache.org/repos/asf/xerces/c/branches/xerces-2.7/samples/Projects/Win32/VC6/PSVIWriter"
+   last-author="jberry"
+   kind="dir"
+   uuid="13f79535-47bb-0310-9956-ffa450edef68"
+   prop-time="2005-08-26T16:19:45.000000Z"
+   revision="240275"/>
+<entry
+   committed-rev="175718"
+   name="PSVIWriter.dsp"
+   text-time="2005-08-26T16:19:45.000000Z"
+   committed-date="2004-02-04T20:31:45.000000Z"
+   checksum="71978c8d61e1a5ab5ba3f2d7a3f9ca80"
+   last-author="peiyongz"
+   kind="file"
+   prop-time="2005-08-26T16:19:45.000000Z"/>
+<entry
+   committed-rev="175733"
+   name="PSVIWriter.mak"
+   text-time="2005-08-26T16:19:45.000000Z"
+   committed-date="2004-02-06T19:57:41.000000Z"
+   checksum="6a102deff79f0cc3d8dad21be62b6305"
+   last-author="peiyongz"
+   kind="file"
+   prop-time="2005-08-26T16:19:45.000000Z"/>
+</wc-entries>

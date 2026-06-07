@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<xs:schema id="OptBind" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Options">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="Category" type="CategoryType"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Subtypes -->
+	<xs:complexType name="CategoryType">		
+		<xs:sequence maxOccurs="unbounded">
+			<xs:choice>
+				<xs:element name="Option" type="OptionType"/>
+				<xs:element name="Category" type="CategoryType" minOccurs="0" 
+					maxOccurs="unbounded" />
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+	
+	<xs:complexType name="OptionType">
+		<xs:sequence>
+			<xs:element name="SettingsObject">
+				<xs:complexType>
+					<xs:attribute name="name" type="xs:string"/>
+					<xs:attribute name="store" type="xs:string"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="HelpText" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+</xs:schema>

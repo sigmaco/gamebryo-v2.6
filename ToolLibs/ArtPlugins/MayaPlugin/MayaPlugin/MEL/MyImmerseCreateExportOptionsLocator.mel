@@ -1,0 +1,29 @@
+global proc MyImmerseCreateExportOptionsLocator()
+{
+    // Save the Current Selection list
+    string $sSelectList[] = `ls -sl`;
+
+    // Create the Locator if it doesn't exists
+    if(`objExists Please_Dont_Delete_MyImmerse_Export_Options` == 0)
+    {
+        spaceLocator -p 0 0 0 -n Please_Dont_Delete_MyImmerse_Export_Options;
+
+        // Hide it by default
+        setAttr Please_Dont_Delete_MyImmerse_Export_Options.visibility false;
+    }
+
+    if(`attributeExists MyImmerseNIFOptionsVar Please_Dont_Delete_MyImmerse_Export_Options` == 0)
+    {
+        addAttr -dt "string" -ln MyImmerseNIFOptionsVar Please_Dont_Delete_MyImmerse_Export_Options;
+        setAttr Please_Dont_Delete_MyImmerse_Export_Options.MyImmerseNIFOptionsVar -type "string" `optionVar -q "NifOptions"`;
+    }
+
+    if(`attributeExists MyImmerseNIFOptimizationVar Please_Dont_Delete_MyImmerse_Export_Options` == 0)
+    {
+        addAttr -dt "string" -ln MyImmerseNIFOptimizationVar Please_Dont_Delete_MyImmerse_Export_Options;
+        setAttr Please_Dont_Delete_MyImmerse_Export_Options.MyImmerseNIFOptimizationVar -type "string" "";
+    }
+
+    // Reselect the selection list
+    select -r $sSelectList;
+}

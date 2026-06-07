@@ -1,0 +1,3 @@
+"m:\Gamebryo2.6BR_NoWiiPhysX_Win32_Src_Build\ToolLibs\ArtPlugins\MayaPlugin\MayaPlugin\Win32\VC80\" is the project directory 
+"C:\Program Files\Autodesk\Maya2008" is the maya installation directory. 
+"Shipping DLL Maya2008\GamebryoMayaPlugin.mll" is the plugin 

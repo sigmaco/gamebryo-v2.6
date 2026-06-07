@@ -1,0 +1,50 @@
+//
+// MyImmerseCreateNoStripifyAttribute.mel
+//
+// Mel script for applying Net Immerse Attributes to a 
+
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateNoStripifyAttribute(string $nodeName)
+{
+    string $dagnodes[];
+    if($nodeName == "")
+    {
+        $dagnodes = `selectedNodes -dagObjects`;  
+    }
+    else
+    {
+        if(size(`selectedNodes -dagObjects`) > 1)
+        {
+            $dagnodes = `selectedNodes -dagObjects`;
+        }
+        else
+        {
+            $dagnodes[0] = $nodeName;
+        }
+    }
+    // Return dag objects only
+    
+    
+
+    if(size($dagnodes) <= 0)
+    {
+        print("ERROR::Create No Stripify Attribute. No Objects selected.\n");
+        return;
+    }
+
+    int $iLoop = 0;
+
+    while($iLoop < size($dagnodes))
+    {
+        // check if the No Stripify Attribute is already there
+        if(`attributeExists Ni_No_Stripify $dagnodes[$iLoop]` == false)
+        {
+            // Add the No Stripify Attribute
+            addAttr -ln Ni_No_Stripify -at bool -dv true $dagnodes[$iLoop];
+        }
+        
+        // Increment the current Node
+        $iLoop = $iLoop + 1;
+    }
+}
+//---------------------------------------------------------------------------

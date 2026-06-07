@@ -1,0 +1,60 @@
+//
+// MyImmerseCreateMorphTag.mel
+//
+// Mel script for applying Net Immerse Morph Tags to an Node
+
+
+global proc int MyImmerseFindFirstAvailableMorphTagNumber(string $ObjectName)
+{
+    int $iMorphTagNumber;
+    string $AttributeName;
+    int $iFound;
+
+    $iMorphTagNumber = 1;
+    $AttributeName = "Ni_Morph_Tag_" + $iMorphTagNumber + "_Name";
+    $iFound = `attributeExists $AttributeName $ObjectName`;
+
+    while ($iFound == true)
+    {
+        $iMorphTagNumber = $iMorphTagNumber + 1;
+        $AttributeName = "Ni_Morph_Tag_" + $iMorphTagNumber + "_Name";
+        $iFound = `attributeExists $AttributeName $ObjectName`;
+    }
+
+    return $iMorphTagNumber;
+}
+
+global proc MyImmerseCreateMorphTag()
+{
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) == 0)
+    {
+        print "ERROR::Creating Morph Tag, No Object was Selected.\n";
+        return;
+    }
+
+
+    if(size($dagnodes) > 1)
+    {
+        print "ERROR::Creating Morph Tag, Multiple objects were selected.\n";
+        return;
+    }
+
+    string $groupName = $dagnodes[0];
+
+    if(`attributeExists Ni_Sequence_1_Name $groupName` == false)
+    {
+       print ("WARNING::" + $groupName + " does not have seem to have any sequences. Is it a Character?");
+    }
+
+    int $MorphTagNumber;
+    $MorphTagNumber = MyImmerseFindFirstAvailableMorphTagNumber($groupName);
+
+    addAttr -ln ("Ni_Morph_Tag_" + $MorphTagNumber + "_Name") -dt "string";
+    addAttr -ln ("Ni_Morph_Tag_" + $MorphTagNumber + "_Frame") -at "float" -min 0.0;
+
+}
+

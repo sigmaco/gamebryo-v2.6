@@ -1,0 +1,37 @@
+//
+// MyImmerseCreateSurfaceEmitterWithAttributes.mel
+//
+// Mel script for applying Net Immerse Attributes to an particle system
+
+
+global proc MyImmerseCreateSurfaceEmitterWithAttributes()
+{
+    string $szSelected[] = `ls -l -sl`;
+    
+    if (size($szSelected) == 0)
+    {
+        error ("Create Surface Emitter:: You must select an object to emit from.");
+        return;
+    }
+    
+    if (size($szSelected) > 1)
+    {
+        error ("Create Surface Emitter:: You must select only ONE object to emit from.");
+        return;
+    }
+
+
+    string $szEmitter[] = `emitter -type surface -r 100 -sro 0 -nuv 0 -cye none -cyi 1 -spd 1 -srn 0 -nsp 1 -tsp 0 -mxd 0 -mnd 0 -dx 1 -dy 0 -dz 0 -sp 0`;
+
+    string $szParticles[] = `particle`;
+    // Result: particle2 particleShape2 //
+
+    connectDynamic -em $szEmitter[1] $szParticles[0];
+
+    MyImmerseAddGamebryoParticlesAttributes($szParticles[1]);
+    MyImmerseAddGamebryoEmitterAttributes($szEmitter[1]);
+    
+    // The default ZBuffer Property for Mesh particles is Test On Write On
+    setAttr ($szParticles[1] + ".Ni_ZBufferProperty") 0;
+
+}

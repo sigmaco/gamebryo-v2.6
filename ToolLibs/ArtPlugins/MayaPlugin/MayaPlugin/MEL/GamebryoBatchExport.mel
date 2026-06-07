@@ -1,0 +1,14 @@
+global proc GamebryoBatchExport(string $exportPath)
+{
+    string $szPluginName = MyImmerseGetPluginName();
+
+    if (MyImmerseCheckAndLoadPlugin($szPluginName))
+        return;
+	
+    if($exportPath == "")
+    {
+        $exportPath = `optionVar -q "ExportFilePath"`;
+    }
+
+	file -f -typ "Nif" -pmt false -ea $exportPath;
+}

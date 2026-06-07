@@ -1,0 +1,196 @@
+proc matrix MyImmerseFloatToMatrix(float $fInMatrix[])
+{
+    matrix $mMatrix[4][4];
+
+    $mMatrix[0][0] = $fInMatrix[0];
+    $mMatrix[1][0] = $fInMatrix[1];
+    $mMatrix[2][0] = $fInMatrix[2];
+    $mMatrix[3][0] = $fInMatrix[3];
+    $mMatrix[0][1] = $fInMatrix[4];
+    $mMatrix[1][1] = $fInMatrix[5];
+    $mMatrix[2][1] = $fInMatrix[6];
+    $mMatrix[3][1] = $fInMatrix[7];
+    $mMatrix[0][2] = $fInMatrix[8];
+    $mMatrix[1][2] = $fInMatrix[9];
+    $mMatrix[2][2] = $fInMatrix[10];
+    $mMatrix[3][2] = $fInMatrix[11];
+    $mMatrix[0][3] = $fInMatrix[12];
+    $mMatrix[1][3] = $fInMatrix[13];
+    $mMatrix[2][3] = $fInMatrix[14];
+    $mMatrix[3][3] = $fInMatrix[15];
+
+    return $mMatrix;
+}
+
+proc MyImmersePrintMatrix(matrix $mMatrix[][])
+{
+    print("Matrix::\n");
+    print($mMatrix[0][0] + " " + $mMatrix[0][1] + " " + $mMatrix[0][2] + " " + $mMatrix[0][3] + "\n");
+    print($mMatrix[1][0] + " " + $mMatrix[1][1] + " " + $mMatrix[1][2] + " " + $mMatrix[1][3] + "\n");
+    print($mMatrix[2][0] + " " + $mMatrix[2][1] + " " + $mMatrix[2][2] + " " + $mMatrix[2][3] + "\n");
+    print($mMatrix[3][0] + " " + $mMatrix[3][1] + " " + $mMatrix[3][2] + " " + $mMatrix[3][3] + "\n");
+}
+
+proc float[] MyImmerseRotate(matrix $mMatrix[][], float $fVector[])
+{
+    float $fResult[3];
+    
+    $fResult[0] = $mMatrix[0][0] * $fVector[0] + $mMatrix[0][1] * $fVector[1] + $mMatrix[0][2] * $fVector[2];
+    $fResult[1] = $mMatrix[1][0] * $fVector[0] + $mMatrix[1][1] * $fVector[1] + $mMatrix[1][2] * $fVector[2];
+    $fResult[2] = $mMatrix[2][0] * $fVector[0] + $mMatrix[2][1] * $fVector[1] + $mMatrix[2][2] * $fVector[2];
+ 
+    return $fResult;
+}
+
+proc float MyImmerseGetLinearUnitMultiplier()
+{
+    string $sUnits = `currentUnit -q -l -f`;
+
+    if(gmatch("millimeter",$sUnits) == 1)
+    {
+        return 10.0;
+    }
+
+    if(gmatch("centimeter",$sUnits) == 1)
+    {
+        return 1.0;
+    }
+
+    if(gmatch("meter",$sUnits) == 1)
+    {
+        return 0.01;
+    }
+
+    if(gmatch("inch",$sUnits) == 1)
+    {
+        return (1.0 / 2.54);
+    }
+
+    if(gmatch("foot",$sUnits) == 1)
+    {
+        return (1.0 / 30.48);
+    }
+
+    if(gmatch("yard",$sUnits) == 1)
+    {
+        return (1.0 / 91.44);
+    }
+    
+    return 1.0; 
+}
+
+
+proc MyImmerseConvertMatrix()
+{
+    string $sSelectedType[];
+
+    $sSelectedType = `ls -sl -st`;
+
+    if(size($sSelectedType) != 2)
+    {
+        print("Error: Only Select One Object.\n");
+        return;
+    }
+
+    if(gmatch("transform", $sSelectedType[1]) == 0)
+    {
+        print("Error: Only work on Transforms.\n");
+        return;
+    }
+
+    matrix $mTotalMatrix[4][4];
+    float $fInMatrix[];
+    matrix $mInMatrix[4][4];
+
+    string $sCurrentObject = $sSelectedType[0];
+
+    string $sAttribute = $sCurrentObject + ".matrix";
+    $fInMatrix = `getAttr $sAttribute`;
+
+    $mTotalMatrix = MyImmerseFloatToMatrix($fInMatrix);
+    print($sCurrentObject + "\n");
+    MyImmersePrintMatrix($mTotalMatrix);
+
+
+    string $sHistory[] = `listHistory $sCurrentObject`;
+
+
+    int $iHistoryObj = 0;
+    while($iHistoryObj < size($sHistory))
+    {
+
+        if(`objectType -isType "transformMesh" $sHistory[$iHistoryObj]` == 1)
+        {
+            $sAttribute = $sHistory[$iHistoryObj] + ".transform";
+            $fInMatrix = `getAttr $sAttribute`;
+
+            $mInMatrix = MyImmerseFloatToMatrix($fInMatrix);
+
+            print($sHistory[$iHistoryObj] + "\n");
+            MyImmersePrintMatrix($mInMatrix);
+
+            // Accumulate the Matrix
+            $mTotalMatrix = $mTotalMatrix * $mInMatrix;
+        }
+
+        $iHistoryObj = $iHistoryObj + 1;
+    }
+
+
+    MyImmersePrintMatrix($mTotalMatrix);
+
+    float $fIdentity[3];
+    $fIdentity[0] = 1;
+    $fIdentity[1] = 0;
+    $fIdentity[2] = 0;
+
+    float $fNewAngle[3] = MyImmerseRotate($mTotalMatrix, $fIdentity);
+    print($fNewAngle[0] + " " + $fNewAngle[1] + " " + $fNewAngle[2] + "\n");
+    
+    string $sCommandArgs = "-v1 " + $fIdentity[0] + " " + $fIdentity[1] + " " + $fIdentity[2] + " -v2 " + $fNewAngle[0] + " " + $fNewAngle[1] + " " + $fNewAngle[2];
+    float $fEulerAngles[3] = `angleBetween -euler -v1 $fIdentity[0] $fIdentity[1] $fIdentity[1] -v2 $fNewAngle[0] $fNewAngle[1] $fNewAngle[2]`;
+    
+    print($fEulerAngles[0] + " " + $fEulerAngles[1] + " " + $fEulerAngles[2] + "\n");
+
+    $sAttribute = $sCurrentObject + ".rotateX";
+    setAttr $sAttribute $fEulerAngles[0];
+
+    $sAttribute = $sCurrentObject + ".rotateY";
+    setAttr $sAttribute $fEulerAngles[1];
+
+    $sAttribute = $sCurrentObject + ".rotateZ";
+    setAttr $sAttribute $fEulerAngles[2];
+
+    float $fLinearMultiplier = MyImmerseGetLinearUnitMultiplier();
+
+    $sAttribute = $sCurrentObject + ".translateX";
+    float $fTranslateX = `getAttr $sAttribute` + ($mTotalMatrix[0][3] * $fLinearMultiplier);
+    float $fInvTranslateX = 0 - $fTranslateX;
+
+    $sAttribute = $sCurrentObject + ".translateX";
+    float $fTranslateY = `getAttr $sAttribute` + ($mTotalMatrix[1][3] * $fLinearMultiplier);
+    float $fInvTranslateY = 0 - $fTranslateY;
+
+    $sAttribute = $sCurrentObject + ".translateX";
+    float $fTranslateZ = `getAttr $sAttribute` + ($mTotalMatrix[2][3] * $fLinearMultiplier);
+    float $fInvTranslateZ = 0 - $fTranslateZ;
+
+    xform -r -t $fTranslateX $fTranslateY $fTranslateZ -rp $fInvTranslateX $fInvTranslateY $fInvTranslateZ -sp $fInvTranslateX $fInvTranslateY $fInvTranslateZ;
+
+    // DELETE THE OLD HISTORY
+    int $iHistoryObj = 0;
+    while($iHistoryObj < size($sHistory))
+    {
+
+        if(`objectType -isType "transformMesh" $sHistory[$iHistoryObj]` == 1)
+        {
+            delete $sHistory[$iHistoryObj];
+        }
+
+        $iHistoryObj = $iHistoryObj + 1;
+    }
+
+}
+
+MyImmerseConvertMatrix();
+

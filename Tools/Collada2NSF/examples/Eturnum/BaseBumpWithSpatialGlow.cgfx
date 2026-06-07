@@ -1,0 +1,304 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+// The base-glow-bump effect from the alien temple.  Most of the lighting is
+// done in the associated pixel shader since the surface is normal mapped.  
+
+// The GlowLightPosition and light directions are global constants that are 
+// wired to lights with application controllers.  GlowAttenuation hangs off the
+// object and is artist controlled.  The fourth component of Zoze controls the
+// fraction of the GlowAttenuation distance inside which there is no attenuation.
+// This gives us a really hot glow in the middle that tapers off quickly.
+string description
+<
+	string detail0 = "Apply a base map, normal map, and a glow map. The normal map is used ";
+    string detail1 = "to modify the lighting from two directional lights, and the glow map ";
+    string detail2 = "intensity is scaled by the distance to the glow source. The quadratic ";
+    string detail3 = "and linear attenuation components of the glow map are controlled by ";
+    string detail4 = "the x and y components of the 'GlowAttenuation' attribute, while the ";
+    string detail5 = "w component of that attribute represents the size of the hot spot in ";
+    string detail6 = "the middle of the glow. This shader is used in the Eturnum sample for ";
+    string detail7 = "the walls of the temple. ";
+> = "Base Bump With Spatial Glow";
+
+// Parameters
+float4x4 WorldViewProjTranspose : WorldViewProjectionTranspose
+<
+	string UIWidget="None";
+>;
+
+float4x4 InvWorldTranspose : WorldInverseTranspose
+<
+	string UIWidget="None";
+>;
+
+float4 GlowLightPosition
+<
+	string UIWidget="None";
+	string VarType="Global";
+	
+> = {0.0, 0.0, 0.0, 1.0};
+
+float4 Zoze
+<
+	string UIWidget="None";
+> = {0.0, 1.0, 0.0, 0.3};
+
+float4 GlowAttenuation 
+<
+	string UIName="Glow Attenuation";
+	string UIWidget = "Slider";
+> = {1.0, 1.0, 1.0, 200.0};
+
+// Light1: Dynamic Effect
+string Light1
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string Object="GeneralLight";
+	string ObjectIndex="0";
+	
+> = "Light1";
+
+// Light2: Dynamic Effect
+string Light2
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string Object="GeneralLight";
+	string ObjectIndex="1";
+> = "Light2";
+
+float3 Light1Direction
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectName="Light1";
+	string ObjectProperty="ModelDirection";
+>;
+float3 Light2Direction
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectName="Light2";
+	string ObjectProperty="ModelDirection";
+>;
+
+float3 Diffuse1
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectName="Light1";
+	string ObjectProperty="Diffuse";
+>;
+
+float3 Diffuse2
+<
+	string UIWidget="None";
+	string VarType="Object";
+	string ObjectName="Light2";
+	string ObjectProperty="Diffuse";
+>;
+
+struct VS_INPUT 
+{
+    float3 Pos          : POSITION;
+    float3 Normal       : NORMAL0;
+    float2 TexCoord     : TEXCOORD0;
+    float3 Tangent      : TANGENT0;
+    float3 BiNormal     : BINORMAL0;
+    float4 Color        : COLOR0;
+};
+
+struct VS_OUTPUT
+{
+    float4 Pos          : POSITION;
+    float2 TexCoord     : TEXCOORD0;
+    float4 Diffuse      : COLOR0;
+    float3 Light1TangentSpace : TEXCOORD3;
+    float3 Light2TangentSpace : TEXCOORD4;
+};
+
+VS_OUTPUT vmain(VS_INPUT In)
+{
+    VS_OUTPUT Out = (VS_OUTPUT)0;
+
+    //Output transformed vertex
+	float4 InPos = float4(In.Pos, 1.0);
+    Out.Pos = mul(WorldViewProjTranspose, InPos);
+
+    //Output packed texture coordinates
+    Out.TexCoord = In.TexCoord;
+
+    //Output vertex color
+    Out.Diffuse.rgb = In.Color.rgb;
+
+    //Find light position and vector in object space for the glow calculations.
+    //Transform to object space with inverse world mat
+    float3 ObjSpaceLightPos = mul(InvWorldTranspose, GlowLightPosition).xyz;
+    //Get the light vector in object space.
+    float3 ObjSpaceLightVec = ObjSpaceLightPos - InPos.xyz;
+
+    //Get the distance squared in r3.x and 1/d in r2.x.  We'll need those 
+    // values for the glow clamping, attenuation, etc...
+    float DistSq = dot(ObjSpaceLightVec, ObjSpaceLightVec);
+    float InvDist = rsqrt(DistSq);
+
+    //This is a fairly confusing block of code.  The glow value is attenuated 
+    //using GlowAttenuation, referred to as G.  The distance from the 
+    // GlowLightPosition is referred to as s.  We use s because it is not 
+    // simply the distance but is Max(0, (d - (G.w * Zoze.w)).  The final 
+    // value placed in oD1 for multiplication in the pixel shader is 
+    // 1 / (G.x(s^2) + G.y(s) + 1).  This is standard attenuation except 
+    // that by shifting the value towards zero, no attenuation is applied if 
+    // the point is close to the GlowLightPosition giving a very hot glow near
+    // that position.  Note also that G.w could be precomputed to contain 
+    // G.w * Zoze.w.  Originally, G.w was used to clamp the glow, but 
+    //that functionality was removed in favor of the current approach. 
+    // It would require changes to all the art, and since we use mad to do 
+    // the work, it would save us no shader instructions.
+
+    // Compute d
+    float Dist = 1 / InvDist;
+    
+    //s = (glowClamp * -hotSpotFraction) + d
+    float S = (GlowAttenuation.w * -Zoze.w) + Dist;
+    
+    //Clamp s to positive range.
+    S = max(S, Zoze.x);
+    
+    //Compute s^2 
+    float SSq = S * S;
+    
+    //Apply the linear and quadratic attenuation constants
+    float SAtten = (S * GlowAttenuation.y) + (SSq * GlowAttenuation.x);
+
+    //Add one for constant attenuation and no clamping
+    SAtten += Zoze.y;
+    
+    //Take 1 / attenuation factor and place in oD0
+    //for multiplying in the pixel shader.
+    Out.Diffuse.a = (1/SAtten);
+
+    //We assume here that light vectors are normalized.  We'll transform them into
+    //tangent space to use for dot3 bump mapping in the pixel shader.
+
+    //Light1Direction
+    Out.Light1TangentSpace.x = dot(-Light1Direction, In.Tangent);
+    Out.Light1TangentSpace.y = dot(-Light1Direction, In.BiNormal);
+    Out.Light1TangentSpace.z = dot(-Light1Direction, In.Normal);
+
+    //Light2Direction
+    Out.Light2TangentSpace.x = dot(-Light2Direction, In.Tangent);
+    Out.Light2TangentSpace.y = dot(-Light2Direction, In.BiNormal);
+    Out.Light2TangentSpace.z = dot(-Light2Direction, In.Normal);
+
+    return Out;
+}
+
+// NTM_Base texture and sampler
+texture BaseTexture
+<
+	string NTM = "base";
+	string ResourceType = "2D";
+>;
+sampler2D Base: register(s0) = sampler_state 
+{
+	WrapS = Wrap;
+    WrapT = Wrap;
+	Texture = <BaseTexture>;
+	MinFilter = LinearMipMapLinear;
+	MagFilter = Linear;
+};
+
+// Bumpmap texture and sampler
+texture normalMap
+<
+	string ResourceName = "normals.bmp";
+	string ResourceType = "2D";
+>;
+sampler2D Bump: register(s1) = sampler_state 
+{
+	WrapS = Wrap;
+    WrapT = Wrap;
+	Texture = <normalMap>;
+	MinFilter = LinearMipMapLinear;
+	MagFilter = Linear;
+};
+
+// NTM_Glow texture and sampler
+texture GlowTexture
+<
+	string NTM = "glow";
+	string ResourceType = "2D";
+>;
+
+sampler2D Glow: register(s2) = sampler_state 
+{
+	WrapS = Wrap;
+    WrapT = Wrap;
+	Texture = <GlowTexture>;
+	MinFilter = LinearMipMapLinear;
+	MagFilter = Linear;
+};
+
+float4 fmain(VS_OUTPUT In) : COLOR
+{
+    //This shader normal maps the walls with two lights and adds in the glow
+    //effect.  The glow is scaled with the value in v1 from the vertex shader.
+    //The final lighting calculation is outlined below.
+
+    float4 Out;
+    
+    //Sample the bump map
+    float3 Normal = tex2D(Bump, In.TexCoord).xyz * 2.0 - 1.0;
+    
+    // N dot L.  The light vector is not biased coming out of the vertex shader
+    float3 Diffuse = saturate(dot(Normal, In.Light1TangentSpace)) * Diffuse1;
+    
+    // N dot L for light2
+    Diffuse += saturate(dot(Normal, In.Light2TangentSpace)) * Diffuse2;
+
+    //Sample the base map
+    float3 BaseTex = tex2D(Base, In.TexCoord).xyz;
+
+    //Sample the glow map
+    float3 GlowTex = tex2D(Glow, In.TexCoord).xyz;
+
+    //Modulate lighting by vertex colors
+    Diffuse *= In.Diffuse.rgb;
+    
+    //Modulate the base map by the lighting results.
+    Out.rgb = (BaseTex * Diffuse);
+    
+    //Add in the glow effect times 2.
+    Out.rgb += saturate(2*In.Diffuse.a*GlowTex);
+    
+    //Set output alpha to one
+    Out.a = 1;
+    
+    return Out;
+}
+
+
+technique main 
+{
+	pass p0 
+	{
+	
+	    VertexProgram = compile arbvp1 vmain();
+		AlphaTestEnable = false;
+		PolygonMode = int2(Front, Fill);
+		FragmentProgram = compile arbfp1 fmain();
+	}
+}

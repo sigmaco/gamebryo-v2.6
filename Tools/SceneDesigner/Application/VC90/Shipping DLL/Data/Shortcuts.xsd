@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<xs:schema id="Shortcuts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Shortcuts">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="Shortcut" type="ShortcutType"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Subtypes -->
+	
+	<xs:complexType name="ShortcutType">
+		<xs:sequence>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="Command" type="EmptyWithNameType"/>
+				<xs:element name="Key" type="EmptyWithNameType"/>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+	
+	<xs:complexType name="EmptyWithNameType">
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+</xs:schema>

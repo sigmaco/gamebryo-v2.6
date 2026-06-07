@@ -1,0 +1,10 @@
+Version: 1
+Script ("Mesh Process","Process")
+{
+    Plugin ("NiPhysXMeshConverterPlugin","PhysX Mesh Converter","1.0","PROCESS")
+    {
+    }
+    Plugin ("MeshFinalizePlugin","Mesh Finalize","1.0","PROCESS")
+    {
+    }
+}

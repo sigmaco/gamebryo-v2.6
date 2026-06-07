@@ -1,0 +1,18 @@
+//
+// MyImmerseCreateScreenSpaceCamera.mel
+//
+// Mel script for applying Net Immerse Attributes to a 
+
+
+global proc MyImmerseCreateScreenSpaceCamera()
+{
+
+    // Create the Camera
+    string $sCamera[] = `camera -centerOfInterest 5 -focalLength 35 -lensSqueezeRatio 1 -cameraScale 1 -horizontalFilmAperture 1.4173 -horizontalFilmOffset 0 -verticalFilmAperture 0.9449 -verticalFilmOffset 0 -filmFit Fill -overscan 1 -motionBlur 0 -shutterAngle 144 -nearClipPlane 0.01 -farClipPlane 1000 -orthographic 1 -orthographicWidth 30`; 
+
+    objectMoveCommand; 
+    cameraMakeNode 1 "";
+
+    addAttr -ln "Ni_ScreenSpaceCamera" -at bool -dv 1 $sCamera[0];
+}
+

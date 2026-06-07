@@ -1,0 +1,46 @@
+
+global proc MyImmerseRemoveJointOrientationAndRotateAxis(string $sObject,  int $iAllDecendents)
+{
+    string $szJoints[]; 
+    
+    if ($sObject == "")
+    {
+        $szJoints = `ls -l -sl -typ joint`;
+
+            // Check for Nothing Selected
+        if(size($szJoints) == 0)
+        {
+            print("WARNING:: No Joints Selected\n");
+        }
+    }
+    else
+    {
+        $szJoints[0] = $sObject;
+    }
+
+
+
+	int $iCount = 0;
+    while( $iCount < size($szJoints))
+    {
+        MyImmerseFixJoint($szJoints[$iCount]);
+
+        // Also do the children below
+        if ($iAllDecendents == 1)
+        {
+            string $szChildren[] = `listRelatives -ad -f -typ joint $szJoints[$iCount]`;
+
+            int $iChildCount = 0;
+
+            while ($iChildCount < size($szChildren))
+            {
+                MyImmerseFixJoint($szChildren[$iChildCount]);
+
+                $iChildCount++;
+            }
+        }
+
+        $iCount++;
+    }
+
+}

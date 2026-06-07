@@ -1,0 +1,32 @@
+source MyImmerseGUI;
+
+//---------------------------------------------------------------------------
+global proc string GetDefaultExportPath()
+{
+    string $szDefaultFileDir = `file -q -sceneName`;
+
+    $szDefaultFileDir = dirname($szDefaultFileDir);
+
+    string $szDefaultFileName = `file -q -sceneName`;
+    if($szDefaultFileName == "")
+    {
+        $szDefaultFileName = "untitled";
+    }
+
+    $szDefaultFileName = `basename $szDefaultFileName ".ma"`;
+    $szDefaultFileName = `basename $szDefaultFileName ".mb"`;
+
+    string $szDefaultFilePath = $szDefaultFileDir + "\/" + $szDefaultFileName + ".nif";
+
+    return $szDefaultFilePath;
+}
+//---------------------------------------------------------------------------
+global proc EnsureDefault()
+{
+    if(!`optionVar -ex "ExportFilePath"`)
+    {
+        string $defaultExportPath = GetDefaultExportPath();
+        optionVar -sv "ExportFilePath" $defaultExportPath;
+    }
+}
+//---------------------------------------------------------------------------

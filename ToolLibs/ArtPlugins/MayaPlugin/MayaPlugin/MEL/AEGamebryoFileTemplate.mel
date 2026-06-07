@@ -1,0 +1,701 @@
+global proc int HasGamebryoGenericOptionsAttributes(string $nodeName)
+{
+    int $result = false;
+    if(`attributeExists  Ni_Generic_Format       $nodeName` ||
+        `attributeExists Ni_Generic_Texture_Size $nodeName`||
+        `attributeExists Ni_Generic_Location     $nodeName`||
+        `attributeExists Ni_Generic_Load_Directly_To_Renderer $nodeName`)
+    {
+        $result = true;
+    }
+
+    return $result;
+}
+
+global proc AEGamebryoCreateGenericOptionsControls(string $nodeName)
+{
+    frameLayout -label "Generic Options" -collapse false genericOptionsFrame;
+        columnLayout genericOptionsColumnLayout;
+            attrEnumOptionMenuGrp -label "Format" 
+                -at ($nodeName + ".Ni_Generic_Format")
+                Ni_Generic_FormatControl;
+
+            attrEnumOptionMenuGrp -label "Size" 
+                -at ($nodeName + ".Ni_Generic_Texture_Size") 
+                Ni_Generic_Texture_SizeControl;
+
+            attrEnumOptionMenuGrp -label "Location" 
+                -at ($nodeName + ".Ni_Generic_Location") 
+                Ni_Generic_LocationControl;
+
+            attrControlGrp -label "Load Directly To Render" 
+                -a ($nodeName + ".Ni_Generic_Load_Directly_To_Renderer") 
+                Ni_Generic_Load_Directly_To_RendererControl;
+        setParent..;
+    setParent..;
+}
+
+global proc AEAddGenericOptions(string $nodeAndAttr)
+{
+    string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoGenericOptionsAttributes($nodeName))
+    {
+        if(`frameLayout -ex genericOptionsFrame`)
+        {
+            frameLayout -e -vis true genericOptionsFrame;
+            AEGamebryoReattachGenericOptionsControls($nodeName);
+        }
+        else
+        {
+            AEGamebryoCreateGenericOptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex genericOptionsFrame`)
+        {
+            frameLayout -e -vis false genericOptionsFrame;
+        }
+    }
+}
+
+global proc AEGamebryoReattachGenericOptionsControls(string $nodeName)
+{
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_Generic_Format") 
+        Ni_Generic_FormatControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_Generic_Texture_Size" ) 
+        Ni_Generic_Texture_SizeControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_Generic_Location") 
+        Ni_Generic_LocationControl;
+
+    deleteUI Ni_Generic_Load_Directly_To_RendererControl;
+
+    columnLayout -p genericOptionsColumnLayout;
+        attrControlGrp -label "Load Directly To Render"
+            -attribute ($nodeName + ".Ni_Generic_Load_Directly_To_Renderer") 
+            Ni_Generic_Load_Directly_To_RendererControl;
+    setParent..;
+}
+
+global proc AEReplaceGenericOptions(string $nodeAndAttr)
+{
+    string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoGenericOptionsAttributes($buffer[0]))
+    {
+        if(`frameLayout -ex genericOptionsFrame`)
+        {
+            frameLayout -e -vis true genericOptionsFrame;
+            AEGamebryoReattachGenericOptionsControls($nodeName);
+        }
+        else
+        {
+            AEGamebryoCreateGenericOptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex genericOptionsFrame`)
+        {
+            frameLayout -e -vis false genericOptionsFrame;
+        }
+    }
+}
+
+
+global proc int HasGamebryoXbox360Options(string $nodeName)
+{
+    int $result = false;
+    if(`attributeExists  Ni_Next_Gen_XBox_Format                    $nodeName` ||
+        `attributeExists Ni_Next_Gen_XBox_Texture_Size              $nodeName` ||
+        `attributeExists Ni_Next_Gen_XBox_Location                  $nodeName` ||
+        `attributeExists Ni_Next_Gen_XBox_Load_Directly_To_Renderer $nodeName`)
+    {
+        $result = true;
+    }
+
+    return $result;
+}
+
+global proc Create360OptionsControls(string $nodeName)
+{
+    frameLayout -label "Xbox 360 Options" -collapse false xbox360OptionsFrame;
+        columnLayout xbox360OptionsColumnLayout;
+            attrEnumOptionMenuGrp -label "Format" 
+                -at ($nodeName + ".Ni_Next_Gen_XBox_Format") 
+                Ni_Next_Gen_XBox_FormatControl;
+
+            attrEnumOptionMenuGrp -label "Size" 
+                -at ($nodeName + ".Ni_Next_Gen_XBox_Texture_Size") 
+                Ni_Next_Gen_XBox_Texture_SizeControl;
+
+            attrEnumOptionMenuGrp -label "Location" 
+                -at ($nodeName + ".Ni_Next_Gen_XBox_Location") 
+                Ni_Next_Gen_XBox_LocationControl;
+
+            attrControlGrp -label "Load Directly To Render" 
+                -a ($nodeName + ".Ni_Next_Gen_XBox_Load_Directly_To_Renderer") 
+                Ni_Next_Gen_XBox_Load_Directly_To_RendererControl;
+        setParent..;
+    setParent..;
+}
+
+global proc AEAddXbox360Options(string $nodeAndAttr)
+{
+string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoXbox360Options($buffer[0]))
+    {
+        if(`frameLayout -ex xbox360OptionsFrame`)
+        {
+            frameLayout -e -vis true xbox360OptionsFrame;
+            AEGamebryoReattach360OptionsControls($nodeName);
+        }
+        else
+        {
+            Create360OptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex xbox360OptionsFrame`)
+        {
+            frameLayout -e -vis false xbox360OptionsFrame;
+        }
+    }
+}
+
+global proc AEGamebryoReattach360OptionsControls(string $nodeName)
+{
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_Next_Gen_XBox_Format") 
+        Ni_Next_Gen_XBox_FormatControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_Next_Gen_XBox_Texture_Size" ) 
+        Ni_Next_Gen_XBox_Texture_SizeControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_Next_Gen_XBox_Location") 
+        Ni_Next_Gen_XBox_LocationControl;
+
+    deleteUI Ni_Next_Gen_XBox_Load_Directly_To_RendererControl;
+
+    columnLayout -p xbox360OptionsColumnLayout;
+        attrControlGrp -label "Load Directly To Render"
+            -attribute ($nodeName + ".Ni_Next_Gen_XBox_Load_Directly_To_Renderer") 
+            Ni_Next_Gen_XBox_Load_Directly_To_RendererControl;
+    setParent..;
+}
+
+global proc AEReplaceXbox360Options(string $nodeAndAttr)
+{
+    string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoXbox360Options($buffer[0]))
+    {
+        if(`frameLayout -ex xbox360OptionsFrame`)
+        {
+            frameLayout -e -vis true xbox360OptionsFrame;
+            AEGamebryoReattach360OptionsControls($nodeName);
+        }
+        else
+        {
+            Create360OptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex xbox360OptionsFrame`)
+        {
+            frameLayout -e -vis false xbox360OptionsFrame;
+        }
+    }
+}
+
+
+//
+//DX9 OPTIONS START
+//
+
+global proc int HasGamebryoDX9Options(string $nodeName)
+{
+    int $result = false;
+    if(`attributeExists  Ni_DX9_Format                      $nodeName` ||
+        `attributeExists Ni_DX9_Texture_Size                $nodeName` ||
+        `attributeExists Ni_DX9_Location                    $nodeName` ||
+        `attributeExists Ni_DX9_Load_Directly_To_Renderer   $nodeName`)
+    {
+        $result = true;
+    }
+
+    return $result;
+}
+
+global proc CreateDX9OptionsControls(string $nodeName)
+{
+    frameLayout -label "DX9 Options" -collapse false dx9OptionsFrame;
+        columnLayout dx9OptionsColumnLayout;
+            attrEnumOptionMenuGrp -label "Format" 
+                -at ($nodeName + ".Ni_DX9_Format") 
+                Ni_DX9_FormatControl;
+
+            attrEnumOptionMenuGrp -label "Size" 
+                -at ($nodeName + ".Ni_DX9_Texture_Size") 
+                Ni_DX9_Texture_SizeControl;
+
+            attrEnumOptionMenuGrp -label "Location" 
+                -at ($nodeName + ".Ni_DX9_Location") 
+                Ni_DX9_LocationControl;
+
+            attrControlGrp -label "Load Directly To Render" 
+                -a ($nodeName + ".Ni_DX9_Load_Directly_To_Renderer") 
+                Ni_DX9_Load_Directly_To_RendererControl;
+        setParent..;
+    setParent..;
+}
+
+global proc AEAddDX9Options(string $nodeAndAttr)
+{
+string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoDX9Options($buffer[0]))
+    {
+        if(`frameLayout -ex dx9OptionsFrame`)
+        {
+            frameLayout -e -vis true dx9OptionsFrame;
+            AEGamebryoReattachDX9OptionsControls($nodeName);
+        }
+        else
+        {
+            Create360OptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex dx9OptionsFrame`)
+        {
+            frameLayout -e -vis false dx9OptionsFrame;
+        }
+    }
+}
+
+global proc AEGamebryoReattachDX9OptionsControls(string $nodeName)
+{
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_DX9_Format") 
+        Ni_DX9_FormatControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_DX9_Texture_Size" ) 
+        Ni_DX9_Texture_SizeControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_DX9_Location") 
+        Ni_DX9_LocationControl;
+
+    deleteUI Ni_DX9_Load_Directly_To_RendererControl;
+
+    columnLayout -p dx9OptionsColumnLayout;
+        attrControlGrp -label "Load Directly To Render"
+            -attribute ($nodeName + ".Ni_DX9_Load_Directly_To_Renderer") 
+            Ni_DX9_Load_Directly_To_RendererControl;
+    setParent..;
+}
+
+global proc AEReplaceDX9Options(string $nodeAndAttr)
+{
+    string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoDX9Options($buffer[0]))
+    {
+        if(`frameLayout -ex dx9OptionsFrame`)
+        {
+            frameLayout -e -vis true dx9OptionsFrame;
+            AEGamebryoReattachDX9OptionsControls($nodeName);
+        }
+        else
+        {
+            CreateDX9OptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex dx9OptionsFrame`)
+        {
+            frameLayout -e -vis false dx9OptionsFrame;
+        }
+    }
+}
+
+//
+//D3D10 OPTIONS START
+//
+
+global proc int HasGamebryoD3D10Options(string $nodeName)
+{
+    int $result = false;
+    if(`attributeExists  Ni_D3D10_Format                      $nodeName` ||
+        `attributeExists Ni_D3D10_Texture_Size                $nodeName` ||
+        `attributeExists Ni_D3D10_Location                    $nodeName` ||
+        `attributeExists Ni_D3D10_Load_Directly_To_Renderer   $nodeName`)
+    {
+        $result = true;
+    }
+
+    return $result;
+}
+
+global proc CreateD3D10OptionsControls(string $nodeName)
+{
+    frameLayout -label "D3D10 Options" -collapse false d3d10OptionsFrame;
+        columnLayout d3d10OptionsColumnLayout;
+            attrEnumOptionMenuGrp -label "Format" 
+                -at ($nodeName + ".Ni_D3D10_Format") 
+                Ni_D3D10_FormatControl;
+
+            attrEnumOptionMenuGrp -label "Size" 
+                -at ($nodeName + ".Ni_D3D10_Texture_Size") 
+                Ni_D3D10_Texture_SizeControl;
+
+            attrEnumOptionMenuGrp -label "Location" 
+                -at ($nodeName + ".Ni_D3D10_Location") 
+                Ni_D3D10_LocationControl;
+
+            attrControlGrp -label "Load Directly To Render" 
+                -a ($nodeName + ".Ni_D3D10_Load_Directly_To_Renderer") 
+                Ni_D3D10_Load_Directly_To_RendererControl;
+        setParent..;
+    setParent..;
+}
+
+global proc AEAddD3D10Options(string $nodeAndAttr)
+{
+string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoD3D10Options($buffer[0]))
+    {
+        if(`frameLayout -ex d3d10OptionsFrame`)
+        {
+            frameLayout -e -vis true d3d10OptionsFrame;
+            AEGamebryoReattachD3D10OptionsControls($nodeName);
+        }
+        else
+        {
+            Create360OptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex d3d10OptionsFrame`)
+        {
+            frameLayout -e -vis false d3d10OptionsFrame;
+        }
+    }
+}
+
+global proc AEGamebryoReattachD3D10OptionsControls(string $nodeName)
+{
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_D3D10_Format") 
+        Ni_D3D10_FormatControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_D3D10_Texture_Size" ) 
+        Ni_D3D10_Texture_SizeControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_D3D10_Location") 
+        Ni_D3D10_LocationControl;
+
+    deleteUI Ni_D3D10_Load_Directly_To_RendererControl;
+
+    columnLayout -p d3d10OptionsColumnLayout;
+        attrControlGrp -label "Load Directly To Render"
+            -attribute ($nodeName + ".Ni_D3D10_Load_Directly_To_Renderer") 
+            Ni_D3D10_Load_Directly_To_RendererControl;
+    setParent..;
+}
+
+global proc AEReplaceD3D10Options(string $nodeAndAttr)
+{
+    string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoD3D10Options($buffer[0]))
+    {
+        if(`frameLayout -ex d3d10OptionsFrame`)
+        {
+            frameLayout -e -vis true d3d10OptionsFrame;
+            AEGamebryoReattachD3D10OptionsControls($nodeName);
+        }
+        else
+        {
+            CreateD3D10OptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex d3d10OptionsFrame`)
+        {
+            frameLayout -e -vis false d3d10OptionsFrame;
+        }
+    }
+}
+
+
+//
+//PS3 options start
+//
+global proc int HasGamebryoPS3Options(string $nodeName)
+{
+    int $result = false;
+    if( `attributeExists Ni_PS3_Format          $nodeName` ||
+        `attributeExists Ni_PS3_Texture_Size    $nodeName` ||
+        `attributeExists Ni_PS3_Location        $nodeName`)
+    {
+        $result = true;
+    }
+
+    return $result;
+}
+
+global proc CreatePS3OptionsControls(string $nodeName)
+{
+    frameLayout -label "PS3 Options" -collapse false ps3OptionsFrame;
+        columnLayout ps3OptionsColumnLayout;
+            attrEnumOptionMenuGrp -label "Format" 
+                -at ($nodeName + ".Ni_PS3_Format") 
+                Ni_PS3_FormatControl;
+
+            attrEnumOptionMenuGrp -label "Size" 
+                -at ($nodeName + ".Ni_PS3_Texture_Size") 
+                Ni_PS3_Texture_SizeControl;
+
+            attrEnumOptionMenuGrp -label "Location" 
+                -at ($nodeName + ".Ni_PS3_Location") 
+                Ni_PS3_LocationControl;
+        setParent..;
+    setParent..;
+}
+
+global proc AEAddPS3Options(string $nodeAndAttr)
+{
+string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoPS3Options($buffer[0]))
+    {
+        if(`frameLayout -ex ps3OptionsFrame`)
+        {
+            frameLayout -e -vis true ps3OptionsFrame;
+            AEGamebryoReattachPS3OptionsControls($nodeName);
+        }
+        else
+        {
+            Create360OptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex ps3OptionsFrame`)
+        {
+            frameLayout -e -vis false ps3OptionsFrame;
+        }
+    }
+}
+
+global proc AEGamebryoReattachPS3OptionsControls(string $nodeName)
+{
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_PS3_Format") 
+        Ni_PS3_FormatControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_PS3_Texture_Size" ) 
+        Ni_PS3_Texture_SizeControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_PS3_Location") 
+        Ni_PS3_LocationControl;
+}
+
+global proc AEReplacePS3Options(string $nodeAndAttr)
+{
+    string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoPS3Options($buffer[0]))
+    {
+        if(`frameLayout -ex ps3OptionsFrame`)
+        {
+            frameLayout -e -vis true ps3OptionsFrame;
+            AEGamebryoReattachPS3OptionsControls($nodeName);
+        }
+        else
+        {
+            CreatePS3OptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex ps3OptionsFrame`)
+        {
+            frameLayout -e -vis false ps3OptionsFrame;
+        }
+    }
+}
+
+//
+//Wii options start
+//
+global proc int HasGamebryoWiiOptions(string $nodeName)
+{
+    int $result = false;
+    if( `attributeExists Ni_Wii_Format          $nodeName` ||
+        `attributeExists Ni_Wii_Texture_Size    $nodeName` ||
+        `attributeExists Ni_Wii_Location        $nodeName`)
+    {
+        $result = true;
+    }
+
+    return $result;
+}
+
+global proc CreateWiiOptionsControls(string $nodeName)
+{
+    frameLayout -label "Wii Options" -collapse false wiiOptionsFrame;
+        columnLayout wiiOptionsColumnLayout;
+            attrEnumOptionMenuGrp -label "Format" 
+                -at ($nodeName + ".Ni_Wii_Format") 
+                Ni_Wii_FormatControl;
+
+            attrEnumOptionMenuGrp -label "Size" 
+                -at ($nodeName + ".Ni_Wii_Texture_Size") 
+                Ni_Wii_Texture_SizeControl;
+
+            attrEnumOptionMenuGrp -label "Location" 
+                -at ($nodeName + ".Ni_Wii_Location") 
+                Ni_Wii_LocationControl;
+        setParent..;
+    setParent..;
+}
+
+global proc AEAddWiiOptions(string $nodeAndAttr)
+{
+string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoWiiOptions($buffer[0]))
+    {
+        if(`frameLayout -ex wiiOptionsFrame`)
+        {
+            frameLayout -e -vis true wiiOptionsFrame;
+            AEGamebryoReattachWiiOptionsControls($nodeName);
+        }
+        else
+        {
+            CreateWiiOptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex wiiOptionsFrame`)
+        {
+            frameLayout -e -vis false wiiOptionsFrame;
+        }
+    }
+}
+
+global proc AEGamebryoReattachWiiOptionsControls(string $nodeName)
+{
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_Wii_Format") 
+        Ni_Wii_FormatControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_Wii_Texture_Size" ) 
+        Ni_Wii_Texture_SizeControl;
+    attrEnumOptionMenuGrp -e -at ($nodeName + ".Ni_Wii_Location") 
+        Ni_Wii_LocationControl;
+}
+
+global proc AEReplaceWiiOptions(string $nodeAndAttr)
+{
+    string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+    string $nodeName = $buffer[0];
+
+    if(HasGamebryoWiiOptions($buffer[0]))
+    {
+        if(`frameLayout -ex wiiOptionsFrame`)
+        {
+            frameLayout -e -vis true wiiOptionsFrame;
+            AEGamebryoReattachWiiOptionsControls($nodeName);
+        }
+        else
+        {
+            CreateWiiOptionsControls($nodeName);
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex wiiOptionsFrame`)
+        {
+            frameLayout -e -vis false wiiOptionsFrame;
+        }
+    }
+}
+
+
+global proc AEGamebryoFileTemplate(string $nodeName)
+{
+    editorTemplate -beginLayout "Gamebryo";
+        editorTemplate -callCustom "AEGamebryoAddAttributeButton" "AEGamebryoAddAttributeButtonReplace" "file";
+        
+        editorTemplate -callCustom "AEAddGenericOptions" "AEReplaceGenericOptions" "Nothing";
+        editorTemplate -callCustom "AEAddXbox360Options" "AEReplaceXbox360Options" "Nothing";
+        editorTemplate -callCustom "AEAddDX9Options" "AEReplaceDX9Options" "Nothing";
+        editorTemplate -callCustom "AEAddD3D10Options" "AEReplaceD3D10Options" "Nothing";
+        editorTemplate -callCustom "AEAddPS3Options" "AEReplacePS3Options" "Nothing";
+        editorTemplate -callCustom "AEAddWiiOptions" "AEReplaceWiiOptions" "Nothing";
+
+        editorTemplate -suppress "Ni_Generic_Format";
+        editorTemplate -suppress "Ni_Generic_Texture_Size";
+        editorTemplate -suppress "Ni_Generic_Location";
+        editorTemplate -suppress "Ni_Generic_Load_Directly_To_Renderer";
+
+        editorTemplate -suppress "Ni_Next_Gen_XBox_Format";
+        editorTemplate -suppress "Ni_Next_Gen_XBox_Texture_Size";
+        editorTemplate -suppress "Ni_Next_Gen_XBox_Location";
+        editorTemplate -suppress "Ni_Next_Gen_XBox_Load_Directly_To_Renderer";
+
+        editorTemplate -suppress "Ni_DX9_Format";                
+        editorTemplate -suppress "Ni_DX9_Texture_Size";
+        editorTemplate -suppress "Ni_DX9_Location";             
+        editorTemplate -suppress "Ni_DX9_Load_Directly_To_Renderer";
+
+        editorTemplate -suppress "Ni_D3D10_Format";                
+        editorTemplate -suppress "Ni_D3D10_Texture_Size";
+        editorTemplate -suppress "Ni_D3D10_Location";             
+        editorTemplate -suppress "Ni_D3D10_Load_Directly_To_Renderer";
+
+        editorTemplate -suppress "Ni_PS3_Format";          
+        editorTemplate -suppress "Ni_PS3_Texture_Size"; 
+        editorTemplate -suppress "Ni_PS3_Location";     
+
+        editorTemplate -suppress "Ni_Wii_Format";          
+        editorTemplate -suppress "Ni_Wii_Texture_Size"; 
+        editorTemplate -suppress "Ni_Wii_Location";     
+
+    editorTemplate -endLayout;
+    
+}
