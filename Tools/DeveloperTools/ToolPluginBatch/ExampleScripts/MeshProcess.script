@@ -1,0 +1,7 @@
+Version: 1
+Script ("Mesh Process","Process")
+{
+    Plugin ("MeshFinalizePlugin","Mesh Finalize","1.0","PROCESS")
+    {
+    }
+}

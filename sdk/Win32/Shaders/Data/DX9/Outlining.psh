@@ -1,0 +1,37 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+;The outlining shader.  Basically, this assumes that the fragment is a 
+;silhouette edge if an N dot V calculation is less than the threshold in
+;c1 that the artist sets.  The N dot V value is biased in the vertex shader
+;and hence we do some math here to shift everything into the right ranges.
+;cnd selects src1 when r0.a is greater than .5 and src2 when r0.a is less
+;than .5.  src0 must always be r0.a in ps.1.1.  I don't know why it isn't
+;implicit.
+
+ps_1_1
+
+def c4, -0.5, -0.5, -0.5, -0.5
+
+texcoord t0                  ;Get N dot V biased
+
+mad r0.a, c1, c4, t0.b       ;Move values into r0.a for comparison.  We must
+    ;halve the outlineThickness constant in c1 since the artist has a range
+    ;from 0 to 1.  Note that we negate constant c4 itself rather than using
+    ;-c1 or -c4 in the instruction since source register modifiers on constants
+    ;produce undefined results and will not validate in DX9.
+
+cnd r0.rgb, r0.a, v0, c0     ;Run cnd.  If N dot V is less than 
+    ;outlineThickness then we select black, c0.  Otherwise, we take the color
+    ;from the vertex shader out of v0.
++mov r0.a, c0.a

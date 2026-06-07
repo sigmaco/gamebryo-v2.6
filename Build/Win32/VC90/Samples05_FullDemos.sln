@@ -1,0 +1,68 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MetalWars", "..\..\..\Samples\FullDemos\MetalWars\Win32\VC90\MetalWars.vcproj", "{01D80EBC-ADAF-46E8-99BF-C52F68494061}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MOUT", "..\..\..\Samples\FullDemos\MOUT\Win32\VC90\MOUT.vcproj", "{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SceneApp", "..\..\..\Samples\FullDemos\SceneApp\Win32\VC90\SceneApp.vcproj", "{A40B021E-FE8A-4D25-9982-498392727325}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL|Win32 = Debug DLL|Win32
+		Debug Miles Sound|Win32 = Debug Miles Sound|Win32
+		Debug|Win32 = Debug|Win32
+		Release DLL|Win32 = Release DLL|Win32
+		Release Miles Sound|Win32 = Release Miles Sound|Win32
+		Release|Win32 = Release|Win32
+		Shipping DLL|Win32 = Shipping DLL|Win32
+		Shipping Miles Sound|Win32 = Shipping Miles Sound|Win32
+		Shipping|Win32 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Debug DLL|Win32.ActiveCfg = Debug|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Debug Miles Sound|Win32.ActiveCfg = Debug Miles Sound|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Debug Miles Sound|Win32.Build.0 = Debug Miles Sound|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Debug|Win32.ActiveCfg = Debug|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Debug|Win32.Build.0 = Debug|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Release DLL|Win32.ActiveCfg = Release|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Release Miles Sound|Win32.ActiveCfg = Release Miles Sound|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Release Miles Sound|Win32.Build.0 = Release Miles Sound|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Release|Win32.ActiveCfg = Release|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Release|Win32.Build.0 = Release|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Shipping DLL|Win32.ActiveCfg = Shipping|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Shipping Miles Sound|Win32.ActiveCfg = Shipping Miles Sound|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Shipping Miles Sound|Win32.Build.0 = Shipping Miles Sound|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{01D80EBC-ADAF-46E8-99BF-C52F68494061}.Shipping|Win32.Build.0 = Shipping|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Debug DLL|Win32.ActiveCfg = Debug|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Debug Miles Sound|Win32.ActiveCfg = Debug|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Debug|Win32.Build.0 = Debug|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Release DLL|Win32.ActiveCfg = Release|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Release Miles Sound|Win32.ActiveCfg = Release|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Release|Win32.ActiveCfg = Release|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Release|Win32.Build.0 = Release|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Shipping DLL|Win32.ActiveCfg = Shipping|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Shipping Miles Sound|Win32.ActiveCfg = Shipping|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{2E72FCFE-2F6D-48C9-9219-8BCB485C1393}.Shipping|Win32.Build.0 = Shipping|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Debug Miles Sound|Win32.ActiveCfg = Debug|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Debug|Win32.Build.0 = Debug|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Release Miles Sound|Win32.ActiveCfg = Release|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Release|Win32.ActiveCfg = Release|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Release|Win32.Build.0 = Release|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Shipping Miles Sound|Win32.ActiveCfg = Shipping|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{A40B021E-FE8A-4D25-9982-498392727325}.Shipping|Win32.Build.0 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

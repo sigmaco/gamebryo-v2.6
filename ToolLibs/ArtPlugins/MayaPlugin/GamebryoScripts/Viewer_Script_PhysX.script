@@ -1,0 +1,17 @@
+Version: 1
+Script ("Viewer_Script_PhysX","VIEWER")
+{
+	Plugin ("PhysXViewerPlugin","PhysX Viewer","1.1","Viewer")
+	{
+		Parameter ("NiPluginToolkit Renderer","2");
+		Parameter ("DebugOutput","FALSE");
+		Parameter ("GroundPlane","FALSE");
+		Parameter ("GroundHeight","0.000000");
+		Parameter ("FullScreen","FALSE");
+		Parameter ("ResolutionWidth","1024");
+		Parameter ("ResolutionHeight","768");
+		Parameter ("GravityX","0.000000");
+		Parameter ("GravityY","-9.800000");
+		Parameter ("GravityZ","0.000000");
+	}
+}

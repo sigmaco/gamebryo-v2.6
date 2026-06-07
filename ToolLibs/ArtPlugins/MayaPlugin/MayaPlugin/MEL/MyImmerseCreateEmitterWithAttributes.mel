@@ -1,0 +1,18 @@
+//
+// MyImmerseCreateEmitterWithAttributes.mel
+//
+// Mel script for applying Net Immerse Attributes to an particle system
+
+
+global proc MyImmerseCreateEmitterWithAttributes()
+{
+    string $szEmitter[] = `emitter -pos 0 0 0 -type omni -r 100 -sro 0 -nuv 0 -cye none -cyi 1 -spd 1 -srn 0 -nsp 1 -tsp 0 -mxd 0 -mnd 0 -dx 1 -dy 0 -dz 0 -sp 0`;
+
+    string $szParticles[] = `particle`;
+    // Result: particle2 particleShape2 //
+
+    connectDynamic -em $szEmitter[0] $szParticles[0];
+
+    MyImmerseAddGamebryoParticlesAttributes($szParticles[1]);
+    MyImmerseAddGamebryoEmitterAttributes($szEmitter[0]);
+}

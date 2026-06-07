@@ -1,0 +1,439 @@
+<?xml version="1.0"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+	<asset>
+		<contributor>
+			<author>ed.holzwarth</author>
+			<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+			<comments/>
+			<copyright/>
+		</contributor>
+		<contributor>
+			<author>Michael.Noland</author>
+			<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+			<comments/>
+			<copyright/>
+		</contributor>
+		<created>2007-09-13T17:09:27</created>
+		<keywords>FXComposer, NVIDIA</keywords>
+		<modified>2007-11-15T15:04:55</modified>
+		<subject/>
+		<title/>
+	</asset>
+	<library_effects>
+		<effect id="WarpBars0" name="WarpBars">
+			<profile_CG platform="PC-OGL">
+				<include sid="default" url="WarpBars.cgfx"/>
+				<newparam sid="description">
+					<annotate name="detail0">
+						<string>This shader is used for the circular oscillating Warp Bars in the </string>
+					</annotate>
+					<annotate name="detail2">
+						<string>in that sample, and will not look good on arbitrary geometry. </string>
+					</annotate>
+					<annotate name="detail4">
+						<string>the CenterlineConstants</string>
+					</annotate>
+					<annotate name="detail1">
+						<string>Eturnum sample. This effect is highly dependent on the specific geometry </string>
+					</annotate>
+					<annotate name="detail3">
+						<string>Check the cgfx file for details on this shader, including how to set </string>
+					</annotate>
+					<string>Warp Bars Effect</string>
+				</newparam>
+				<newparam sid="WorldViewProj">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>WORLDVIEWPROJECTION</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="InvWorld">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>WORLDINVERSE</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="EyePos">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>EYEPOS</semantic>
+					<float4>0 0 0 0</float4>
+				</newparam>
+				<newparam sid="Zono">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<float4>0 1 -1 1</float4>
+				</newparam>
+				<newparam sid="MaterialColor">
+					<annotate name="UIName">
+						<string>Material Color</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Color</string>
+					</annotate>
+					<semantic>DIFFUSE</semantic>
+					<float4>0.5 0 0.5 1</float4>
+				</newparam>
+				<newparam sid="CenterlineConstants">
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIName">
+						<string>Center Line Constants</string>
+					</annotate>
+					<float4>0 100 200 0.01</float4>
+				</newparam>
+				<newparam sid="Cosine">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Global</string>
+					</annotate>
+					<float>1</float>
+				</newparam>
+				<newparam sid="Sine">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Global</string>
+					</annotate>
+					<float>0</float>
+				</newparam>
+				<newparam sid="Retraction">
+					<annotate name="UIName">
+						<string>Retraction</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>-1000</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>1000</float>
+					</annotate>
+					<float>-100</float>
+				</newparam>
+				<newparam sid="WarpBarTexKill">
+					<annotate name="UIName">
+						<string>Warp Bar Tex Kill</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Global</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>0</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>1000</float>
+					</annotate>
+					<float>75</float>
+				</newparam>
+				<technique sid="main">
+					<pass sid="p0">
+						<blend_enable value="true"/>
+						<alpha_test_enable value="true"/>
+						<cull_face_enable value="true"/>
+						<blend_func>
+							<src/>
+							<dest value="ONE"/>
+						</blend_func>
+						<depth_test_enable value="true"/>
+						<depth_mask value="false"/>
+						<depth_func value="LEQUAL"/>
+						<shader stage="VERTEX">
+							<compiler_target>arbvp1</compiler_target>
+							<name source="default">vmain</name>
+							<bind symbol="WorldViewProj">
+								<param ref="WorldViewProj"/>
+							</bind>
+							<bind symbol="InvWorld">
+								<param ref="InvWorld"/>
+							</bind>
+							<bind symbol="EyePos">
+								<param ref="EyePos"/>
+							</bind>
+							<bind symbol="Zono">
+								<param ref="Zono"/>
+							</bind>
+							<bind symbol="MaterialColor">
+								<param ref="MaterialColor"/>
+							</bind>
+							<bind symbol="CenterlineConstants">
+								<param ref="CenterlineConstants"/>
+							</bind>
+							<bind symbol="Cosine">
+								<param ref="Cosine"/>
+							</bind>
+							<bind symbol="Sine">
+								<param ref="Sine"/>
+							</bind>
+							<bind symbol="Retraction">
+								<param ref="Retraction"/>
+							</bind>
+							<bind symbol="WarpBarTexKill">
+								<param ref="WarpBarTexKill"/>
+							</bind>
+						</shader>
+						<shader stage="FRAGMENT">
+							<compiler_target>arbfp1</compiler_target>
+							<name source="default">fmain</name>
+						</shader>
+						<extra type="passenable">
+							<technique profile="NVIDIA_FXCOMPOSER">
+								<true/>
+							</technique>
+						</extra>
+					</pass>
+					<extra type="import">
+						<technique profile="NVIDIA_FXCOMPOSER">
+							<import compiler_options=""/>
+						</technique>
+					</extra>
+				</technique>
+			</profile_CG>
+			<profile_CG platform="PS3">
+				<include sid="default" url="WarpBars.cgfx"/>
+				<include sid="WarpBars_main_p0_vmain_compiled" url="WarpBars_main_p0.vpo"/>
+				<include sid="WarpBars_main_p0_fmain_compiled" url="WarpBars_main_p0.fpo"/>
+				<newparam sid="description">
+					<annotate name="detail0">
+						<string>This shader is used for the circular oscillating Warp Bars in the </string>
+					</annotate>
+					<annotate name="detail2">
+						<string>in that sample, and will not look good on arbitrary geometry. </string>
+					</annotate>
+					<annotate name="detail4">
+						<string>the CenterlineConstants</string>
+					</annotate>
+					<annotate name="detail1">
+						<string>Eturnum sample. This effect is highly dependent on the specific geometry </string>
+					</annotate>
+					<annotate name="detail3">
+						<string>Check the cgfx file for details on this shader, including how to set </string>
+					</annotate>
+					<string>Warp Bars Effect</string>
+				</newparam>
+				<newparam sid="WorldViewProj">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>WORLDVIEWPROJECTION</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="InvWorld">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>WORLDINVERSE</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="EyePos">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>EYEPOS</semantic>
+					<float4>0 0 0 0</float4>
+				</newparam>
+				<newparam sid="Zono">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<float4>0 1 -1 1</float4>
+				</newparam>
+				<newparam sid="MaterialColor">
+					<annotate name="UIName">
+						<string>Material Color</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Color</string>
+					</annotate>
+					<semantic>DIFFUSE</semantic>
+					<float4>0.5 0 0.5 1</float4>
+				</newparam>
+				<newparam sid="CenterlineConstants">
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIName">
+						<string>Center Line Constants</string>
+					</annotate>
+					<float4>0 100 200 0.01</float4>
+				</newparam>
+				<newparam sid="Cosine">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Global</string>
+					</annotate>
+					<float>1</float>
+				</newparam>
+				<newparam sid="Sine">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Global</string>
+					</annotate>
+					<float>0</float>
+				</newparam>
+				<newparam sid="Retraction">
+					<annotate name="UIName">
+						<string>Retraction</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>-1000</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>1000</float>
+					</annotate>
+					<float>-100</float>
+				</newparam>
+				<newparam sid="WarpBarTexKill">
+					<annotate name="UIName">
+						<string>Warp Bar Tex Kill</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Global</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>0</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>1000</float>
+					</annotate>
+					<float>75</float>
+				</newparam>
+				<technique sid="main">
+					<pass sid="p0">
+						<blend_enable value="true"/>
+						<alpha_test_enable value="true"/>
+						<cull_face_enable value="true"/>
+						<blend_func>
+							<src/>
+							<dest value="ONE"/>
+						</blend_func>
+						<depth_test_enable value="true"/>
+						<depth_mask value="false"/>
+						<depth_func value="LEQUAL"/>
+						<shader stage="VERTEX">
+							<compiler_target>arbvp1</compiler_target>
+							<name source="WarpBars_main_p0_vmain_compiled">vmain</name>
+							<bind symbol="WorldViewProj">
+								<param ref="WorldViewProj"/>
+							</bind>
+							<bind symbol="InvWorld">
+								<param ref="InvWorld"/>
+							</bind>
+							<bind symbol="EyePos">
+								<param ref="EyePos"/>
+							</bind>
+							<bind symbol="Zono">
+								<param ref="Zono"/>
+							</bind>
+							<bind symbol="MaterialColor">
+								<param ref="MaterialColor"/>
+							</bind>
+							<bind symbol="CenterlineConstants">
+								<param ref="CenterlineConstants"/>
+							</bind>
+							<bind symbol="Cosine">
+								<param ref="Cosine"/>
+							</bind>
+							<bind symbol="Sine">
+								<param ref="Sine"/>
+							</bind>
+							<bind symbol="Retraction">
+								<param ref="Retraction"/>
+							</bind>
+							<bind symbol="WarpBarTexKill">
+								<param ref="WarpBarTexKill"/>
+							</bind>
+						</shader>
+						<shader stage="FRAGMENT">
+							<compiler_target>arbfp1</compiler_target>
+							<name source="WarpBars_main_p0_fmain_compiled">fmain</name>
+						</shader>
+						<extra type="passenable">
+							<technique profile="NVIDIA_FXCOMPOSER">
+								<true/>
+							</technique>
+						</extra>
+					</pass>
+					<extra type="import">
+						<technique profile="NVIDIA_FXCOMPOSER">
+							<import compiler_options=""/>
+						</technique>
+					</extra>
+				</technique>
+			</profile_CG>
+		</effect>
+	</library_effects>
+	<library_materials>
+		<material id="Material0" name="WarpBars">
+			<instance_effect url="#WarpBars0">
+				<technique_hint platform="PC-D3D" ref="Constant"/>
+				<technique_hint platform="PS3" ref="main"/>
+				<technique_hint platform="PC-OGL" ref="main"/>
+				<setparam ref="WorldViewProj">
+					<float4x4>-0.343435 0 -1.50018 -1.5 0 2.74748 0 0 -4.12122 0 0.125015 0.125 -5.49495 0 4.74421 4.74525</float4x4>
+				</setparam>
+				<setparam ref="InvWorld">
+					<float4x4>-0.0551724 -0 -0.662069 -0 0 1 0 0 0.662069 0 -0.0551724 0 -0.110345 -0 -1.32414 1</float4x4>
+				</setparam>
+				<setparam ref="EyePos">
+					<float4>0 0 0 0</float4>
+				</setparam>
+				<setparam ref="Zono">
+					<float4>0 1 -1 1</float4>
+				</setparam>
+				<setparam ref="MaterialColor">
+					<float4>0.5 0 0.5 1</float4>
+				</setparam>
+				<setparam ref="CenterlineConstants">
+					<float4>0 100 200 0.01</float4>
+				</setparam>
+				<setparam ref="Cosine">
+					<float>1</float>
+				</setparam>
+				<setparam ref="Sine">
+					<float>0</float>
+				</setparam>
+				<setparam ref="Retraction">
+					<float>-100</float>
+				</setparam>
+				<setparam ref="WarpBarTexKill">
+					<float>75</float>
+				</setparam>
+			</instance_effect>
+		</material>
+	</library_materials>
+</COLLADA>

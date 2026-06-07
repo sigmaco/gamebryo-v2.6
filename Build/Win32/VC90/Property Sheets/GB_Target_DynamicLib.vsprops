@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Target_DynamicLib"
+	OutputDirectory="$(GB_Configuration_Name)$(GB_Target_Suffix)"
+	IntermediateDirectory="$(GB_Configuration_Name)$(GB_Target_Suffix)"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="_USRDLL;_WINDOWS"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalLibraryDirectories="&quot;$(GB_Target_Import_Path)&quot;"
+		ProgramDatabaseFile="$(GB_Target_Import_Path)\$(TargetName).pdb"
+		ImportLibrary="&quot;$(GB_Target_Import_Filename)&quot;"
+	/>
+	<UserMacro
+		Name="GB_Target_Suffix"
+		Value="DLL"
+	/>
+	<UserMacro
+		Name="GB_Target_Path"
+		Value="DLL"
+	/>
+	<UserMacro
+		Name="GB_Target_Import_Path"
+		Value="$(TargetDir)..\Lib\VC90\$(GB_Configuration_Name)$(GB_Target_Suffix)"
+	/>
+	<UserMacro
+		Name="GB_Target_Filename"
+		Value="$(GB_Target_Path)\$(ProjectName)$(GB_DLL_Suffix).dll"
+	/>
+	<UserMacro
+		Name="GB_Target_Import_Filename"
+		Value="$(GB_Target_Import_Path)\$(ProjectName)$(GB_DLL_Suffix).lib"
+	/>
+</VisualStudioPropertySheet>

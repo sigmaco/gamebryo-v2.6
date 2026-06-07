@@ -1,0 +1,108 @@
+//
+// MyImmerseAddMilesAudioSourceAttributes.mel
+//
+/*
+addAttr -ln "NiMilesAudioSource_Type" -at enum -en ("3D:Ambient");
+addAttr -ln "NiMilesAudioSource_AllowSharing" -at bool;
+addAttr -ln "NiMilesAudioSource_Streamed" -at bool;
+addAttr -ln "NiMilesAudioSource_FileName" -dt "string";
+addAttr -ln "NiMilesAudioSource_Gain" -at "float;
+addAttr -ln "NiMilesAudioSource_MinDistance" -at "float;
+addAttr -ln "NiMilesAudioSource_MaxDistance" -at "float;
+addAttr -ln "NiMilesAudioSource_ConeMinAngle" -at "float;
+addAttr -ln "NiMilesAudioSource_ConeMaxAngle" -at "float;
+addAttr -ln "NiMilesAudioSource_ConeGain" -at "float;
+addAttr -ln "NiMilesAudioSource_LoopInfinate" -at bool;
+addAttr -ln "NiMilesAudioSource_LoopCount" -at byte;
+*/
+
+global proc MyImmerseAddMilesAudioSourceAttributes()
+{
+    int $intVal;
+
+    string $szTransforms[] = `ls -l -sl -typ shape -typ transform`;
+    
+    // Check for Nothing Selected
+    if(size($szTransforms) == 0)
+    {
+        print("WARNING:: No Shapes or Transforms Selected\n");
+    }
+
+    int $iCount = 0;
+    while( $iCount < size($szTransforms))
+    {
+        string $szAttribute;
+
+
+        if(`attributeExists "NiMilesAudioSource_Type" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln NiMilesAudioSource_Type -at enum -enumName "3D:Ambient" -k false $szTransforms[$iCount];
+            
+            $szAttribute = $szTransforms[$iCount] + ".NiMilesAudioSource_Type";
+            setAttr $szAttribute 1;
+        }
+
+        if(`attributeExists "NiMilesAudioSource_AllowSharing" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_AllowSharing" -at bool -k false -dv 1 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_Streamed" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_Streamed" -at bool -k false -dv 0 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_FileName" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_FileName" -dt "string" $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_Gain" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_Gain" -at "float" -k true -min 0 -max 1 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_MinDistance" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_MinDistance" -at "float" -k false -min 0 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_MaxDistance" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_MaxDistance" -at "float" -k false -min 0 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_ConeMinAngle" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_ConeMinAngle" -at "float" -k false -min 0 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_ConeMaxAngle" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_ConeMaxAngle" -at "float" -k false -min 0 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_ConeGain" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_ConeGain" -at "float" -k false -min 0 -max 1 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_ConeGain" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_ConeGain" -at "float" -k false -min 0 -max 1 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_LoopInfinate" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_LoopInfinate" -at bool -k false -dv 1 $szTransforms[$iCount];
+        }
+
+        if(`attributeExists "NiMilesAudioSource_LoopCount" $szTransforms[$iCount]` == 0)
+        {
+            addAttr -ln "NiMilesAudioSource_LoopCount" -at byte -k false -dv 1 -min 1 -max 255 $szTransforms[$iCount];
+        }
+
+        $iCount = $iCount + 1;
+    }
+
+}

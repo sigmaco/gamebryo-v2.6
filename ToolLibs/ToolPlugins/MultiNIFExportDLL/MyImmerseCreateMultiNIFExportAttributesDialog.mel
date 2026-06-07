@@ -1,0 +1,483 @@
+//
+// MyImmerseCreateMultiNIFExportAttributes.mel
+//
+// Mel script for applying Net Immerse Attributes to a 
+
+
+global proc MyImmerseCreateMultiNIFExportAttributes()
+{
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) <= 0)
+    {
+        print("ERROR::Create Multiiple NIF Export. No Objects selected.\n");
+        return;
+    }
+
+    int $iLoop = 0;
+
+    while($iLoop < size($dagnodes))
+    {
+        
+        if(`attributeExists NiData_MultiNifExportUseGlobalSettings $dagnodes[$iLoop]` == false)
+        {
+            addAttr 
+                -ln NiData_MultiNifExportUseGlobalSettings 
+                -at bool 
+                -dv true
+                $dagnodes[$iLoop];
+        }        
+
+        if(`attributeExists NiData_MultiNifExportFileName $dagnodes[$iLoop]` == false)
+        {
+            addAttr 
+                -ln NiData_MultiNifExportFileName 
+                -dt "string"
+                $dagnodes[$iLoop];
+
+        }        
+
+        if(`attributeExists NiData_MultiNifExportUseObjectName $dagnodes[$iLoop]` == false)
+        {
+            addAttr 
+                -ln NiData_MultiNifExportUseObjectName 
+                -at bool 
+                -dv true
+                $dagnodes[$iLoop];
+        }        
+
+        if(`attributeExists NiData_MultiNifExportDeleteAfterExport $dagnodes[$iLoop]` == false)
+        {
+            addAttr 
+                -ln NiData_MultiNifExportDeleteAfterExport 
+                -at bool 
+                -dv true
+                $dagnodes[$iLoop];
+        }        
+
+        if(`attributeExists NiData_MultiNifExportRepairEmitterWithoutParticles $dagnodes[$iLoop]` == false)
+        {
+            addAttr 
+                -ln NiData_MultiNifExportRepairEmitterWithoutParticles 
+                -at bool 
+                -dv true
+                $dagnodes[$iLoop];
+        }        
+
+        if(`attributeExists NiData_MultiNifExportTranslateType $dagnodes[$iLoop]` == false)
+        {
+            addAttr 
+                -ln NiData_MultiNifExportTranslateType 
+                -at enum 
+                -enumName "World Translation:Local Translation:No Translation" 
+                -dv 2
+                $dagnodes[$iLoop];
+        }        
+
+        if(`attributeExists NiData_MultiNifExportRotateType $dagnodes[$iLoop]` == false)
+        {
+            addAttr 
+                -ln NiData_MultiNifExportRotateType 
+                -at enum 
+                -enumName "World Rotation:Local Rotation:No Rotation" 
+                -dv 0
+                $dagnodes[$iLoop];
+        }        
+
+        if(`attributeExists NiData_MultiNifExportScaleType $dagnodes[$iLoop]` == false)
+        {
+            addAttr 
+                -ln NiData_MultiNifExportScaleType 
+                -at enum 
+                -enumName "World Scale:Local Scale:No Scale" 
+                -dv 0
+                $dagnodes[$iLoop];
+        }        
+
+
+        // Incroment the current Node
+        $iLoop = $iLoop + 1;
+    }
+
+
+    // Rebuild the Export Node List
+    MyImmerseMultiNIFExportAppendAllExportNodes();
+
+    // Disable Everything untils something is selected
+    MyImmerseMultiNIFExportEnableExportNodesAttributes();
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseRemoveMultiNIFExportAttributes(string $szObject)
+{
+    // Find the selected object from the list if none was provided
+    if ($szObject == "")
+    {
+        // Make sure something was selected
+        if (`textScrollList -q -numberOfSelectedItems ExportNodeList` == 0)
+        {
+            return;
+        }
+        
+        // Get the selected object
+        string $szSelectedList[] = `textScrollList -q -selectItem ExportNodeList`;
+        $szObject = $szSelectedList[0];
+    }
+
+
+    
+    if(`attributeExists NiData_MultiNifExportUseGlobalSettings $szObject` == true)
+    {
+        deleteAttr -at NiData_MultiNifExportUseGlobalSettings $szObject;
+    }        
+
+    if(`attributeExists NiData_MultiNifExportFileName $szObject` == true)
+    {
+        deleteAttr -at NiData_MultiNifExportFileName $szObject;
+    }        
+
+    if(`attributeExists NiData_MultiNifExportUseObjectName $szObject` == true)
+    {
+        deleteAttr -at NiData_MultiNifExportUseObjectName $szObject; 
+    }        
+
+    if(`attributeExists NiData_MultiNifExportDeleteAfterExport $szObject` == true)
+    {
+        deleteAttr -at NiData_MultiNifExportDeleteAfterExport $szObject;
+    }        
+
+    if(`attributeExists NiData_MultiNifExportRepairEmitterWithoutParticles $szObject` == true)
+    {
+        deleteAttr -at NiData_MultiNifExportRepairEmitterWithoutParticles $szObject; 
+    }        
+
+    if(`attributeExists NiData_MultiNifExportTranslateType $szObject` == true)
+    {
+        deleteAttr -at NiData_MultiNifExportTranslateType $szObject;
+    }        
+
+    if(`attributeExists NiData_MultiNifExportRotateType $szObject` == true)
+    {
+        deleteAttr -at NiData_MultiNifExportRotateType $szObject;
+    }        
+
+    if(`attributeExists NiData_MultiNifExportScaleType $szObject` == true)
+    {
+        deleteAttr -at NiData_MultiNifExportScaleType $szObject;
+    }        
+
+    // Rebuild the Export Node List
+    MyImmerseMultiNIFExportAppendAllExportNodes();
+
+    // Disable Everything untils something is selected
+    MyImmerseMultiNIFExportEnableExportNodesAttributes();
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseHasMultiNIFExportAttributes(string $szObject)
+{
+
+    if ((`attributeExists NiData_MultiNifExportUseGlobalSettings $szObject` == true) &&
+        (`attributeExists NiData_MultiNifExportFileName $szObject` == true) &&
+        (`attributeExists NiData_MultiNifExportUseObjectName $szObject` == true) &&
+        (`attributeExists NiData_MultiNifExportDeleteAfterExport $szObject` == true) &&
+        (`attributeExists NiData_MultiNifExportRepairEmitterWithoutParticles $szObject` == true) &&
+        (`attributeExists NiData_MultiNifExportTranslateType $szObject` == true) &&
+        (`attributeExists NiData_MultiNifExportRotateType $szObject` == true) &&
+        (`attributeExists NiData_MultiNifExportScaleType $szObject` == true))
+    {
+        return true;
+    }
+
+    return false;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseMultiNIFExportAppendAllExportNodes()
+{
+    // Build the list of objects with Export Options
+    string $szAllDagNodes[];
+    string $szExportNodes[];
+
+    $szAllDagNodes = `ls -dag -l`;
+
+    int $iLoop = 0;
+    for($iLoop = 0; $iLoop < size($szAllDagNodes); $iLoop++)
+    {
+        if (MyImmerseHasMultiNIFExportAttributes($szAllDagNodes[$iLoop]))
+        {
+            int $iSize = size($szExportNodes);
+
+            $szExportNodes[$iSize] = $szAllDagNodes[$iLoop];
+            print ($szExportNodes[$iSize] + "\n");
+        }
+    }
+
+    // Clear the list
+    textScrollList -e -removeAll ExportNodeList;
+
+    // Rebuild the list
+    for($iLoop = 0; $iLoop < size($szExportNodes); $iLoop++)
+    {
+        textScrollList -e
+            -append $szExportNodes[$iLoop]
+            ExportNodeList;
+    }
+
+    // Gray out the button
+    if (`button -q -ex MyImmerseRemoveMultiExportButton` == true)
+    {
+        button -e -en false MyImmerseRemoveMultiExportButton;
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseMultiNIFExportEnableExportNodesAttributes()
+{
+    // Make sure something was selected
+    if (`textScrollList -q -numberOfSelectedItems ExportNodeList` == 0)
+    {
+        // Disable all of the items and the global settings
+        checkBox -e -value true -en false UseGlobalSettingsCheckBox;
+        textFieldGrp -e -ed false FileNameTextField;
+    }
+    else
+    {
+        checkBox -e -en true UseGlobalSettingsCheckBox;
+        textFieldGrp -e -ed true FileNameTextField;
+    }
+    
+
+    if (`checkBox -q -value UseGlobalSettingsCheckBox` == true)
+    {
+        checkBox -e -en false UseObjectNameAsFileNameCheckBox;
+        checkBox -e -en false DeleteFromFurtherExportsCheckBox;
+        checkBox -e -en false AutoRepairEmitterCheckBox;
+        radioButtonGrp -e -en false TranslationTypeRadioButtonGroup;
+        radioButtonGrp -e -en false RotationTypeRadioButtonGroup;
+        radioButtonGrp -e -en false ScaleTypeRadioButtonGroup;
+        return;
+    }
+    else
+    {
+        checkBox -e -en true UseObjectNameAsFileNameCheckBox;
+        checkBox -e -en true DeleteFromFurtherExportsCheckBox;
+        checkBox -e -en true AutoRepairEmitterCheckBox;
+        radioButtonGrp -e -en true TranslationTypeRadioButtonGroup;
+        radioButtonGrp -e -en true RotationTypeRadioButtonGroup;
+        radioButtonGrp -e -en true ScaleTypeRadioButtonGroup;
+    }
+
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseMultiNIFExportUpdateExportNodesAttributes()
+{
+    // Make sure something was selected
+    if (`textScrollList -q -numberOfSelectedItems ExportNodeList` == 0)
+    {
+        return;
+    }
+
+    // Get the selected object
+    string $szSelectedList[] = `textScrollList -q -selectItem ExportNodeList`;
+    string $szObject = $szSelectedList[0];
+
+
+    setAttr ($szObject + ".NiData_MultiNifExportUseGlobalSettings") `checkBox -q -value UseGlobalSettingsCheckBox`;
+    setAttr -type "string" ($szObject + ".NiData_MultiNifExportFileName") `textFieldGrp -q -text FileNameTextField`;
+    setAttr ($szObject + ".NiData_MultiNifExportUseObjectName") `checkBox -q -value UseObjectNameAsFileNameCheckBox`;
+    setAttr ($szObject + ".NiData_MultiNifExportDeleteAfterExport") `checkBox -q -value DeleteFromFurtherExportsCheckBox`;
+    setAttr ($szObject + ".NiData_MultiNifExportRepairEmitterWithoutParticles") `checkBox -q -value AutoRepairEmitterCheckBox`;
+    setAttr ($szObject + ".NiData_MultiNifExportTranslateType") (`radioButtonGrp -q -sl TranslationTypeRadioButtonGroup` - 1);
+    setAttr ($szObject + ".NiData_MultiNifExportRotateType") (`radioButtonGrp -q -sl RotationTypeRadioButtonGroup` - 1);
+    setAttr ($szObject + ".NiData_MultiNifExportScaleType") (`radioButtonGrp -q -sl ScaleTypeRadioButtonGroup` - 1);
+
+    MyImmerseMultiNIFExportEnableExportNodesAttributes();
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseMultiNIFShowAttributes()
+{
+    // Make sure something was selected
+    if (`textScrollList -q -numberOfSelectedItems ExportNodeList` == 0)
+    {
+        // Clear the label
+        text -e -label "" CurrentExportLabel;
+
+        // Gray out all of the options
+        return;
+    }
+    
+    // Get the selected object
+    string $szSelectedList[] = `textScrollList -q -selectItem ExportNodeList`;
+    string $szObject = $szSelectedList[0];
+
+    // Set the Current Object Name
+    text -e -l $szObject CurrentExportLabel;
+
+    checkBox -e -value `getAttr ($szObject + ".NiData_MultiNifExportUseGlobalSettings")` UseGlobalSettingsCheckBox;
+    textFieldGrp -e -text `getAttr ($szObject + ".NiData_MultiNifExportFileName")` FileNameTextField;
+    checkBox -e -value `getAttr ($szObject + ".NiData_MultiNifExportUseObjectName")` UseObjectNameAsFileNameCheckBox;
+    checkBox -e -value `getAttr ($szObject + ".NiData_MultiNifExportDeleteAfterExport")` DeleteFromFurtherExportsCheckBox;
+    checkBox -e -value `getAttr ($szObject + ".NiData_MultiNifExportRepairEmitterWithoutParticles")` AutoRepairEmitterCheckBox;
+    radioButtonGrp -e -sl (`getAttr ($szObject + ".NiData_MultiNifExportTranslateType")` + 1) TranslationTypeRadioButtonGroup;
+    radioButtonGrp -e -sl (`getAttr ($szObject + ".NiData_MultiNifExportRotateType")` + 1) RotationTypeRadioButtonGroup;
+    radioButtonGrp -e -sl (`getAttr ($szObject + ".NiData_MultiNifExportScaleType")` + 1) ScaleTypeRadioButtonGroup;
+
+
+    MyImmerseMultiNIFExportEnableExportNodesAttributes();
+
+        // Gray out the button
+    if (`button -q -ex MyImmerseRemoveMultiExportButton` == true)
+    {
+        button -e -en true MyImmerseRemoveMultiExportButton;
+    }
+
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateMultiNIFExportAttributesDialog()
+{
+
+	// ONLY ALLOW ONE WINDOW AT A TIME SO WE WILL DELETE IT IF IT EXISTS
+    
+	// Check if the window exists
+	if( MyImmerseWindowExists("MultiNIFExportWindow") )
+	{
+		deleteUI MultiNIFExportWindow;
+	}
+
+    int $iEdgeWidth = 10;
+
+	window -title "Multi NIF Export" -widthHeight 445 465 MultiNIFExportWindow;
+
+    columnLayout -rs 10;
+
+    rowLayout -nc 2 -cw 1 $iEdgeWidth;
+		text -l "" -w $iEdgeWidth;
+        text -label "Multi Export Objects" -al "left" -fn "boldLabelFont" -w 200;
+	setParent ..; // RowLayout
+
+    rowLayout -nc 2 -cw 1 $iEdgeWidth;
+		text -l "" -w $iEdgeWidth;
+
+        textScrollList
+            -numberOfRows 8
+            -allowMultiSelection false
+            -deleteKeyCommand "MyImmerseRemoveMultiNIFExportAttributes(\"\")"
+            -selectCommand "MyImmerseMultiNIFShowAttributes()"
+            ExportNodeList;
+
+        MyImmerseMultiNIFExportAppendAllExportNodes();
+
+	setParent ..; // RowLayout
+
+    rowLayout -nc 3 -cw 1 $iEdgeWidth -cw 2 165;
+		text -l "" -w $iEdgeWidth;
+        text -label "Current Multi Export Object:" -al "left" -fn "boldLabelFont" -w 165;
+        text -label "" -al "left" -fn "boldLabelFont" CurrentExportLabel;
+	setParent ..; // RowLayout
+
+
+    // File Name
+    textFieldGrp
+        -label "File Name"
+        -changeCommand "MyImmerseMultiNIFExportUpdateExportNodesAttributes()"
+        FileNameTextField;
+
+    // Use Global Settings
+    rowLayout -nc 2 -cw 1 $iEdgeWidth;
+		text -l "" -w $iEdgeWidth;
+        checkBox
+            -label "Use Global Multi-Export Settings"
+            -changeCommand "MyImmerseMultiNIFExportUpdateExportNodesAttributes()"
+            UseGlobalSettingsCheckBox;
+	setParent ..; // RowLayout
+
+    // Use Object Name
+    rowLayout -nc 2 -cw 1 $iEdgeWidth;
+		text -l "" -w $iEdgeWidth;
+        checkBox
+            -label "Use Object Name As File Name"
+            -changeCommand "MyImmerseMultiNIFExportUpdateExportNodesAttributes()"
+            UseObjectNameAsFileNameCheckBox;
+	setParent ..; // RowLayout
+
+    // Delete From Further Exports
+    rowLayout -nc 2 -cw 1 $iEdgeWidth;
+		text -l "" -w $iEdgeWidth;
+        checkBox
+            -label "Delete From Further Exports"
+            -changeCommand "MyImmerseMultiNIFExportUpdateExportNodesAttributes()"
+            DeleteFromFurtherExportsCheckBox;
+	setParent ..; // RowLayout
+
+    // Repair Emitter without particles
+    rowLayout -nc 2 -cw 1 $iEdgeWidth;
+		text -l "" -w $iEdgeWidth;
+        checkBox
+            -label "Auto Repair Emitter without Particles"
+            -changeCommand "MyImmerseMultiNIFExportUpdateExportNodesAttributes()"
+            AutoRepairEmitterCheckBox;
+	setParent ..; // RowLayout
+
+    // Export Translation Type
+    rowLayout -nc 2 -cw 1 $iEdgeWidth -cw 2 600;
+		text -l "" -w $iEdgeWidth;
+        radioButtonGrp
+            -numberOfRadioButtons 3
+            -label "Translation"
+            -label1 "World"
+            -label2 "Local"
+            -label3 "None"
+            -onCommand  "MyImmerseMultiNIFExportUpdateExportNodesAttributes()"
+            TranslationTypeRadioButtonGroup;
+	setParent ..; // RowLayout
+
+    // Export Rotation Type
+    rowLayout -nc 2 -cw 1 $iEdgeWidth;
+		text -l "" -w $iEdgeWidth;
+        radioButtonGrp
+            -numberOfRadioButtons 3
+            -label "Rotation"
+            -label1 "World"
+            -label2 "Local"
+            -label3 "None"
+            -onCommand  "MyImmerseMultiNIFExportUpdateExportNodesAttributes()"
+            RotationTypeRadioButtonGroup;
+	setParent ..; // RowLayout
+
+    // Export Scale Type
+    rowLayout -nc 2 -cw 1 $iEdgeWidth;
+		text -l "" -w $iEdgeWidth;
+        radioButtonGrp
+            -numberOfRadioButtons 3
+            -label "Scale"
+            -label1 "World"
+            -label2 "Local"
+            -label3 "None"
+            -onCommand  "MyImmerseMultiNIFExportUpdateExportNodesAttributes()"
+            ScaleTypeRadioButtonGroup;
+	setParent ..; // RowLayout
+
+    // Disable Everything untils something is selected
+    MyImmerseMultiNIFExportEnableExportNodesAttributes();
+
+    rowLayout -nc 4 -cw 1 $iEdgeWidth -cw 2 205 -cw 3 135;
+        text -l "" -w $iEdgeWidth;
+        button 
+            -l "Add Selected Objects to the Export List"
+            -c MyImmerseCreateMultiNIFExportAttributes;
+        button 
+            -l "Remove From Export List"
+            -en false
+            -c "MyImmerseRemoveMultiNIFExportAttributes(\"\")"
+            MyImmerseRemoveMultiExportButton;
+        button 
+            -l "Close"
+            -c  "deleteUI -window MultiNIFExportWindow";
+    setParent ..; // RowLayout
+
+    setParent ..; // columnLayout
+
+	showWindow MultiNIFExportWindow;
+}
+//---------------------------------------------------------------------------
+
+

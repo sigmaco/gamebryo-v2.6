@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Target_StaticLib"
+	OutputDirectory="$(GB_Configuration_Name)$(GB_Target_Suffix)"
+	IntermediateDirectory="$(GB_Configuration_Name)$(GB_Target_Suffix)"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="_LIB"
+		ProgramDataBaseFileName="$(TargetDir)\$(TargetName).pdb"
+	/>
+	<UserMacro
+		Name="GB_Target_Suffix"
+		Value="Lib"
+	/>
+	<UserMacro
+		Name="GB_Target_Path"
+		Value="Lib\VC80\$(GB_Configuration_Name)$(GB_Target_Suffix)"
+	/>
+	<UserMacro
+		Name="GB_Target_Filename"
+		Value="$(GB_Target_Path)\$(ProjectName).lib"
+	/>
+</VisualStudioPropertySheet>

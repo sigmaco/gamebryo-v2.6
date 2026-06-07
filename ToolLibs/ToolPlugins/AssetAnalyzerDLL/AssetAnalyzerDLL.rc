@@ -1,0 +1,156 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PROCESS_DIALOG DIALOGEX 0, 0, 483, 239
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Asset Analyzer Options"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,180,218,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,236,218,50,14
+    CONTROL         "Max Triangle Count",IDC_USE_MAX_TRIANGLE_COUNT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,48,77,10
+    EDITTEXT        IDC_MAX_TRIANGLE_COUNT,239,47,70,14
+    CONTROL         "Max Texture Size (NxN)",IDC_USE_MAX_TEXTURE_SIZE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,325,72,91,10
+    CONTROL         "Max Data Memory Size (KB)",IDC_USE_MAX_MEMORY_SIZE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,30,104,10
+    EDITTEXT        IDC_MAX_MEMORY_SIZE,263,29,46,14,ES_NUMBER
+    CONTROL         "Triangle to Mesh Ratio",IDC_USE_TRIANGLE_MESH_RATIO,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,84,97,10
+    EDITTEXT        IDC_TRIANGLE_TO_MESH_RATIO,255,82,54,14,ES_NUMBER
+    CONTROL         "Max Scene Texture Size (KB)",IDC_USE_MAX_SCENE_TEXTURE_SIZE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,66,109,10
+    EDITTEXT        IDC_MAX_SCENE_TEXTURE_SIZE,269,65,40,14,ES_NUMBER
+    CONTROL         "Multi Sub Object Warnings",IDC_USE_MULTI_SUBOBJECT_WARNING,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,325,93,100,10
+    EDITTEXT        IDC_MULTI_SUB_OBJECT_WARNINGS,428,92,41,14,ES_NUMBER
+    CONTROL         "Max Morphing Vertex Count",IDC_USE_MAX_MORPHING_VERTEX_COUNT,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,325,114,103,10
+    EDITTEXT        IDC_MAX_MORPHING_VERTEX_COUNT,432,112,37,14,ES_NUMBER
+    CONTROL         "Max Triangles Per Object",IDC_USE_MAX_TRIANGLES_PER_OBJECT,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,325,52,95,10
+    EDITTEXT        IDC_MAX_TRIANGLES_PER_OBJECT,422,50,48,14,ES_NUMBER
+    CONTROL         "Max Scene Graph Depth",IDC_USE_MAX_SCENE_GRAPH_DEPTH,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,102,95,10
+    EDITTEXT        IDC_MAX_SCENE_GRAPH_DEPTH,255,101,54,14,ES_NUMBER
+    CONTROL         "Max Lights Per Object",IDC_USE_MAX_LIGHTS_PER_OBJECT,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,325,31,85,10
+    EDITTEXT        IDC_MAX_LIGHTS_PER_OBJECT,412,29,57,14,ES_NUMBER
+    CONTROL         "Max Scene Object Count",IDC_USE_MAX_SCENE_OBJECT_COUNT,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,120,95,10
+    EDITTEXT        IDC_MAX_SCENE_OBJECT_COUNT,256,119,53,14,ES_NUMBER
+    CONTROL         "Required Objects",IDC_USE_REQUIRED_OBJECTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,11,71,10
+    EDITTEXT        IDC_NEW_REQUIRED_OBJECT,7,26,135,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Add",IDC_ADD_REQUIRED_OBJECT,52,46,50,14
+    LISTBOX         IDC_REQUIRED_OBJECTS,7,85,133,127,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
+    GROUPBOX        "Scene Options",IDC_STATIC,147,15,166,197
+    GROUPBOX        "Object Options",IDC_STATIC,317,15,159,124
+    COMBOBOX        IDC_MAX_TEXTURE_SIZE,417,71,52,63,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Double Click to Remove an Object",IDC_STATIC,20,74,110,8
+    CONTROL         "No Spot Lights",IDC_NO_SPOT_LIGHTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,138,63,10
+    CONTROL         "No Directional Lights",IDC_NO_DIRECTIONAL_LIGHTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,174,81,10
+    CONTROL         "No Point Lights",IDC_NO_POINT_LIGHTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,156,64,10
+    CONTROL         "No Ambient Lights",IDC_NO_AMBIENT_LIGHTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,157,192,73,10
+END
+
+IDD_RESULTS_DIALOG DIALOG  0, 0, 382, 286
+STYLE DS_SETFONT | DS_MODALFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Asset Analyzer Results"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,168,265,50,14
+    EDITTEXT        IDC_EDIT_RESULTS,7,7,368,253,ES_MULTILINE | WS_VSCROLL | WS_HSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_PROCESS_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 476
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 232
+    END
+
+    IDD_RESULTS_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 375
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 279
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

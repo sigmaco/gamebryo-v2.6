@@ -1,0 +1,9 @@
+Version: 1
+Script ("Viewer_Script_D3D10","Viewer")
+{
+	Plugin ("NiSceneViewerD3D10Plugin","NiSceneViewerD3D10","1.0","Viewer")
+	{
+		Parameter ("TREEVIEW","FALSE");
+		Parameter ("UIMFile",".\InputMap.uim");
+	}
+}

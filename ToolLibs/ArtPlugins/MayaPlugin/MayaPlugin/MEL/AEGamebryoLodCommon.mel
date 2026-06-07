@@ -1,0 +1,19 @@
+
+global proc AEGamebryoLodCommon ( string $nodeName ) 
+{
+	editorTemplate -beginLayout "Gamebryo";
+
+		editorTemplate -label "Use Screen LOD" -addControl Ni_Use_ScreenLOD;
+        editorTemplate -label "Screen LOD 1" -addControl Ni_ScreenLOD_1;
+        editorTemplate -label "Screen LOD 2" -addControl Ni_ScreenLOD_2;
+        editorTemplate -label "Screen LOD 3" -addControl Ni_ScreenLOD_3;
+        editorTemplate -label "Screen LOD 4" -addControl Ni_ScreenLOD_4;
+        editorTemplate -label "Screen LOD 5" -addControl Ni_ScreenLOD_5;
+        editorTemplate -label "Screen LOD 6" -addControl Ni_ScreenLOD_6;
+        editorTemplate -label "Screen LOD 7" -addControl Ni_ScreenLOD_7;
+        editorTemplate -label "Screen LOD 8" -addControl Ni_ScreenLOD_8;
+        editorTemplate -label "Screen LOD 9" -addControl Ni_ScreenLOD_9;
+        editorTemplate -label "Screen LOD 10" -addControl Ni_ScreenLOD_10;
+
+	editorTemplate -endLayout;
+}

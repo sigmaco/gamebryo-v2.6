@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<Options>
+	<Category name="AutoSave">
+		<Option name="AutoSave Interval in Minutes">
+			<SettingsObject store="PerUser" name = "AutoSaveIntervalInMinutes"/>
+			<HelpText>This sets how frequently the Scene Designer will make a backup of your unsaved scene. Enter a value of '0' to disable the Auto-Save feature.</HelpText>
+		</Option>
+	</Category>    
+    <Category name="External Application Settings">
+        <Option name="External Application Path">
+            <SettingsObject store="PerUser" name="External Application Path"/>
+            <HelpText>The full path to an external application to launch. If no path is specified, the default SceneApp path is used.</HelpText>
+        </Option>
+    </Category>
+    <Category name="External Application Settings">
+        <Option name="External Application Command Line">
+            <SettingsObject store="PerUser" name="External Application Command Line"/>
+            <HelpText>Command-line parameters to use for the external application.</HelpText>
+        </Option>
+    </Category>
+    <Category name="External Application Settings">
+        <Option name="Save Without Prompting">
+            <SettingsObject store="PerUser" name="Save Without Prompting"/>
+            <HelpText>Save the scene without prompting when launching the external application.</HelpText>
+        </Option>
+    </Category>
+</Options>  

@@ -1,0 +1,9 @@
+Version: 1
+Script ("Geom Convert","Process")
+{
+	Plugin ("NiGeometryConverterPlugin","NiGeometry To NiMesh Converter","1.0","PROCESS")
+	{
+		Parameter ("PC Settings","PC - GeForce 3 & 4");
+		Parameter ("Next-Gen Xbox Settings","Next-GenXbox");
+	}
+}

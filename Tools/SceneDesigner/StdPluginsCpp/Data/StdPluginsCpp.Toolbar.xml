@@ -1,0 +1,165 @@
+<?xml version="1.0" ?>
+<Toolbars>
+    <Toolbar name="09 Prefab Options">
+        <Button name="Pick Prefab Entities">
+            <Command name="PickPrefabEntities"/>
+            <Image>
+                <File>pick_prefabs.png</File>
+            </Image>
+        </Button>
+    </Toolbar>
+    <Toolbar name="10 Transformation Interaction Modes">
+        <Button name="Create">
+            <Command name="CreateInteractionMode"/>
+            <Image>
+                <File>create.png</File>
+            </Image>
+        </Button>
+        <Button name="Select">
+            <Command name="SelectInteractionMode"/>
+            <Image>
+                <File>select.png</File>
+            </Image>
+        </Button>
+        <Button name="Translate">
+            <Command name="TranslateInteractionMode"/>
+            <Image>
+                <File>translate.png</File>
+            </Image>
+        </Button>
+        <Button name="Rotate">
+            <Command name="RotateInteractionMode"/>
+            <Image>
+                <File>rotate.png</File>
+            </Image>
+        </Button>
+        <Button name="Scale">
+            <Command name="ScaleInteractionMode"/>
+            <Image>
+                <File>scale.png</File>
+            </Image>
+        </Button>
+    </Toolbar>
+    <Toolbar name="11 View Operation Interaction modes">
+        <Button name="Pan">
+            <Command name="PanInteractionMode"/>
+            <Image>
+                <File>view_pan.png</File>
+            </Image>
+        </Button>
+        <Button name="Zoom">
+            <Command name="ZoomInteractionMode"/>
+            <Image>
+                <File>zoom_dolly_view.png</File>
+            </Image>
+        </Button>
+        <Button name="Look">
+            <Command name="LookInteractionMode"/>
+            <Image>
+                <File>free_look.png</File>
+            </Image>
+        </Button>
+        <Button name="Orbit">
+            <Command name="OrbitInteractionMode"/>
+            <Image>
+                <File>view_orbit.png</File>
+            </Image>
+        </Button>
+        <Button name="Zoom Extents Selection/Scene">
+            <Command name="MoveToSelection"/>
+            <Image>
+                <File>zoom_to_selection.png</File>
+            </Image>
+        </Button>
+        <Button name="Zoom Extents All">
+			<Command name="ZoomExtentsAll"/>
+			<Image>
+				<File>zoom_all.png</File>
+			</Image>
+        </Button>
+        <Button name="Look At Selection">
+            <Command name="LookAtSelection"/>
+            <Image>
+                <File>look_at_selection.png</File>
+            </Image>
+        </Button>
+        <Button name="Toggle Viewports">
+            <Command name="ToggleViewports"/>
+            <Image>
+                <File>view_min_max.png</File>
+            </Image>
+        </Button>
+    </Toolbar>
+    <Toolbar name="12 Snap Align and Precision">
+        <Button name="Translate Snap">
+            <Command name="TranslateSnapToggle"/>
+            <Image>
+                <File>snap_translate.png</File>
+            </Image>
+        </Button>
+        <Button name="Rotate Snap">
+            <Command name="RotateSnapToggle"/>
+            <Image>
+                <File>snap_rotate.png</File>
+            </Image>
+        </Button>
+        <Button name="Scale Snap">
+            <Command name="ScaleSnapToggle"/>
+            <Image>
+                <File>snap_scale.png</File>
+            </Image>
+        </Button>
+        <Button name="Translate Precision">
+            <Command name="TranslatePrecisionToggle"/>
+            <Image>
+                <File>translate_precision_toggle.png</File>
+            </Image>
+        </Button>
+        <Button name="Scale Precision">
+            <Command name="ScalePrecisionToggle"/>
+            <Image>
+                <File>precision_scale.png</File>
+            </Image>
+        </Button>
+        <Button name="Snap To Surface">
+            <Command name="SnapToSurfaceToggle"/>
+            <Image>
+                <File>snap_to_surface.png</File>
+            </Image>
+        </Button>
+        <Button name="Align To Surface">
+            <Command name="AlignToSurfaceToggle"/>
+            <Image>
+                <File>align_surface.png</File>
+            </Image>
+        </Button>
+    </Toolbar>
+    <Toolbar name="13 Lighting Optimization">
+        <Button name="Optimize Selected Lights">
+            <Command name="OptimizeSelectedLight"/>
+            <Image>
+                <File>optimize_light.png</File>
+            </Image>
+        </Button>
+        <Button name="Select Lights Affecting Entities">
+            <Command name="SelectLightsAffectingEntity"/>
+            <Image>
+                <File>select_lights.png</File>
+            </Image>
+        </Button>
+    </Toolbar>
+    <Toolbar name="14 Animation Controls">
+		<Button name="Play/Pause All Animations">
+			<Command name="PlayAnimations"/>
+			<Image>
+				<File>play_pause_animation.png</File>
+			</Image>
+		</Button>
+		<Button name="Reset Actor Animations">
+			<Command name="ResetAnimations"/>
+			<Image>
+				<File>reset_animation.png</File>
+			</Image>
+		</Button>
+    </Toolbar>
+</Toolbars> 

@@ -1,0 +1,63 @@
+//
+// MyImmerseCreateSphericalCollider.mel
+//
+// Mel script for applying Net Immerse Attributes to a Group to make it 
+// a Switch Node
+
+
+global proc MyImmerseCreateSphericalCollider()
+{
+    // Get the selected objects
+    string $szSelected[] = `ls -sl -l`;
+
+
+    // Check for no selection
+    if (size($szSelected) == 0)
+    {
+        error ("MyImmerseCreateSphericalCollider: No Particles Selected");
+        return;
+    }
+
+    // Check for multiple selection
+    if (size($szSelected) > 1)
+    {
+        error ("MyImmerseCreateSphericalCollider: Multiple Objects Selected");
+        return;
+    }
+
+    // Make sure the selected object has a particle shape child
+    string $szParticles = $szSelected[0];
+
+    string $szRelatives[] = `listRelatives -f -s $szParticles`;
+
+    int $iLoop = 0;
+    int $iFound = 0;
+
+    for ($iLoop = 0; $iLoop < size($szRelatives); $iLoop++)
+    {
+        if (`objectType -isType "particle" $szRelatives[$iLoop]` == 1)
+        {
+            $iFound = 1;
+        }
+    }
+
+    if ($iFound == 0)
+    {
+        error ("MyImmerseCreateSphericalCollider:: The selected object is not particles.");
+    }
+
+
+    // Create the Plane
+    string $szSphere[] = `polySphere -r 1 -sx 8 -sy 8 -ax 0 1 0 -tx 1 -ch 1`;
+
+    // Make it a collider of the particles
+    collision -r 1 -f 0  $szSphere[0];
+
+    // Add a custom attribute so we know what this is originally
+    addAttr -ln Ni_SphericalCollider -at bool -dv 1 $szSphere[0];
+
+    // Delete the child object on export
+    addAttr -ln Ni_ColliderDeleteOnExport -at bool -dv 0 $szSphere[0];
+
+    connectDynamic -c $szSphere  $szParticles;
+}

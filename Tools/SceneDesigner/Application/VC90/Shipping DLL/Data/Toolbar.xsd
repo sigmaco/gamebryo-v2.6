@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<xs:schema id="Toolbar" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Toolbars">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Toolbar" type="ToolbarType" 
+					maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Subtypes -->
+	
+	<xs:complexType name="ToolbarType">
+		<xs:sequence>
+			<xs:element name="Button" minOccurs="0" maxOccurs="unbounded"
+				type="ButtonType"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+	
+	<xs:complexType name="ButtonType">
+		<xs:sequence>
+			<xs:element name="Command" type="EmptyWithNameType"/>
+			<xs:element name="Image" type="ImageType"/>
+		</xs:sequence>		
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+	
+	<xs:complexType name="ImageType">
+		<xs:choice>
+			<xs:element name="File" type="xs:string"/>			
+			<xs:element name="Resource" type="xs:string"/>
+		</xs:choice>
+	</xs:complexType>
+		
+	<xs:complexType name="EmptyWithNameType">
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+</xs:schema>

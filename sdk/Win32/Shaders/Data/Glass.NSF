@@ -1,0 +1,159 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader Glass
+{
+    "This shader implements ATI's Complex Glass effect, found in "
+    "ATI's RenderMonkey 1.0 sample. It uses HLSL shaders. "
+    "This shader is used for the glassy teapot in the ShaderSample demo. "
+    
+    // Attribute list
+    Attributes
+    {
+        Attrib_Color
+            baseColor
+            Artist
+            0.722019, 0.704711, 0.760274, 1.000000
+            [(0.0,0.0,0.0,0.0)  (1.0,1.0,1.0,1.0)]
+
+        Attrib_Float 
+            refractionScale
+            Artist
+            1.0
+
+        Attrib_Float 
+            reflectionScale
+            Artist
+            1.0
+
+        Attrib_Float 
+            indexOfRefractionRatio
+            Artist
+            1.14
+
+        Attrib_Float 
+            ambient
+            Artist
+            0.2
+
+        Attrib_Float 
+            rainbowSpread
+            Artist
+            0.18
+
+        Attrib_Float 
+            rainbowScale
+            Artist
+            0.2
+
+        Attrib_Texture 
+            EnvMap     
+            Artist      
+            0
+
+        Attrib_Texture
+            RainbowMap
+            Artist
+            1
+    }
+
+    // Packing Definition
+    PackingDef PosNorm
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      3   PDT_Float3
+    }
+    
+    // Implementation
+    Implementation ComplexGlass
+    {
+        "This implementation is intended for hardware "
+        "that supports VS 1.1 and PS version 2.0"
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform            = DX9|XENON
+            VSVersion           = v1.1
+            UserVersion         = v0.0
+            PSVersion           = v2.0
+            UsesNiRenderState   = true
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosNorm
+
+        // 'Global' render states
+        RenderStates
+        {
+            AlphaBlendEnable    = true
+            SrcBlend            = SrcAlpha
+            DestBlend           = InvSrcAlpha
+            Lighting            = false
+        }
+
+        // First pass
+        Pass ComplexGlass
+        {
+            // Vertex shader program
+            VSProgram   "Glass.hlsl" ComplexGlassVS vs_1_1
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProj       view_proj_matrix    0
+                CM_Defined      InvWorldView        inv_world_view      0
+            }
+
+            // Pixel shader program
+            PSProgram   "Glass.hlsl" ComplexGlassPS ps_2_0
+
+            // Pixel Shader constant map
+            PS_Constantmap
+            {
+                CM_Attribute    baseColor               0   1   0
+                CM_Attribute    refractionScale         1   1   0
+                CM_Attribute    reflectionScale         2   1   0
+                CM_Attribute    indexOfRefractionRatio  3   1   0
+                CM_Attribute    ambient                 4   1   0
+                CM_Attribute    rainbowSpread           5   1   0
+                CM_Attribute    rainbowScale            6   1   0
+            }
+            
+            Sampler 0   Environment
+            {
+                TSS_Texture     = <EnvMap>
+
+                TSAMP_AddressU  = TADDR_Clamp
+                TSAMP_AddressV  = TADDR_Clamp
+                TSAMP_AddressW  = TADDR_Clamp
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+
+            Sampler 1   Rainbow
+            {
+                TSS_Texture     = <RainbowMap>
+
+                TSAMP_AddressU  = TADDR_Clamp
+                TSAMP_AddressV  = TADDR_Clamp
+                TSAMP_AddressW  = TADDR_Clamp
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+    }
+}

@@ -1,0 +1,680 @@
+//
+// MyImmerseCreateNiLightAttenuationDialog.mel
+//
+//---------------------------------------------------------------------------
+global proc float MyImmerseCreateNiLightAttenuationFindDistance(float $fFinal)
+{
+    float $fDimmer = `floatSliderGrp -q -v DimmerValue`;
+    float $fConstant = `floatSliderGrp -q -v ConstantValue`;
+    float $fLinear = `floatSliderGrp -q -v LinearValue`;
+    float $fQuadratic = `floatSliderGrp -q -v QuadraticValue`;
+
+    if(($fLinear <= 0.0000000000000001) && ($fQuadratic <= 0.0000000000000001))
+    {
+        // Check for zero
+        if($fConstant == 0.0)
+            return 0.0;
+
+        return ( $fDimmer / $fConstant );
+    }
+
+    // print("Dimmer " + $fDimmer + " Constant " + $fConstant + " Linear " + $fLinear + " Quadratic " + $fQuadratic + "\n");
+
+    float $fDistance = 100000000.0;
+    float $fStep = 50000000.0;
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop < 30; $iLoop++)
+    {
+        float $fCurrentLight = $fDimmer / ( $fConstant + ($fLinear * $fDistance) + ($fQuadratic * $fDistance * $fDistance) );
+
+        // print ($iLoop + " " + $fFinal + " " + $fCurrentLight + " " + $fDistance + " " + $fStep + "\n");
+
+        if($fCurrentLight == $fFinal)
+            return $fDistance;
+
+        if($fCurrentLight < $fFinal)
+        {
+            $fDistance -= $fStep;
+        }
+        else
+        {
+            $fDistance += $fStep;
+        }
+
+        $fStep /= 2.0;
+    }
+
+    return $fDistance;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateNiLightAttenuationResetDistanceIntensity()
+{
+    float $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.9);
+    textFieldGrp -e -tx $fDistance Intensity90Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.8);
+    textFieldGrp -e  -tx $fDistance Intensity80Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.7);
+    textFieldGrp -e -tx $fDistance Intensity70Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.6);
+    textFieldGrp -e  -tx $fDistance Intensity60Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.5);
+    textFieldGrp -e -tx $fDistance Intensity50Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.4);
+    textFieldGrp -e -tx $fDistance Intensity40Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.3);
+    textFieldGrp -e -tx $fDistance Intensity30Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.2);
+    textFieldGrp -e -tx $fDistance Intensity20Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.1);
+    textFieldGrp -e -tx $fDistance Intensity10Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.05);
+    textFieldGrp -e -tx $fDistance Intensity5Label;
+
+    $fDistance = MyImmerseCreateNiLightAttenuationFindDistance(0.01);
+    textFieldGrp -e -tx $fDistance Intensity1Label;
+
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateNiLightAttenuationUpdateAttribute(string $szNode, 
+    string $szAttribute, string $szMenu)
+{
+    // print( $szAttribute + "\n");
+
+    float $fValue = `floatSliderGrp -q -v $szMenu`;
+
+    setAttr ($szNode + "." + $szAttribute) $fValue;
+
+    // Update the Distance values
+    MyImmerseCreateNiLightAttenuationResetDistanceIntensity();
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseAttenuationByDistance(string $szNode, int $iByDistance)
+{
+    int $iNotByDistance = 1;
+
+    if($iByDistance == 1)
+    {
+        $iNotByDistance = 0;
+        setAttr ($szNode + ".Ni_SetAttenuationByDistance") true;
+    }
+    else
+    {
+        setAttr ($szNode + ".Ni_SetAttenuationByDistance") false;
+    }
+
+    attrEnumOptionMenu -e -en $iByDistance AttenuationMayaDecayRate;    
+    
+    floatSliderGrp -e -en $iByDistance AttenuationNearZeroDistance;
+
+    floatSliderGrp -e -en $iNotByDistance DimmerValue;
+    
+    floatSliderGrp -e -en $iNotByDistance ConstantValue;
+    
+    floatSliderGrp -e -en $iNotByDistance LinearValue;
+    
+    floatSliderGrp -e -en $iNotByDistance QuadraticValue;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseAttenuationUseMayaDecay(string $szNode, int $iUseMayaDecay)
+{
+    int $iNotDecay = ($iUseMayaDecay != 1);
+
+    frameLayout -e -en $iNotDecay AttenuationLayout;
+
+    setAttr ($szNode + ".Ni_UseMayaDecayRate") $iUseMayaDecay;
+
+    // Reset the attenuation by distance
+    if($iNotDecay == 1)
+    {
+        MyImmerseAttenuationByDistance( $szNode, `getAttr ($szNode + ".Ni_SetAttenuationByDistance")`);
+    }
+
+    // print ("Set Decay " + $szNode + "." + $iUseMayaDecay + "\n");
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateNiDirectionalLightAttributesIfDontExist(string $nodeName)
+{
+    if(`attributeExists "Ni_Dimmer" $nodeName` == 0)
+    {
+        addAttr -ln Ni_Dimmer -at "float" -min 0.0 -max 100000.0 -dv 1.0 $nodeName;
+    }
+
+    if(`attributeExists "Ni_AmbientColor" $nodeName` == 0)
+    {
+        addAttr -ln Ni_AmbientColor -nc 3 -at float3 -uac $nodeName;
+        addAttr -ln Ni_AmbientColorRed   -at "float" -dv 0.0 -p Ni_AmbientColor $nodeName;
+        addAttr -ln Ni_AmbientColorGreen -at "float" -dv 0.0 -p Ni_AmbientColor $nodeName;
+        addAttr -ln Ni_AmbientColorBlue  -at "float" -dv 0.0 -p Ni_AmbientColor $nodeName;
+    }
+
+    if(`attributeExists "Ni_SpecularColor" $nodeName` == 0)
+    {
+        addAttr -ln Ni_SpecularColor -nc 3 -at float3 -uac $nodeName;
+        addAttr -ln Ni_SpecularColorRed   -at "float" -dv 1.0 -p Ni_SpecularColor $nodeName;
+        addAttr -ln Ni_SpecularColorGreen -at "float" -dv 1.0 -p Ni_SpecularColor $nodeName;
+        addAttr -ln Ni_SpecularColorBlue  -at "float" -dv 1.0 -p Ni_SpecularColor $nodeName;
+    }
+
+    MyImmerseCreateShadowAttributes($nodeName);
+}
+
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateAllLightAttributes(string $szNode)
+{
+
+    string $sDirectionalLights[] = 
+        MyImmerseGetSelectedDirectionalLights();
+    if(size($sDirectionalLights) > 0)
+    {
+        string $sDirectionalLight;
+        for($sDirectionalLight in $sDirectionalLights)
+        {
+            MyImmerseCreateNiDirectionalLightAttributesIfDontExist(
+                $sDirectionalLight);
+        }
+    }
+
+    string $sAttentuationLights[] = 
+        MyImmerseGetSelectedAttentuationLights();
+    if(size($sAttentuationLights) > 0)
+    {
+        string $sAttentuationLight;
+        for($sAttentuationLight in $sAttentuationLights)
+        {
+            MyImmerseCreateNiLightAttributesIfDontExist(
+                $sAttentuationLight);
+        }
+    }
+
+    $szType = `ls -st $szNode`;
+    if(($szType[1] == "pointLight") || ($szType[1] == "spotLight"))
+    {
+        $sAttentuationLights[size($sAttentuationLights)] = 
+            $szType[0];
+    }   
+    else if($szType[1] == "directionalLight")
+    {
+        $sDirectionalLights[size($sDirectionalLights)] = 
+            $szType[0];
+    }
+    else
+    {
+        warning($szNode + " is not a supported light\n");
+        if((size($sDirectionalLights) == 0) && 
+            (size($sAttentuationLights) == 0))
+        {
+            error("No support lights selected");
+        }
+    }
+
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateNiLightAttributesIfDontExist(string $light)
+{
+    MyImmerseCreateNiDirectionalLightAttributesIfDontExist($light);
+
+    if(`attributeExists "Ni_ConstantAttenuation" $light` == 0)
+    {
+        addAttr -ln Ni_ConstantAttenuation -at "float" -dv 1.0 $light;
+    }
+
+    if(`attributeExists "Ni_LinearAttenuation" $light` == 0)
+    {
+        addAttr -ln Ni_LinearAttenuation -at "float" -dv 0.0 $light;
+    }
+
+    if(`attributeExists "Ni_QuadraticAttenuation" $light` == 0)
+    {
+        addAttr -ln Ni_QuadraticAttenuation -at "float" -dv 0.0 $light;
+    }
+
+    if(`attributeExists "Ni_UseMayaDecayRate" $light` == 0)
+    {
+        addAttr -ln Ni_UseMayaDecayRate -at bool -dv 0 $light;
+    }
+
+    if(`attributeExists "Ni_SetAttenuationByDistance" $light` == 0)
+    {
+        addAttr -ln Ni_SetAttenuationByDistance -at bool -dv 0 $light;
+    }
+
+    if(`attributeExists "Ni_NearZeroDistance" $light` == 0)
+    {
+        addAttr -ln Ni_NearZeroDistance -at "float" -dv 10.0 $light;
+    }
+
+    MyImmerseCreateShadowAttributes($light);
+    
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateShadowAttributes(string $light)
+{
+    if(`attributeExists "GbShadowTechnique" $light` == 0)
+    {
+        addAttr -ln "GbShadowTechnique" -at long $light;
+    }
+
+    if(`attributeExists "GbStaticShadows" $light` == 0)
+    {
+        addAttr -ln GbStaticShadows -at bool -dv 0 $light;
+    }
+
+    if(`attributeExists "GbShadowTechniqueName" $light` == 0)
+    {
+        addAttr -ln GbShadowTechniqueName -dt "string" $light;
+    }
+
+    if(`attributeExists "GbUseAutomaticBias" $light` == 0)
+    {
+        addAttr -ln GbUseAutomaticBias -at bool -dv 1 $light;
+    }
+
+    if(`attributeExists "GbUseBackFaces" $light` == 0)
+    {
+        addAttr -ln GbUseBackFaces -at bool -dv 1 $light;
+    }
+
+    if(`attributeExists "GbForceMapSize" $light` == 0)
+    {
+        addAttr -ln GbForceMapSize -at bool -dv 0 $light;
+    }
+}
+
+//---------------------------------------------------------------------------
+global proc MyImmerseAttenuationHandleDecayRate(string $szNode)
+{
+
+    // Handle Updating the Near Zero Distance
+    MyImmerseCreateNiLightAttenuationUpdateAttribute($szNode, "Ni_NearZeroDistance", "AttenuationNearZeroDistance");
+
+
+    int $iDecay = `getAttr ($szNode + ".decayRate")`;
+
+
+    // Check for No Decay
+    if($iDecay == 0)
+    {
+        print("WARNING:: \"No Decay\" is meaningless with a define decay rate by Maximum Distance. Defaulting to Linear.\n");
+
+        $iDecay = 1;
+        setAttr ($szNode + ".decayRate") 1;
+       
+    }
+    
+    // Check for Cubic Decay
+    if($iDecay == 3)
+    {
+        print("WARNING:: \"Cubic Decay\" is not supported by the Gamebryo Maya exporter. Defaulting to Quadratic.\n");
+
+        $iDecay = 2;
+        setAttr ($szNode + ".decayRate") 2;
+    }
+
+
+    // Initialize the attenuation values
+    floatSliderGrp -e -value 1.0 DimmerValue;
+    floatSliderGrp -e -value 0.0 ConstantValue;
+    floatSliderGrp -e -value 0.0 LinearValue;
+    floatSliderGrp -e -value 0.0 QuadraticValue;
+
+
+    float $fMaxDistance = `getAttr ($szNode + ".Ni_NearZeroDistance")`;
+    // print("Distance " + $fMaxDistance + "\n");
+
+    // Check for Linear Decay
+    if($iDecay == 1)
+    {   
+        float $fValue = 100.0 / $fMaxDistance;
+        floatSliderGrp -e -value $fValue LinearValue;
+    }
+
+    // Check for Quadratic Decay
+    if($iDecay == 2)
+    {
+        float $fValue = 100.0 / ($fMaxDistance * $fMaxDistance);
+        floatSliderGrp -e -value $fValue QuadraticValue;
+    }
+
+    MyImmerseCreateNiLightAttenuationUpdateAttribute($szNode, "Ni_Dimmer", "DimmerValue");
+    MyImmerseCreateNiLightAttenuationUpdateAttribute($szNode, "Ni_ConstantAttenuation", "ConstantValue");
+    MyImmerseCreateNiLightAttenuationUpdateAttribute($szNode, "Ni_LinearAttenuation", "LinearValue");
+    MyImmerseCreateNiLightAttenuationUpdateAttribute($szNode, "Ni_QuadraticAttenuation", "QuadraticValue");
+}
+//---------------------------------------------------------------------------
+global proc string[] MyImmerseGetSelectedDirectionalLights()
+{
+    string $szDirectionalLights[];
+
+    string $szLightShapes[] = `ls -sl -lights`;
+    string $sLightShape;
+    for($sLightShape in $szLightShapes)
+    {
+        $szType = `ls -st $sLightShape`;
+        if($szType[1] == "directionalLight")
+        {
+            $szDirectionalLights[size($szDirectionalLights)] = 
+                $sLightShape;
+        }   
+        else
+        {
+            if(($szType[1] != "pointLight") && ($szType[1] != "spotLight"))
+            {
+                warning($sLightShape + "is type " + $szType[1] + 
+                    " which is not a supported light type\n");
+            }
+        }
+    }
+
+    string $szDagNodes[] = `selectedNodes -dagObjects`;
+
+    string $sDagNode;
+    for($sDagNode in $szDagNodes)
+    {      
+        //Check for Child Shapes
+        string $szChildren[] = `listRelatives -s $sDagNode`;
+
+        if(size($szChildren) != 1)
+        {
+            warning("Only works on transforms with a single child shape\n");
+        }
+
+        string $szShape = $szChildren[0];
+
+        $szType = `ls -st $szShape`;
+        if($szType[1] == "directionalLight")
+        {
+            $szDirectionalLights[size($szDirectionalLights)] = $szShape;
+        }   
+        else
+        {
+            if(($szType[1] != "pointLight") && ($szType[1] != "spotLight"))
+            {
+                warning($szShape + "is type " + $szType[1] + 
+                    " which is not a supported light type\n");
+            }
+        }
+    }
+    
+    return $szDirectionalLights;
+}
+//---------------------------------------------------------------------------
+global proc string[] MyImmerseGetSelectedAttentuationLights()
+{
+    string $szAttentuationLightShapes[];
+    
+    string $szLightShapes[] = `ls -sl -lights`;
+    string $sLightShape;
+    for($sLightShape in $szLightShapes)
+    {
+        string $szType[] = `ls -st $sLightShape`;
+        if(($szType[1] == "pointLight") || ($szType[1] == "spotLight"))
+        {
+            $szAttentuationLightShapes[size($szAttentuationLightShapes)] = 
+                $sLightShape;
+        }   
+        else
+        {
+            if($szType[1] != "directionalLight")
+            {
+                warning($sLightShape + "is type " + $szType[1] + 
+                    " which is not a supported light type\n");
+            }
+        }
+    }
+
+    string $szDagNodes[] = `selectedNodes -dagObjects`;
+
+    string $sDagNode;
+    for($sDagNode in $szDagNodes)
+    {      
+        //Check for Child Shapes
+        string $szChildren[] = `listRelatives -s $sDagNode`;
+
+        if(size($szChildren) != 1)
+        {
+            warning("Only works on transforms with a single child shape\n");
+        }
+
+        string $szShape = $szChildren[0];
+
+        $szType = `ls -st $szShape`;
+        if(($szType[1] == "pointLight") || ($szType[1] == "spotLight"))
+        {
+            $szAttentuationLightShapes[size($szAttentuationLightShapes)] = 
+                $szShape;
+        }   
+        else
+        {
+            if($szType[1] != "directionalLight")
+            {
+                warning($szShape + " is type " + $szType[1] + 
+                    " which is not a supported light type\n");
+            }
+        }
+    }
+
+    return $szAttentuationLightShapes;
+}
+
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateNiLightAttenuationDialog(string $nodeName)
+{
+    // Return dag objects only
+    string $dagnodes[];
+    string $szShape;
+   
+    string $sDirectionalLights[];
+    string $sAttentuationLights[];
+
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) <= 0)
+    {
+        error("No Objects Selected");
+    }
+    else
+    {
+        $sAttentuationLights = 
+            MyImmerseGetSelectedAttentuationLights();
+        if(size($sAttentuationLights) > 0)
+        {
+            string $sAttentuationLight;
+            for($sAttentuationLight in $sAttentuationLights)
+            {
+                MyImmerseCreateNiLightAttributesIfDontExist(
+                    $sAttentuationLight);
+            }
+        }
+
+        if(size($sAttentuationLights) <= 0)
+        {
+            error("No supported lights selected");
+        }
+    }
+
+    $szShape = $sAttentuationLights[0];
+
+    if(size($sAttentuationLights) > 1)
+    {
+        warning("More then one light selected. Binding first light, " + $szShape + 
+            ", to dialog.");
+    }
+
+    if(`window -ex NiLightAttenuationWindow` == 1)
+    {
+        deleteUI -wnd NiLightAttenuationWindow;
+    }
+
+    float $fNearZeroDistance = `getAttr ($szShape + ".Ni_NearZeroDistance")`;
+    float $fDimmer = `getAttr ($szShape + ".Ni_Dimmer")`;
+    float $fConstant = `getAttr ($szShape + ".Ni_ConstantAttenuation")`;
+    float $fLinear = `getAttr ($szShape + ".Ni_LinearAttenuation")`;
+    float $fQuadratic = `getAttr ($szShape + ".Ni_QuadraticAttenuation")`;
+
+    window -title ("Gamebryo Light Attenuation Dialog : " + $szShape) 
+        -widthHeight 400 550 NiLightAttenuationWindow;
+    columnLayout;
+
+    checkBoxGrp
+        -l " "
+        -ncb 1
+        -v1 `getAttr ($szShape + ".Ni_UseMayaDecayRate")`
+        -on1 ("MyImmerseAttenuationUseMayaDecay " + $szShape + " true")
+        -of1 ("MyImmerseAttenuationUseMayaDecay " + $szShape + " false")
+        -l1 "Use Maya Decay" AttenuationUseMayaDecayRate;
+
+    frameLayout
+        -cll false
+        -bv true
+        -bs "etchedIn"
+        -en false
+        -l "Gamebryo Maya Light Attenuation Options"
+        AttenuationLayout;
+
+        columnLayout -adj true GamebryoAttenuationColumnLayout;
+
+        radioButtonGrp
+            -l "Set Attenuation By"
+            -nrb 2
+            -on1 ("MyImmerseAttenuationByDistance " + $szShape + " true")
+            -on2 ("MyImmerseAttenuationByDistance " + $szShape + " false")
+            -sl 2
+            -la2 "Maximum Distance" "Custom Attenuation"  
+            AttenuationSelection;
+
+        text -label "";
+
+
+        attrEnumOptionMenu 
+            -label "Decay Rate" 
+            -en true
+            -attribute ($szShape + ".decayRate")
+            AttenuationMayaDecayRate;
+
+        scriptJob 
+            -p AttenuationMayaDecayRate
+            -rp
+            -ac ($szShape + ".decayRate") ("MyImmerseAttenuationHandleDecayRate(\""+ $szShape + "\")");
+
+        floatSliderGrp 
+            -l "Max Distance" 
+            -field true 
+            -min 0.0001 
+            -fmn 0.0001 
+            -max 100.0
+            -pre 4
+            -fmx 100000000.0
+            -value $fNearZeroDistance
+            -changeCommand ("MyImmerseAttenuationHandleDecayRate " + $szShape)
+            AttenuationNearZeroDistance;
+
+
+        text -label "";
+
+        floatSliderGrp 
+            -l "Dimmer" 
+            -field true 
+            -min 0.0 
+            -max 1.0
+            -fmx 1000000.0
+            -pre 4
+            -value $fDimmer
+            -changeCommand ("MyImmerseCreateNiLightAttenuationUpdateAttribute " + $szShape + " Ni_Dimmer DimmerValue")
+            DimmerValue;
+    
+    
+        floatSliderGrp 
+            -l "Constant Attenuation" 
+            -field true 
+            -min 0.0 
+            -fmn 0.0 
+            -max 10.0
+            -fmx 1000000.0
+            -pre 16
+            -value $fConstant
+            -changeCommand ("MyImmerseCreateNiLightAttenuationUpdateAttribute " + $szShape + " Ni_ConstantAttenuation ConstantValue")
+            ConstantValue;
+    
+        floatSliderGrp 
+            -l "Linear Attenuation" 
+            -field true 
+            -min 0.0 
+            -fmn 0.0 
+            -max 10.0
+            -fmx 1000000.0
+            -pre 16
+            -value $fLinear
+            -changeCommand ("MyImmerseCreateNiLightAttenuationUpdateAttribute " + $szShape + " Ni_LinearAttenuation LinearValue")
+            LinearValue;
+    
+        floatSliderGrp 
+            -l "Quadratic Attenuation" 
+            -field true 
+            -min 0.0 
+            -fmn 0.0 
+            -max 10.0
+            -fmx 1000000.0
+            -pre 16
+            -value $fQuadratic
+            -changeCommand ("MyImmerseCreateNiLightAttenuationUpdateAttribute " + $szShape + " Ni_QuadraticAttenuation QuadraticValue")
+            QuadraticValue;
+
+        setParent ..; // AttenuationLayout
+
+    setParent ..; // AttenuationLayout
+
+
+    text -label "" SpaceLabel1;
+    text -label "Light Distance By Intensity" -w 200 -align "center" IntensityLabel;
+    text -label "" SpaceLabel2;
+
+    textFieldGrp -label "90% = " -ed false Intensity90Label;
+    textFieldGrp -label "80% = " -ed false Intensity80Label;
+    textFieldGrp -label "70% = " -ed false Intensity70Label;
+    textFieldGrp -label "60% = " -ed false Intensity60Label;
+    textFieldGrp -label "50% = " -ed false Intensity50Label;
+    textFieldGrp -label "40% = " -ed false Intensity40Label;
+    textFieldGrp -label "30% = " -ed false Intensity30Label;
+    textFieldGrp -label "20% = " -ed false Intensity20Label;
+    textFieldGrp -label "10% = " -ed false Intensity10Label;
+    textFieldGrp -label "5% = " -ed false Intensity5Label;
+    textFieldGrp -label "1% = " -ed false Intensity1Label;
+
+
+    // Reset the distance values
+    MyImmerseCreateNiLightAttenuationResetDistanceIntensity();
+
+
+showWindow NiLightAttenuationWindow;
+
+    // Initialize the Values
+    int $iByDistance = `getAttr ($szShape + ".Ni_SetAttenuationByDistance")`;
+
+    if($iByDistance == 1)
+    {
+        radioButtonGrp -e -sl 1 AttenuationSelection;
+        MyImmerseAttenuationHandleDecayRate($szShape);
+    }
+    else
+    {
+        radioButtonGrp -e -sl 2 AttenuationSelection;
+    }
+    MyImmerseAttenuationByDistance( $szShape, $iByDistance);
+
+    MyImmerseAttenuationUseMayaDecay( $szShape, `getAttr ($szShape + ".Ni_UseMayaDecayRate")`);
+
+}
+
+
+//MyImmerseCreateNiLightAttenuationDialog("");
+

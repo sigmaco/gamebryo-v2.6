@@ -1,0 +1,205 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+// IceBlock Lite shader
+texture BaseTexture
+<
+	string NTM = "base";
+>;
+sampler BaseSampler 
+<
+	string NTM = "base";
+	int NTMIndex = 0;
+> = sampler_state
+{ 
+		texture = (BaseTexture);
+    AddressU = Clamp;
+    AddressV = Clamp;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+texture NormalTexture
+<
+	string NTM = "shader";
+>;
+sampler NormalSampler
+<
+    string NTM = "shader";
+    int NTMIndex = 0;
+> = sampler_state
+{ 
+		texture = (NormalTexture);
+    AddressU = Clamp;
+    AddressV = Clamp;
+    MipFilter = LINEAR; 
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+texture AlphaTexture
+<
+	string NTM = "shader";
+>;
+sampler AlphaSampler
+< 
+    string NTM = "shader";
+    int NTMIndex = 1;
+> = sampler_state
+{ 
+		texture = (AlphaTexture);
+    AddressU = Clamp;
+    AddressV = Clamp;
+    MipFilter = LINEAR; 
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+texture EnvTexture
+<
+	string NTM = "shader";
+>;
+samplerCUBE EnvSampler
+< 
+	string NTM = "shader";
+  int NTMIndex = 2;
+>  = sampler_state
+ {
+ 	texture = (EnvTexture);
+	MinFilter = Linear;
+	MagFilter = Linear;
+	MipFilter = Linear;
+	AddressU = clamp;
+	AddressV = clamp;
+	AddressW = clamp;
+};
+
+float4x4 WorldViewProjection
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLDVIEWPROJECTION";
+>;
+
+float4x4 World
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLD";
+>;
+
+float4x4 ViewInv
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "VIEWINVERSE";
+>;
+
+float3 MSLightPos : Position
+<
+    string VarType = "Object";
+    string Object = "PointLight";
+    string ObjectProperty = "Position";
+>;
+
+float RefractionIndex           : ATTRIBUTE = 1.31f;
+float Bump          		    : ATTRIBUTE = 0.01f;
+float RefractionMult			: ATTRIBUTE = 0.05f;
+float BaseMapPercent			: ATTRIBUTE = 0.75f;
+float FresnelTransparency		: ATTRIBUTE = 0.9f;
+
+// Vertex Shaders
+struct VS_OUTPUT
+{
+    float4 Position   : POSITION;
+    float2 BaseTex  : TEXCOORD0;
+    float3 TSLightDir : TEXCOORD1;
+    float3 WorldNormal	: TEXCOORD2;
+    float3 WorldTangent	: TEXCOORD3;
+    float3 WorldBinorm	: TEXCOORD4;
+    float3 Vn : TEXCOORD6;
+};
+
+VS_OUTPUT VS(float3 Position : POSITION,
+    float3 Normal   : NORMAL,
+    float3 Binormal : BINORMAL,
+    float3 Tangent  : TANGENT,    
+    float2 TexCoord : TEXCOORD)
+{
+    VS_OUTPUT Out = (VS_OUTPUT)0;
+
+    // Transform position
+    Out.Position = mul(float4(Position, 1), WorldViewProjection);
+
+    // Output View Vector
+    float4 Po = float4(Position.xyz,1.0);
+    float3 Pw = mul(Po, World).xyz;
+    Out.Vn = normalize(ViewInv[3].xyz - Pw);
+
+    Out.WorldNormal = normalize(mul(Normal, World).xyz);
+    Out.WorldTangent = normalize(mul(Tangent, World).xyz);
+    Out.WorldBinorm = normalize(mul(Binormal, World).xyz);
+
+    // Fill in texture coordinates
+    Out.BaseTex = TexCoord;
+
+    // Get model-space light direction
+    float3 MSLightDir = float3(0,0,0) - Position;
+
+    Out.TSLightDir = normalize(MSLightDir);
+	
+    return Out;
+}
+
+// Pixel shader
+float4 PS(VS_OUTPUT In) : COLOR
+{
+	float3 Norm = tex2D(NormalSampler, In.BaseTex);
+    Norm = Norm * 2.0 - 1.0;    	
+     
+    // Compure reflect color
+    float3 Nn = In.WorldNormal;
+    float3 Tn = In.WorldTangent;
+    float3 Bn = In.WorldBinorm;
+    
+    float3 bumps = Bump * (Norm-(0.5).xxx);
+    float3 Nb = Nn + (bumps.x * Tn + bumps.y * Bn);
+    Nb = normalize(Nb);
+    float4 reflVect = float4(reflect(In.Vn,Nb),0);
+    reflVect = normalize(reflVect);
+    float4 reflColor = texCUBE(EnvSampler,reflVect);
+    
+    float4 Base = tex2D(BaseSampler, In.BaseTex);   
+ 
+    return lerp(reflColor, Base, BaseMapPercent);
+ }
+
+// techniques
+technique IceBlockLite
+<
+    string Description = "This shader takes in a base map, normal map, "
+    "and environment map. The normal map is used to compute the reflected "
+    "light vector. This is then used to look up the color to reflect from the "
+    "environment map. It uses HLSL shaders through an FX file. ";
+    string NBTMethod = "ATI";
+    bool UsesNiRenderState = true;
+    bool UsesNiLightState = false;
+>
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VS();
+        PixelShader = compile ps_2_0 PS();
+        
+        AlphaBlendEnable = FALSE;
+    }
+}
+

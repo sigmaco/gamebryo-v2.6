@@ -1,0 +1,94 @@
+//
+// MyImmerseCreateProxySphericalCollider.mel
+//
+// Mel script for applying Net Immerse Attributes to a Group to make it 
+// a Switch Node
+
+
+global proc MyImmerseCreateProxySphericalCollider(string $nodeName)
+{
+    // Get the selected objects
+    string $szSelected[];
+    if($nodeName == "")
+    {
+        $szSelected = `ls -sl -l`;
+    }
+    else
+    {
+        $szSelected[0] = $nodeName;
+    }
+
+
+    // Check for no selection
+    if (size($szSelected) == 0)
+    {
+        error ("MyImmerseCreateSphericalCollider: Objects Selected");
+        return;
+    }
+
+    // Check for multiple selection
+    if (size($szSelected) != 2)
+    {
+        error ("MyImmerseCreateSphericalCollider: You must select the particles and an object for it's proxy sphere");
+        return;
+    }
+
+    // Make sure the selected object has a particle shape child
+    string $szParticles = $szSelected[0];
+    string $szProxy = $szSelected[1];
+    string $szRelatives[] = `listRelatives -f -s $szParticles`;
+
+    int $iLoop = 0;
+    int $iFound = 0;
+
+    for ($iLoop = 0; $iLoop < size($szRelatives); $iLoop++)
+    {
+        if (`objectType -isType "particle" $szRelatives[$iLoop]` == 1)
+        {
+            $iFound = 1;
+        }
+    }
+
+    if ($iFound == 0)
+    {
+
+        $szParticles = $szSelected[1];
+        $szRelatives = `listRelatives -f -s $szParticles`;
+
+        $iLoop = 0;
+
+        for ($iLoop = 0; $iLoop < size($szRelatives); $iLoop++)
+        {
+            if (`objectType -isType "particle" $szRelatives[$iLoop]` == 1)
+            {
+                $iFound = 1;
+                $szParticles = $szSelected[1];
+                $szProxy = $szSelected[0];
+            }
+        }
+
+        if ($iFound == 0)
+        {
+            error ("MyImmerseCreateSphericalCollider:: No Particles Selected.");
+            return;
+        }
+    }
+
+
+    // Make it a collider of the particles
+    collision -r 1 -f 0  $szProxy;
+
+    // Add a custom attribute so we know what this is originally
+    if (`attributeExists "Ni_SphericalCollider" $szProxy` == 0)
+    {
+        addAttr -ln Ni_SphericalCollider -at bool -dv 1 $szProxy;
+    }
+
+    // Delete the child object on export
+    if (`attributeExists "Ni_ColliderDeleteOnExport" $szProxy` == 0)
+    {
+        addAttr -ln Ni_ColliderDeleteOnExport -at bool -dv 0 $szProxy;
+    }
+
+    connectDynamic -c $szProxy  $szParticles;
+}

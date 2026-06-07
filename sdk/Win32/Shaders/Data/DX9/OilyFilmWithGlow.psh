@@ -1,0 +1,46 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+;Oily Film pixel shader from the alien's gauntlets modified to use a glow map
+;instead of the warp effect map.  t0 is the packed texture coordinate and t1 
+;is N dot V.  If we assume that the thin film on the gauntlet is of uniform 
+;thickness, then N dot V actually approximates the distance that light travels
+;through the film and is accurate in the lookup of the thin film ramp. The 
+;final output is summarized below.
+;
+;B  = Base map
+;TF = Thin film interference map
+;G  = Glow map
+;v0 = Diffuse lighting from vertex shader
+;v1 = Specular lighting from vertex shader
+;Oc = Output color
+;Oa = Output alpha
+;
+;Oc = B * v0 + TF * v1 + G
+;Oa = 1
+
+ps_1_4
+
+def c0, 1.0, 0.0, 0.0, 1.0
+
+texld  r1, t1                ;Sample filmRamp based off of thickness in t1
+texld  r0, t0                ;Sample baseMap with t0
+texld  r2, t0                ;Sample glow map.
+
+mul r0, r0, v0               ;Modulate base map by diffuse lighting.
+add r0.rgb, r1, r0           ;Add in thin film interference
+
+add r0.rgb, r2, r0           ;Add glow color.
+
+add r0.rgb, r0, v1           ;Add in specular color.
++mov r0.a, c0.a              ;Move in warp alpha

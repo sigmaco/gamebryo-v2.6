@@ -1,0 +1,453 @@
+//
+// MyImmerseBoneLODDialog.mel
+//
+// Mel script for applying bone Level of detail and displaying its children
+//
+
+
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseBoneLODIsRoot(string $szNode)
+{
+    return `attributeExists "Ni_BoneLODRoot" $szNode`;
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseBoneLODCleanAllChildren(string $szNode, int $iLevel)
+{
+
+    // When setting the new level make sure all of the children are
+    // at a lower level so we will clear any children which have 
+    // a higher level then us.
+
+    string $szChildren[] = `listRelatives -ad -f -typ transform $szNode`;
+
+    int $iLoop = 0;
+    for($iLoop = 0; $iLoop < size($szChildren); $iLoop++)
+    {
+//      print ("Cleaning Child " + $szChildren[$iLoop] + "\n");
+
+        // Check for a LOD Level
+        if(`attributeExists Ni_BoneLODLevel $szChildren[$iLoop]` == 1)
+        {
+            // LOD Level is greater then or equal our Level
+            int $iChildLevel = `getAttr ($szChildren[$iLoop] + ".Ni_BoneLODLevel")`;
+            if( $iChildLevel >= $iLevel)
+            {
+//              print ("Child " + $szChildren[$iLoop] + "\n");
+                deleteAttr -at Ni_BoneLODLevel $szChildren[$iLoop];
+                warning ($szNode + " :: Has a child of a greater LOD Level. The child LOD will be removed. Child:: " + $szChildren[$iLoop] + " LOD Level:" + $iChildLevel);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseBoneLODCheckAllParents(string $szNode, int $iLevel)
+{
+    // When setting the new level make sure all of the parents are greater
+    // then our current level if they are less then our level they sould be
+    // cleared.
+
+    string $szParent[] = `listRelatives -p -f $szNode`;
+
+//  print ($szParent[0] + "\n");
+
+    while($szParent[0] != "")
+    {
+        // Check for a LOD Level
+        if(`attributeExists Ni_BoneLODLevel $szParent[0]` == 1)
+        {
+            // LOD Level is greater then or equal our Level
+            int $iParentLevel = `getAttr ($szParent[0] + ".Ni_BoneLODLevel")`;
+            if($iParentLevel < $iLevel)
+            {
+                error ($szNode + " :: Has a parent of a lower LOD level so it will not be set. Parent::" + $szParent[0] + " LOD Level:" + $iParentLevel );
+                return 0;       
+            }
+        }
+
+        // Get the next parent
+        if(MyImmerseBoneLODIsRoot($szParent[0]))
+        {
+            $szParent[0] = "";
+        }
+        else 
+        {
+            $szParent = `listRelatives -p -f $szParent[0]`;
+        }
+
+//      print ($szParent[0] + "\n");
+    }
+
+    return 1;
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseBoneLODSetBoneLODLevel()
+{
+    string $szNodes[] = `selectedNodes -dagObjects`;
+    int $iLevel = `intSliderGrp -q -v CurrentBoneLOD`;
+
+    int $iLoop = 0;
+
+    for( $iLoop = 0; $iLoop < size($szNodes); $iLoop++)
+    {
+//      print ("Exaining " + $szNodes[$iLoop] + "\n");
+
+        // Check to make sure this is valid with our parents
+        if(MyImmerseBoneLODCheckAllParents($szNodes[$iLoop], $iLevel))
+        {
+
+            if(`attributeExists Ni_BoneLODLevel $szNodes[$iLoop]` == 0)
+            {
+    //          print ("Adding " + $szNodes[$iLoop] + "\n");
+    
+                addAttr -at long -ln "Ni_BoneLODLevel" -k false $szNodes[$iLoop];
+            }
+
+            setAttr ($szNodes[$iLoop] + ".Ni_BoneLODLevel") $iLevel;
+
+            MyImmerseBoneLODCleanAllChildren($szNodes[$iLoop], $iLevel);
+        }
+    }
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseBoneLODSelectLevelZero(string $szRoot)
+{
+//  print ("Root Name " + $szRoot + "\n");
+
+    // Select the all of the leif transforms which don't have a level
+    // OR are Level Zero
+
+    // Clear the selection
+    select -cl;
+
+    string $szNodes[] = `listRelatives -ad -f -typ transform $szRoot`;
+
+    // Add in the character root
+    $szNodes[size($szNodes)] = $szRoot;
+
+    int $iLoop = 0;
+    for( $iLoop = 0; $iLoop < size($szNodes); $iLoop++)
+    {
+//      print ($szNodes[$iLoop] + "\n");
+
+        string $szChildren[] = `listRelatives -ad -f -typ transform $szNodes[$iLoop]`;
+
+        if(size($szChildren) == 0)
+        {
+
+            if(`attributeExists Ni_BoneLODLevel $szNodes[$iLoop]` == 1)
+            {
+                // Only select if the level was set to Zero
+                if(`getAttr ($szNodes[$iLoop] + ".Ni_BoneLODLevel")` == 0)
+                {
+                    select -add $szNodes[$iLoop];
+                }
+            }
+            else
+            {
+                // Select level Zero if you have NO children and NO tag
+                select -add $szNodes[$iLoop];
+            }
+
+        }
+
+    }
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseBoneLODSelectLevel()
+{
+    string $szRoot = `text -q -label BoneLODRootName`;
+    int $iLevel = `intSliderGrp -q -v CurrentBoneLOD`;
+
+//  print ("Root Name " + $szRoot + "\n");
+//  print ("Level " + $iLevel + "\n");
+
+    if ($iLevel == 0)
+    {
+        MyImmerseBoneLODSelectLevelZero($szRoot);
+        return;
+    }
+
+    // Clear the selection
+    select -cl;
+
+    string $szNodes[] = `listRelatives -ad -f -typ transform $szRoot`;
+
+    // Add in the character root
+    $szNodes[size($szNodes)] = $szRoot;
+
+    int $iLoop = 0;
+    for( $iLoop = 0; $iLoop < size($szNodes); $iLoop++)
+    {
+//      print ($szNodes[$iLoop] + "\n");
+
+        if(`attributeExists Ni_BoneLODLevel $szNodes[$iLoop]` == 1)
+        {
+            if(`getAttr ($szNodes[$iLoop] + ".Ni_BoneLODLevel")` == $iLevel)
+            {
+                select -add $szNodes[$iLoop];
+            }
+        }
+
+    }
+}
+
+//---------------------------------------------------------------------------
+
+global proc string MyImmerseBoneLODSearchForParentLOD(string $szRoot)
+{
+    string $szParent[] = `listRelatives -p -f $szRoot`;
+
+//  print ($szParent[0] + "\n");
+
+    while($szParent[0] != "")
+    {
+        if(MyImmerseBoneLODIsRoot($szParent[0]))
+            return $szParent[0];
+
+        $szParent = `listRelatives -p -f $szParent`;
+
+//      print ($szParent[0] + "\n");
+    }
+
+    return "";
+}
+
+//---------------------------------------------------------------------------
+
+global proc string MyImmerseBoneLODSearchForChildLOD(string $szRoot)
+{
+    string $szNodes[] = `listRelatives -ad -f -typ transform $szRoot`;
+
+    int $iLoop = 0;
+    for( $iLoop = 0; $iLoop < size($szNodes); $iLoop++)
+    {
+//      print ($szNodes[$iLoop] + "\n");
+
+        if(MyImmerseBoneLODIsRoot($szNodes[$iLoop]))
+        {
+            return $szNodes[$iLoop];
+        }
+    }
+
+    return "";
+}
+
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseBoneLODHandErrors(string $szDagNodes[])
+{
+
+    if(size($szDagNodes) != 1)
+    {
+        if(size($szDagNodes) <= 0)
+        {
+            text -label "";
+            text -label "ERROR::No Objects Selected.";
+            text -label "";
+            text -label "Select the Root of the Bone LOD";
+        }
+        else
+        {
+            text -label "";
+            text -label "ERROR::Multiple Objects Selected.";
+            text -label "";
+            text -label "Only Select the Root of the Bone LOD";
+        }
+
+        return 0;
+    }
+
+    string $szRoot = $szDagNodes[0];
+
+    string $szLODParent = MyImmerseBoneLODSearchForParentLOD($szRoot);
+
+    if($szLODParent != "")
+    {
+        text -label "";
+        text -label "         ERROR::Selected Object has a Bone LOD parent.";
+        text -label "";
+        text -label ("         " + $szLODParent + " :: is a Bone LOD Root.");
+
+        return 0;
+    }
+
+
+    string $szLODChild = MyImmerseBoneLODSearchForChildLOD($szRoot);
+
+    if($szLODChild != "")
+    {
+        text -label "";
+        text -label "         ERROR::Selected Object has a child which is already a Bone LOD root.";
+        text -label "";
+        text -label ("         " + $szLODChild + " :: is a Bone LOD Root.");
+
+        return 0;
+    }
+
+    return 1;
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseBoneLODInitializeNewBoneLOD(string $szNode)
+{
+
+    if(MyImmerseBoneLODIsRoot($szNode))
+        return;
+
+    // Add the Root Tag if it is need
+    addAttr -at bool -ln "Ni_BoneLODRoot" -k false $szNode;
+    setAttr ($szNode + ".Ni_BoneLODRoot") 1;
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseBoneLODDeleteSelectedFromLevel()
+{
+
+    // Return dag objects only
+    string $szNodes[];
+    $szNodes = `selectedNodes -dagObjects`;
+
+    int $iLoop = 0;
+
+    // Loop through each selected node removing the Level if it exists
+    for($iLoop = 0; $iLoop < size($szNodes); $iLoop++)
+    {
+        if(`attributeExists Ni_BoneLODLevel $szNodes[$iLoop]` == 1)
+        {
+            deleteAttr -at Ni_BoneLODLevel $szNodes[$iLoop];
+        }
+    }
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseBoneLODDialog(string $nodeName)
+{
+    if(MyImmerseWindowExists("Ni_BoneLODWindow"))
+    {
+        deleteUI Ni_BoneLODWindow;
+    }
+
+    window -title "Gamebryo Bone LOD" -widthHeight 400 200 Ni_BoneLODWindow;
+
+    columnLayout;
+
+    string $dagnodes[];
+    if($nodeName != "")
+    {
+        $dagnodes[0] = $nodeName;
+    }
+    else
+    {
+        // Return dag objects only
+        
+        $dagnodes = `selectedNodes -dagObjects`;
+    }
+
+    if(MyImmerseBoneLODHandErrors($dagnodes))
+    {
+        string $sObject = $dagnodes[0];
+
+        MyImmerseBoneLODInitializeNewBoneLOD($sObject);
+
+        text -label "";
+        text -label $dagnodes[0] -vis false BoneLODRootName;
+
+        rowLayout -nc 2 -cw 1 110;
+            text -l "  Character Root:" -al "left" -fn "boldLabelFont" -w 110;
+            text -l $dagnodes[0] -al "left";
+        setParent ..; // RowLayout
+         
+        text -label "";
+    
+        intSliderGrp 
+            -l "Current Bone LOD" 
+            -field true 
+            -min 0 
+            -max 16
+            CurrentBoneLOD;
+
+        text -label "";
+    
+        rowLayout -nc 3;
+            
+            text -label "";
+
+            button 
+                -label "Select Level" 
+                -c "MyImmerseBoneLODSelectLevel"
+                BoneLODSelectLevelButton;
+    
+            button 
+                -label "Set Selected to Level" 
+                -c "MyImmerseBoneLODSetBoneLODLevel"
+                BoneLODSetSelectedToLevelButton;
+
+        setParent ..; // columnLayout
+
+        text -label "";
+
+        rowLayout -nc 2;
+
+            text -label "";
+
+            button 
+                -label "Delete Selected from Level" 
+                -c "MyImmerseBoneLODDeleteSelectedFromLevel"
+                BoneLODDeleteSelectedFromLevelButton;
+
+        setParent ..; // columnLayout
+    
+
+        text -label "";
+        text -label "         Use the Hypergraph to view and select the different Bone LOD levels.";
+
+    }
+
+    showWindow Ni_BoneLODWindow;
+
+
+    // Find the window Location
+    int $iTopEdge = `window -q -te Ni_BoneLODWindow`;
+    int $iLeftEdge = `window -q -le Ni_BoneLODWindow`;
+
+	float $version = `getApplicationVersionAsFloat`;
+
+	if($version < 8)
+	{
+		// Bring up the Hyper Graph Window so you can see your selections
+		HypergraphWindow;
+		
+		    // Position it under the BoneLODWindow
+		window -e -te ($iTopEdge + 200 + 24) hyperGraphPanel1Window;
+		window -e -le $iLeftEdge hyperGraphPanel1Window;
+	}
+	else
+	{
+		string $whichPanel = getHyperGraphPanel("DAG");
+
+		// Bring up the Hyper Graph Window so you can see your selections
+		hyperGraphWindow($whichPanel, "DAG");
+		
+		window -e -te ($iTopEdge + 200 + 24) ($whichPanel + "Window");
+		window -e -le $iLeftEdge ($whichPanel + "Window");
+	}
+
+
+
+}
+
+

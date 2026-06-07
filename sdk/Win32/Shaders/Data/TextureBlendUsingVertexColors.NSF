@@ -1,0 +1,159 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader TextureBlendUsingVertexColors
+{
+    "This shader blends between three textures using the red, green, and "
+    "blue color channels of the vertices as per-texture weights. The "
+    "'BlendWeightMultiplier' is multiplied by each of the vertex color "
+    "channels before the weights are used. The final weighted result is "
+    "lit using up to eight point lights, and then modulated with the dark map. "
+    
+    Objects
+    {
+        Effect_PointLight   0   Light1
+        Effect_PointLight   1   Light2
+        Effect_PointLight   2   Light3
+        Effect_PointLight   3   Light4
+        Effect_PointLight   4   Light5
+        Effect_PointLight   5   Light6
+        Effect_PointLight   6   Light7
+        Effect_PointLight   7   Light8
+    }
+    
+    Attributes
+    {
+        Attrib_Texture      BlendMapRed         Artist      0
+        Attrib_Texture      BlendMapGreen       Artist      1
+        Attrib_Texture      BlendMapBlue        Artist      2
+        Attrib_Texture      DarkMap             Artist      3               "white.bmp"
+        Attrib_Point3       BlendMapMultiplier  Artist      1.0,1.0,1.0     [(0.0,0.0,0.0)  (1.0,1.0,1.0)]   
+    }
+
+    PackingDef PosNormUVsVCs
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      3   PDT_Float3
+            PDP_Color       5   PDT_UByteColor
+            PDP_TexCoord0   7   PDT_Float2
+            PDP_TexCoord1   8   PDT_Float2
+            PDP_TexCoord2   9   PDT_Float2
+            PDP_TexCoord3   10  PDT_Float2
+    }
+
+    Implementation VS11_PS11
+    {
+        "This implementation requires hardware that supports "
+        "Vertex Shader v1.1 and Pixel Shader v1.1."
+
+        Requirements
+        {
+            VSVersion   = v1.1
+            UserVersion = v0.0
+            PSVersion   = v1.1
+            Platform    = DX9|XENON
+            UsesNIRenderState = true
+        }
+
+        PackingDef  PosNormUVsVCs
+
+        Pass Blend
+        {
+            VSProgram   "TextureBlend.vsh"
+     
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose      0  0
+                CM_Constant     ConstValue                  4  1   0.0, 1.0, 0.0, 0.0
+                CM_Defined      MaterialAmbient             5  0
+                CM_Defined      MaterialDiffuse             6  0
+                CM_Object       Light1      ModelPosition   7
+                CM_Object       Light1      Diffuse         8
+                CM_Object       Light1      Attenuation     9
+                CM_Object       Light2      ModelPosition   10
+                CM_Object       Light2      Diffuse         11
+                CM_Object       Light2      Attenuation     12
+                CM_Object       Light3      ModelPosition   13
+                CM_Object       Light3      Diffuse         14
+                CM_Object       Light3      Attenuation     15
+                CM_Object       Light4      ModelPosition   16
+                CM_Object       Light4      Diffuse         17
+                CM_Object       Light4      Attenuation     18
+                CM_Object       Light5      ModelPosition   19
+                CM_Object       Light5      Diffuse         20
+                CM_Object       Light5      Attenuation     21
+                CM_Object       Light6      ModelPosition   22
+                CM_Object       Light6      Diffuse         23
+                CM_Object       Light6      Attenuation     24
+                CM_Object       Light7      ModelPosition   25
+                CM_Object       Light7      Diffuse         26
+                CM_Object       Light7      Attenuation     27
+                CM_Object       Light8      ModelPosition   28
+                CM_Object       Light8      Diffuse         29
+                CM_Object       Light8      Attenuation     30
+                CM_Attribute    BlendMapMultiplier          50   1   0
+            }
+
+            Sampler 0   BlendMapRedSampler
+            {
+                TSS_Texture     = <BlendMapRed>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+            Sampler 1   BlendMapGreenSampler
+            {
+                TSS_Texture     = <BlendMapGreen>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+            Sampler 2   BlendMapBlueSampler
+            {
+                TSS_Texture     = <BlendMapBlue>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+            Sampler 3   DarkMapSampler
+            {
+                TSS_Texture     = <DarkMap>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+
+            PSProgram   "TextureBlendDarkMap.psh"
+            
+            PS_Constantmap
+            {
+                CM_Constant     RedValue                  1  1   1.0, 0.0, 0.0, 0.0
+                CM_Constant     GreenValue                2  1   0.0, 1.0, 0.0, 0.0
+                CM_Constant     BlueValue                 3  1   0.0, 0.0, 1.0, 0.0
+            }
+        }
+    }
+}

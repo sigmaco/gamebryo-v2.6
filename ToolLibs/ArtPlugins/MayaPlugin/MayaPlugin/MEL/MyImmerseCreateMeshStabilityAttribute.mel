@@ -1,0 +1,58 @@
+//
+// MyImmerseCreateMeshStabilityAttribute.mel
+//
+// Mel script for applying Net Immerse Attributes to a Group to make it 
+// a Switch Node
+
+
+global proc MyImmerseCreateMeshStabilityAttribute(string $nodeName)
+{
+    // Return dag objects only
+    string $dagnodes[];
+
+    if($nodeName == "")
+    {
+        $dagnodes = `selectedNodes -dagObjects`;
+    }
+    else
+    {
+        if(size(`selectedNodes -dagObjects`) > 1)
+        {
+            $dagnodes = `selectedNodes -dagObjects`;
+        }
+        else
+        {
+            $dagnodes[0] = $nodeName;
+        }
+    }
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop < size($dagnodes); $iLoop++)
+    {
+        // print($dagnodes[$iLoop] + "\n");
+
+        if( `attributeExists Ni_MeshStaticKeepPositions $dagnodes[$iLoop]` == 0)
+            addAttr -ln Ni_MeshStaticKeepPositions -at bool -dv 0 $dagnodes[$iLoop];
+
+        if( `attributeExists Ni_MeshStaticKeepNormals $dagnodes[$iLoop]` == 0)
+            addAttr -ln Ni_MeshStaticKeepNormals -at bool -dv 0 $dagnodes[$iLoop];
+
+        if( `attributeExists Ni_MeshStaticKeepColors $dagnodes[$iLoop]` == 0)
+            addAttr -ln Ni_MeshStaticKeepColors -at bool -dv 0 $dagnodes[$iLoop];
+
+        if( `attributeExists Ni_MeshStaticKeepUVs $dagnodes[$iLoop]` == 0)
+            addAttr -ln Ni_MeshStaticKeepUVs -at bool -dv 0 $dagnodes[$iLoop];
+
+        if( `attributeExists Ni_MeshStaticKeepIndices $dagnodes[$iLoop]` == 0)
+            addAttr -ln Ni_MeshStaticKeepIndices -at bool -dv 0 $dagnodes[$iLoop];
+
+        if( `attributeExists Ni_MeshStaticKeepBoneData $dagnodes[$iLoop]` == 0)
+            addAttr -ln Ni_MeshStaticKeepBoneData -at bool -dv 0 $dagnodes[$iLoop];
+
+
+    }
+
+}
+
+
+

@@ -1,0 +1,103 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader Outlining
+{
+    "This shader applies a directional light and an ambient light to an "
+    "untextured object, and then draws an outline around the object that's "
+    "based on the angle between the triangle normals and the camera. The "
+    "'outlineThickness' attribute is used to change the size of the outline, "
+    "and can range from 0.0, where almost no outline is visible, to 1.0, "
+    "where the entire object appears as the outline. Because of the method "
+    "of implementation, this shader looks best on rounded objects with "
+    "smoothing groups. Note also that this outlining shader does the outline "
+    "for each pixel individually, so the outline width will vary over the "
+    "object. "
+    
+    // The values for the lights.  
+    Objects
+    {
+        Effect_GeneralLight   0   Light1
+    }
+
+    // Attribute list
+    Attributes
+    {
+        // The thickness of the outline.  
+        Attrib_Float
+            outlineThickness
+            Artist
+            0.1
+            [0.0 1.0]
+        // The color of the outline.  
+        Attrib_Color
+            outlineColor
+            Artist
+            0.0, 0.0, 0.0, 1.0
+    }
+
+    // Packing Definition
+    PackingDef PosBlendWeightBlendIndicesNormUV0
+    {
+        PD_Stream    0
+            PDP_Position        0    PDT_Float3
+            PDP_Normal          3    PDT_Float3
+    }
+    
+    // Implementation
+    Implementation VS11_PS11
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v1.1."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v1.1
+            UsesNIRenderState       = true
+            Platform                = DX9|XENON
+        }
+        
+        // Packing Definition it uses
+        PackingDef    PosBlendWeightBlendIndicesNormUV0
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram    "Outlining.vsh"
+
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose      0       0
+                CM_Defined      MaterialDiffuse             4       0
+                CM_Constant     Zoze                        5   1   0.0,1.0,0.0,0.5
+                CM_Object       Light1  ModelDirection      6
+                CM_Object       Light1  Diffuse             7  
+                CM_Defined      AmbientLight                8   0   
+                CM_Defined      MaterialAmbient             9       0
+                CM_Defined      InvWorldViewTranspose       10      0
+            }
+            
+            PSProgram "Outlining.psh"
+
+            PS_Constantmap
+            {
+                CM_Attribute    outlineColor            0   1   0
+                CM_Attribute    outlineThickness        1   1   0
+            }
+        }
+    }
+}

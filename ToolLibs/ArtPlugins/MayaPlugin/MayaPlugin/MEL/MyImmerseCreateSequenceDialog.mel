@@ -1,0 +1,1047 @@
+//
+// MyImmerseCreateSequenceDialog.mel
+//
+// Mel script for creating the animations sequences for controller extractor.
+
+
+//---------------------------------------------------------------------------
+global proc float MyImmerseGetCurrentFrameRate()
+{
+    string $sFrameUnit = `currentUnit -q -t`;
+
+    if($sFrameUnit == "game")
+    {
+        return 15.0;
+    }
+    else if($sFrameUnit == "film")
+    {
+        return 24.0;
+    }
+    else if($sFrameUnit == "pal")
+    {
+        return 25.0;
+    }
+    else if($sFrameUnit == "ntsc")
+    {
+        return 30.0;
+    }
+    else if($sFrameUnit == "show")
+    {
+        return 48.0;
+    }
+    else if($sFrameUnit == "palf")
+    {
+        return 50.0;
+    }
+    else if($sFrameUnit == "ntscf")
+    {
+        return 60.0;
+    }
+    else 
+    {
+        print ("Error Reading current working unit for time: " + $sFrameUnit + " is not supported.\n");
+    }
+
+    return 1.0; 
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSetSequenceInfo (string $sObject, int $iSequenceNumber) 
+{
+    if($iSequenceNumber == -1)
+    {
+        textFieldGrp -e -en false SequenceName;
+        floatSliderGrp -e -en false SequenceStartFrame;
+        floatSliderGrp -e -en false SequenceEndFrame;
+        checkBoxGrp -e -en false SequenceLooping;
+        checkBoxGrp -e -en false SequenceAnimationAccumulation;
+        checkBoxGrp -e -en false SequenceAccumulateRotation;
+        checkBoxGrp -e -en false SequenceAccumulateTranslation;
+    }
+    else
+    {
+        string $szSequenceName = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Name")`;
+        float $fStartFrame = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Start_Time")`;
+        float $fEndFrame = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_End_Time")`;
+        int $bLooping = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Looping")`;
+        int $bAnimationAccumulation = `getAttr ($sObject + ".Ni_Sequence_Animation_Accumulation")`;
+        int $bRot = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Rot")`;
+        int $bTranX = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_X")`;;
+        int $bTranY = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_Y")`;;
+        int $bTranZ = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_Z")`;;
+
+        // Convert the Time to Frames
+        $fStartFrame = $fStartFrame * MyImmerseGetCurrentFrameRate();
+        $fEndFrame = $fEndFrame * MyImmerseGetCurrentFrameRate();
+
+        textFieldGrp -e -en true -tx $szSequenceName SequenceName;
+        floatSliderGrp -e -en true -v $fStartFrame SequenceStartFrame;
+        floatSliderGrp -e -en true -v $fEndFrame SequenceEndFrame;
+        checkBoxGrp -e -en true -v1 $bLooping SequenceLooping;
+        checkBoxGrp -e -v1 $bAnimationAccumulation SequenceAnimationAccumulation;
+        checkBoxGrp -e -v1 $bRot SequenceAccumulateRotation;
+        checkBoxGrp -e -v1 $bTranX -v2 $bTranY -v3 $bTranZ SequenceAccumulateTranslation;
+    
+        checkBoxGrp -e -en $bAnimationAccumulation SequenceAccumulateRotation;
+        checkBoxGrp -e -en $bAnimationAccumulation SequenceAccumulateTranslation;
+
+        checkBoxGrp -e -en (MyImmerseSequenceDialogGetLayerRoot($sObject) == "") SequenceAnimationAccumulation;
+    }
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetNumSequenceFromCharacter (string $sObject) 
+{
+    // verify the object has sequences
+    if(`attributeExists Ni_Sequence $sObject` == false)
+        return(0);
+
+    int $iNumValidSequences = 0;
+    $iNumSequences = `getAttr -s ($sObject + ".Ni_Sequence")`;
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop < $iNumSequences; $iLoop++)
+    {
+        if(`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            $iNumValidSequences = $iNumValidSequences + 1;
+        }
+    }
+
+    return( $iNumValidSequences );
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetDisplaySequenceFromCharacter (string $sObject, int $iSequenceNumber) 
+{
+    // verify the object has sequences
+    if(`attributeExists Ni_Sequence $sObject` == false)
+        return(0);
+
+    int $iNumValidSequences = 0;
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop <= $iSequenceNumber; $iLoop++)
+    {
+        if(`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            $iNumValidSequences = $iNumValidSequences + 1;
+        }
+    }
+
+    return( $iNumValidSequences );
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetNextValidSequence (string $sObject, int $iSequenceNumber) 
+{
+    // verify the object has sequences
+    if(`attributeExists Ni_Sequence $sObject` == false)
+        return(-1);
+
+    $iNumSequences = `getAttr -s ($sObject + ".Ni_Sequence")`;
+
+    int $iLoop;
+    for($iLoop = ($iSequenceNumber + 1); $iLoop < $iNumSequences; $iLoop++)
+    {
+        if(`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            return($iLoop);
+        }
+    }
+
+    return(-1);
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetPreviousValidSequence (string $sObject, int $iSequenceNumber) 
+{
+    // verify the object has sequences
+    if(`attributeExists Ni_Sequence $sObject` == false)
+        return(-1);
+
+
+    int $iLoop;
+    for($iLoop = ($iSequenceNumber - 1); $iLoop >= 0; $iLoop--)
+    {
+        if(`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            return($iLoop);
+        }
+    }
+
+    return(-1);
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseIsFirstSequence(string $sObject, int $iSequenceNumber)
+{
+    // verify the object has sequences
+    if(`attributeExists Ni_Sequence $sObject` == false)
+        return(true);
+
+    int $iLoop;
+
+    for($iLoop = ($iSequenceNumber - 1); $iLoop >= 0; $iLoop = $iLoop - 1)
+    {
+        if(`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseIsLastSequence(string $sObject, int $iSequenceNumber)
+{
+    // verify the object has sequences
+    if(`attributeExists Ni_Sequence $sObject` == false)
+        return(true);
+
+
+    int $iLoop;
+    $iNumSequences = `getAttr -s ($sObject + ".Ni_Sequence")`;
+
+    for($iLoop = ($iSequenceNumber + 1); $iLoop < $iNumSequences; $iLoop = $iLoop + 1)
+    {
+        if(`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseUpdateSequenceWindow(string $sObject)
+{
+    int $iSequenceNumber = `intField -q -v SequenceNumberField`;
+
+    MyImmerseSetSequenceInfo($sObject, $iSequenceNumber);
+
+    if($iSequenceNumber == -1)
+    {
+        text -e -label "Sequence 0 of 0" SequenceCurrent;
+    }
+    else
+    {
+        int $iDisplaySequenceNumber = MyImmerseGetDisplaySequenceFromCharacter ($sObject, $iSequenceNumber) ;
+        int $iMaxSequenceNumber = MyImmerseGetNumSequenceFromCharacter($sObject);
+    
+        text -e -label ("Sequence " + $iDisplaySequenceNumber + " of " + $iMaxSequenceNumber + " Sequences") SequenceCurrent;
+    }
+
+    button -e -en (MyImmerseIsFirstSequence($sObject, $iSequenceNumber) == false) SequencePrevious;
+    button -e -en (MyImmerseIsLastSequence($sObject, $iSequenceNumber) == false) SequenceNext;
+    button -e -en ($iSequenceNumber != -1) SequenceDelete;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteSequencePrevious(string $sObject)
+{
+    int $iSequenceNumber = `intField -q -v SequenceNumberField`;
+    
+    int $iNewSequence = MyImmerseGetPreviousValidSequence($sObject, $iSequenceNumber);
+
+    if( $iNewSequence != -1 )
+    {
+        intField -e -v $iNewSequence SequenceNumberField;
+    }
+
+    MyImmerseUpdateSequenceWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteSequenceNext(string $sObject)
+{
+    int $iSequenceNumber = `intField -q -v SequenceNumberField`;
+
+    int $iNewSequence = MyImmerseGetNextValidSequence($sObject, $iSequenceNumber);
+
+    if( $iNewSequence != -1 )
+    {
+        intField -e -v $iNewSequence SequenceNumberField;
+    }
+
+    MyImmerseUpdateSequenceWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteDeleteSequence (string $sObject) 
+{
+    int $iSequenceNumber = `intField -q -v SequenceNumberField`;
+
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Valid") false;
+
+    int $iNewSequence = MyImmerseGetNextValidSequence($sObject, $iSequenceNumber);
+
+    if( $iNewSequence != -1 )
+    {
+        intField -e -v $iNewSequence SequenceNumberField;
+    }
+    else
+    {
+        $iNewSequence = MyImmerseGetPreviousValidSequence($sObject, $iSequenceNumber);
+
+        intField -e -v $iNewSequence SequenceNumberField;
+    }
+
+    if($iNewSequence == -1)
+    {
+        MyImmerseSequenceDialogDeleteCharacterRoot();
+        
+        deleteAttr ($sObject + ".Ni_Sequence");
+        deleteAttr ($sObject + ".Ni_Sequence_Animation_Accumulation");
+    }
+
+    MyImmerseUpdateSequenceWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteCreateSequence (string $sObject) 
+{
+    MyImmerseCreateSequenceAttribute($sObject);
+
+    // Find the Next ValidSequenceNumber
+    int $iSequenceNumber = -1;
+    
+
+    // Look for the first available whole
+    while(MyImmerseGetNextValidSequence($sObject, $iSequenceNumber) == ($iSequenceNumber + 1))
+    {
+        $iSequenceNumber++;    
+    }
+
+    // Increment to the next place    
+    $iSequenceNumber++;
+
+    intField -e -v $iSequenceNumber SequenceNumberField;
+
+    // Create a New Sequence with the defaults
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Valid") true;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Name") -type "string" "NEW SEQUENCE";
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Start_Time") 0.0;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_End_Time") 0.0;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Looping") false;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Rot") false;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_X") false;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_Y") false;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_Z") false;
+
+    MyImmerseUpdateSequenceWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteUpdateSequence (string $sObject) 
+{
+    int $iSequenceNumber = `intField -q -v SequenceNumberField`;
+    
+    string $sSequenceName = `textFieldGrp -q -tx SequenceName`;
+    float $fStartFrame = `floatSliderGrp -q -v SequenceStartFrame`;
+    float $fEndFrame = `floatSliderGrp -q-v SequenceEndFrame`;
+    int $bLooping = `checkBoxGrp -q -v1 SequenceLooping`;
+
+    int $bAnimationAccumulation = `checkBoxGrp -q -v1 SequenceAnimationAccumulation`;
+
+    int $bRot = `checkBoxGrp -q -v1 SequenceAccumulateRotation`;
+    int $bTranX = `checkBoxGrp -q -v1 SequenceAccumulateTranslation`;
+    int $bTranY = `checkBoxGrp -q -v2 SequenceAccumulateTranslation`;
+    int $bTranZ = `checkBoxGrp -q -v3 SequenceAccumulateTranslation`;
+
+    // Force EndFrame to be Greater than the Start Frame;
+    if($fStartFrame >= $fEndFrame)
+    {
+        $fEndFrame = $fStartFrame;
+        float $fMax = `floatSliderGrp -q-max SequenceEndFrame`;
+        if (($fEndFrame + .1) <= $fMax)
+        {
+            $fEndFrame = $fEndFrame + .1;
+        }
+        
+        floatSliderGrp -e-v $fEndFrame SequenceEndFrame;
+    }
+
+    checkBoxGrp -e -en $bAnimationAccumulation SequenceAccumulateTranslation;
+
+    // Convert From Frames to Time
+    $fStartFrame = $fStartFrame / MyImmerseGetCurrentFrameRate();
+    $fEndFrame = $fEndFrame / MyImmerseGetCurrentFrameRate();
+
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Name") -type "string" $sSequenceName;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Start_Time") $fStartFrame;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_End_Time") $fEndFrame;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Looping") $bLooping;
+    setAttr ($sObject + ".Ni_Sequence_Animation_Accumulation") $bAnimationAccumulation;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Rot") $bRot;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_X") $bTranX;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_Y") $bTranY;
+    setAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Tran_Z") $bTranZ;
+
+    MyImmerseSortSequences($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateSequenceAttribute (string $sObject) 
+{
+    if(`attributeExists Ni_Sequence $sObject` == false)
+    {
+        addAttr -ln Ni_Sequence -nc 9 -at compound -m -im true $sObject;
+        addAttr -ln Ni_Sequence_Valid -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Name -dt "string" -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Start_Time -at "float" -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_End_Time -at "float" -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Looping -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Rot -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Tran_X -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Tran_Y -at bool -p Ni_Sequence $sObject;
+        addAttr -ln Ni_Sequence_Tran_Z -at bool -p Ni_Sequence $sObject;
+
+        addAttr -ln Ni_Sequence_Animation_Accumulation -at bool $sObject;
+
+        setAttr ($sObject + ".Ni_Sequence[0].Ni_Sequence_Valid") false;
+        setAttr ($sObject + ".Ni_Sequence_Animation_Accumulation") false;
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSortSequences (string $sObject) 
+{
+    int $iSequenceNumber = `intField -q -v SequenceNumberField`;
+
+    if($iSequenceNumber == -1)
+        return;
+
+    int $iNumSequences = `getAttr -s ($sObject + ".Ni_Sequence")`;
+    float $fCurrentTime = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Start_Time")`;
+    string $sCurrentName = `getAttr ($sObject + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Name")`;
+
+    int $bFound = true;
+    int $iLoop;
+
+    while($bFound == true)
+    {
+        $bFound = false;
+
+        for($iLoop = 0; $iLoop < ($iNumSequences - 1); $iLoop++)
+        {
+            float $fLowStartTime = `getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Start_Time")`;
+            float $fHighStartTime = `getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Start_Time")`;
+
+            if(((`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == false) &&
+                (`getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Valid")` == true)) ||
+               ((`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true) &&
+                (`getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Valid")` == true) &&
+                ( $fLowStartTime > $fHighStartTime)))            
+            {
+                // Get the Low Values
+                int $bLowValid = `getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")`;
+                string $sLowName = `getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Name")`;
+                float $fLowEndTime = `getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_End_Time")`;
+                int $bLowLooping = `getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Looping")`;
+                int $bLowRot = `getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Rot")`;
+                int $bLowTranX = `getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Tran_X")`;
+                int $bLowTranY = `getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Tran_Y")`;
+                int $bLowTranZ = `getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Tran_Z")`;
+
+                // Get the Hight Values
+                int $bHighValid = `getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Valid")`;
+                string $sHighName = `getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Name")`;
+                float $fHighEndTime = `getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_End_Time")`;
+                int $bHighLooping = `getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Looping")`;
+                int $bHighRot = `getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Rot")`;
+                int $bHighTranX = `getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Tran_X")`;
+                int $bHighTranY = `getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Tran_Y")`;
+                int $bHighTranZ = `getAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Tran_Z")`;
+
+                // Save the Hight values in the low spot
+                setAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid") $bHighValid;
+                setAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Name") -type "string" $sHighName;
+                setAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Start_Time") $fHighStartTime;
+                setAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_End_Time") $fHighEndTime;
+                setAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Looping") $bHighLooping;
+                setAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Rot") $bHighRot;
+                setAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Tran_X") $bHighTranX;
+                setAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Tran_Y") $bHighTranY;
+                setAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Tran_Z") $bHighTranZ;
+
+                // Save the Low Values in the hight spot
+                setAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Valid") $bLowValid;
+                setAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Name") -type "string" $sLowName;
+                setAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Start_Time") $fLowStartTime;
+                setAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_End_Time") $fLowEndTime;
+                setAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Looping") $bLowLooping;
+                setAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Rot") $bLowRot;
+                setAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Tran_X") $bLowTranX;
+                setAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Tran_Y") $bLowTranY;
+                setAttr ($sObject + ".Ni_Sequence[" + ($iLoop + 1) + "].Ni_Sequence_Tran_Z") $bLowTranZ;
+                $bFound = true;
+            }
+        }
+    }
+
+    // Search for our current entry
+    for($iLoop = 0; $iLoop < $iNumSequences; $iLoop++)
+    {
+        // If it was the entry we were looking at the reset the Tag Number Field
+        if((`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true) &&
+           (`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Name")` == $sCurrentName) &&
+           (`getAttr ($sObject + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Start_Time")` == $fCurrentTime))
+        {
+            intField -e -v $iLoop SequenceNumberField;
+        }
+    }
+
+    MyImmerseUpdateSequenceWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSequenceDialogSetCharacterRoot()
+{
+    // Get the currently selected dagNode
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) != 1)
+    {
+        warning "Only select 1 node to be the new Character Root.";
+        return;
+    }
+
+    string $szCurrentCharacter = `text -q -l CreateSequenceCharacterRootName`;
+
+    if(`attributeExists Ni_CharacterRoot $szCurrentCharacter` == 1)
+    {
+        deleteAttr ($szCurrentCharacter + ".Ni_CharacterRoot");
+    }
+
+    // Check for an Accumulation Root
+    string $szAccumRoot = MyImmerseSequenceDialogGetAccumulationRoot($dagnodes[0]);
+
+    // If there is an accumulation root above the selceted node then use it and 
+    // give a warning
+
+    if($szAccumRoot != "")
+    {
+        warning "Pre existing Accumulation Root found above the selected node. Defaulting to the Accumulation Root found";
+        $dagnodes[0] = $szAccumRoot;
+    }
+
+    addAttr -ln Ni_CharacterRoot -at bool $dagnodes[0];
+    text -e -l $dagnodes[0] CreateSequenceCharacterRootName;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSequenceDialogDeleteCharacterRoot()
+{
+    string $szCurrentCharacter = `text -q -l CreateSequenceCharacterRootName`;
+
+    if(`attributeExists Ni_CharacterRoot $szCurrentCharacter` == 1)
+    {
+        deleteAttr ($szCurrentCharacter + ".Ni_CharacterRoot");
+    }
+    
+    // Set back to the Accumulation Root
+    string $szAccumRoot = `text -q -l CreateSequenceAccumulationRootName`;
+
+    text -e -l $szAccumRoot CreateSequenceCharacterRootName;
+}
+//---------------------------------------------------------------------------
+global proc string MyImmerseSequenceDialogGetCharacterRoot(string $sObject)
+{
+    // Check to see if this is our Character Root
+    if(`attributeExists "Ni_CharacterRoot" $sObject` == 1)
+    {
+        return $sObject;
+    }
+
+    // Search up the scene graph looking for the character root tag
+    string $szParent[] = `listRelatives -p -f $sObject`;
+
+
+    print("$szParent");
+    print($szParent);
+    print("\n");
+
+    while($szParent[0] != "")
+    {
+        if(`attributeExists "Ni_CharacterRoot" $szParent[0]` == 1)
+            return $szParent[0];
+
+        $szParent = `listRelatives -p -f $szParent`;
+
+        // print ($szParent[0] + "\n");
+    }
+
+    // No Character Root Found so we default to the initial location
+    string $szAccumRoot = MyImmerseSequenceDialogGetAccumulationRoot($sObject);
+
+    if($szAccumRoot == "")
+        return $sObject;
+
+    return $szAccumRoot;
+}
+//---------------------------------------------------------------------------
+global proc string MyImmerseSequenceDialogGetAccumulationRoot(string $sObject)
+{
+    // Search up the scene graph looking for highest node with sequences
+    // Search up the scene graph looking for the character root tag
+    string $szParent[] = `listRelatives -p -f $sObject`;
+
+    // print ($szParent[0] + "\n");
+
+    string $szHighestSequence = "";
+
+    while($szParent[0] != "")
+    {
+        if(`attributeExists "Ni_Sequence" $szParent[0]` == 1)
+            $szHighestSequence = $szParent[0];
+
+        $szParent = `listRelatives -p -f $szParent`;
+
+        // print ($szParent[0] + "\n");
+    }
+
+    return $szHighestSequence;
+}
+//---------------------------------------------------------------------------
+global proc string MyImmerseSequenceDialogGetLayerRoot(string $sObject)
+{
+    // Search up the scene graph If there is anything above us then
+    // we must be a layer
+
+    if(MyImmerseSequenceDialogGetAccumulationRoot($sObject) == "")
+        return "";
+
+    return $sObject;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSequenceSetAnimationRange()
+{
+    float $fMin = `floatSliderGrp -q -v SequenceStartFrame`;
+    float $fMax = `floatSliderGrp -q -v SequenceEndFrame`;
+
+    playbackOptions -min $fMin -max $fMax;
+    currentTime $fMin;
+}
+//---------------------------------------------------------------------------
+global proc string[] MyImmerseFindAllLayerTransforms(string $sObjectName)
+{
+    // print ("Find All Layer Transform\n");
+
+    string $szChildren[] = `listRelatives -fullPath -type transform -ad $sObjectName`;
+    $szChildren[size($szChildren)] = $sObjectName;
+
+    string $szLayers[] = {};
+
+    int $iLoop = 0;
+
+    for($iLoop = 0; $iLoop < size($szChildren); $iLoop++)
+    {
+        // print ($szChildren[$iLoop] + "\n");
+
+        if(MyImmerseGetNumSequenceFromCharacter( $szChildren[$iLoop] ) > 0)
+        {
+            $szLayers[ size($szLayers) ] = $szChildren[ $iLoop ];
+        }
+    }
+
+    return $szLayers;
+}
+//---------------------------------------------------------------------------
+global proc string[] MyImmerseGetValidSequenceNames(string $sObjectName)
+{
+    string $szSequenceNames[] = {};
+
+    if (`attributeExists "Ni_Sequence" $sObjectName` == 0)
+        return $szSequenceNames;
+
+
+    // Get the Sequence Times
+    int $iNumSequences = `getAttr -s ($sObjectName + ".Ni_Sequence")`;
+
+    // print ($iNumSequences + "\n");
+
+    int $iSequence = 0;
+    int $iLoop;
+    float $fFrameRate = MyImmerseGetCurrentFrameRate();
+
+    for( $iLoop = 0; $iLoop < $iNumSequences; $iLoop++)
+    {
+        if(`getAttr ($sObjectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            $szSequenceNames[$iSequence++] = `getAttr ($sObjectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Name")`;
+        }
+    }
+
+    return $szSequenceNames;
+}
+//---------------------------------------------------------------------------
+global proc float[] MyImmerseGetValidSequenceFrames(string $sObjectName)
+{
+    float $fSequenceTimes[] = {};
+
+    if (`attributeExists "Ni_Sequence" $sObjectName` == 0)
+        return $fSequenceTimes;
+
+    // Get the Sequence Times
+    int $iNumSequences = `getAttr -s ($sObjectName + ".Ni_Sequence")`;
+
+    // print ($iNumSequences + "\n");
+
+    int $iSequenceTime = 0;
+    int $iLoop;
+    float $fFrameRate = MyImmerseGetCurrentFrameRate();
+
+    for( $iLoop = 0; $iLoop < $iNumSequences; $iLoop++)
+    {
+        if(`getAttr ($sObjectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            $fSequenceTimes[$iSequenceTime++] = `getAttr ($sObjectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Start_Time")` * $fFrameRate;
+            $fSequenceTimes[$iSequenceTime++] = `getAttr ($sObjectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_End_Time")` * $fFrameRate;
+            // print("Time " + $fSequenceTimes[$iSequenceTime -2] + " " + $fSequenceTimes[$iSequenceTime -1] + "\n");
+        }
+    }
+
+    return $fSequenceTimes;
+}
+//---------------------------------------------------------------------------
+global proc float[] MyImmerseMergeSequenceFrames(float $fSequences1[], float $fSequences2[])
+{
+    int $iCurrentTotal = 0;
+    float $fTotal[];
+
+    int $iCurrent1 = 0;
+    int $iCurrent2 = 0;
+    float $fTime1 = 0;
+    float $fTime2 = 0;
+
+    while (($iCurrent1 < size($fSequences1)) && ($iCurrent2 < size($fSequences2)))
+    {
+        $fTime1 = 1000000;
+        $fTime2 = 1000000;
+
+        if ($iCurrent1 < size($fSequences1))
+        {
+            $fTime1 = $fSequences1[$iCurrent1];
+        }
+
+        if ($iCurrent2 < size($fSequences2))
+        {
+            $fTime2 = $fSequences2[$iCurrent2];
+        }
+
+        if ($fTime1 < $fTime2)
+        {
+            $fTotal[$iCurrentTotal++] = $fTime1;
+            $iCurrent1++;
+        }
+        else
+        {
+            $fTotal[$iCurrentTotal++] = $fTime2;
+            $iCurrent2++;
+        }
+    }
+
+    return $fTotal;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSequenceReduceAnimationKeys(string $sObjectName, 
+    int $iCurrentSequenceOnly)
+{
+    // print ("Object =" + $sObjectName + "\n");
+
+
+    // Find the Accumulation Root so we can collect all layer info
+    string $szAccumRoot = MyImmerseSequenceDialogGetAccumulationRoot($sObjectName);
+
+    if ($szAccumRoot == "")
+    {
+        $szAccumRoot = $sObjectName;
+    }
+
+    // print ("Accumulation Root " + $szAccumRoot + "\n");
+
+    string $szTransforms[] = MyImmerseFindAllLayerTransforms($szAccumRoot);
+
+    // Append on the root of the character
+    $szTransforms[ size($szTransforms) ] = $szAccumRoot;
+
+    float $fSequenceTimes[] = {};
+
+    int $iLoop = 0;
+
+    for( $iLoop = 0; $iLoop < size($szTransforms); $iLoop++)
+    {
+        // print ("Transform: " + $szTransforms[$iLoop] + "\n");
+
+        float $fLayerFrames[] = {};
+        $fLayerFrames = MyImmerseGetValidSequenceFrames( $szTransforms[$iLoop] );
+
+        float $fSequenceTemp[] = {};
+        $fSequenceTemp = MyImmerseMergeSequenceFrames($fSequenceTimes, $fLayerFrames);
+
+        $fSequenceTimes = $fSequenceTemp;
+    }
+
+    float $fFrameRate = MyImmerseGetCurrentFrameRate();
+
+    float $fStartTime = -10000000;
+    float $fEndTime = 10000000;    
+
+    // Check for Current Sequence Only
+    if ($iCurrentSequenceOnly == 1)
+    {
+        int $iSequenceNumber = `intField -q -v SequenceNumberField`;
+
+        $fStartTime = `getAttr ($sObjectName + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_Start_Time")` * $fFrameRate;
+        $fEndTime = `getAttr ($sObjectName + ".Ni_Sequence[" + $iSequenceNumber + "].Ni_Sequence_End_Time")` * $fFrameRate;
+    }
+
+    MyImmerseKeyFrameReduction($sObjectName, $fStartTime, $fEndTime, 1, 0.01, $fSequenceTimes);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseBakeSequences(string $sObjectName)
+{
+    // Find the starting time and the ending time for our bake
+    // print ("Object =" + $sObjectName + "\n");
+
+    // Get the Sequence Times
+    int $iNumSequences = `getAttr -s ($sObjectName + ".Ni_Sequence")`;
+
+    // print ($iNumSequences + "\n");
+
+    int $iSequenceTime = 0;
+    int $iLoop;
+    float $fFrame = 0;
+    float $fMinFrame = 1000000;
+    float $fMaxFrame = -1000000;
+
+    float $fFrameRate = MyImmerseGetCurrentFrameRate();
+
+    for( $iLoop = 0; $iLoop < $iNumSequences; $iLoop++)
+    {
+        if(`getAttr ($sObjectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Valid")` == true)
+        {
+            $fFrame = `getAttr ($sObjectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_Start_Time")` * $fFrameRate;
+
+            if ($fFrame < $fMinFrame)
+            {
+                $fMinFrame = $fFrame;
+            }
+
+            if ($fFrame > $fMaxFrame)
+            {
+                $fMaxFrame = $fFrame;
+            }
+
+            $fFrame = `getAttr ($sObjectName + ".Ni_Sequence[" + $iLoop + "].Ni_Sequence_End_Time")` * $fFrameRate;
+
+            if ($fFrame < $fMinFrame)
+            {
+                $fMinFrame = $fFrame;
+            }
+
+            if ($fFrame > $fMaxFrame)
+            {
+                $fMaxFrame = $fFrame;
+            }
+
+        }
+    }
+
+    string $sRange = ($fMinFrame + ":" + $fMaxFrame);
+
+    bakeResults -simulation true -t $sRange -hierarchy below -sampleBy 1 -disableImplicitControl true -preserveOutsideKeys true -sparseAnimCurveBake false -controlPoints false -shape true {$sObjectName};
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateSequenceDialog()
+{
+
+    // ONLY ALLOW ONE WINDOW AT A TIME SO WE WILL DELETE IT IF IT EXISTS
+
+    // Check if the window exists
+    if( MyImmerseWindowExists("SequenceWindow") )
+    {
+        deleteUI SequenceWindow;
+    }
+
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) != 1)
+    {
+        if(size($dagnodes) <= 0)
+        {
+            error "ERROR::No Objects Selected";
+        }
+        else
+        {
+            error "ERROR::Multiple Objects Selected";
+        }
+        
+        return;
+    }
+
+    window -title "Sequence Window" -widthHeight 460 435 SequenceWindow;
+
+    columnLayout;
+
+    string $sObject = $dagnodes[0];
+    int $iSequenceNumber = MyImmerseGetNextValidSequence($sObject, -1);
+    int $iDisplaySequenceNumber = MyImmerseGetDisplaySequenceFromCharacter ($sObject, $iSequenceNumber) ;
+    int $iMaxSequenceNumber = MyImmerseGetNumSequenceFromCharacter($sObject);
+
+    intField -v 0 -ed false -vis false SequenceNumberField;
+
+    string $szCharacterRoot = MyImmerseSequenceDialogGetCharacterRoot($sObject);
+    string $szAccumulationRoot = MyImmerseSequenceDialogGetAccumulationRoot($sObject);
+    string $szLayerRoot = MyImmerseSequenceDialogGetLayerRoot($sObject);
+
+    // If the Accumulation Root is Null Default to the object we selected
+    if($szAccumulationRoot == "")
+        $szAccumulationRoot = $sObject;
+
+    text -label "";
+
+    rowLayout -nc 4 -adj 2 -cw 1 130;
+        
+        text -l "  Character Root:" -al "left" -fn "boldLabelFont" -w 130;
+
+        text -l $szCharacterRoot -al "left" CreateSequenceCharacterRootName;
+
+        button 
+            -label "Set to Selected" 
+            -c "MyImmerseSequenceDialogSetCharacterRoot"
+            ChangeCharacterButton;
+
+        button 
+            -label "Delete" 
+            -c "MyImmerseSequenceDialogDeleteCharacterRoot"
+            DeleteCharacterButton;
+
+    setParent ..; // RowLayout
+
+    text -label "";
+        
+    rowLayout -nc 2 -cw 1 130;
+        text -l "  Accumulation Root:" -al "left" -fn "boldLabelFont" -w 130;
+        text -l $szAccumulationRoot -al "left" CreateSequenceAccumulationRootName;
+    setParent ..; // RowLayout
+
+    text -label "";
+
+    rowLayout -nc 2 -cw 1 130 -vis ($szLayerRoot != "") SequenceLayerLayout;
+        text -l "  Layer Root: " -al "left" -fn "boldLabelFont" -w 130;
+        text -l $szLayerRoot -al "left" ;
+    setParent ..; // RowLayout
+
+    text -label "";
+
+    text -label "  Allow Animation Accumulation for All Sequences:" AccumulationSpacer;
+
+    checkBoxGrp 
+        -label "  Animation Accumulation" 
+        -ncb 1 
+        -label1 ""
+        -en ($szLayerRoot == "")
+        -changeCommand ("MyImmerseExecuteUpdateSequence " + $sObject)
+        SequenceAnimationAccumulation;
+
+    text -label "" AccumulationSpacer2;
+
+    text 
+        -label ("  Sequence " + $iDisplaySequenceNumber + " of " + $iMaxSequenceNumber + " Sequences") 
+        -fn "boldLabelFont" 
+        -w 300
+        -al "left"
+        SequenceCurrent;
+
+    text -label "" SequenceSpacer;
+
+    textFieldGrp 
+        -label "Sequence Name" 
+        -changeCommand ("MyImmerseExecuteUpdateSequence " + $sObject)
+        SequenceName;
+
+    floatSliderGrp 
+        -l "Start Frame" 
+        -field true 
+        -min 0.0 
+        -fmn 0.0
+        -max 100.0
+        -fmx 1000000.0
+        -changeCommand ("MyImmerseExecuteUpdateSequence " + $sObject)
+        SequenceStartFrame;
+
+    floatSliderGrp 
+        -l "End Frame" 
+        -field true 
+        -min 0.0 
+        -fmn 0.0 
+        -max 100.0
+        -fmx 1000000.0
+        -changeCommand ("MyImmerseExecuteUpdateSequence " + $sObject)
+        SequenceEndFrame;
+
+    checkBoxGrp 
+        -label "Looping" 
+        -ncb 1 
+        -label1 "" 
+        -changeCommand ("MyImmerseExecuteUpdateSequence " + $sObject)
+        SequenceLooping;
+    
+
+    checkBoxGrp 
+        -label "Accumulate Rotation" 
+        -ncb 1 
+        -label1 "" 
+        -changeCommand ("MyImmerseExecuteUpdateSequence " + $sObject)
+        SequenceAccumulateRotation;
+
+    checkBoxGrp 
+        -label "Accumulate Translation" 
+        -ncb 3 
+        -label1 "X" 
+        -label2 "Y" 
+        -label3 "Z" 
+        -changeCommand ("MyImmerseExecuteUpdateSequence " + $sObject)
+        SequenceAccumulateTranslation;
+
+
+    text -label "" SequenceSpacer4;
+
+    rowLayout -nc 4;
+        
+        text -label "" SequenceSpacer5;
+
+        button 
+            -label "Previous" 
+            -en (MyImmerseIsFirstSequence($sObject, $iSequenceNumber) == false)
+            -c ("MyImmerseExecuteSequencePrevious " + $sObject)
+            SequencePrevious;
+
+        button 
+            -label "Next" 
+            -en (MyImmerseIsLastSequence($sObject, $iSequenceNumber) == false)
+            -c ("MyImmerseExecuteSequenceNext " + $sObject)
+            SequenceNext;
+
+        button
+            -label "Jump to Animation"
+            -c "MyImmerseSequenceSetAnimationRange()"
+            JumpToAnimation;
+
+    setParent ..; // columnLayout
+
+    text -label "" SequenceSpacer3;
+
+    rowLayout -nc 3;
+
+        text -label "" SequenceSpacer6;
+
+        button 
+            -label "Create Sequence" 
+            -c ("MyImmerseExecuteCreateSequence " + $sObject) 
+            SequenceCreate;
+
+        button 
+            -label "Delete Sequence" 
+            -c ("MyImmerseExecuteDeleteSequence " + $sObject) 
+            -en ($iSequenceNumber != -1)
+            SequenceDelete;
+
+    setParent ..; // columnLayout
+
+    MyImmerseSetSequenceInfo($sObject, $iSequenceNumber );
+
+    showWindow SequenceWindow;
+}
+//---------------------------------------------------------------------------

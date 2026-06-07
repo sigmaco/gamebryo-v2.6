@@ -1,0 +1,129 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PHYSXVIEWER_OPTIONS DIALOGEX 0, 0, 166, 238
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "PhysX Viewer Options"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Select PhysX viewer options:",IDC_STATIC,6,6,93,8
+    CONTROL         "Generate debug output",IDC_CHECK_DEBUGOUTPUT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,21,20,91,10
+    LTEXT           "Gravity:",IDC_STATIC,22,38,27,8
+    EDITTEXT        IDC_EDIT_GRAVITY_X,54,36,23,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_GRAVITY_Y,84,36,23,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_GRAVITY_Z,114,36,23,14,ES_AUTOHSCROLL
+    CTEXT           "X",IDC_STATIC,60,51,8,8
+    CTEXT           "Y",IDC_STATIC,90,51,8,8
+    CTEXT           "Z",IDC_STATIC,120,51,8,8
+    GROUPBOX        "Ground Plane",IDC_STATIC,21,61,120,48
+    CONTROL         "Enable ground plane",IDC_CHECK_GROUNDPLANE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,27,73,81,10
+    LTEXT           "Height:",IDC_STATIC,39,91,24,8
+    EDITTEXT        IDC_EDIT_GROUNDHEIGHT,65,88,40,14,ES_AUTOHSCROLL
+    GROUPBOX        "Resolution",IDC_STATIC,21,113,120,60
+    CONTROL         "Windowed",IDC_RADIO_WINDOWED,"Button",
+                    BS_AUTORADIOBUTTON,27,125,49,10
+    CONTROL         "Full Screen",IDC_RADIO_FULLSCREEN,"Button",
+                    BS_AUTORADIOBUTTON,81,125,51,10
+    LTEXT           "Width:",IDC_STATIC,27,137,22,8
+    LTEXT           "Height:",IDC_STATIC,81,137,24,8
+    EDITTEXT        IDC_EDIT_RESOLUTIONWIDTH,27,149,40,14,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_EDIT_RESOLUTIONHEIGHT,81,149,40,14,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    GROUPBOX        "Renderer Type",IDC_STATIC,21,180,120,30
+    CONTROL         "DX9",IDC_RADIO_DX9,"Button",BS_AUTORADIOBUTTON,41,194,
+                    29,10
+    CONTROL         "D3D10",IDC_RADIO_D3D10,"Button",BS_AUTORADIOBUTTON,86,
+                    194,37,10
+    DEFPUSHBUTTON   "OK",IDOK,27,217,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,87,217,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_PHYSXVIEWER_OPTIONS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 159
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 231
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

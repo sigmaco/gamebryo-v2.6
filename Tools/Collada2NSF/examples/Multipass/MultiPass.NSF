@@ -1,0 +1,163 @@
+// --------------------------------------------------------------------------
+// This file has been generated from a COLLADA FX File. Do not edit manually.
+// --------------------------------------------------------------------------
+
+NSFShader Default_Material
+{
+    "Multipass Example"
+    "This shader is a multipass example"
+    "The individual passes are simple enough that they could probably be"
+    "combined into a single pass with little effort, so don't use this as"
+    "an example of how to partition the work, just how to create multiple"
+    "passes"
+
+    Attributes
+    {
+        // WorldViewProj:WORLDVIEWPROJECTION
+        Attrib_Transform WorldViewProj Hidden 1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0
+        // time:TIME
+        Attrib_Float time Hidden 0.0
+        // MaterialColor:DIFFUSE
+        Attrib_Color MaterialColor Artist 0.5,0.0,0.5,1.0
+        // diffuseMap:
+        Attrib_Texture diffuseMap Artist "diffuse.bmp"
+    }
+    Implementation PS3CG
+    {
+        Requirements 
+        {
+            Platform = PS3
+            UsesNIRenderState = true
+            UsesNILighting = false
+        }
+        Pass shadow
+        {
+            RenderStates
+            {
+                AlphaBlendEnable = false
+                AlphaTestEnable = false
+                CullFaceEnable = true
+                ZEnable = ZB_True
+                ZFunc = LessEqual
+                PolygonModeFace = Back
+            }
+            VSProgram "MultipassSample.cgfx" vmain_shadow
+            VS_Constantmap
+            {
+                CM_Defined WorldViewProjection WorldViewProj 0 
+            }
+            PSProgram "MultipassSample.cgfx" fmain_unchanged
+        }
+
+        Pass green_right
+        {
+            RenderStates
+            {
+                AlphaBlendEnable = true
+                AlphaTestEnable = false
+                CullFaceEnable = false
+                SrcBlend = SrcAlpha
+                DestBlend = InvSrcAlpha
+                ZEnable = ZB_False
+                ZWriteEnable = false
+                ZFunc = LessEqual
+                PolygonModeFace = Front
+            }
+            VSProgram "MultipassSample.cgfx" vmain_greenright
+            VS_Constantmap
+            {
+                CM_Defined WorldViewProjection WorldViewProj 0 
+            }
+            PSProgram "MultipassSample.cgfx" fmain_unchanged
+        }
+
+        Pass red_left
+        {
+            RenderStates
+            {
+                AlphaBlendEnable = true
+                AlphaTestEnable = false
+                CullFaceEnable = false
+                SrcBlend = SrcAlpha
+                DestBlend = InvSrcAlpha
+                ZEnable = ZB_False
+                ZWriteEnable = false
+                ZFunc = LessEqual
+                PolygonModeFace = Front
+            }
+            VSProgram "MultipassSample.cgfx" vmain_redleft
+            VS_Constantmap
+            {
+                CM_Defined WorldViewProjection WorldViewProj 0 
+            }
+            PSProgram "MultipassSample.cgfx" fmain_unchanged
+        }
+
+        Pass wavy_overlay0
+        {
+            RenderStates
+            {
+                AlphaBlendEnable = true
+                AlphaTestEnable = false
+                CullFaceEnable = true
+                SrcBlend = SrcAlpha
+                DestBlend = InvSrcAlpha
+                ZEnable = ZB_False
+                ZWriteEnable = false
+                ZFunc = LessEqual
+            }
+            VSProgram "MultipassSample.cgfx" vmain_pulsealpha
+            VS_Constantmap
+            {
+                CM_Attribute  0 0 0
+                CM_Attribute  0 0 0
+                CM_Defined WorldViewProjection WorldViewProj 0 
+                CM_Defined time time 0 
+            }
+            Sampler 1 DiffuseMapSampler
+            {
+                TSS_Texture = <diffuseMap>
+                TSAMP_AddressU = TADDR_WRAP
+                TSAMP_AddressV = TADDR_WRAP
+                TSAMP_MinFilter = TEXF_LINEAR
+                TSAMP_MagFilter = TEXF_LINEAR
+                TSAMP_MipFilter = TEXF_LINEAR
+            }
+            PSProgram "MultipassSample.cgfx" fmain_tex
+        }
+
+        Pass wavy_overlay1
+        {
+            RenderStates
+            {
+                AlphaBlendEnable = true
+                AlphaTestEnable = false
+                CullFaceEnable = true
+                SrcBlend = SrcAlpha
+                DestBlend = InvSrcAlpha
+                ZEnable = ZB_False
+                ZWriteEnable = false
+                ZFunc = LessEqual
+            }
+            VSProgram "MultipassSample.cgfx" vmain_pulsealpha
+            VS_Constantmap
+            {
+                CM_Attribute  0 0 0
+                CM_Attribute  0 0 0
+                CM_Defined WorldViewProjection WorldViewProj 0 
+                CM_Defined time time 0 
+            }
+            Sampler 1 DiffuseMapSampler
+            {
+                TSS_Texture = <diffuseMap>
+                TSAMP_AddressU = TADDR_WRAP
+                TSAMP_AddressV = TADDR_WRAP
+                TSAMP_MinFilter = TEXF_LINEAR
+                TSAMP_MagFilter = TEXF_LINEAR
+                TSAMP_MipFilter = TEXF_LINEAR
+            }
+            PSProgram "MultipassSample.cgfx" fmain_tex
+        }
+
+    }
+}

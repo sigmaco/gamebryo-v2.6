@@ -1,0 +1,113 @@
+<?xml version="1.0" ?>
+<Menu>
+    <MenuItem name="[10]File">
+        <MenuItem name="New">
+            <Command name="NewFile"/>
+        </MenuItem>
+        <MenuItem name="Open...">
+            <Command name = "OpenFile"/>
+        </MenuItem>
+        <MenuItem name="Recent">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="-">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="&amp;Save">
+            <Command name="SaveFile"/>
+        </MenuItem>
+        <MenuItem name="Save &amp;As...">
+            <Command name="SaveFileAs"/>
+        </MenuItem>
+        <MenuItem name="-">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="Change Palette Folder">
+            <Command name="ChangePaletteFolder"/>
+        </MenuItem>
+        <MenuItem name="-">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="Exit">
+            <Command name="Exit"/>
+        </MenuItem>
+    </MenuItem>
+    <MenuItem name="[20]Edit">
+        <MenuItem name="Undo">
+            <Command name="Undo"/>
+        </MenuItem>
+        <MenuItem name="Redo">
+            <Command name="Redo"/>
+        </MenuItem>
+        <MenuItem name="-">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="Clone Selection">
+			<Command name="CloneSelection"/>
+        </MenuItem>
+        <MenuItem name="-">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="Select All Entities">
+            <Command name="SelectAllEntities"/>
+        </MenuItem>
+        <MenuItem name="Deselect All Entities">
+            <Command name="DeselectAllEntities"/>
+        </MenuItem>
+        <MenuItem name="-">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="Add Tag to Selected Entities">
+            <Command name="AddTagToSelectedEntities"/>
+        </MenuItem>
+        <MenuItem name="Remove Tags from Selected Entities">
+            <Command name="RemoveTagsFromSelectedEntities"/>
+        </MenuItem>
+        <MenuItem name="Edit Common Tags on Selected Entities">
+            <Command name="EditCommonTagsOnSelectedEntities"/>
+        </MenuItem>
+    </MenuItem>
+    <MenuItem name="[30]View">
+        <MenuItem name="Command Panels">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="-">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="Create Camera From Viewport">
+            <Command name="CreateCameraFromViewport"/>
+        </MenuItem>
+        <MenuItem name="Launch External Application">
+            <Command name="LaunchExternalApplication"/>
+        </MenuItem>
+        <MenuItem name="-">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="Reset Viewport Cameras">
+            <Command name="ResetViewportCameras"/>
+        </MenuItem>
+        <MenuItem name="Reset Window Layout...">
+            <Command name="ResetWindowLayout"/>
+        </MenuItem>
+        <MenuItem name="-">
+            <CustomMenu/>
+        </MenuItem>
+        <MenuItem name="Options...">
+            <Command name="Options"/>
+        </MenuItem>
+    </MenuItem>
+    <MenuItem name="[100]Help">
+        <MenuItem name="Contents">
+            <Command name="HelpContents"/>
+        </MenuItem>
+        <MenuItem name="Index">
+            <Command name="HelpIndex"/>
+        </MenuItem>
+        <MenuItem name="Search">
+            <Command name="HelpSearch"/>
+        </MenuItem>
+        <MenuItem name="About Gamebryo Scene Designer...">
+            <Command name="HelpAbout"/>
+        </MenuItem>
+    </MenuItem>
+</Menu>   

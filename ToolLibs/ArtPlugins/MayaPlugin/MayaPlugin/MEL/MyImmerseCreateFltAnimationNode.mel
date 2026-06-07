@@ -1,0 +1,28 @@
+//
+// MyImmerseCreateFltAnimationNode.mel
+//
+// Mel script for applying Net Immerse Attributes to a Group to make it 
+// a Flt Animation Node
+
+
+global proc MyImmerseCreateFltAnimationNode()
+{
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) <= 0)
+        return;
+
+    string $groupName = $dagnodes[0];
+
+    if(size($dagnodes) > 1)
+    {
+        $groupName = `group`;
+    }
+
+    addAttr -ln Ni_FltAnimationNode -at bool $groupName;
+    addAttr -ln Ni_FltAnimationBounce -at bool $groupName;
+    addAttr -ln Ni_FltAnimationUpdateAll -at bool $groupName;
+    addAttr -ln Ni_FltAnimationPeriod -at "float" -min 0.0 -dv 1.0 $groupName;
+}

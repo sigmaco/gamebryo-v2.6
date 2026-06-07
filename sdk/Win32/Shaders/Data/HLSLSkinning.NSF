@@ -1,0 +1,86 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader HLSLSkinning
+{
+    "This shader performs skinning in the vertex shader using 20 bones. "
+    "It uses HLSL shaders referenced by an NSF shader. "
+    "This shader does not transform normals and "
+    "cannot perform lighting calculations. This shader does apply a base map. "
+
+    // Packing Definition
+    PackingDef PosBlendWeightBlendIndicesUV0
+    {
+        PD_Stream   0
+            PDP_Position        0   PDT_Float3
+            PDP_BlendWeights    1   PDT_Float3
+            PDP_BlendIndices    2   PDT_UByteColor
+            PDP_TexCoord0       7   PDT_Float2
+    }
+    
+    // Implementation
+    Implementation VS11PS11
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v1.1."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform                = DX9|XENON
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v2.0
+            BonesPerPartition       = 20
+            UsesNiRenderState       = true
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosBlendWeightBlendIndicesUV0
+
+        // 'Global' render states
+        RenderStates
+        {
+            Lighting            = false
+        }
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "SimpleSkinning.hlsl" VS vs_1_1
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      ViewProj   ViewProjMatrix   0
+                CM_Defined      SkinBoneMatrix3 Bone                0   20
+            }
+            
+            PSProgram   "SimpleSkinning.hlsl" PS ps_2_0
+
+            // Sampler stage 0
+            Sampler 0   Sampler0
+            {
+                TSS_Texture     = NTM_Base
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+    }
+}
+

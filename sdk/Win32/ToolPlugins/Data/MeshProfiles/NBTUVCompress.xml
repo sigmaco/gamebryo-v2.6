@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeshProfiles version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./NiMeshProfileSchema.xsd">
+    <MeshProfile name="NBTUVCompress" description="Compresses Normal, Binormal, Tangent, and UV data. 
+        UV data will be clamped to a range of 0 and 1. Morphing is not supported.">
+        <FinalizeStream name="Indices">
+            <Element convertformat="UINT16" converttype="SMARTCLAMP">INDEX</Element>
+        </FinalizeStream>
+        <FinalizeStream name="BaseVertexStream">
+            <Element>POSITION</Element>
+            <Element type="NORMAL" convertformat="INT8" converttype="NORMALIZE" renderer="D3D10">
+                <Component value="NORMAL.X"/>
+                <Component value="NORMAL.Y"/>
+                <Component value="NORMAL.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="NORMAL" convertformat="INT16" converttype="NORMALIZE" renderer="DX9">
+                <Component value="NORMAL.X"/>
+                <Component value="NORMAL.Y"/>
+                <Component value="NORMAL.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="NORMAL" convertformat="INT16" converttype="NORMALIZE" renderer="XENON">
+                <Component value="NORMAL.X"/>
+                <Component value="NORMAL.Y"/>
+                <Component value="NORMAL.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="NORMAL" convertformat="INT16" converttype="NORMALIZE" renderer="PS3">
+                <Component value="NORMAL.X"/>
+                <Component value="NORMAL.Y"/>
+                <Component value="NORMAL.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="COLOR" convertformat="UINT8" converttype="NORMALIZE" range="0-7">COLOR</Element>
+            <Element convertformat="INT16" converttype="NORMALIZE" range="0-7">TEXCOORD</Element>
+            <Element type="BINORMAL" convertformat="INT8" converttype="NORMALIZE" renderer="D3D10">
+                <Component value="BINORMAL.X"/>
+                <Component value="BINORMAL.Y"/>
+                <Component value="BINORMAL.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="BINORMAL" convertformat="INT16" converttype="NORMALIZE" renderer="DX9">
+                <Component value="BINORMAL.X"/>
+                <Component value="BINORMAL.Y"/>
+                <Component value="BINORMAL.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="BINORMAL" convertformat="INT16" converttype="NORMALIZE" renderer="XENON">
+                <Component value="BINORMAL.X"/>
+                <Component value="BINORMAL.Y"/>
+                <Component value="BINORMAL.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="BINORMAL" convertformat="INT16" converttype="NORMALIZE" renderer="PS3">
+                <Component value="BINORMAL.X"/>
+                <Component value="BINORMAL.Y"/>
+                <Component value="BINORMAL.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="TANGENT" convertformat="INT8" converttype="NORMALIZE" renderer="D3D10">
+                <Component value="TANGENT.X"/>
+                <Component value="TANGENT.Y"/>
+                <Component value="TANGENT.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="TANGENT" convertformat="INT16" converttype="NORMALIZE" renderer="DX9">
+                <Component value="TANGENT.X"/>
+                <Component value="TANGENT.Y"/>
+                <Component value="TANGENT.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="TANGENT" convertformat="INT16" converttype="NORMALIZE" renderer="XENON">
+                <Component value="TANGENT.X"/>
+                <Component value="TANGENT.Y"/>
+                <Component value="TANGENT.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="TANGENT" convertformat="INT16" converttype="NORMALIZE" renderer="PS3">
+                <Component value="TANGENT.X"/>
+                <Component value="TANGENT.Y"/>
+                <Component value="TANGENT.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element strict="STRICT_FORMAT" convertformat="UINT8" converttype="TYPECLAMP">BLENDINDICES</Element>
+            <Element>POSITION_BP</Element>
+            <Element type="NORMAL_BP" convertformat="INT8" converttype="NORMALIZE" renderer="D3D10">
+                <Component value="NORMAL_BP.X"/>
+                <Component value="NORMAL_BP.Y"/>
+                <Component value="NORMAL_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="NORMAL_BP" convertformat="INT16" converttype="NORMALIZE" renderer="DX9">
+                <Component value="NORMAL_BP.X"/>
+                <Component value="NORMAL_BP.Y"/>
+                <Component value="NORMAL_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="NORMAL_BP" convertformat="INT16" converttype="NORMALIZE" renderer="XENON">
+                <Component value="NORMAL_BP.X"/>
+                <Component value="NORMAL_BP.Y"/>
+                <Component value="NORMAL_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="NORMAL_BP" convertformat="INT16" converttype="NORMALIZE" renderer="PS3">
+                <Component value="NORMAL_BP.X"/>
+                <Component value="NORMAL_BP.Y"/>
+                <Component value="NORMAL_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="BINORMAL_BP" convertformat="INT8" converttype="NORMALIZE" renderer="D3D10">
+                <Component value="BINORMAL_BP.X"/>
+                <Component value="BINORMAL_BP.Y"/>
+                <Component value="BINORMAL_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="BINORMAL_BP" convertformat="INT16" converttype="NORMALIZE" renderer="DX9">
+                <Component value="BINORMAL_BP.X"/>
+                <Component value="BINORMAL_BP.Y"/>
+                <Component value="BINORMAL_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="BINORMAL_BP" convertformat="INT16" converttype="NORMALIZE" renderer="XENON">
+                <Component value="BINORMAL_BP.X"/>
+                <Component value="BINORMAL_BP.Y"/>
+                <Component value="BINORMAL_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="BINORMAL_BP" convertformat="INT16" converttype="NORMALIZE" renderer="PS3">
+                <Component value="BINORMAL_BP.X"/>
+                <Component value="BINORMAL_BP.Y"/>
+                <Component value="BINORMAL_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="TANGENT_BP" convertformat="INT8" converttype="NORMALIZE" renderer="D3D10">
+                <Component value="TANGENT_BP.X"/>
+                <Component value="TANGENT_BP.Y"/>
+                <Component value="TANGENT_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="TANGENT_BP" convertformat="INT16" converttype="NORMALIZE" renderer="DX9">
+                <Component value="TANGENT_BP.X"/>
+                <Component value="TANGENT_BP.Y"/>
+                <Component value="TANGENT_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="TANGENT_BP" convertformat="INT16" converttype="NORMALIZE" renderer="XENON">
+                <Component value="TANGENT_BP.X"/>
+                <Component value="TANGENT_BP.Y"/>
+                <Component value="TANGENT_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element type="TANGENT_BP" convertformat="INT16" converttype="NORMALIZE" renderer="PS3">
+                <Component value="TANGENT_BP.X"/>
+                <Component value="TANGENT_BP.Y"/>
+                <Component value="TANGENT_BP.Z"/>
+                <Component value="0"/>
+            </Element>
+            <Element name="BLENDWEIGHT" type="BLENDWEIGHT">
+                <Component value="BLENDWEIGHT.0" />
+                <Component value="BLENDWEIGHT.1" />
+                <Component value="BLENDWEIGHT.2" />
+            </Element>
+        </FinalizeStream>
+        <FinalizeStream name="BoneIndexRemapStream">
+            <Element>BONE_PALETTE</Element>
+        </FinalizeStream>
+    </MeshProfile>
+</MeshProfiles>

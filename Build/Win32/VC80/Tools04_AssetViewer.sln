@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetViewer", "..\..\..\Tools\AssetViewer\Win32\VC80\AssetViewer.vcproj", "{BD33B8E3-65A3-443E-BAA5-E1073CE90D49}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools04_AssetViewer", "Tools04_AssetViewer", "{FF5DBDD0-1A1A-4ACC-A0BC-73AD396EF016}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL|Win32 = Debug DLL|Win32
+		Debug With Release DLL|Win32 = Debug With Release DLL|Win32
+		Release DLL|Win32 = Release DLL|Win32
+		Shipping DLL|Win32 = Shipping DLL|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD33B8E3-65A3-443E-BAA5-E1073CE90D49}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{BD33B8E3-65A3-443E-BAA5-E1073CE90D49}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{BD33B8E3-65A3-443E-BAA5-E1073CE90D49}.Debug With Release DLL|Win32.ActiveCfg = Debug With Release DLL|Win32
+		{BD33B8E3-65A3-443E-BAA5-E1073CE90D49}.Debug With Release DLL|Win32.Build.0 = Debug With Release DLL|Win32
+		{BD33B8E3-65A3-443E-BAA5-E1073CE90D49}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{BD33B8E3-65A3-443E-BAA5-E1073CE90D49}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{BD33B8E3-65A3-443E-BAA5-E1073CE90D49}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{BD33B8E3-65A3-443E-BAA5-E1073CE90D49}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BD33B8E3-65A3-443E-BAA5-E1073CE90D49} = {FF5DBDD0-1A1A-4ACC-A0BC-73AD396EF016}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+    Name="GB_Target_PhysX_DynamicLib"
+    InheritedPropertySheets="GB_PhysX_Compile.vsprops"
+	>
+	<Tool
+        Name="VCLinkerTool"
+        AdditionalLibraryDirectories="&quot;$(PHYSXINSTALLPATH)\SDKs\lib\win32\&quot;"
+        AdditionalDependencies="PhysXLoader.lib"
+	/>
+</VisualStudioPropertySheet>

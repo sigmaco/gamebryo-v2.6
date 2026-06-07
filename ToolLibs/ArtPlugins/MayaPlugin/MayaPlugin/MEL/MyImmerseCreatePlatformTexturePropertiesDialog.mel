@@ -1,0 +1,702 @@
+//
+// MyImmerseCreatePlatformTexturePropertiesDialog.mel
+//
+// Mel script for applying Net Immerse Attributes to a File Texture
+
+global proc CopyAllAttributes()
+{
+    // Return dag objects only
+    string $FileTextures[];
+    $FileTextures = `ls -sl -typ file`;
+
+    string $szFirst = $FileTextures[0];
+
+    // Obtain the settings off the first file texture
+    int $iGenericFormat = `getAttr($szFirst + ".Ni_Generic_Format")`;
+    int $iGenericTextureSize = `getAttr($szFirst + ".Ni_Generic_Texture_Size")`;
+    int $iGenericLocation = `getAttr($szFirst + ".Ni_Generic_Location")`;
+    int $iGenericLoadDirectlyToRenderer = `getAttr($szFirst + ".Ni_Generic_Load_Directly_To_Renderer")`;
+    int $iNextGenXBoxFormat = `getAttr($szFirst + ".Ni_Next_Gen_XBox_Format")`;
+    int $iNextGenXBoxTextureSize = `getAttr($szFirst + ".Ni_Next_Gen_XBox_Texture_Size")`;
+    int $iNextGenXBoxLocation = `getAttr($szFirst + ".Ni_Next_Gen_XBox_Location")`;
+    int $iNextGenXBoxLoadDirectlyToRenderer = `getAttr($szFirst + ".Ni_Next_Gen_XBox_Load_Directly_To_Renderer")`;
+    int $iDX9Format = `getAttr($szFirst + ".Ni_DX9_Format")`;
+    int $iDX9TextureSize = `getAttr($szFirst + ".Ni_DX9_Texture_Size")`;
+    int $iDX9Location = `getAttr($szFirst + ".Ni_DX9_Location")`;
+    int $iDX9LoadDirectlyToRenderer = `getAttr($szFirst + ".Ni_DX9_Load_Directly_To_Renderer")`;
+    int $iD3D10Format = `getAttr($szFirst + ".Ni_D3D10_Format")`;
+    int $iD3D10TextureSize = `getAttr($szFirst + ".Ni_D3D10_Texture_Size")`;
+    int $iD3D10Location = `getAttr($szFirst + ".Ni_D3D10_Location")`;
+    int $iD3D10LoadDirectlyToRenderer = `getAttr($szFirst + ".Ni_D3D10_Load_Directly_To_Renderer")`;
+    int $iPS3Format = `getAttr($szFirst + ".Ni_PS3_Format")`;
+    int $iPS3TextureSize = `getAttr($szFirst + ".Ni_PS3_Texture_Size")`;
+    int $iPS3Location = `getAttr($szFirst + ".Ni_PS3_Location")`;
+    int $iWiiFormat = `getAttr($szFirst + ".Ni_Wii_Format")`;
+    int $iWiiTextureSize = `getAttr($szFirst + ".Ni_Wii_Texture_Size")`;
+    int $iWiiLocation = `getAttr($szFirst + ".Ni_Wii_Location")`;
+
+
+    int $iLoop = 1;
+    while($iLoop < size($FileTextures))
+    {   
+        string $szObject2 = $FileTextures[$iLoop];
+               
+        // Set attribute to the first...
+
+        setAttr ($szObject2 + ".Ni_Generic_Format") $iGenericFormat;
+        setAttr ($szObject2 + ".Ni_Generic_Texture_Size") $iGenericTextureSize;
+        setAttr ($szObject2 + ".Ni_Generic_Location") $iGenericLocation;
+        setAttr ($szObject2 + ".Ni_Generic_Load_Directly_To_Renderer") $iGenericLoadDirectlyToRenderer;
+        setAttr ($szObject2 + ".Ni_Next_Gen_XBox_Format") $iNextGenXBoxFormat;
+        setAttr ($szObject2 + ".Ni_Next_Gen_XBox_Texture_Size") $iNextGenXBoxTextureSize;
+        setAttr ($szObject2 + ".Ni_Next_Gen_XBox_Location") $iNextGenXBoxLocation;
+        setAttr ($szObject2 + ".Ni_Next_Gen_XBox_Load_Directly_To_Renderer") $iNextGenXBoxLoadDirectlyToRenderer;
+        setAttr ($szObject2 + ".Ni_DX9_Format") $iDX9Format;
+        setAttr ($szObject2 + ".Ni_DX9_Texture_Size") $iDX9TextureSize;
+        setAttr ($szObject2 + ".Ni_DX9_Location") $iDX9Location;
+        setAttr ($szObject2 + ".Ni_DX9_Load_Directly_To_Renderer") $iDX9LoadDirectlyToRenderer;
+        setAttr ($szObject2 + ".Ni_D3D10_Format") $iD3D10Format;
+        setAttr ($szObject2 + ".Ni_D3D10_Texture_Size") $iD3D10TextureSize;
+        setAttr ($szObject2 + ".Ni_D3D10_Location") $iD3D10Location;
+        setAttr ($szObject2 + ".Ni_D3D10_Load_Directly_To_Renderer") $iD3D10LoadDirectlyToRenderer;
+        setAttr ($szObject2 + ".Ni_PS3_Format") $iPS3Format;
+        setAttr ($szObject2 + ".Ni_PS3_Texture_Size") $iPS3TextureSize;
+        setAttr ($szObject2 + ".Ni_PS3_Location") $iPS3Location;
+        setAttr ($szObject2 + ".Ni_Wii_Format") $iWiiFormat;
+        setAttr ($szObject2 + ".Ni_Wii_Texture_Size") $iWiiTextureSize;
+        setAttr ($szObject2 + ".Ni_Wii_Location") $iWiiLocation;
+
+        $iLoop = $iLoop + 1;
+    }
+}
+
+global proc MyImmerseCreatePlatformTextureProperties()
+{
+    // Return dag objects only
+    string $FileTextures[];
+    $FileTextures = `ls -sl -typ file`;
+
+    if(size($FileTextures) <= 0)
+    {
+        print("ERROR::Create Texture Properties. No file textures selected.\n");
+        return;
+    }
+
+    int $iLoop = 0;
+
+    while($iLoop < size($FileTextures))
+    {
+        // Convert the PC to Generic if you come across it
+        if((`attributeExists Ni_PC_Format $FileTextures[$iLoop]` == true) &&
+           (`attributeExists Ni_Generic_Format $FileTextures[$iLoop]` == false))
+        {
+            addAttr -ln Ni_Generic_Format -at enum -enumName "Platform Default (Match Default Platform Format):Texture Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $FileTextures[$iLoop];
+            setAttr ($FileTextures[$iLoop] + ".Ni_Generic_Format") `getAttr ($FileTextures[$iLoop] + ".Ni_PC_Format")`;
+        }
+
+        if((`attributeExists Ni_PC_Texture_Size $FileTextures[$iLoop]` == true) &&
+           (`attributeExists Ni_Generic_Texture_Size $FileTextures[$iLoop]` == false))
+        {
+            addAttr -ln Ni_Generic_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $FileTextures[$iLoop];
+            setAttr ($FileTextures[$iLoop] + ".Ni_Generic_Texture_Size") `getAttr ($FileTextures[$iLoop] + ".Ni_PC_Texture_Size")`;
+        }
+        
+        if((`attributeExists Ni_PC_Location $FileTextures[$iLoop]` == true) &&
+           (`attributeExists Ni_Generic_Location $FileTextures[$iLoop]` == false))
+        {
+            addAttr -ln Ni_Generic_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $FileTextures[$iLoop];
+            setAttr ($FileTextures[$iLoop] + ".Ni_Generic_Location") `getAttr ($FileTextures[$iLoop] + ".Ni_PC_Location")`;
+        }
+
+        if((`attributeExists Ni_PC_Load_Directly_To_Renderer $FileTextures[$iLoop]` == true) &&
+           (`attributeExists Ni_Generic_Load_Directly_To_Renderer $FileTextures[$iLoop]` == false))
+        {
+            addAttr -ln Ni_Generic_Load_Directly_To_Renderer -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $FileTextures[$iLoop];
+            setAttr ($FileTextures[$iLoop] + ".Ni_Generic_Load_Directly_To_Renderer") `getAttr ($FileTextures[$iLoop] + ".Ni_PC_Load_Directly_To_Renderer")`;
+        }
+        // ***** End Conversion Code *****
+    
+        if(`attributeExists Ni_Generic_Format $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Generic_Format -at enum -enumName "Platform Default (Match Default Platform Format):Texture Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_Generic_Texture_Size $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Generic_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $FileTextures[$iLoop];
+        }
+        
+        if(`attributeExists Ni_Generic_Location $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Generic_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_Generic_Load_Directly_To_Renderer $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Generic_Load_Directly_To_Renderer -at bool -dv false $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_Next_Gen_XBox_Format $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Next_Gen_XBox_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_Next_Gen_XBox_Texture_Size $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Next_Gen_XBox_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $FileTextures[$iLoop];
+        }
+        
+        if(`attributeExists Ni_Next_Gen_XBox_Location $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Next_Gen_XBox_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_Next_Gen_XBox_Load_Directly_To_Renderer $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Next_Gen_XBox_Load_Directly_To_Renderer -at bool -dv false $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_DX9_Format $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_DX9_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_DX9_Texture_Size $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_DX9_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $FileTextures[$iLoop];
+        }
+        
+        if(`attributeExists Ni_DX9_Location $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_DX9_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_DX9_Load_Directly_To_Renderer $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_DX9_Load_Directly_To_Renderer -at bool -dv false $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_D3D10_Format $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_D3D10_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_D3D10_Texture_Size $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_D3D10_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $FileTextures[$iLoop];
+        }
+        
+        if(`attributeExists Ni_D3D10_Location $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_D3D10_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_D3D10_Load_Directly_To_Renderer $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_D3D10_Load_Directly_To_Renderer -at bool -dv false $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_PS3_Format $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_PS3_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_PS3_Texture_Size $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_PS3_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $FileTextures[$iLoop];
+        }
+        
+        if(`attributeExists Ni_PS3_Location $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_PS3_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_Wii_Format $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Wii_Format -at enum -enumName "Platform Default (Match Default Platform Format):Default (Match Source Image):24/32 bit:16 bit:Compress DXT1:Compress DXT3:Compress DXT5" $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_Wii_Texture_Size $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Wii_Texture_Size -at enum -enumName "Platform Default (Match Default Platform Reduction):Default (Match Source Image):1 / 2:1 / 4: 1 / 8: 1 / 16: 1 / 32: 1 / 64" $FileTextures[$iLoop];
+        }
+        
+        if(`attributeExists Ni_Wii_Location $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_Wii_Location -at enum -enumName "Scene Default:Internal to NIF :External as NIF:External Original Format" $FileTextures[$iLoop];
+        }
+
+        // Increment the current Node
+        $iLoop = $iLoop + 1;
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmersePlatformTextureUpdate(string $szObject, string $szPlatform)
+{
+    if (`getAttr ($szObject + ".Ni_" + $szPlatform + "_Location")` == 3)
+    {
+        attrEnumOptionMenu -e -en false ($szPlatform + "TextureFormatEnum");
+        attrEnumOptionMenu -e -en false ($szPlatform + "TextureSizeEnum");
+        
+        if (($szPlatform == "Generic") || ($szPlatform == "Next_Gen_XBox") || 
+            ($szPlatform == "DX9") || ($szPlatform == "D3D10"))
+        {
+            checkBox -e -en true ($szPlatform + "TextureLoadDirectlyCheckBox");
+        }
+    }
+    else
+    {
+        attrEnumOptionMenu -e -en true ($szPlatform + "TextureFormatEnum");
+        attrEnumOptionMenu -e -en true ($szPlatform + "TextureSizeEnum");
+
+        if (($szPlatform == "Generic") || ($szPlatform == "Next_Gen_XBox") || 
+            ($szPlatform == "DX9") || ($szPlatform == "D3D10"))
+        {
+            checkBox -e -en false -v false ($szPlatform + "TextureLoadDirectlyCheckBox");
+            
+            setAttr ($szObject + ".Ni_" + $szPlatform + "_Load_Directly_To_Renderer") 0;
+        }
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreatePlatformTexturePropertiesDialog()
+{
+    MyImmerseCreatePlatformTextureProperties();
+
+    // ONLY ALLOW ONE WINDOW AT A TIME SO WE WILL DELETE IT IF IT EXISTS
+
+    // Check if the window exists
+    if( MyImmerseWindowExists("PlatformTexturePropertiesWindow") )
+    {
+        deleteUI PlatformTexturePropertiesWindow;
+    }
+
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `ls -sl -typ file`;
+
+    int $NumOfFiles = size($dagnodes);   
+  
+    window -title "Platform Texture Properties" -widthHeight 380 780 PlatformTexturePropertiesWindow;
+
+    columnLayout -rs 10;
+
+    if($NumOfFiles == 0)
+    {
+        text -label "ERROR::No file textures Selected" SequenceCurrent;
+    }
+    else
+    {
+        string $sObject = $dagnodes[0];
+        int $iEdgeWidth = 10;
+
+        
+        string $sTitle = ("      Texture: " + $sObject);
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+            text -label ("Texture: " + $sObject) -al "left" -fn "boldLabelFont" -w 200;
+        setParent ..; // RowLayout
+
+        // Generic Attributes
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+
+            frameLayout
+                -cll false
+                -cl false
+                -bv true
+                -bs "etchedIn"
+                -l "Generic Texture Properties";
+    
+            columnLayout
+                -rs 10;
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Format" 
+                    -attribute ($sObject + ".Ni_Generic_Format")
+                    GenericTextureFormatEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Size" 
+                    -attribute ($sObject + ".Ni_Generic_Texture_Size")
+                    GenericTextureSizeEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Location" 
+                    -attribute ($sObject + ".Ni_Generic_Location")
+                    GenericTextureLocationEnum;
+            setParent ..; // RowLayout
+
+            scriptJob 
+                -p GenericTextureLocationEnum
+                -rp
+                -ac ($sObject + ".Ni_Generic_Location") ("MyImmersePlatformTextureUpdate(\"" + $sObject + "\", \"Generic\")");
+
+
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                checkBox
+                    -label "Load Directly To Renderer (Hint)" 
+                    -en (`getAttr ($sObject + ".Ni_Generic_Location")` == 3)
+                    -v `getAttr ($sObject + ".Ni_Generic_Load_Directly_To_Renderer")`
+                    -onc ("setAttr " + $sObject + ".Ni_Generic_Load_Directly_To_Renderer" + " 1")
+                    -ofc ("setAttr " + $sObject + ".Ni_Generic_Load_Directly_To_Renderer" + " 0")
+                    GenericTextureLoadDirectlyCheckBox;
+
+            setParent ..; // RowLayout
+
+
+            MyImmersePlatformTextureUpdate($sObject, "Generic");
+            setParent ..; // ColumnLayout
+    
+            setParent ..; // FrameLayout
+
+        setParent ..; // RowLayout
+
+
+
+        // Next_Gen_XBox
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+
+            frameLayout
+                -cll false
+                -cl false
+                -bv true
+                -bs "etchedIn"
+                -l "Xbox 360 Texture Properties";
+    
+            columnLayout
+                -rs 10;
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Format" 
+                    -attribute ($sObject + ".Ni_Next_Gen_XBox_Format")
+                    Next_Gen_XBoxTextureFormatEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Size" 
+                    -attribute ($sObject + ".Ni_Next_Gen_XBox_Texture_Size")
+                    Next_Gen_XBoxTextureSizeEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Location" 
+                    -attribute ($sObject + ".Ni_Next_Gen_XBox_Location")
+                    Next_Gen_XBoxTextureLocationEnum;
+            setParent ..; // RowLayout
+
+            scriptJob 
+                -p Next_Gen_XBoxTextureLocationEnum
+                -rp
+                -ac ($sObject + ".Ni_Next_Gen_XBox_Location") ("MyImmersePlatformTextureUpdate(\"" + $sObject + "\", \"Next_Gen_XBox\")");
+
+
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                checkBox
+                    -label "Load Directly To Renderer (Hint)" 
+                    -en (`getAttr ($sObject + ".Ni_Next_Gen_XBox_Location")` == 3)
+                    -v `getAttr ($sObject + ".Ni_Next_Gen_XBox_Load_Directly_To_Renderer")`
+                    -onc ("setAttr " + $sObject + ".Ni_Next_Gen_XBox_Load_Directly_To_Renderer" + " 1")
+                    -ofc ("setAttr " + $sObject + ".Ni_Next_Gen_XBox_Load_Directly_To_Renderer" + " 0")
+                    Next_Gen_XBoxTextureLoadDirectlyCheckBox;
+            setParent ..; // RowLayout
+
+            MyImmersePlatformTextureUpdate($sObject, "Next_Gen_XBox");
+
+            setParent ..; // ColumnLayout
+    
+            setParent ..; // FrameLayout
+
+        setParent ..; // RowLayout
+
+
+        // DX9
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+
+            frameLayout
+                -cll false
+                -cl false
+                -bv true
+                -bs "etchedIn"
+                -l "DX9 Texture Properties";
+    
+            columnLayout
+                -rs 10;
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Format" 
+                    -attribute ($sObject + ".Ni_DX9_Format")
+                    DX9TextureFormatEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Size" 
+                    -attribute ($sObject + ".Ni_DX9_Texture_Size")
+                    DX9TextureSizeEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Location" 
+                    -attribute ($sObject + ".Ni_DX9_Location")
+                    DX9TextureLocationEnum;
+            setParent ..; // RowLayout
+    
+            scriptJob 
+                -p DX9TextureLocationEnum
+                -rp
+                -ac ($sObject + ".Ni_DX9_Location") ("MyImmersePlatformTextureUpdate(\"" + $sObject + "\", \"DX9\")");
+
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                checkBox
+                    -label "Load Directly To Renderer (Hint)" 
+                    -en (`getAttr ($sObject + ".Ni_DX9_Location")` == 3)
+                    -v `getAttr ($sObject + ".Ni_DX9_Load_Directly_To_Renderer")`
+                    -onc ("setAttr " + $sObject + ".Ni_DX9_Load_Directly_To_Renderer" + " 1")
+                    -ofc ("setAttr " + $sObject + ".Ni_DX9_Load_Directly_To_Renderer" + " 0")
+                    DX9TextureLoadDirectlyCheckBox;
+
+            setParent ..; // RowLayout
+
+            MyImmersePlatformTextureUpdate($sObject, "DX9");
+
+            setParent ..; // ColumnLayout
+    
+            setParent ..; // FrameLayout
+
+        setParent ..; // RowLayout
+
+        // D3D10
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+
+            frameLayout
+                -cll false
+                -cl false
+                -bv true
+                -bs "etchedIn"
+                -l "D3D10 Texture Properties";
+    
+            columnLayout
+                -rs 10;
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Format" 
+                    -attribute ($sObject + ".Ni_D3D10_Format")
+                    D3D10TextureFormatEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Size" 
+                    -attribute ($sObject + ".Ni_D3D10_Texture_Size")
+                    D3D10TextureSizeEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Location" 
+                    -attribute ($sObject + ".Ni_D3D10_Location")
+                    D3D10TextureLocationEnum;
+            setParent ..; // RowLayout
+    
+            scriptJob 
+                -p D3D10TextureLocationEnum
+                -rp
+                -ac ($sObject + ".Ni_D3D10_Location") ("MyImmersePlatformTextureUpdate(\"" + $sObject + "\", \"D3D10\")");
+
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                checkBox
+                    -label "Load Directly To Renderer (Hint)" 
+                    -en (`getAttr ($sObject + ".Ni_D3D10_Location")` == 3)
+                    -v `getAttr ($sObject + ".Ni_D3D10_Load_Directly_To_Renderer")`
+                    -onc ("setAttr " + $sObject + ".Ni_D3D10_Load_Directly_To_Renderer" + " 1")
+                    -ofc ("setAttr " + $sObject + ".Ni_D3D10_Load_Directly_To_Renderer" + " 0")
+                    D3D10TextureLoadDirectlyCheckBox;
+
+            setParent ..; // RowLayout
+
+            MyImmersePlatformTextureUpdate($sObject, "D3D10");
+
+            setParent ..; // ColumnLayout
+    
+            setParent ..; // FrameLayout
+
+        setParent ..; // RowLayout
+
+        // PS3
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+
+            frameLayout
+                -cll false
+                -cl false
+                -bv true
+                -bs "etchedIn"
+                -l "PS3 Texture Properties";
+    
+            columnLayout
+                -rs 10;
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Format" 
+                    -attribute ($sObject + ".Ni_PS3_Format")
+                    PS3TextureFormatEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Size" 
+                    -attribute ($sObject + ".Ni_PS3_Texture_Size")
+                    PS3TextureSizeEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Location" 
+                    -attribute ($sObject + ".Ni_PS3_Location")
+                    PS3TextureLocationEnum;
+            setParent ..; // RowLayout
+    
+            scriptJob 
+                -p PS3TextureLocationEnum
+                -rp
+                -ac ($sObject + ".Ni_PS3_Location") ("MyImmersePlatformTextureUpdate(\"" + $sObject + "\", \"PS3\")");
+
+            MyImmersePlatformTextureUpdate($sObject, "PS3");
+
+            setParent ..; // ColumnLayout
+    
+            setParent ..; // FrameLayout
+
+        setParent ..; // RowLayout
+
+        // Wii
+
+        rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+
+            frameLayout
+                -cll false
+                -cl false
+                -bv true
+                -bs "etchedIn"
+                -l "Wii Texture Properties";
+    
+            columnLayout
+                -rs 10;
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Format" 
+                    -attribute ($sObject + ".Ni_Wii_Format")
+                    WiiTextureFormatEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Size" 
+                    -attribute ($sObject + ".Ni_Wii_Texture_Size")
+                    WiiTextureSizeEnum;
+            setParent ..; // RowLayout
+    
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+                text -l "" -w $iEdgeWidth;
+                attrEnumOptionMenu 
+                    -label "Texture Location" 
+                    -attribute ($sObject + ".Ni_Wii_Location")
+                    WiiTextureLocationEnum;
+            setParent ..; // RowLayout
+    
+            scriptJob 
+                -p WiiTextureLocationEnum
+                -rp
+                -ac ($sObject + ".Ni_Wii_Location") ("MyImmersePlatformTextureUpdate(\"" + $sObject + "\", \"Wii\")");
+
+            MyImmersePlatformTextureUpdate($sObject, "Wii");
+
+            setParent ..; // ColumnLayout
+    
+            setParent ..; // FrameLayout
+
+        setParent ..; // RowLayout
+        
+        
+        if ($NumOfFiles >= 2)
+        {
+            rowLayout -nc 2 -cw 1 $iEdgeWidth;
+            text -l "" -w $iEdgeWidth;
+
+            frameLayout
+                -cll false
+                -cl false
+                -bv true
+                -bs "etchedIn"
+                -l "Multiple File Textures Selection";
+    
+            columnLayout
+                -rs 10;           
+       
+                // If multiple files selected, present the "Apply to All" Button        
+                rowLayout -nc 1 -cw 1 $iEdgeWidth;
+                    text -label ("By default, settings apply to first selected texture only.  Choose 'Apply to All'\nto override default and apply settings to all selected textures.\n") -al "left";
+                setParent ..; // RowLayout
+
+                rowLayout -nc 1 -cw 1 $iEdgeWidth;
+                    button -label "Apply to All" -c ("CopyAllAttributes()") -al "center";
+                setParent ..; // RowLayout                           
+            
+            setParent ..; // ColumnLayout
+            setParent ..; // FrameLayout
+            setParent ..; // RowLayout          
+        }
+    }
+
+    setParent ..; // columnLayout
+
+    showWindow PlatformTexturePropertiesWindow;
+}
+//---------------------------------------------------------------------------
+
+

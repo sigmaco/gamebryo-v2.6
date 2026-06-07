@@ -1,0 +1,568 @@
+<?xml version="1.0"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <library_effects>
+        <effect id="MultipassSample0" name="MultipassSample">
+            <profile_CG platform="PC-OGL">
+                <include sid="MultipassSample" url="MultipassSample.cgfx"/>
+                <newparam sid="description">
+                    <annotate name="detail0">
+                        <string>This shader is a multipass example</string>
+                    </annotate>
+                    <annotate name="detail1">
+                        <string>The individual passes are simple enough that they could probably be</string>
+                    </annotate>
+                    <annotate name="detail3">
+                        <string>an example of how to partition the work, just how to create multiple</string>
+                    </annotate>
+                    <annotate name="detail2">
+                        <string>combined into a single pass with little effort, so don't use this as</string>
+                    </annotate>
+                    <annotate name="detail4">
+                        <string>passes</string>
+                    </annotate>
+                    <string>Multipass Example</string>
+                </newparam>
+                <newparam sid="WorldViewProj">
+                    <annotate name="UIWidget">
+                        <string>None</string>
+                    </annotate>
+                    <semantic>WORLDVIEWPROJECTION</semantic>
+                    <float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+                </newparam>
+                <newparam sid="time">
+                    <annotate name="UIWidget">
+                        <string>None</string>
+                    </annotate>
+                    <semantic>TIME</semantic>
+                    <float>0</float>
+                </newparam>
+                <newparam sid="MaterialColor">
+                    <annotate name="UIName">
+                        <string>Material Color</string>
+                    </annotate>
+                    <annotate name="UIWidget">
+                        <string>Color</string>
+                    </annotate>
+                    <semantic>DIFFUSE</semantic>
+                    <float4>0.5 0 0.5 1</float4>
+                </newparam>
+                <newparam sid="diffuseMap">
+                    <annotate name="ResourceName">
+                        <string>diffuse.bmp</string>
+                    </annotate>
+                    <annotate name="ResourceType">
+                        <string>2D</string>
+                    </annotate>
+                    <surface type="2D">
+                        <init_from>diffuse3</init_from>
+                        <format>A8R8G8B8</format>
+                        <size>0 0 1</size>
+                    </surface>
+                </newparam>
+                <newparam sid="DiffuseMapSampler">
+                    <semantic>TEXUNIT1</semantic>
+                    <sampler2D>
+                        <source>diffuseMap</source>
+                        <wrap_s>WRAP</wrap_s>
+                        <wrap_t>WRAP</wrap_t>
+                        <minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+                        <magfilter>LINEAR</magfilter>
+                    </sampler2D>
+                </newparam>
+                <technique sid="main">
+                    <pass sid="shadow">
+                        <blend_enable/>
+                        <alpha_test_enable/>
+                        <cull_face_enable value="true"/>
+                        <depth_test_enable value="true"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face value="BACK"/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample">vmain_shadow</name>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample">fmain_unchanged</name>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <pass sid="green_right">
+                        <blend_enable value="true"/>
+                        <alpha_test_enable/>
+                        <cull_face_enable/>
+                        <blend_func>
+                            <src value="SRC_ALPHA"/>
+                            <dest value="ONE_MINUS_SRC_ALPHA"/>
+                        </blend_func>
+                        <depth_test_enable/>
+                        <depth_mask value="false"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face value="FRONT"/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample">vmain_greenright</name>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample">fmain_unchanged</name>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <pass sid="red_left">
+                        <blend_enable value="true"/>
+                        <alpha_test_enable/>
+                        <cull_face_enable/>
+                        <blend_func>
+                            <src value="SRC_ALPHA"/>
+                            <dest value="ONE_MINUS_SRC_ALPHA"/>
+                        </blend_func>
+                        <depth_test_enable/>
+                        <depth_mask value="false"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face value="FRONT"/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample">vmain_redleft</name>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample">fmain_unchanged</name>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <pass sid="wavy_overlay0">
+                        <blend_enable value="true"/>
+                        <alpha_test_enable/>
+                        <cull_face_enable value="true"/>
+                        <blend_func>
+                            <src value="SRC_ALPHA"/>
+                            <dest value="ONE_MINUS_SRC_ALPHA"/>
+                        </blend_func>
+                        <depth_test_enable/>
+                        <depth_mask value="false"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample">vmain_pulsealpha</name>
+                            <bind symbol="frequency">
+                                <float>0.1</float>
+                            </bind>
+                            <bind symbol="phase">
+                                <float>0</float>
+                            </bind>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                            <bind symbol="time">
+                                <param ref="time"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample">fmain_tex</name>
+                            <bind symbol="DiffuseMapSampler">
+                                <param ref="DiffuseMapSampler"/>
+                            </bind>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <pass sid="wavy_overlay1">
+                        <blend_enable value="true"/>
+                        <alpha_test_enable/>
+                        <cull_face_enable value="true"/>
+                        <blend_func>
+                            <src value="SRC_ALPHA"/>
+                            <dest value="ONE_MINUS_SRC_ALPHA"/>
+                        </blend_func>
+                        <depth_test_enable/>
+                        <depth_mask value="false"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample">vmain_pulsealpha</name>
+                            <bind symbol="frequency">
+                                <float>0.21</float>
+                            </bind>
+                            <bind symbol="phase">
+                                <float>1.254</float>
+                            </bind>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                            <bind symbol="time">
+                                <param ref="time"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample">fmain_tex</name>
+                            <bind symbol="DiffuseMapSampler">
+                                <param ref="DiffuseMapSampler"/>
+                            </bind>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <extra type="import">
+                        <technique profile="NVIDIA_FXCOMPOSER">
+                            <import compiler_options=""/>
+                        </technique>
+                    </extra>
+                </technique>
+            </profile_CG>
+            <profile_CG platform="PS3">
+                <include sid="MultipassSample" url="MultipassSample.cgfx"/>
+                <include sid="MultipassSample_main_shadow_vmain_shadow_compiled" url="MultipassSample_main_shadow.vpo"/>
+                <include sid="MultipassSample_main_shadow_fmain_unchanged_compiled" url="MultipassSample_main_shadow.fpo"/>
+                <include sid="MultipassSample_main_green_right_vmain_greenright_compiled" url="MultipassSample_main_green_right.vpo"/>
+                <include sid="MultipassSample_main_green_right_fmain_unchanged_compiled" url="MultipassSample_main_green_right.fpo"/>
+                <include sid="MultipassSample_main_red_left_vmain_redleft_compiled" url="MultipassSample_main_red_left.vpo"/>
+                <include sid="MultipassSample_main_red_left_fmain_unchanged_compiled" url="MultipassSample_main_red_left.fpo"/>
+                <include sid="MultipassSample_main_wavy_overlay0_vmain_pulsealpha_compiled" url="MultipassSample_main_wavy_overlay0.vpo"/>
+                <include sid="MultipassSample_main_wavy_overlay0_fmain_tex_compiled" url="MultipassSample_main_wavy_overlay0.fpo"/>
+                <include sid="MultipassSample_main_wavy_overlay1_vmain_pulsealpha_compiled" url="MultipassSample_main_wavy_overlay1.vpo"/>
+                <include sid="MultipassSample_main_wavy_overlay1_fmain_tex_compiled" url="MultipassSample_main_wavy_overlay1.fpo"/>
+                <newparam sid="description">
+                    <annotate name="detail0">
+                        <string>This shader is a multipass example</string>
+                    </annotate>
+                    <annotate name="detail1">
+                        <string>The individual passes are simple enough that they could probably be</string>
+                    </annotate>
+                    <annotate name="detail3">
+                        <string>an example of how to partition the work, just how to create multiple</string>
+                    </annotate>
+                    <annotate name="detail2">
+                        <string>combined into a single pass with little effort, so don't use this as</string>
+                    </annotate>
+                    <annotate name="detail4">
+                        <string>passes</string>
+                    </annotate>
+                    <string>Multipass Example</string>
+                </newparam>
+                <newparam sid="WorldViewProj">
+                    <annotate name="UIWidget">
+                        <string>None</string>
+                    </annotate>
+                    <semantic>WORLDVIEWPROJECTION</semantic>
+                    <float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+                </newparam>
+                <newparam sid="time">
+                    <annotate name="UIWidget">
+                        <string>None</string>
+                    </annotate>
+                    <semantic>TIME</semantic>
+                    <float>0</float>
+                </newparam>
+                <newparam sid="MaterialColor">
+                    <annotate name="UIName">
+                        <string>Material Color</string>
+                    </annotate>
+                    <annotate name="UIWidget">
+                        <string>Color</string>
+                    </annotate>
+                    <semantic>DIFFUSE</semantic>
+                    <float4>0.5 0 0.5 1</float4>
+                </newparam>
+                <newparam sid="diffuseMap">
+                    <annotate name="ResourceName">
+                        <string>diffuse.bmp</string>
+                    </annotate>
+                    <annotate name="ResourceType">
+                        <string>2D</string>
+                    </annotate>
+                    <surface type="2D">
+                        <init_from>diffuse3</init_from>
+                        <format>A8R8G8B8</format>
+                        <size>0 0 1</size>
+                    </surface>
+                </newparam>
+                <newparam sid="DiffuseMapSampler">
+                    <semantic>TEXUNIT1</semantic>
+                    <sampler2D>
+                        <source>diffuseMap</source>
+                        <wrap_s>WRAP</wrap_s>
+                        <wrap_t>WRAP</wrap_t>
+                        <minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+                        <magfilter>LINEAR</magfilter>
+                    </sampler2D>
+                </newparam>
+                <technique sid="main">
+                    <pass sid="shadow">
+                        <blend_enable/>
+                        <alpha_test_enable/>
+                        <cull_face_enable value="true"/>
+                        <depth_test_enable value="true"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face value="BACK"/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample_main_shadow_vmain_shadow_compiled">vmain_shadow</name>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample_main_shadow_fmain_unchanged_compiled">fmain_unchanged</name>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <pass sid="green_right">
+                        <blend_enable value="true"/>
+                        <alpha_test_enable/>
+                        <cull_face_enable/>
+                        <blend_func>
+                            <src value="SRC_ALPHA"/>
+                            <dest value="ONE_MINUS_SRC_ALPHA"/>
+                        </blend_func>
+                        <depth_test_enable/>
+                        <depth_mask value="false"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face value="FRONT"/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample_main_green_right_vmain_greenright_compiled">vmain_greenright</name>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample_main_green_right_fmain_unchanged_compiled">fmain_unchanged</name>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <pass sid="red_left">
+                        <blend_enable value="true"/>
+                        <alpha_test_enable/>
+                        <cull_face_enable/>
+                        <blend_func>
+                            <src value="SRC_ALPHA"/>
+                            <dest value="ONE_MINUS_SRC_ALPHA"/>
+                        </blend_func>
+                        <depth_test_enable/>
+                        <depth_mask value="false"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face value="FRONT"/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample_main_red_left_vmain_redleft_compiled">vmain_redleft</name>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample_main_red_left_fmain_unchanged_compiled">fmain_unchanged</name>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <pass sid="wavy_overlay0">
+                        <blend_enable value="true"/>
+                        <alpha_test_enable/>
+                        <cull_face_enable value="true"/>
+                        <blend_func>
+                            <src value="SRC_ALPHA"/>
+                            <dest value="ONE_MINUS_SRC_ALPHA"/>
+                        </blend_func>
+                        <depth_test_enable/>
+                        <depth_mask value="false"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample_main_wavy_overlay0_vmain_pulsealpha_compiled">vmain_pulsealpha</name>
+                            <bind symbol="frequency">
+                                <float>0.1</float>
+                            </bind>
+                            <bind symbol="phase">
+                                <float>0</float>
+                            </bind>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                            <bind symbol="time">
+                                <param ref="time"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample_main_wavy_overlay0_fmain_tex_compiled">fmain_tex</name>
+                            <bind symbol="DiffuseMapSampler">
+                                <param ref="DiffuseMapSampler"/>
+                            </bind>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <pass sid="wavy_overlay1">
+                        <blend_enable value="true"/>
+                        <alpha_test_enable/>
+                        <cull_face_enable value="true"/>
+                        <blend_func>
+                            <src value="SRC_ALPHA"/>
+                            <dest value="ONE_MINUS_SRC_ALPHA"/>
+                        </blend_func>
+                        <depth_test_enable/>
+                        <depth_mask value="false"/>
+                        <depth_func value="LEQUAL"/>
+                        <polygon_mode>
+                            <face/>
+                            <mode/>
+                        </polygon_mode>
+                        <shader stage="VERTEX">
+                            <compiler_target>arbvp1</compiler_target>
+                            <name source="MultipassSample_main_wavy_overlay1_vmain_pulsealpha_compiled">vmain_pulsealpha</name>
+                            <bind symbol="frequency">
+                                <float>0.21</float>
+                            </bind>
+                            <bind symbol="phase">
+                                <float>1.254</float>
+                            </bind>
+                            <bind symbol="WorldViewProj">
+                                <param ref="WorldViewProj"/>
+                            </bind>
+                            <bind symbol="time">
+                                <param ref="time"/>
+                            </bind>
+                        </shader>
+                        <shader stage="FRAGMENT">
+                            <compiler_target>arbfp1</compiler_target>
+                            <name source="MultipassSample_main_wavy_overlay1_fmain_tex_compiled">fmain_tex</name>
+                            <bind symbol="DiffuseMapSampler">
+                                <param ref="DiffuseMapSampler"/>
+                            </bind>
+                        </shader>
+                        <extra type="passenable">
+                            <technique profile="NVIDIA_FXCOMPOSER">
+                                <true/>
+                            </technique>
+                        </extra>
+                    </pass>
+                    <extra type="import">
+                        <technique profile="NVIDIA_FXCOMPOSER">
+                            <import compiler_options=""/>
+                        </technique>
+                    </extra>
+                </technique>
+            </profile_CG>
+        </effect>
+    </library_effects>
+    <library_images>
+        <image id="diffuseMap" name="diffuseMap">
+            <init_from>diffuse.bmp</init_from>
+        </image>
+        <image id="diffuseMap1" name="diffuseMap1">
+            <init_from>diffuse.bmp</init_from>
+        </image>
+        <image id="diffuse" name="diffuse">
+            <init_from>diffuse.bmp</init_from>
+        </image>
+        <image id="diffuse1" name="diffuse1">
+            <init_from>diffuse.bmp</init_from>
+        </image>
+        <image id="diffuse2" name="diffuse2">
+            <init_from>diffuse.bmp</init_from>
+        </image>
+        <image id="diffuse3" name="diffuse3">
+            <init_from>diffuse.bmp</init_from>
+        </image>
+    </library_images>
+    <library_materials>
+        <material id="Material0" name="Default_Material">
+            <instance_effect url="#MultipassSample0">
+                <technique_hint platform="PS3" ref="main"/>
+                <setparam ref="WorldViewProj">
+                    <float4x4>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
+                </setparam>
+                <setparam ref="time">
+                    <float>0</float>
+                </setparam>
+                <setparam ref="MaterialColor">
+                    <float4>0.5 0 0.5 1</float4>
+                </setparam>
+                <setparam ref="diffuseMap">
+                    <surface type="2D">
+                        <init_from>diffuse2</init_from>
+                        <format>Unknown</format>
+                        <size>0 0 1</size>
+                    </surface>
+                </setparam>
+            </instance_effect>
+        </material>
+    </library_materials>
+</COLLADA>

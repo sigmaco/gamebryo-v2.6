@@ -1,0 +1,14 @@
+// 
+// MyImmerseOnSceneLoad.mel
+//
+//  These are the scripts that MyImmerse will run on scene load to
+// make any necessary automatic conversions
+//
+
+global proc MyImmerseOnSceneLoad()
+{
+    MyImmerseResetAllNiMultiShaderBaseMapOnly();
+    MyImmersePixelShaderVerifyAllNiMultiShaders();
+    MyImmerseUpgradeABVAttributes();
+    MyImmerseUpdateEmitterAndParticlesWithAttributes();
+}

@@ -1,0 +1,69 @@
+//
+// MyImmerseExportSelected.mel
+//
+// Mel script for Exporting Selected from Maya as NIF
+
+
+
+global proc MyImmerseExportSelected(string $szFileName, string $callType)
+{
+    int     $intVal;
+    int     $index;
+    string  $stringVal;
+
+
+    string $szShaderNodes[] = `ls -l -sl -typ shape -typ transform`;
+    
+    // Check for Nothing Selected
+    if(size($szShaderNodes) == 0)
+    {
+        print("WARNING:: No Shapes or Transforms Selected\n");
+        return;
+    }
+
+    GamebryoLoadPlugins();
+
+    $intVal = `exists file`;
+
+    if ( $intVal != 1 )
+    {
+        // Commmand file does not exist.
+        // Load the plugin which contains it.
+        $intVal = `loadPlugin objExport`;
+    }
+
+    // Get Scene Name
+    string $szSceneName = `file -q -expandName`;
+
+    // Save Scene Temp1
+    file -rename "SelectedTemp1.mb";
+    file -s -f -ch true;
+
+    // Save Selected Temp2
+    file -es -f -typ "mayaBinary" "SelectedTemp2.mb";
+
+    // Open Temp2
+    file -o -f "SelectedTemp2.mb";
+
+    // Get the File Options    
+    string $fileOptions = "";
+    if (`optionVar -exists "NifOptions"`) {
+        // Post the new options.
+        $fileOptions = `optionVar -q "NifOptions"`;
+    } 
+
+    // Export All Temp2 to FIleName
+    file -ea -f -typ Nif -op $fileOptions $szFileName;
+
+    // Delete the Temporary File
+    sysFile -delete "SelectedTemp2.mb";
+
+    // Open Temp1
+    file -o -f "SelectedTemp1.mb";
+
+    // Delete the Temporary File
+    sysFile -delete "SelectedTemp1.mb";
+
+    // Rename Scene 
+    file -rename $szSceneName;
+}

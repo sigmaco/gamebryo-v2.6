@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="232861"
+   name=""
+   committed-date="2005-08-15T19:24:56.805244Z"
+   url="https://svn.apache.org/repos/asf/xerces/c/branches/xerces-2.7/samples/Projects/Win32/VC6/SCMPrint"
+   last-author="jberry"
+   kind="dir"
+   uuid="13f79535-47bb-0310-9956-ffa450edef68"
+   prop-time="2005-08-26T16:19:44.000000Z"
+   revision="240275"/>
+<entry
+   committed-rev="175745"
+   name="SCMPrint.dsp"
+   text-time="2005-08-26T16:19:44.000000Z"
+   committed-date="2004-02-11T21:38:23.000000Z"
+   checksum="8e11fbed0fd251fe2c54fa6a7813bf0a"
+   last-author="peiyongz"
+   kind="file"
+   prop-time="2005-08-26T16:19:44.000000Z"/>
+<entry
+   committed-rev="175750"
+   name="SCMPrint.mak"
+   text-time="2005-08-26T16:19:44.000000Z"
+   committed-date="2004-02-11T22:54:36.000000Z"
+   checksum="7d65d359f300565454c2c5e122c209f4"
+   last-author="peiyongz"
+   kind="file"
+   prop-time="2005-08-26T16:19:44.000000Z"/>
+</wc-entries>

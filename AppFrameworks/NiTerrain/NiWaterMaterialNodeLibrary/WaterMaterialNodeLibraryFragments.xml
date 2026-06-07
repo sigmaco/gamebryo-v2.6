@@ -1,0 +1,944 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<library version="1">
+  <!--========================================================================-->
+  <fragment type="Vertex" name="TransformPositionToWorld">
+    <desc>
+      This fragment is responsible for applying the world transform to the
+      incoming local vertex position.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic="Position"
+                label="Local"
+                variable="Position" />
+      <resource type="float4x4"
+                semantic="WorldMatrix"
+                label=""
+                variable="World" />
+    </inputs>
+
+    <outputs>
+      <resource type="float4"
+                semantic="Position"
+                label="World"
+                variable="WorldPos" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      WorldPos = mul(float4(Position.xyz, 1.0), World);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="TransformNormal">
+    <desc>
+    This fragment is responsible for applying the world transform to the
+    normal.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Normal" label="Local" 
+            variable="Normal" />
+        <resource type="float4x4" semantic="WorldMatrix" label="" 
+            variable="World" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNrm" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+    // Transform the normal into world space for lighting
+    WorldNrm = mul( Normal, (float3x3)World );
+
+    // Should not need to normalize here since we will normalize in the pixel 
+    // shader due to linear interpolation across triangle not preserving
+    // normality.
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="TransformNT">
+    <desc>
+    This fragment is responsible for applying the world transform to the
+    normal, binormal, and tangent.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Normal" label="Local" 
+            variable="Normal" />
+        <resource type="float3" semantic="Tangent" label="Local" 
+            variable="Tangent" />
+        <resource type="float4x4" semantic="WorldMatrix" label="" 
+            variable="World" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldNrm" />
+        <resource type="float3" semantic="Normal" label="World" 
+            variable="WorldTangent" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+    // Transform the normal into world space for lighting
+    WorldNrm      = mul( Normal, (float3x3)World );
+    WorldTangent  = mul( Tangent, (float3x3)World );
+    
+    // Should not need to normalize here since we will normalize in the pixel 
+    // shader due to linear interpolation across triangle not preserving
+    // normality.
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="CalculateBinormal">
+    <desc>
+      Takes the cross product of a vertex normal and a tangent to create a binormal.      
+      Assumes the vertex normal and tangent are normalized.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic="Normal"
+                label="World"
+                variable="WorldNormal" />
+      <resource type="float3"
+                semantic="Tangent"
+                label="World"
+                variable="WorldTangent" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic="Texcoord"
+                label="World"
+                variable="WorldBinormal" />      
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      WorldBinormal = cross(WorldTangent, WorldNormal);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="ProjectPositionWorldToProj">
+    <desc>
+      This fragment is responsible for applying the view projection transform
+      to the input world position.
+    </desc>
+    <inputs>
+      <resource type="float4" semantic="Position" label="World" 
+      variable="WorldPosition" />
+      <resource type="float4x4" semantic="ViewProjMatrix" label="" 
+      variable="ViewProjMatrix" />
+    </inputs>
+    <outputs>
+      <resource type="float4" semantic="Position" label="World" 
+      variable="WorldProj" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      WorldProj = mul(WorldPosition, ViewProjMatrix);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="SplitTextureCoordinates">
+    <desc>
+      This fragment works out the different texture values from the 
+      texture stream
+    </desc>
+    <inputs>
+      <resource type="float2" semantic="TexCoord" label="" 
+      variable="TexCoord" />
+      <resource type="float4x4" semantic="TexTransform" label="" 
+      variable="TexTransform" />
+      <resource type="float2" semantic="TexCoord" label="" 
+      variable="NormalModifier" />
+    </inputs>
+    <outputs>
+      <resource type="float2" semantic="TexCoord" label="World" 
+      variable="BaseUV" />
+      <resource type="float2" semantic="TexCoord" label="World" 
+      variable="NormalUV" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+        BaseUV = TexCoord.xy;
+        NormalUV.xy = BaseUV.xy * NormalModifier.xy;
+        NormalUV = mul(float4(NormalUV.x, NormalUV.y, 0.0, 1.0), TexTransform);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="CalculateViewVectorDistance">
+    <desc>
+      This fragment is responsible for calculating the camera view vector.
+    </desc>
+    <inputs>
+      <resource type="float4"
+                semantic="Position"
+                label="World"
+                variable="WorldPos" />
+
+      <resource type="float3"
+                semantic="CameraPosition"
+                label="World"
+                variable="CameraPos"
+                default="(0.0, 0.0, 0.0)" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic="ViewVector"
+                label="World"
+                variable="WorldViewVector"/>
+      <resource type="float" 
+                semantic="" 
+                label=""
+                variable="ViewDistance" />      
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      WorldViewVector = CameraPos - WorldPos;
+      ViewDistance = length(WorldViewVector);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel/Vertex" name="NormalizeVector">
+    <desc>
+      Normalizes the specified 3D vector.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="Input"/>
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="Output"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      Output = normalize(Input);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="ComputeProjectiveCoordinates">
+    <desc>
+      This fragment transforms the world position through the world projective
+      matrix
+    </desc>
+    <inputs>
+      <resource type="float4" semantic="Position" label="" 
+      variable="WorldPos" />
+      <resource type="float4x4" semantic="" label="" 
+      variable="ProjectiveMatrix" />
+    </inputs>
+    <outputs>
+      <resource type="float4" semantic="TexCoord" label="" 
+      variable="PlanarTex" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      PlanarTex = mul(float4(WorldPos.xyz,1.0), ProjectiveMatrix);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="TextureRGBASample">
+    <desc>
+      This fragment is responsible for sampling a texture and returning its value
+      as a RGB value and an A value.
+    </desc>
+    <inputs>
+      <resource type="float2" semantic="TexCoord" label="" 
+          variable="TexCoord" />
+      <resource type="sampler2D" semantic="Texture" label="" 
+          variable="Sampler" />
+      <resource type="bool" semantic="" label="" 
+          variable="Saturate" default="(true)" />
+    </inputs>
+    <outputs>
+      <resource type="float4" semantic="Color" label="" 
+          variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" 
+          platform="D3D10/DX9/Xenon/PS3" 
+      target="ps_2_0/vs_3_0/ps_3_0/ps_4_0">
+      ColorOut = tex2D(Sampler, TexCoord);
+      if (Saturate)
+      {
+      ColorOut = saturate(ColorOut);
+      }
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalculateWorldNormal">
+    <desc>
+      This fragment is responsible for computing the final RGBA color.
+    </desc>
+    <inputs>
+      <resource type="float3" semantic="Normal" label="" 
+          variable="Normal" />
+      <resource type="float3" semantic="Tangent" label="" 
+          variable="Tangent" />
+      <resource type="float3" semantic="Binormal" label="" 
+          variable="Binormal" />
+      <resource type="float4" semantic="Color" label="" 
+          variable="NormalMap" />
+    </inputs>
+    <outputs>
+      <resource type="float3" semantic="Normal" label="" 
+          variable="WorldNormalOut" />
+    </outputs>
+    <code lang="hlsl/Cg" 
+          platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      NormalMap.rgb = normalize((2 * (NormalMap.rgb)) - 1);
+
+      float3 Nn = normalize(Normal);
+      float3 Tn = normalize(Tangent);
+      float3 Bn = normalize(Binormal);
+      Nn = Nn + NormalMap.r*Tn + NormalMap.g*Bn;
+      WorldNormalOut = normalize(Nn);
+
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalculateDiffuseColor">
+    <desc>
+      Accumulates the affects of a single light.
+
+      WorldNormal and LightDirection are assumed to be normalized.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="Normal"/>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="LightDirection"/>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="LightDiffuse"
+                default="(1.0, 1.0, 1.0)"/>      
+    </inputs>
+    <outputs>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="DiffuseOut"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+
+      float NdotL = saturate(dot(Normal, -LightDirection));
+      DiffuseOut = LightDiffuse * NdotL;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalculatePlanarReflection">
+    <desc>
+      Calculates the color value using planar reflection
+
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="PlanarTex"/>
+      <resource type="float3"
+                semantic="Normal"
+                label=""
+                variable="Normal"/>
+      <resource type="sampler2D" semantic="Texture" label="" 
+          variable="Sampler_Env" />
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Disturbance"
+                default="(25.0)"/>
+    </inputs>
+    <outputs>
+      <resource type="float4"
+                semantic="Color"
+                label=""
+                variable="ReflectOut"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+
+      float4 reflProj = PlanarTex.xyzz;
+      reflProj.xy += Normal.xy * Disturbance;
+      ReflectOut = tex2Dproj(Sampler_Env, reflProj);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalculateRefraction">
+    <desc>
+      Calculates the color value using planar refrection
+
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="PlanarTex"/>
+      <resource type="float3"
+                semantic="Normal"
+                label=""
+                variable="Normal"/>
+      <resource type="sampler2D" 
+                semantic="Texture" 
+                label="" 
+                variable="Sampler_Env" />
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Disturbance"
+                default="(25.0)"/>
+    </inputs>
+    <outputs>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="RefractedOut"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+
+      float4 reflProj = PlanarTex.xyzz;
+      reflProj.xy += Normal.xy * Disturbance;
+      reflProj.y = reflProj.z - reflProj.y;
+      RefractedOut = tex2Dproj(Sampler_Env, reflProj);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalculateReflectionVector">
+    <desc>
+      Calculates the reflection vector to be used for cubemap reflection
+
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic="Position"
+                label=""
+                variable="ViewVector"/>
+      <resource type="float3"
+                semantic="Normal"
+                label=""
+                variable="Normal"/>
+    </inputs>
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="ReflectionVector"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+
+      ReflectionVector = normalize(reflect(ViewVector, Normal));
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalculateCubeMapReflection">
+    <desc>
+      Calculates the reflection vector to be used for cubemap reflection
+
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="ReflectionVector"/>
+      <resource type="samplerCUBE" semantic="Texture" label="" 
+            variable="Sampler" />
+    </inputs>
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="ReflectedOut"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+
+      ReflectedOut = texCUBE(Sampler, ReflectionVector.xzy);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalculateSpecularColor">
+    <desc>
+      Calculates the specular color
+
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="ReflectionVector"/>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="LightDirection"/>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="LightSpecular"
+                default="(1.0, 1.0, 1.0)"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Specularity"
+                default="(3.0)"/>
+    </inputs>
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="ColorOut"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      ColorOut = 2 * LightSpecular * pow(dot(ReflectionVector, LightDirection), Specularity);
+    </code>
+    <code lang="hlsl/Cg"
+          platform="PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      ColorOut = 2 * LightSpecular * pow(abs(dot(ReflectionVector, LightDirection)), Specularity);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="AccumulateColors">
+    <desc>
+      Additions two colors together
+     
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="MaterialColor"/>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="LightDiffuse"/>
+    </inputs>
+    <outputs>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="DiffuseOut"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+
+      DiffuseOut.rgb = saturate(MaterialColor.rgb + LightDiffuse);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="ModulateColors">
+    <desc>
+      Multiplies two colors together
+
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="MaterialColor"/>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="LightDiffuse"/>
+    </inputs>
+    <outputs>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="DiffuseOut"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+
+      DiffuseOut.rgb = saturate(MaterialColor.rgb * LightDiffuse);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="LerpColors">
+    <desc>
+      Lerps between two colors
+
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="MaterialColor"/>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="Color1"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="LerpValue"/>
+    </inputs>
+    <outputs>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="LerpOut"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+
+      LerpOut.rgb = lerp(MaterialColor.rgb, Color1, LerpValue);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="RetrieveAlpha">
+    <desc>
+      Returns the alpha value of a given color
+
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="Color"
+                label=""
+                variable="Color"/>
+    </inputs>
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="AlphaOut"/>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="ColorOut"/>
+      
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+     
+      AlphaOut = Color.a;
+      ColorOut.rgb = Color.rgb;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="ComputeFogFactor">
+    <desc>
+      Calculates the fog factor. This is used to compute the refraction
+
+    </desc>
+
+    <inputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="ViewDistance"/>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="ViewVector"/>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="WorldNormal"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Depth"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="FogDensity"
+                default="(1.0)"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="FogDistance"
+                default="(1.0)"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="FogFallOff"
+                default="(1.0)"/>      
+    </inputs>
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="FogFactor"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      float distanceFactor = pow(clamp(ViewDistance / FogDistance, 0, 1), FogFallOff);
+      FogFactor = 1 - dot(ViewVector, WorldNormal);
+      FogFactor = clamp(FogFactor * FogFactor,0,1);
+      FogFactor = FogFactor + distanceFactor;
+      FogFactor = FogFactor * pow(Depth, 0.5);
+      FogFactor = clamp(FogFactor,0,1);
+      FogFactor = clamp((FogFactor * FogDensity), 0, 1);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="ComputeFresnelFactor">
+    <desc>
+      Calculates the fresnel factor. This is used to lerp between refraction
+      and reflection
+
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="ReflectionVector"/>
+      <resource type="float3"
+                semantic="Normal"
+                label=""
+                variable="WorldNormal"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="ReflectionFactor"
+                default="(0.375)"/>
+    </inputs>
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="FresnelFactor"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      FresnelFactor = 1 - clamp(pow(dot(ReflectionVector,WorldNormal),ReflectionFactor),0,1);
+    </code>
+    <code lang="hlsl/Cg"
+          platform="PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      FresnelFactor = 1 - clamp(pow(abs(dot(ReflectionVector,WorldNormal)),ReflectionFactor),0,1);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="MultiplyScalars">
+    <desc>
+      Does a scalar multiplication
+
+    </desc>
+
+    <inputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Scalar1"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Scalar2"/>
+    </inputs>
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Result"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      Result = Scalar1 * Scalar2;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="LerpScalars">
+    <desc>
+      Lerps between two scalars
+
+    </desc>
+
+    <inputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Scalar1"
+                default="(1.0)"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Scalar2"
+                default="(1.0)"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="LerpValue"/>
+    </inputs>
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Result"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      Result = lerp(Scalar1, Scalar2, LerpValue);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="SetColorAndAlpha">
+    <desc>
+      This fragment is responsible for computing the final RGBA color.
+    </desc>
+    <inputs>
+      <resource type="float3" semantic="Color" label="" 
+          variable="Color" default="(0.0, 0.0, 0.0)" />
+      <resource type="float" semantic="" label="" 
+          variable="Alpha" default="(1.0)" />
+    </inputs>
+    <outputs>
+      <resource type="float4" semantic="Color" label="" 
+          variable="OutputColor" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputColor.rgb = Color.rgb;
+      OutputColor.a = Alpha;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel/Vertex" name="ApplyFog">
+    <desc>
+      This fragment is responsible for applying the fog amount.
+    </desc>
+    <inputs>
+      <resource type="float4"
+                semantic="Color"
+                label=""
+                variable="UnfoggedColor"/>
+
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="FogColor"
+                default="(0.5, 0.5, 0.5)"/>
+
+      <resource type="float"
+                semantic="Fog"
+                label=""
+                variable="FogAmount" />
+    </inputs>
+
+    <outputs>
+      <resource type="float4"
+                semantic="Color"
+                label=""
+                variable="FoggedColor" />
+    </outputs>
+
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+      FoggedColor.rgb = lerp(FogColor, UnfoggedColor.rgb, FogAmount);
+      FoggedColor.a = UnfoggedColor.a;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="CalculateFog">
+    <desc>
+      This fragment is responsible for handling fogging calculations.
+      FogType can be one of 4 values:
+
+      NONE   - 0
+      EXP    - 1
+      EXP2   - 2
+      LINEAR - 3
+    </desc>
+    <inputs>
+      <resource type="int"
+                semantic="FogType" label=""
+                variable="FogType" />
+
+      <resource type="float"
+                semantic="FogDensity"
+                label=""
+                variable="FogDensity"
+                default="(1.0)"/>
+
+      <resource type="float"
+                semantic="ViewDistance"
+                label=""
+                variable="ViewDistance"
+                default="(0.0, 0.0, 0.0)"/>
+
+      <resource type="bool"
+                semantic="FogRange"
+                label=""
+                variable="FogRange"
+                default="(false)"/>
+
+      <resource type="float2"
+                semantic="FogStartEnd"
+                label=""
+                variable="FogStartEnd"
+                default="(0.0, 1.0)"/>
+    </inputs>
+    <outputs>
+      <resource type="float" semantic="Fog" label="" variable="FogOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+      if (FogType == 0) // NONE
+      {
+      FogOut = 1.0;
+      }
+      else if (FogType == 1) // EXP
+      {
+      FogOut = 1.0 / exp( ViewDistance * FogDensity);
+      }
+      else if (FogType == 2) // EXP2
+      {
+      FogOut = 1.0 / exp( pow( ViewDistance * FogDensity, 2));
+      }
+      else if (FogType == 3) // LINEAR
+      {
+      FogOut = saturate((FogStartEnd.y - ViewDistance) /
+      (FogStartEnd.y - FogStartEnd.x));
+      }
+    </code>
+  </fragment>
+  <!--========================================================================-->  
+</library>
+

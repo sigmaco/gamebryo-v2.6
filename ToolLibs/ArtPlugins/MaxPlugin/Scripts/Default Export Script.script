@@ -1,0 +1,7 @@
+Version: 1
+Script ("Default Export Script","Export")
+{
+	Plugin ("NifExportPlugin","NIF Exporter","1.0","EXPORT")
+	{
+	}
+}

@@ -1,0 +1,2648 @@
+  SceneDesignerFramework.MCollectionPropertyEditorForm.resources - Embedded, ContainedInManifestFile, 
+Assembly SceneDesignerFramework, Version=2.2.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=SHA1, flags=None
+Assembly System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=SHA1, flags=None
+Assembly System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=SHA1, flags=None
+Assembly System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=SHA1, flags=None
+Assembly System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=SHA1, flags=None
+Assembly System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=SHA1, flags=None
+Assembly Accessibility, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=SHA1, flags=None
+Assembly Microsoft.VisualC, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=SHA1, flags=None
+Class Emergent.Gamebryo.SceneDesigner.Framework.MDisposable: AutoLayout, AnsiClass, Class, Public, Abstract, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Methods:
+    Dispose(): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.IService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    Initialize(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    Start(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.PropertyType: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String, System.String, System.Type, System.Type, System.Type, System.Type): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(System.String, System.String, System.Type, System.Type, System.Type): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(System.String, System.String, System.Type): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.Type CollectionEditor 'get set' : 
+    System.Type TypeConverter 'get set' : 
+    System.Type Editor 'get set' : 
+    System.Type ManagedType 'get set' : 
+    System.String PrimitiveType 'get set' : 
+    System.String Name 'get set' : 
+  Methods:
+    get_Name(): PrivateScope, Public, SpecialName
+    set_Name(String): PrivateScope, Public, SpecialName
+    get_PrimitiveType(): PrivateScope, Public, SpecialName
+    set_PrimitiveType(String): PrivateScope, Public, SpecialName
+    get_ManagedType(): PrivateScope, Public, SpecialName
+    set_ManagedType(Type): PrivateScope, Public, SpecialName
+    get_Editor(): PrivateScope, Public, SpecialName
+    set_Editor(Type): PrivateScope, Public, SpecialName
+    get_TypeConverter(): PrivateScope, Public, SpecialName
+    set_TypeConverter(Type): PrivateScope, Public, SpecialName
+    get_CollectionEditor(): PrivateScope, Public, SpecialName
+    set_CollectionEditor(Type): PrivateScope, Public, SpecialName
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IPropertyTypeService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    RegisterType(PropertyType, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RegisterType(PropertyType): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    UnregisterType(PropertyType): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    Clear(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    LookupType(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    IsTypeVisibleToUser(PropertyType): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetAllPropertyTypes(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.UndoRedoHandler: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(ICommand[]): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(ICommand[], AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ICommandService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    UInt32 RedoStackCount 'get ' : 
+    UInt32 UndoStackCount 'get ' : 
+  Events:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.UndoRedoHandler CommandsRemovedFromRedoStack: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.UndoRedoHandler CommandsAddedToRedoStack: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.UndoRedoHandler CommandsRemovedFromUndoStack: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.UndoRedoHandler CommandsAddedToUndoStack: 
+  Methods:
+    ExecuteCommand(ICommand, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    UndoCommands(UInt32): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RedoCommands(UInt32): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    BeginUndoFrame(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    EndUndoFrame(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    get_UndoStackCount(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    get_RedoStackCount(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    GetUndoCommandNames(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetRedoCommandNames(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetUndoCommands(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetRedoCommands(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveFromUndoRedoStack(ICommand): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ClearUndoAndRedoStacks(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    add_CommandsAddedToUndoStack(UndoRedoHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    remove_CommandsAddedToUndoStack(UndoRedoHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    add_CommandsRemovedFromUndoStack(UndoRedoHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    remove_CommandsRemovedFromUndoStack(UndoRedoHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    add_CommandsAddedToRedoStack(UndoRedoHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    remove_CommandsAddedToRedoStack(UndoRedoHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    add_CommandsRemovedFromRedoStack(UndoRedoHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    remove_CommandsRemovedFromRedoStack(UndoRedoHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.Message: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String, System.String, System.Object): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Fields:
+    System.String m_strText : Public
+    System.String m_strDetails : Public
+    System.Object m_pmObject : Public
+    System.String m_strTime : Public
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.MessageAddedHandler: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MessageChannelType, Int32): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MessageChannelType, Int32, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ChannelMessagesClearedHandler: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MessageChannelType): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MessageChannelType, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.AllMessagesClearedHandler: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IMessageService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Events:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.AllMessagesClearedHandler AllMessagesCleared: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ChannelMessagesClearedHandler ChannelMessagesCleared: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.MessageAddedHandler MessageAdded: 
+  Methods:
+    GetChannelName(MessageChannelType): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    AddMessage(MessageChannelType, Message): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    AddMessage(MessageChannelType, String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetMessage(MessageChannelType, Int32): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetLatestMessage(MessageChannelType): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetMessages(MessageChannelType): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ClearMessages(MessageChannelType): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ClearAllMessages(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    add_MessageAdded(MessageAddedHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    remove_MessageAdded(MessageAddedHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    add_ChannelMessagesCleared(ChannelMessagesClearedHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    remove_ChannelMessagesCleared(ChannelMessagesClearedHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    add_AllMessagesCleared(AllMessagesClearedHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    remove_AllMessagesCleared(AllMessagesClearedHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+Class Emergent.Gamebryo.SceneDesigner.Framework.MPropertyContainer: AutoLayout, AnsiClass, Class, Public, Abstract, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    System.ComponentModel.ICustomTypeDescriptor
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.Framework.MLayer Layer 'get set' : 
+    System.String SourceFilename 'get ' : 
+    System.Guid ID 'get ' : 
+    Boolean Writable 'get set' : 
+    NiEntityPropertyInterface* PropertyInterface 'get ' : 
+    Boolean Dirty 'get set' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, SpecialName
+    get_Dirty(): PrivateScope, Public, SpecialName
+    set_Dirty(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_PropertyInterface(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    HasProperty(String): PrivateScope, Public
+    IsCollection(String): PrivateScope, Public
+    GetElementCount(String): PrivateScope, Public
+    SetElementCount(String, UInt32): PrivateScope, Public
+    IsPropertyReadOnly(String): PrivateScope, Public
+    GetPropertyType(String): PrivateScope, Public
+    IsPropertyUnique(String): PrivateScope, Public
+    IsPropertyInheritable(String): PrivateScope, Public
+    GetPropertyDisplayName(String): PrivateScope, Public
+    IsExternalAssetPath(String, UInt32): PrivateScope, Public
+    GetPropertyData(String, UInt32): PrivateScope, Public
+    GetPropertyData(String): PrivateScope, Public
+    SetPropertyData(String, Object, UInt32, Boolean(HasFieldMarshal)): PrivateScope, Public
+    SetPropertyData(String, Object, Boolean(HasFieldMarshal)): PrivateScope, Public
+    CanResetProperty(String): PrivateScope, Public
+    ResetProperty(String): PrivateScope, Public
+    MakePropertyUnique(String): PrivateScope, Public
+    get_Writable(): PrivateScope, Public, Virtual, VtableLayoutMask, SpecialName
+    set_Writable(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, SpecialName
+    get_ID(): PrivateScope, Public, SpecialName
+    get_SourceFilename(): PrivateScope, Public, SpecialName
+    get_Layer(): PrivateScope, Public, SpecialName
+    GetAttributes(): PrivateScope, Public, Virtual
+    GetClassName(): PrivateScope, Public, Virtual
+    GetComponentName(): PrivateScope, Public, Virtual
+    GetConverter(): PrivateScope, Public, Virtual
+    GetDefaultEvent(): PrivateScope, Public, Virtual
+    GetDefaultProperty(): PrivateScope, Public, Virtual
+    GetEditor(Type): PrivateScope, Public, Virtual
+    GetEvents(Attribute[]): PrivateScope, Public, Virtual
+    GetEvents(): PrivateScope, Public, Virtual
+    GetProperties(Attribute[]): PrivateScope, Public, Virtual
+    GetProperties(): PrivateScope, Public, Virtual
+    GetPropertyOwner(PropertyDescriptor): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MComponent: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MPropertyContainer
+    Void .ctor(NiEntityComponentInterface*): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.Framework.MComponent RootMasterComponent 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MComponent MasterComponent 'get set' : 
+    NiEntityPropertyInterface* PropertyInterface 'get ' : 
+    System.Guid TemplateID 'get set' : 
+    System.String Name 'get ' : 
+  Methods:
+    CreateGeneralComponent(String): PrivateScope, Public, Static
+    GetNiEntityComponentInterface(): PrivateScope, Public
+    get_Name(): PrivateScope, Public, SpecialName
+    get_TemplateID(): PrivateScope, Public, SpecialName
+    set_TemplateID(Guid): PrivateScope, Public, SpecialName
+    get_PropertyInterface(): PrivateScope, Public, Virtual, SpecialName
+    Clone(Boolean(HasFieldMarshal)): PrivateScope, Public
+    get_MasterComponent(): PrivateScope, Public, SpecialName
+    set_MasterComponent(MComponent): PrivateScope, Public, SpecialName
+    get_RootMasterComponent(): PrivateScope, Public, SpecialName
+    IsAddOrRemovePropertySupported(): PrivateScope, Public
+    AddProperty(String, String, String, String, Boolean(HasFieldMarshal), String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    AddProperty(String, String, String, String, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RemoveProperty(String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    GetDependentPropertyNames(): PrivateScope, Public
+    GetDescription(String): PrivateScope, Public
+    SetDescription(String, String): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MRenderingContext: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiEntityRenderingContext*): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetRenderingContext(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEntity: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MPropertyContainer
+    Void .ctor(NiEntityInterface*): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Boolean Writable 'get set' : 
+    System.String TagDelimiterString 'get ' : 
+    SByte TagDelimiter 'get ' IsSignUnspecifiedByte : 
+    System.String[] TagsArray 'get ' : 
+    System.String Tags 'get set' : 
+    Boolean LocalFrozen 'get ' : 
+    Boolean Frozen 'get set' : 
+    Boolean LocalHidden 'get ' : 
+    Boolean Hidden 'get set' : 
+    UInt32 ComponentCount 'get ' : 
+    Boolean SupportsComponents 'get ' : 
+    Boolean IsPrefabRoot 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MEntity PrefabRoot 'get set' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MEntity RootMasterEntity 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MEntity MasterEntity 'get set' : 
+    NiEntityPropertyInterface* PropertyInterface 'get ' : 
+    System.Guid TemplateID 'get set' : 
+    System.String Name 'get set' : 
+  Methods:
+    ToString(): PrivateScope, Public, Virtual
+    get_Name(): PrivateScope, Public, SpecialName
+    set_Name(String): PrivateScope, Public, SpecialName
+    get_TemplateID(): PrivateScope, Public, SpecialName
+    set_TemplateID(Guid): PrivateScope, Public, SpecialName
+    get_PropertyInterface(): PrivateScope, Public, Virtual, SpecialName
+    CreateGeneralEntity(String): PrivateScope, Public, Static
+    Clone(String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    get_MasterEntity(): PrivateScope, Public, SpecialName
+    set_MasterEntity(MEntity): PrivateScope, Public, SpecialName
+    get_RootMasterEntity(): PrivateScope, Public, SpecialName
+    MakeEntityUnique(): PrivateScope, Public
+    get_PrefabRoot(): PrivateScope, Public, SpecialName
+    set_PrefabRoot(MEntity): PrivateScope, Public, SpecialName
+    get_IsPrefabRoot(): PrivateScope, Public, SpecialName
+    GetPrefabEntities(): PrivateScope, Public
+    get_SupportsComponents(): PrivateScope, Public, SpecialName
+    get_ComponentCount(): PrivateScope, Public, SpecialName
+    GetComponents(): PrivateScope, Public
+    GetComponentByTemplateID(Guid): PrivateScope, Public
+    CanAddComponent(MComponent): PrivateScope, Public
+    CanRemoveComponent(MComponent): PrivateScope, Public
+    AddComponent(MComponent, Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public
+    RemoveComponent(MComponent, Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public
+    GetPropertyNames(): PrivateScope, Public
+    GetSceneRootPointer(UInt32): PrivateScope, Public
+    GetSceneRootPointerCount(): PrivateScope, Public
+    get_Hidden(): PrivateScope, Public, SpecialName
+    set_Hidden(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    SetHidden(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public
+    get_LocalHidden(): PrivateScope, Public, SpecialName
+    get_Frozen(): PrivateScope, Public, SpecialName
+    set_Frozen(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    SetFrozen(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public
+    get_LocalFrozen(): PrivateScope, Public, SpecialName
+    get_Tags(): PrivateScope, Public, SpecialName
+    set_Tags(String): PrivateScope, Public, SpecialName
+    get_TagsArray(): PrivateScope, Public, SpecialName
+    AddTag(String): PrivateScope, Public
+    RemoveTag(String): PrivateScope, Public
+    ContainsTag(String): PrivateScope, Public
+    get_TagDelimiter(): PrivateScope, Public, Static, SpecialName
+    get_TagDelimiterString(): PrivateScope, Public, Static, SpecialName
+    get_Writable(): PrivateScope, Public, Virtual, SpecialName
+    set_Writable(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityInterface(): PrivateScope, Public
+    Update(Single, NiExternalAssetManager*): PrivateScope, Public
+    GetProperties(Attribute[]): PrivateScope, Public, Virtual
+    GetProperties(): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEntity+EntityDescriptor: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+  :System.ComponentModel.PropertyDescriptor
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MEntity, ValueType, System.String, System.Attribute[]): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.Type PropertyType 'get ' : 
+    Boolean IsReadOnly 'get ' : 
+    System.Type ComponentType 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MEntity Entity 'get ' : 
+  Methods:
+    get_Entity(): PrivateScope, Public, SpecialName
+    get_ComponentType(): PrivateScope, Public, Virtual, SpecialName
+    get_IsReadOnly(): PrivateScope, Public, Virtual, SpecialName
+    get_PropertyType(): PrivateScope, Public, Virtual, SpecialName
+    CanResetValue(Object): PrivateScope, Public, Virtual
+    GetValue(Object): PrivateScope, Public, Virtual
+    ResetValue(Object): PrivateScope, Public, Virtual
+    SetValue(Object, Object): PrivateScope, Public, Virtual
+    ShouldSerializeValue(Object): PrivateScope, Public, Virtual
+    GetEditor(Type): PrivateScope, Public, Virtual
+    get_Converter(): PrivateScope, Public, Virtual
+Struct Emergent.Gamebryo.SceneDesigner.Framework.MEntity+EntityDescriptor+ValueType: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    ValueType ID = 3 : Public, Static, Literal, HasDefault
+    ValueType Name = 0 : Public, Static, Literal, HasDefault
+    ValueType Tags = 6 : Public, Static, Literal, HasDefault
+    ValueType Frozen = 5 : Public, Static, Literal, HasDefault
+    ValueType Hidden = 4 : Public, Static, Literal, HasDefault
+    ValueType Layer = 2 : Public, Static, Literal, HasDefault
+    ValueType MasterEntity = 1 : Public, Static, Literal, HasDefault
+Class Emergent.Gamebryo.SceneDesigner.Framework.MCollectionPropertyEditor: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.Design.CollectionEditor
+    Void .ctor(System.Type, System.Type): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    EditValue(ITypeDescriptorContext, IServiceProvider, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEntityPropertyDescriptor: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.PropertyDescriptor
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MPropertyContainer, System.String, UInt32, System.Type, System.Type, System.String, System.Attribute[]): PrivateScope, Public, SpecialName, RTSpecialName
+  Fields:
+    UInt32 INVALID_PROPERTY_INDEX = 4294967295 : Public, Static, Literal, HasDefault
+  Properties:
+    System.ComponentModel.TypeConverter Converter 'get ' : 
+    System.Type PropertyType 'get ' : 
+    Boolean IsReadOnly 'get ' : 
+    System.Type ComponentType 'get ' : 
+    System.Type ConverterType 'get ' : 
+    System.Type EditorType 'get ' : 
+    UInt32 PropertyIndex 'get ' : 
+    System.String PropertyName 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MPropertyContainer PropertyContainer 'get ' : 
+  Methods:
+    get_PropertyContainer(): PrivateScope, Public, SpecialName
+    get_PropertyName(): PrivateScope, Public, SpecialName
+    get_PropertyIndex(): PrivateScope, Public, SpecialName
+    get_EditorType(): PrivateScope, Public, SpecialName
+    get_ConverterType(): PrivateScope, Public, SpecialName
+    get_ComponentType(): PrivateScope, Public, Virtual, SpecialName
+    get_IsReadOnly(): PrivateScope, Public, Virtual, SpecialName
+    get_PropertyType(): PrivateScope, Public, Virtual, SpecialName
+    CanResetValue(Object): PrivateScope, Public, Virtual
+    GetValue(Object): PrivateScope, Public, Virtual
+    ResetValue(Object): PrivateScope, Public, Virtual
+    SetValue(Object, Object): PrivateScope, Public, Virtual
+    ShouldSerializeValue(Object): PrivateScope, Public, Virtual
+    GetEditor(Type): PrivateScope, Public, Virtual
+    get_Converter(): PrivateScope, Public, Virtual, SpecialName
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.ServiceProvider: AutoLayout, AnsiClass, Class, Public, Abstract, BeforeFieldInit
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ServiceProvider Instance 'get ' : 
+  Methods:
+    GetService(Type): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    Shutdown(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    get_Instance(): PrivateScope, Public, Static, SpecialName
+Struct NiEntityCommandInterface: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Abstract, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.MessageChannelType: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.MessageChannelType Conflicts = 3 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.MessageChannelType General = 2 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.MessageChannelType Errors = 1 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.MessageChannelType AllChannels = 0 : Public, Static, Literal, HasDefault
+Struct NiEntityPropertyInterface: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Abstract, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiEntityComponentInterface: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Abstract, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiEntityRenderingContext: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiEntityInterface: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Abstract, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiAVObject: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiExternalAssetManager: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Class Emergent.Gamebryo.SceneDesigner.Framework.MComponentFactory: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Methods:
+    Get(NiEntityComponentInterface*): PrivateScope, Public
+    Remove(MComponent): PrivateScope, Public
+    Remove(NiEntityComponentInterface*): PrivateScope, Public
+    Clear(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MAddRemovePropertyCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiAddRemovePropertyCommand*, Emergent.Gamebryo.SceneDesigner.Framework.MPropertyContainer): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MUtility: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetStreamingFormatDescriptions(): PrivateScope, Public, Static
+    GetStreamingFormatExtensions(): PrivateScope, Public, Static
+    GetFormatFromFilename(String): PrivateScope, Public, Static
+    GetCurrentTimeInSec(): PrivateScope, Public, Static
+    GetGamebryoVersion(): PrivateScope, Public, Static
+    GetGamebryoBuildDate(): PrivateScope, Public, Static
+    GetVersionFromString(String): PrivateScope, Public, Static
+    SetImageSubFolder(String): PrivateScope, Public, Static
+    RadiansToDegrees(Single): PrivateScope, Public, Static
+    DegreesToRadians(Single): PrivateScope, Public, Static
+    FloatToRGB(Single): PrivateScope, Public, Static
+    RGBToFloat(Byte): PrivateScope, Public, Static
+    AddErrorInterfaceMessages(NiEntityErrorInterface*): PrivateScope, Public, Static
+    AddErrorInterfaceMessages(MessageChannelType, NiEntityErrorInterface*): PrivateScope, Public, Static
+    IDToGuid(NiUniqueID* IsImplicitlyDereferenced): PrivateScope, Public, Static
+    GuidToID(Guid, NiUniqueID* IsImplicitlyDereferenced): PrivateScope, Public, Static
+Struct NiAddRemovePropertyCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiEntityErrorInterface: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Abstract, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiUniqueID: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiUniqueID+HashFunctor: AutoLayout, AnsiClass, Class, NestedPublic, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiPoint2: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiPoint3: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiQuaternion: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiMatrix3: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEntityCloneHelper: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Clone(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    Fixup(Boolean(HasFieldMarshal)): PrivateScope, Public
+    Lookup(MEntity): PrivateScope, Public
+    GetEntities(): PrivateScope, Public
+    Reset(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MSelectionSet: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiEntitySelectionSet*): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    UInt32 EntityCount 'get ' : 
+    System.String Name 'get set' : 
+  Methods:
+    Create(String, UInt32): PrivateScope, Public, Static
+    Create(String): PrivateScope, Public, Static
+    ToString(): PrivateScope, Public, Virtual
+    GetNiEntitySelectionSet(): PrivateScope, Public
+    get_Name(): PrivateScope, Public, SpecialName
+    set_Name(String): PrivateScope, Public, SpecialName
+    get_EntityCount(): PrivateScope, Public, SpecialName
+    AddEntity(MEntity): PrivateScope, Public
+    RemoveEntity(MEntity): PrivateScope, Public
+    RemoveAllEntities(): PrivateScope, Public
+    GetEntities(): PrivateScope, Public
+    GetEntityByName(String): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MPoint3: AutoLayout, AnsiClass, Class, Public, Serializable, BeforeFieldInit
+    Void .ctor(NiPoint3*): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(Single, Single, Single): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Single Z   'get set' : 
+    Single Y   'get set' : 
+    Single X   'get set' : 
+  Methods:
+    SetData(NiPoint3* IsImplicitlyDereferenced): PrivateScope, Public
+    ToNiPoint3(NiPoint3* IsImplicitlyDereferenced): PrivateScope, Public
+    get_X(): PrivateScope, Public, SpecialName
+    set_X(Single): PrivateScope, Public, SpecialName
+    get_Y(): PrivateScope, Public, SpecialName
+    set_Y(Single): PrivateScope, Public, SpecialName
+    get_Z(): PrivateScope, Public, SpecialName
+    set_Z(Single): PrivateScope, Public, SpecialName
+    Add(MPoint3, MPoint3): PrivateScope, Public, Static
+    Subtract(MPoint3, MPoint3): PrivateScope, Public, Static
+    Multiply(Single, MPoint3): PrivateScope, Public, Static
+    Dot(MPoint3, MPoint3): PrivateScope, Public, Static
+    Cross(MPoint3, MPoint3): PrivateScope, Public, Static
+    Unitize(MPoint3): PrivateScope, Public, Static
+    Length(MPoint3): PrivateScope, Public, Static
+    Equals(Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MScene: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiScene*): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String SourceFilename 'get set' : 
+    Boolean Writable 'get ' : 
+    UInt32 LayerFilenameCount 'get ' : 
+    UInt32 SelectionSetCount 'get ' : 
+    Boolean Dirty 'get set' : 
+    UInt32 EntityCount 'get ' : 
+    System.String Name 'get set' : 
+  Methods:
+    GetNiScene(): PrivateScope, Public
+    get_Name(): PrivateScope, Public, SpecialName
+    set_Name(String): PrivateScope, Public, SpecialName
+    get_EntityCount(): PrivateScope, Public, SpecialName
+    get_Dirty(): PrivateScope, Public, SpecialName
+    set_Dirty(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    GetEntities(): PrivateScope, Public
+    GetEntityByName(String): PrivateScope, Public
+    GetEntityByID(Guid): PrivateScope, Public
+    AddEntity(MEntity, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RemoveEntity(MEntity, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RemoveAllEntities(Boolean(HasFieldMarshal)): PrivateScope, Public
+    IsEntityInScene(MEntity): PrivateScope, Public
+    GetDependentEntities(MEntity): PrivateScope, Public
+    get_SelectionSetCount(): PrivateScope, Public, SpecialName
+    GetSelectionSets(): PrivateScope, Public
+    GetSelectionSetByName(String): PrivateScope, Public
+    AddSelectionSet(MSelectionSet): PrivateScope, Public
+    RemoveSelectionSet(MSelectionSet): PrivateScope, Public
+    RemoveAllSelectionSets(): PrivateScope, Public
+    IsSelectionSetInScene(MSelectionSet): PrivateScope, Public
+    get_LayerFilenameCount(): PrivateScope, Public, SpecialName
+    GetLayerFilenames(): PrivateScope, Public
+    AddLayerFilename(String): PrivateScope, Public
+    RenameLayerFilename(String, String): PrivateScope, Public
+    RemoveLayerFilename(String): PrivateScope, Public
+    RemoveAllLayerFilenames(): PrivateScope, Public
+    get_Writable(): PrivateScope, Public, SpecialName
+    get_SourceFilename(): PrivateScope, Public, SpecialName
+    set_SourceFilename(String): PrivateScope, Public, SpecialName
+    Update(Single, NiExternalAssetManager*): PrivateScope, Public
+    UpdateEffects(): PrivateScope, Public
+    GetUniqueEntityName(String): PrivateScope, Public
+    GetUniqueSelectionSetName(String): PrivateScope, Public
+    GetBound(NiBound*): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MBatchCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(System.String): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    AddCommand(ICommand): PrivateScope, Public
+    RemoveCommand(ICommand): PrivateScope, Public
+    RemoveAllCommands(): PrivateScope, Public
+    GetCommands(): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MPalette: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(System.String, UInt32): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MScene): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.Framework.MEntity ActiveEntity 'get set' : 
+    Boolean Writable 'get ' : 
+    Boolean Dirty 'get set' : 
+    Boolean DontSave 'get set' : 
+    UInt32 EntityCount 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MScene Scene 'get ' : 
+    System.String Name 'get set' : 
+  Methods:
+    get_Name(): PrivateScope, Public, SpecialName
+    set_Name(String): PrivateScope, Public, SpecialName
+    get_Scene(): PrivateScope, Public, SpecialName
+    get_EntityCount(): PrivateScope, Public, SpecialName
+    get_DontSave(): PrivateScope, Public, SpecialName
+    set_DontSave(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_Dirty(): PrivateScope, Public, SpecialName
+    set_Dirty(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_Writable(): PrivateScope, Public, SpecialName
+    GetEntities(): PrivateScope, Public
+    GetEntityByName(String): PrivateScope, Public
+    AddEntity(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RemoveEntity(MEntity, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RemoveAllEntities(Boolean(HasFieldMarshal)): PrivateScope, Public
+    AddComponentPropertyToEntities(MComponent, String, MScene[]): PrivateScope, Public
+    RemoveComponentPropertyFromEntities(MComponent, String, MScene[]): PrivateScope, Public
+    ReplaceComponentPropertyOnEntities(MComponent, String, String, MScene[]): PrivateScope, Public
+    GetEntityCategory(MEntity): PrivateScope, Public
+    ResetEntityNames(): PrivateScope, Public
+    get_ActiveEntity(): PrivateScope, Public, SpecialName
+    set_ActiveEntity(MEntity): PrivateScope, Public, SpecialName
+    CreateTemplateFromFile(String): PrivateScope, Public, Static
+    StripPaletteName(String): PrivateScope, Public, Static
+    {dtor}(): PrivateScope, Public
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.IRenderingMode: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Properties:
+    Boolean DisplayToUser 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    get_DisplayToUser(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    Update(Single): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    Begin(MRenderingContext): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    Render(MEntity[], MRenderingContext): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    Render(MEntity, MRenderingContext): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    End(MRenderingContext): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IRenderingModeService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    AddRenderingMode(IRenderingMode): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetRenderingModeByName(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetRenderingModes(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.IInteractionMode: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Properties:
+    System.Windows.Forms.Cursor MouseCursor 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    get_MouseCursor(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    Initialize(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    Update(Single): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RenderGizmo(MRenderingContext): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetHoverData(Int32*(Out), Int32*(Out)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    MouseEnter(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    MouseLeave(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    MouseHover(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    MouseMove(Int32, Int32): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    MouseWheel(Int32): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    DoubleClick(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Struct Emergent.Gamebryo.SceneDesigner.PluginAPI.IInteractionMode+MouseButtonType: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    MouseButtonType RightButton = 2 : Public, Static, Literal, HasDefault
+    MouseButtonType MiddleButton = 1 : Public, Static, Literal, HasDefault
+    MouseButtonType LeftButton = 0 : Public, Static, Literal, HasDefault
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IInteractionModeService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IInteractionMode ActiveMode 'get set' : 
+  Methods:
+    AddInteractionMode(IInteractionMode): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetInteractionModeByName(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetInteractionModes(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    get_ActiveMode(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    set_ActiveMode(IInteractionMode): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    Update(Single): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.SettingChangedEventArgs: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String, Emergent.Gamebryo.SceneDesigner.PluginAPI.SettingsCategory): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.SettingsCategory Category 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, SpecialName
+    get_Category(): PrivateScope, Public, SpecialName
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.SettingChangedHandler: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Object, SettingChangedEventArgs): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Object, SettingChangedEventArgs, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ISettingsService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    System.String SceneFileName 'get set' : 
+    System.String ScenePath 'get set' : 
+  Methods:
+    RegisterSettingsObject(String, Object, SettingsCategory): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetSettingsObject(String, SettingsCategory): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    SetSettingsObject(String, Object, SettingsCategory): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveSettingsObject(String, SettingsCategory): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    get_ScenePath(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    set_ScenePath(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    get_SceneFileName(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    set_SceneFileName(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    SaveSettings(SettingsCategory): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    LoadSettings(SettingsCategory): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ClearSettings(SettingsCategory): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    SetChangedSettingHandler(String, SettingsCategory, SettingChangedHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IOptionsService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    AddOption(String, SettingsCategory, String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    SetHelpDescription(String, String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetHelpDescription(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    SetTypeConverter(String, TypeConverter): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetTypeConverter(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    SetTypeEditor(String, Object): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetTypeEditor(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetOptions(String, SettingsCategory): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetOptions(SettingsCategory): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetSettingsObject(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetSettingsName(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetSettingsCategory(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ISelectionService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.Framework.MPoint3 SelectionCenter 'get set' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MEntity SelectedEntity 'get set' : 
+    Boolean CommandsAreUndoable 'get ' : 
+    Int32 NumSelectedEntities 'get ' : 
+  Methods:
+    AddEntitiesToSelection(MEntity[]): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    AddEntityToSelection(MEntity): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    AddSelectionSetToSelection(MSelectionSet): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveEntitiesFromSelection(MEntity[]): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveEntityFromSelection(MEntity): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveSelectionSetFromSelection(MSelectionSet): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ReplaceSelection(MSelectionSet): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ReplaceSelection(MEntity[]): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ClearSelectedEntities(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    get_NumSelectedEntities(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    GetSelectedEntities(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    get_CommandsAreUndoable(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    get_SelectedEntity(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    set_SelectedEntity(MEntity): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    get_SelectionCenter(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    set_SelectionCenter(MPoint3): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    IsEntitySelected(MEntity): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Class Emergent.Gamebryo.SceneDesigner.Framework.MViewport: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(Single, Single, Single, Single, Emergent.Gamebryo.SceneDesigner.Framework.MEntity): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(Single, Single, Single, Single): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.Drawing.Rectangle CameraNameRect 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IRenderingMode RenderingMode 'get set' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MScene ToolScene 'get ' : 
+    Int32 Height 'get ' : 
+    Int32 Width 'get ' : 
+    Single Bottom 'get ' : 
+    Single Top 'get ' : 
+    Single Right 'get ' : 
+    Single Left 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MEntity CameraEntity 'get ' : 
+  Methods:
+    _SDMInit(): PrivateScope, Public, Static
+    _SDMShutdown(): PrivateScope, Public, Static
+    get_CameraEntity(): PrivateScope, Public, SpecialName
+    GetNiCamera(): PrivateScope, Public
+    SetCamera(MEntity, Boolean(HasFieldMarshal)): PrivateScope, Public
+    Update(Single): PrivateScope, Public
+    UpdateClippingPlanes(): PrivateScope, Public
+    RenderUnselectedEntities(): PrivateScope, Public
+    RenderSelectedEntities(): PrivateScope, Public
+    RenderGizmo(): PrivateScope, Public
+    RenderScreenElements(Boolean(HasFieldMarshal)): PrivateScope, Public
+    UpdateScreenConsole(): PrivateScope, Public
+    get_Left(): PrivateScope, Public, SpecialName
+    get_Right(): PrivateScope, Public, SpecialName
+    get_Top(): PrivateScope, Public, SpecialName
+    get_Bottom(): PrivateScope, Public, SpecialName
+    SetViewportValues(Single, Single, Single, Single): PrivateScope, Public
+    get_Width(): PrivateScope, Public, SpecialName
+    get_Height(): PrivateScope, Public, SpecialName
+    get_ToolScene(): PrivateScope, Public, SpecialName
+    get_RenderingMode(): PrivateScope, Public, SpecialName
+    set_RenderingMode(IRenderingMode): PrivateScope, Public, SpecialName
+    get_CameraNameRect(): PrivateScope, Public, SpecialName
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Events:
+    __Delegate_PaletteWritableStatusChanged PaletteWritableStatusChanged: 
+    __Delegate_FilterOptionsChanged FilterOptionsChanged: 
+    __Delegate_FilterEnabledChanged FilterEnabledChanged: 
+    __Delegate_TagsManagerUpdated TagsManagerUpdated: 
+    __Delegate_PrefabRemoved PrefabRemoved: 
+    __Delegate_PrefabAdded PrefabAdded: 
+    __Delegate_EntitiesMovedToNewLayer EntitiesMovedToNewLayer: 
+    __Delegate_ActiveLayerChanged ActiveLayerChanged: 
+    __Delegate_LayerStatusChanged LayerStatusChanged: 
+    __Delegate_LayerFilenameRenamed LayerFilenameRenamed: 
+    __Delegate_LayerFilenameRemoved LayerFilenameRemoved: 
+    __Delegate_LayerFilenameAdded LayerFilenameAdded: 
+    __Delegate_LayerSaved LayerSaved: 
+    __Delegate_LayerSaving LayerSaving: 
+    __Delegate_LayerRenamed LayerRenamed: 
+    __Delegate_LayerDeleted LayerDeleted: 
+    __Delegate_LayerAdded LayerAdded: 
+    __Delegate_ApplicationClosing ApplicationClosing: 
+    __Delegate_LongOperationCompleted LongOperationCompleted: 
+    __Delegate_LongOperationStarted LongOperationStarted: 
+    __Delegate_ComponentServiceChanged ComponentServiceChanged: 
+    __Delegate_EntityTagsChanged EntityTagsChanged: 
+    __Delegate_EntityFrozenStateChanged EntityFrozenStateChanged: 
+    __Delegate_EntityHiddenStateChanged EntityHiddenStateChanged: 
+    __Delegate_CameraRemovedFromManager CameraRemovedFromManager: 
+    __Delegate_CameraAddedToManager CameraAddedToManager: 
+    __Delegate_ExclusiveViewportChanged ExclusiveViewportChanged: 
+    __Delegate_ActiveViewportChanged ActiveViewportChanged: 
+    __Delegate_ViewportRenderingModeChanged ViewportRenderingModeChanged: 
+    __Delegate_ViewportCameraChanged ViewportCameraChanged: 
+    __Delegate_SelectionSetNameChanged SelectionSetNameChanged: 
+    __Delegate_SelectionSetNameChanging SelectionSetNameChanging: 
+    __Delegate_ActivePaletteChanged ActivePaletteChanged: 
+    __Delegate_PaletteActiveEntityChanged PaletteActiveEntityChanged: 
+    __Delegate_PaletteRemoved PaletteRemoved: 
+    __Delegate_PaletteAdded PaletteAdded: 
+    __Delegate_EntityNameChanged EntityNameChanged: 
+    __Delegate_EntityNameChanging EntityNameChanging: 
+    __Delegate_SelectionSetRemovedFromScene SelectionSetRemovedFromScene: 
+    __Delegate_SelectionSetAddedToScene SelectionSetAddedToScene: 
+    __Delegate_EntityRemovedFromScene EntityRemovedFromScene: 
+    __Delegate_EntityAddedToScene EntityAddedToScene: 
+    __Delegate_RequestAddCloneToScene RequestAddCloneToScene: 
+    __Delegate_DeletedAutoSave DeletedAutoSave: 
+    __Delegate_NewSceneLoaded NewSceneLoaded: 
+    __Delegate_SceneClosing SceneClosing: 
+    __Delegate_MainSceneSaved MainSceneSaved: 
+    __Delegate_MainSceneSaving MainSceneSaving: 
+    __Delegate_SelectedEntitiesChanged SelectedEntitiesChanged: 
+    __Delegate_EntityComponentRemoved EntityComponentRemoved: 
+    __Delegate_EntityComponentAdded EntityComponentAdded: 
+    __Delegate_ComponentPropertyChanged ComponentPropertyChanged: 
+    __Delegate_ComponentPropertyChanging ComponentPropertyChanging: 
+    __Delegate_ComponentPropertyRemoved ComponentPropertyRemoved: 
+    __Delegate_ComponentPropertyAdded ComponentPropertyAdded: 
+    __Delegate_EntityPropertyChanged EntityPropertyChanged: 
+    __Delegate_EntityPropertyChanging EntityPropertyChanging: 
+    __Delegate_EntityPropertyRemoved EntityPropertyRemoved: 
+    __Delegate_EntityPropertyAdded EntityPropertyAdded: 
+  Methods:
+    RaiseEntityPropertyAdded(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseEntityPropertyRemoved(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseEntityPropertyChanging(MEntity, String, UInt32, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseEntityPropertyChanged(MEntity, String, UInt32, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseComponentPropertyAdded(MComponent, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseComponentPropertyRemoved(MComponent, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseComponentPropertyChanging(MComponent, String, UInt32, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseComponentPropertyChanged(MComponent, String, UInt32, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseEntityComponentAdded(MEntity, MComponent): PrivateScope, Public
+    RaiseEntityComponentRemoved(MEntity, MComponent): PrivateScope, Public
+    RaiseSelectedEntitiesChanged(): PrivateScope, Public
+    RaiseMainSceneSaving(String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseMainSceneSaved(String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseSceneClosing(MScene): PrivateScope, Public
+    RaiseNewSceneLoaded(MScene): PrivateScope, Public
+    RaiseDeletedAutoSave(String): PrivateScope, Public
+    RaiseRequestAddCloneToScene(MScene, MEntity, Boolean&): PrivateScope, Public
+    RaiseEntityAddedToScene(MScene, MEntity): PrivateScope, Public
+    RaiseEntityRemovedFromScene(MScene, MEntity): PrivateScope, Public
+    RaiseSelectionSetAddedToScene(MScene, MSelectionSet): PrivateScope, Public
+    RaiseSelectionSetRemovedFromScene(MScene, MSelectionSet): PrivateScope, Public
+    RaiseEntityNameChanging(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseEntityNameChanged(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaisePaletteAdded(MPalette): PrivateScope, Public
+    RaisePaletteRemoved(MPalette): PrivateScope, Public
+    RaisePaletteActiveEntityChanged(MPalette, MEntity): PrivateScope, Public
+    RaiseActivePaletteChanged(MPalette, MPalette): PrivateScope, Public
+    RaiseSelectionSetNameChanging(MSelectionSet, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseSelectionSetNameChanged(MSelectionSet, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseViewportCameraChanged(MViewport, MEntity): PrivateScope, Public
+    RaiseViewportRenderingModeChanged(MViewport, IRenderingMode): PrivateScope, Public
+    RaiseActiveViewportChanged(MViewport, MViewport): PrivateScope, Public
+    RaiseExclusiveViewportChanged(MViewport, MViewport): PrivateScope, Public
+    RaiseCameraAddedToManager(MEntity): PrivateScope, Public
+    RaiseCameraRemovedFromManager(MEntity): PrivateScope, Public
+    RaiseEntityHiddenStateChanged(MEntity, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseEntityFrozenStateChanged(MEntity, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseEntityTagsChanged(MEntity, String): PrivateScope, Public
+    RaiseComponentServiceChanged(MComponent): PrivateScope, Public
+    RaiseLongOperationStarted(): PrivateScope, Public
+    RaiseLongOperationCompleted(): PrivateScope, Public
+    RaiseApplicationClosing(): PrivateScope, Public
+    RaiseLayerAdded(MLayer, MLayer): PrivateScope, Public
+    RaiseLayerDeleted(MLayer, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseLayerRenamed(MLayer, String): PrivateScope, Public
+    RaiseLayerSaving(MLayer, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseLayerSaved(MLayer, Boolean(HasFieldMarshal)): PrivateScope, Public
+    RaiseLayerFilenameAdded(MLayer, String): PrivateScope, Public
+    RaiseLayerFilenameRemoved(MLayer, String): PrivateScope, Public
+    RaiseLayerFilenameRenamed(MLayer, String, String): PrivateScope, Public
+    RaiseLayerStatusChanged(MLayer): PrivateScope, Public
+    RaiseActiveLayerChanged(MLayer, MLayer): PrivateScope, Public
+    RaiseEntitiesMovedToNewLayer(MLayer, MLayer, MEntity[]): PrivateScope, Public
+    RaisePrefabAdded(MPrefab): PrivateScope, Public
+    RaisePrefabRemoved(MPrefab): PrivateScope, Public
+    RaiseTagsManagerUpdated(): PrivateScope, Public
+    RaiseFilterEnabledChanged(): PrivateScope, Public
+    RaiseFilterOptionsChanged(): PrivateScope, Public
+    RaisePaletteWritableStatusChanged(MPalette): PrivateScope, Public
+    add_EntityPropertyAdded(__Delegate_EntityPropertyAdded): PrivateScope, Public, SpecialName
+    remove_EntityPropertyAdded(__Delegate_EntityPropertyAdded): PrivateScope, Public, SpecialName
+    add_EntityPropertyRemoved(__Delegate_EntityPropertyRemoved): PrivateScope, Public, SpecialName
+    remove_EntityPropertyRemoved(__Delegate_EntityPropertyRemoved): PrivateScope, Public, SpecialName
+    add_EntityPropertyChanging(__Delegate_EntityPropertyChanging): PrivateScope, Public, SpecialName
+    remove_EntityPropertyChanging(__Delegate_EntityPropertyChanging): PrivateScope, Public, SpecialName
+    add_EntityPropertyChanged(__Delegate_EntityPropertyChanged): PrivateScope, Public, SpecialName
+    remove_EntityPropertyChanged(__Delegate_EntityPropertyChanged): PrivateScope, Public, SpecialName
+    add_ComponentPropertyAdded(__Delegate_ComponentPropertyAdded): PrivateScope, Public, SpecialName
+    remove_ComponentPropertyAdded(__Delegate_ComponentPropertyAdded): PrivateScope, Public, SpecialName
+    add_ComponentPropertyRemoved(__Delegate_ComponentPropertyRemoved): PrivateScope, Public, SpecialName
+    remove_ComponentPropertyRemoved(__Delegate_ComponentPropertyRemoved): PrivateScope, Public, SpecialName
+    add_ComponentPropertyChanging(__Delegate_ComponentPropertyChanging): PrivateScope, Public, SpecialName
+    remove_ComponentPropertyChanging(__Delegate_ComponentPropertyChanging): PrivateScope, Public, SpecialName
+    add_ComponentPropertyChanged(__Delegate_ComponentPropertyChanged): PrivateScope, Public, SpecialName
+    remove_ComponentPropertyChanged(__Delegate_ComponentPropertyChanged): PrivateScope, Public, SpecialName
+    add_EntityComponentAdded(__Delegate_EntityComponentAdded): PrivateScope, Public, SpecialName
+    remove_EntityComponentAdded(__Delegate_EntityComponentAdded): PrivateScope, Public, SpecialName
+    add_EntityComponentRemoved(__Delegate_EntityComponentRemoved): PrivateScope, Public, SpecialName
+    remove_EntityComponentRemoved(__Delegate_EntityComponentRemoved): PrivateScope, Public, SpecialName
+    add_SelectedEntitiesChanged(__Delegate_SelectedEntitiesChanged): PrivateScope, Public, SpecialName
+    remove_SelectedEntitiesChanged(__Delegate_SelectedEntitiesChanged): PrivateScope, Public, SpecialName
+    add_MainSceneSaving(__Delegate_MainSceneSaving): PrivateScope, Public, SpecialName
+    remove_MainSceneSaving(__Delegate_MainSceneSaving): PrivateScope, Public, SpecialName
+    add_MainSceneSaved(__Delegate_MainSceneSaved): PrivateScope, Public, SpecialName
+    remove_MainSceneSaved(__Delegate_MainSceneSaved): PrivateScope, Public, SpecialName
+    add_SceneClosing(__Delegate_SceneClosing): PrivateScope, Public, SpecialName
+    remove_SceneClosing(__Delegate_SceneClosing): PrivateScope, Public, SpecialName
+    add_NewSceneLoaded(__Delegate_NewSceneLoaded): PrivateScope, Public, SpecialName
+    remove_NewSceneLoaded(__Delegate_NewSceneLoaded): PrivateScope, Public, SpecialName
+    add_DeletedAutoSave(__Delegate_DeletedAutoSave): PrivateScope, Public, SpecialName
+    remove_DeletedAutoSave(__Delegate_DeletedAutoSave): PrivateScope, Public, SpecialName
+    add_RequestAddCloneToScene(__Delegate_RequestAddCloneToScene): PrivateScope, Public, SpecialName
+    remove_RequestAddCloneToScene(__Delegate_RequestAddCloneToScene): PrivateScope, Public, SpecialName
+    add_EntityAddedToScene(__Delegate_EntityAddedToScene): PrivateScope, Public, SpecialName
+    remove_EntityAddedToScene(__Delegate_EntityAddedToScene): PrivateScope, Public, SpecialName
+    add_EntityRemovedFromScene(__Delegate_EntityRemovedFromScene): PrivateScope, Public, SpecialName
+    remove_EntityRemovedFromScene(__Delegate_EntityRemovedFromScene): PrivateScope, Public, SpecialName
+    add_SelectionSetAddedToScene(__Delegate_SelectionSetAddedToScene): PrivateScope, Public, SpecialName
+    remove_SelectionSetAddedToScene(__Delegate_SelectionSetAddedToScene): PrivateScope, Public, SpecialName
+    add_SelectionSetRemovedFromScene(__Delegate_SelectionSetRemovedFromScene): PrivateScope, Public, SpecialName
+    remove_SelectionSetRemovedFromScene(__Delegate_SelectionSetRemovedFromScene): PrivateScope, Public, SpecialName
+    add_EntityNameChanging(__Delegate_EntityNameChanging): PrivateScope, Public, SpecialName
+    remove_EntityNameChanging(__Delegate_EntityNameChanging): PrivateScope, Public, SpecialName
+    add_EntityNameChanged(__Delegate_EntityNameChanged): PrivateScope, Public, SpecialName
+    remove_EntityNameChanged(__Delegate_EntityNameChanged): PrivateScope, Public, SpecialName
+    add_PaletteAdded(__Delegate_PaletteAdded): PrivateScope, Public, SpecialName
+    remove_PaletteAdded(__Delegate_PaletteAdded): PrivateScope, Public, SpecialName
+    add_PaletteRemoved(__Delegate_PaletteRemoved): PrivateScope, Public, SpecialName
+    remove_PaletteRemoved(__Delegate_PaletteRemoved): PrivateScope, Public, SpecialName
+    add_PaletteActiveEntityChanged(__Delegate_PaletteActiveEntityChanged): PrivateScope, Public, SpecialName
+    remove_PaletteActiveEntityChanged(__Delegate_PaletteActiveEntityChanged): PrivateScope, Public, SpecialName
+    add_ActivePaletteChanged(__Delegate_ActivePaletteChanged): PrivateScope, Public, SpecialName
+    remove_ActivePaletteChanged(__Delegate_ActivePaletteChanged): PrivateScope, Public, SpecialName
+    add_SelectionSetNameChanging(__Delegate_SelectionSetNameChanging): PrivateScope, Public, SpecialName
+    remove_SelectionSetNameChanging(__Delegate_SelectionSetNameChanging): PrivateScope, Public, SpecialName
+    add_SelectionSetNameChanged(__Delegate_SelectionSetNameChanged): PrivateScope, Public, SpecialName
+    remove_SelectionSetNameChanged(__Delegate_SelectionSetNameChanged): PrivateScope, Public, SpecialName
+    add_ViewportCameraChanged(__Delegate_ViewportCameraChanged): PrivateScope, Public, SpecialName
+    remove_ViewportCameraChanged(__Delegate_ViewportCameraChanged): PrivateScope, Public, SpecialName
+    add_ViewportRenderingModeChanged(__Delegate_ViewportRenderingModeChanged): PrivateScope, Public, SpecialName
+    remove_ViewportRenderingModeChanged(__Delegate_ViewportRenderingModeChanged): PrivateScope, Public, SpecialName
+    add_ActiveViewportChanged(__Delegate_ActiveViewportChanged): PrivateScope, Public, SpecialName
+    remove_ActiveViewportChanged(__Delegate_ActiveViewportChanged): PrivateScope, Public, SpecialName
+    add_ExclusiveViewportChanged(__Delegate_ExclusiveViewportChanged): PrivateScope, Public, SpecialName
+    remove_ExclusiveViewportChanged(__Delegate_ExclusiveViewportChanged): PrivateScope, Public, SpecialName
+    add_CameraAddedToManager(__Delegate_CameraAddedToManager): PrivateScope, Public, SpecialName
+    remove_CameraAddedToManager(__Delegate_CameraAddedToManager): PrivateScope, Public, SpecialName
+    add_CameraRemovedFromManager(__Delegate_CameraRemovedFromManager): PrivateScope, Public, SpecialName
+    remove_CameraRemovedFromManager(__Delegate_CameraRemovedFromManager): PrivateScope, Public, SpecialName
+    add_EntityHiddenStateChanged(__Delegate_EntityHiddenStateChanged): PrivateScope, Public, SpecialName
+    remove_EntityHiddenStateChanged(__Delegate_EntityHiddenStateChanged): PrivateScope, Public, SpecialName
+    add_EntityFrozenStateChanged(__Delegate_EntityFrozenStateChanged): PrivateScope, Public, SpecialName
+    remove_EntityFrozenStateChanged(__Delegate_EntityFrozenStateChanged): PrivateScope, Public, SpecialName
+    add_EntityTagsChanged(__Delegate_EntityTagsChanged): PrivateScope, Public, SpecialName
+    remove_EntityTagsChanged(__Delegate_EntityTagsChanged): PrivateScope, Public, SpecialName
+    add_ComponentServiceChanged(__Delegate_ComponentServiceChanged): PrivateScope, Public, SpecialName
+    remove_ComponentServiceChanged(__Delegate_ComponentServiceChanged): PrivateScope, Public, SpecialName
+    add_LongOperationStarted(__Delegate_LongOperationStarted): PrivateScope, Public, SpecialName
+    remove_LongOperationStarted(__Delegate_LongOperationStarted): PrivateScope, Public, SpecialName
+    add_LongOperationCompleted(__Delegate_LongOperationCompleted): PrivateScope, Public, SpecialName
+    remove_LongOperationCompleted(__Delegate_LongOperationCompleted): PrivateScope, Public, SpecialName
+    add_ApplicationClosing(__Delegate_ApplicationClosing): PrivateScope, Public, SpecialName
+    remove_ApplicationClosing(__Delegate_ApplicationClosing): PrivateScope, Public, SpecialName
+    add_LayerAdded(__Delegate_LayerAdded): PrivateScope, Public, SpecialName
+    remove_LayerAdded(__Delegate_LayerAdded): PrivateScope, Public, SpecialName
+    add_LayerDeleted(__Delegate_LayerDeleted): PrivateScope, Public, SpecialName
+    remove_LayerDeleted(__Delegate_LayerDeleted): PrivateScope, Public, SpecialName
+    add_LayerRenamed(__Delegate_LayerRenamed): PrivateScope, Public, SpecialName
+    remove_LayerRenamed(__Delegate_LayerRenamed): PrivateScope, Public, SpecialName
+    add_LayerSaving(__Delegate_LayerSaving): PrivateScope, Public, SpecialName
+    remove_LayerSaving(__Delegate_LayerSaving): PrivateScope, Public, SpecialName
+    add_LayerSaved(__Delegate_LayerSaved): PrivateScope, Public, SpecialName
+    remove_LayerSaved(__Delegate_LayerSaved): PrivateScope, Public, SpecialName
+    add_LayerFilenameAdded(__Delegate_LayerFilenameAdded): PrivateScope, Public, SpecialName
+    remove_LayerFilenameAdded(__Delegate_LayerFilenameAdded): PrivateScope, Public, SpecialName
+    add_LayerFilenameRemoved(__Delegate_LayerFilenameRemoved): PrivateScope, Public, SpecialName
+    remove_LayerFilenameRemoved(__Delegate_LayerFilenameRemoved): PrivateScope, Public, SpecialName
+    add_LayerFilenameRenamed(__Delegate_LayerFilenameRenamed): PrivateScope, Public, SpecialName
+    remove_LayerFilenameRenamed(__Delegate_LayerFilenameRenamed): PrivateScope, Public, SpecialName
+    add_LayerStatusChanged(__Delegate_LayerStatusChanged): PrivateScope, Public, SpecialName
+    remove_LayerStatusChanged(__Delegate_LayerStatusChanged): PrivateScope, Public, SpecialName
+    add_ActiveLayerChanged(__Delegate_ActiveLayerChanged): PrivateScope, Public, SpecialName
+    remove_ActiveLayerChanged(__Delegate_ActiveLayerChanged): PrivateScope, Public, SpecialName
+    add_EntitiesMovedToNewLayer(__Delegate_EntitiesMovedToNewLayer): PrivateScope, Public, SpecialName
+    remove_EntitiesMovedToNewLayer(__Delegate_EntitiesMovedToNewLayer): PrivateScope, Public, SpecialName
+    add_PrefabAdded(__Delegate_PrefabAdded): PrivateScope, Public, SpecialName
+    remove_PrefabAdded(__Delegate_PrefabAdded): PrivateScope, Public, SpecialName
+    add_PrefabRemoved(__Delegate_PrefabRemoved): PrivateScope, Public, SpecialName
+    remove_PrefabRemoved(__Delegate_PrefabRemoved): PrivateScope, Public, SpecialName
+    add_TagsManagerUpdated(__Delegate_TagsManagerUpdated): PrivateScope, Public, SpecialName
+    remove_TagsManagerUpdated(__Delegate_TagsManagerUpdated): PrivateScope, Public, SpecialName
+    add_FilterEnabledChanged(__Delegate_FilterEnabledChanged): PrivateScope, Public, SpecialName
+    remove_FilterEnabledChanged(__Delegate_FilterEnabledChanged): PrivateScope, Public, SpecialName
+    add_FilterOptionsChanged(__Delegate_FilterOptionsChanged): PrivateScope, Public, SpecialName
+    remove_FilterOptionsChanged(__Delegate_FilterOptionsChanged): PrivateScope, Public, SpecialName
+    add_PaletteWritableStatusChanged(__Delegate_PaletteWritableStatusChanged): PrivateScope, Public, SpecialName
+    remove_PaletteWritableStatusChanged(__Delegate_PaletteWritableStatusChanged): PrivateScope, Public, SpecialName
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityPropertyAdded: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityPropertyRemoved: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityPropertyChanging: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, String, UInt32, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, String, UInt32, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityPropertyChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, String, UInt32, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, String, UInt32, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ComponentPropertyAdded: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MComponent, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MComponent, String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ComponentPropertyRemoved: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MComponent, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MComponent, String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ComponentPropertyChanging: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MComponent, String, UInt32, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MComponent, String, UInt32, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ComponentPropertyChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MComponent, String, UInt32, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MComponent, String, UInt32, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityComponentAdded: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, MComponent): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, MComponent, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityComponentRemoved: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, MComponent): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, MComponent, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_SelectedEntitiesChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_MainSceneSaving: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_MainSceneSaved: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_SceneClosing: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MScene): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MScene, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_NewSceneLoaded: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MScene): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MScene, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_DeletedAutoSave: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(String): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(String, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_RequestAddCloneToScene: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MScene, MEntity, Boolean&): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MScene, MEntity, Boolean&, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityAddedToScene: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MScene, MEntity): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MScene, MEntity, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityRemovedFromScene: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MScene, MEntity): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MScene, MEntity, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_SelectionSetAddedToScene: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MScene, MSelectionSet): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MScene, MSelectionSet, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_SelectionSetRemovedFromScene: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MScene, MSelectionSet): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MScene, MSelectionSet, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityNameChanging: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityNameChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_PaletteAdded: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MPalette): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MPalette, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_PaletteRemoved: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MPalette): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MPalette, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_PaletteActiveEntityChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MPalette, MEntity): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MPalette, MEntity, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ActivePaletteChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MPalette, MPalette): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MPalette, MPalette, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_SelectionSetNameChanging: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MSelectionSet, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MSelectionSet, String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_SelectionSetNameChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MSelectionSet, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MSelectionSet, String, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ViewportCameraChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MViewport, MEntity): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MViewport, MEntity, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ViewportRenderingModeChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MViewport, IRenderingMode): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MViewport, IRenderingMode, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ActiveViewportChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MViewport, MViewport): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MViewport, MViewport, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ExclusiveViewportChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MViewport, MViewport): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MViewport, MViewport, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_CameraAddedToManager: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_CameraRemovedFromManager: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityHiddenStateChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityFrozenStateChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntityTagsChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MEntity, String): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MEntity, String, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ComponentServiceChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MComponent): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MComponent, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LongOperationStarted: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LongOperationCompleted: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ApplicationClosing: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LayerAdded: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, MLayer): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, MLayer, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LayerDeleted: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LayerRenamed: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, String): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, String, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LayerSaving: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LayerSaved: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LayerFilenameAdded: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, String): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, String, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LayerFilenameRemoved: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, String): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, String, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LayerFilenameRenamed: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, String, String): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, String, String, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_LayerStatusChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_ActiveLayerChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, MLayer): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, MLayer, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_EntitiesMovedToNewLayer: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MLayer, MLayer, MEntity[]): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MLayer, MLayer, MEntity[], AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_PrefabAdded: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MPrefab): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MPrefab, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_PrefabRemoved: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MPrefab): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MPrefab, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_TagsManagerUpdated: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_FilterEnabledChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_FilterOptionsChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEventManager+__Delegate_PaletteWritableStatusChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(MPalette): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(MPalette, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MEntityFactory: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Methods:
+    Get(NiEntityInterface*): PrivateScope, Public
+    Remove(MEntity): PrivateScope, Public
+    Remove(NiEntityInterface*): PrivateScope, Public
+    Clear(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MAddRemoveComponentCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiAddRemoveComponentCommand*): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MRenameEntityCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiRenameEntityCommand*): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MChangeHiddenStateCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiChangeHiddenStateCommand*): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MChangeFrozenStateCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MEntity, Boolean): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MChangeEntityTagsCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiChangeEntityTagsCommand*): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MExpandablePropertyConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.TypeConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetPropertiesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetProperties(ITypeDescriptorContext, Object, Attribute[]): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Properties:
+    Boolean D3D10 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MRenderingContext RenderingContext 'get ' : 
+    Int32 Height 'get ' : 
+    Int32 Width 'get ' : 
+    System.Drawing.Color BackgroundColor 'get set' : 
+  Methods:
+    get_BackgroundColor(): PrivateScope, Public, SpecialName
+    set_BackgroundColor(Color): PrivateScope, Public, SpecialName
+    get_Width(): PrivateScope, Public, SpecialName
+    get_Height(): PrivateScope, Public, SpecialName
+    get_RenderingContext(): PrivateScope, Public, SpecialName
+    get_D3D10(): PrivateScope, Public, SpecialName
+    UseD3D10(): PrivateScope, Public
+    Create(IntPtr, IntPtr): PrivateScope, Public
+    Recreate(IntPtr): PrivateScope, Public
+    Render(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MTimeManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Properties:
+    Boolean RunUpEnabled 'get set' : 
+    TimeModeType TimeMode 'get set' : 
+    Boolean Enabled 'get set' : 
+    Single EndTime 'get set' : 
+    Single StartTime 'get set' : 
+    Single ScaleFactor 'get set' : 
+    Single ContinuousTime 'get ' : 
+    Single CurrentTime 'get set' : 
+  Events:
+    __Delegate_EnabledStateChanged EnabledStateChanged: 
+    __Delegate_ScaleFactorChanged ScaleFactorChanged: 
+    __Delegate_RunUpTimeRequested RunUpTimeRequested: 
+  Methods:
+    get_CurrentTime(): PrivateScope, Public, SpecialName
+    set_CurrentTime(Single): PrivateScope, Public, SpecialName
+    get_ContinuousTime(): PrivateScope, Public, SpecialName
+    get_ScaleFactor(): PrivateScope, Public, SpecialName
+    set_ScaleFactor(Single): PrivateScope, Public, SpecialName
+    get_StartTime(): PrivateScope, Public, SpecialName
+    set_StartTime(Single): PrivateScope, Public, SpecialName
+    get_EndTime(): PrivateScope, Public, SpecialName
+    set_EndTime(Single): PrivateScope, Public, SpecialName
+    get_Enabled(): PrivateScope, Public, SpecialName
+    set_Enabled(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_TimeMode(): PrivateScope, Public, SpecialName
+    set_TimeMode(TimeModeType): PrivateScope, Public, SpecialName
+    get_RunUpEnabled(): PrivateScope, Public, SpecialName
+    set_RunUpEnabled(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    UpdateTime(): PrivateScope, Public
+    ResetTime(Single): PrivateScope, Public
+    RunUpTime(Single): PrivateScope, Public
+    IncrementTime(Single): PrivateScope, Public
+    add_RunUpTimeRequested(__Delegate_RunUpTimeRequested): PrivateScope, Public, SpecialName
+    remove_RunUpTimeRequested(__Delegate_RunUpTimeRequested): PrivateScope, Public, SpecialName
+    add_ScaleFactorChanged(__Delegate_ScaleFactorChanged): PrivateScope, Public, SpecialName
+    remove_ScaleFactorChanged(__Delegate_ScaleFactorChanged): PrivateScope, Public, SpecialName
+    add_EnabledStateChanged(__Delegate_EnabledStateChanged): PrivateScope, Public, SpecialName
+    remove_EnabledStateChanged(__Delegate_EnabledStateChanged): PrivateScope, Public, SpecialName
+    {dtor}(): PrivateScope, Public
+Struct Emergent.Gamebryo.SceneDesigner.Framework.MTimeManager+TimeModeType: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    TimeModeType Continuous = 1 : Public, Static, Literal, HasDefault
+    TimeModeType Loop = 0 : Public, Static, Literal, HasDefault
+    TimeModeType Clamp = 2 : Public, Static, Literal, HasDefault
+Class Emergent.Gamebryo.SceneDesigner.Framework.MTimeManager+__Delegate_RunUpTimeRequested: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Single): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Single, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MTimeManager+__Delegate_ScaleFactorChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Single): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Single, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MTimeManager+__Delegate_EnabledStateChanged: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Boolean(HasFieldMarshal)): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Boolean(HasFieldMarshal), AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.Framework.MMatrix3: AutoLayout, AnsiClass, Class, Public, Serializable, BeforeFieldInit
+    Void .ctor(NiMatrix3*): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Single ZAngle 'get ' : 
+    Single YAngle 'get ' : 
+    Single XAngle 'get ' : 
+  Methods:
+    SetData(NiMatrix3* IsImplicitlyDereferenced): PrivateScope, Public
+    ToNiMatrix3(NiMatrix3* IsImplicitlyDereferenced): PrivateScope, Public
+    get_XAngle(): PrivateScope, Public, SpecialName
+    get_YAngle(): PrivateScope, Public, SpecialName
+    get_ZAngle(): PrivateScope, Public, SpecialName
+    FromEulerAnglesXYZ(Single, Single, Single): PrivateScope, Public
+    Equals(Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.UICommandHandlerAttribute: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Attribute
+    Void .ctor(System.String): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.Interactive Interactivity 'get set' : 
+    System.String Name 'get set' : 
+  Methods:
+    get_Name(): PrivateScope, Public, SpecialName
+    set_Name(String): PrivateScope, Public, SpecialName
+    get_Interactivity(): PrivateScope, Public, SpecialName
+    set_Interactivity(Interactive): PrivateScope, Public, SpecialName
+Interface Emergent.Gamebryo.SceneDesigner.Framework.IProxyHandler: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Methods:
+    GetMasterProxyEntity(MEntity): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Class Emergent.Gamebryo.SceneDesigner.Framework.MProxyManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.Framework.MScene ProxyScene 'get ' : 
+  Methods:
+    UpdateProxyScales(MViewport): PrivateScope, Public
+    CreateProxy(MEntity): PrivateScope, Public
+    AddProxy(MEntity, MEntity): PrivateScope, Public
+    CreateAndAddProxy(MEntity): PrivateScope, Public
+    RemoveProxy(MEntity): PrivateScope, Public
+    GetProxyForEntity(MEntity): PrivateScope, Public
+    get_ProxyScene(): PrivateScope, Public, SpecialName
+    AddProxyHandler(IProxyHandler): PrivateScope, Public
+    RemoveProxyHandler(IProxyHandler): PrivateScope, Public
+    GetProxyArray(): PrivateScope, Public
+    CreateGenericMasterProxyEntity(String, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Static
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MCameraManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.Framework.IProxyHandler
+  Properties:
+    Boolean Transitioning 'get ' : 
+    UInt32 SceneCameraCount 'get ' : 
+  Methods:
+    EntityIsCamera(MEntity): PrivateScope, Public, Static
+    GetStandardCamera(MViewport, StandardCamera): PrivateScope, Public
+    GetStandardCameraEntity(MViewport, StandardCamera): PrivateScope, Public
+    get_SceneCameraCount(): PrivateScope, Public, SpecialName
+    GetSceneCamera(UInt32): PrivateScope, Public
+    GetSceneCameraEntity(UInt32): PrivateScope, Public
+    Update(Single): PrivateScope, Public
+    TransitionViewportToCamera(MViewport, MEntity): PrivateScope, Public
+    TransitionCamera(MViewport, NiPoint3*, NiMatrix3*, NiFrustum*): PrivateScope, Public
+    get_Transitioning(): PrivateScope, Public, SpecialName
+    SetAspectRatioOnStandardCameras(MViewport, Single): PrivateScope, Public
+    IsAxisAlignedStandardCamera(MViewport, MEntity): PrivateScope, Public
+    IsStandardCamera(MViewport, MEntity): PrivateScope, Public
+    GetMasterProxyEntity(MEntity): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Struct Emergent.Gamebryo.SceneDesigner.Framework.MCameraManager+StandardCamera: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    StandardCamera User = 1 : Public, Static, Literal, HasDefault
+    StandardCamera NegativeZ = 7 : Public, Static, Literal, HasDefault
+    StandardCamera PositiveZ = 6 : Public, Static, Literal, HasDefault
+    StandardCamera NegativeY = 5 : Public, Static, Literal, HasDefault
+    StandardCamera PositiveY = 4 : Public, Static, Literal, HasDefault
+    StandardCamera NegativeX = 3 : Public, Static, Literal, HasDefault
+    StandardCamera PositiveX = 2 : Public, Static, Literal, HasDefault
+    StandardCamera Perspective = 0 : Public, Static, Literal, HasDefault
+Class Emergent.Gamebryo.SceneDesigner.Framework.MViewportManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Properties:
+    UInt32 ViewportCount 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MViewport ActiveViewport 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MViewport ExclusiveViewport 'get ' : 
+  Methods:
+    ClearExclusiveViewport(): PrivateScope, Public
+    SetExclusiveViewport(UInt32): PrivateScope, Public
+    get_ExclusiveViewport(): PrivateScope, Public, SpecialName
+    SetActiveViewport(UInt32): PrivateScope, Public
+    get_ActiveViewport(): PrivateScope, Public, SpecialName
+    get_ViewportCount(): PrivateScope, Public, SpecialName
+    GetViewport(UInt32): PrivateScope, Public
+    ResetViewportCameras(): PrivateScope, Public
+    Update(Single): PrivateScope, Public
+    PreRender(): PrivateScope, Public
+    RenderUnselectedEntities(): PrivateScope, Public
+    RenderSelectedEntities(): PrivateScope, Public
+    RenderGizmo(): PrivateScope, Public
+    RenderScreenElements(): PrivateScope, Public
+    ActivateViewport(Int32, Int32): PrivateScope, Public
+    IsInsideActiveViewport(Int32, Int32): PrivateScope, Public
+    ScreenCoordinatesToViewportCoordinates(Int32, Int32, Int32&(Out) IsImplicitlyDereferenced, Int32&(Out) IsImplicitlyDereferenced): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MPaletteManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Properties:
+    System.String PaletteFileExtension 'get ' : 
+    System.String PaletteFolder 'get set' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MPalette ActivePalette 'get set' : 
+    UInt32 PaletteCount 'get ' : 
+  Methods:
+    get_PaletteCount(): PrivateScope, Public, SpecialName
+    GetPalettes(): PrivateScope, Public
+    GetPaletteByName(String): PrivateScope, Public
+    AddPalette(MPalette): PrivateScope, Public
+    RemovePalette(MPalette): PrivateScope, Public
+    RemoveAllPalettes(): PrivateScope, Public
+    get_ActivePalette(): PrivateScope, Public, SpecialName
+    set_ActivePalette(MPalette): PrivateScope, Public, SpecialName
+    get_PaletteFolder(): PrivateScope, Public, SpecialName
+    set_PaletteFolder(String): PrivateScope, Public, SpecialName
+    get_PaletteFileExtension(): PrivateScope, Public, SpecialName
+    LoadPalette(String): PrivateScope, Public
+    SavePalette(MPalette, String, String): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MLightManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.Framework.IProxyHandler
+  Methods:
+    EntityIsLight(MEntity): PrivateScope, Public, Static
+    GetSceneLights(): PrivateScope, Public
+    AddEntityToDefaultLights(MEntity): PrivateScope, Public
+    AddEntitiesToDefaultLights(MEntity[]): PrivateScope, Public
+    RemoveEntityFromDefaultLights(MEntity): PrivateScope, Public
+    RemoveEntitiesFromDefaultLights(MEntity[]): PrivateScope, Public
+    Update(Single): PrivateScope, Public
+    GetMasterProxyEntity(MEntity): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MBoundManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Methods:
+    Update(Single): PrivateScope, Public
+    OnSettingsChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    GetSceneBound(): PrivateScope, Public
+    GetToolSceneBound(MViewport): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MTagsManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Methods:
+    GetEntitiesForTag(String): PrivateScope, Public
+    GetTags(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Interface Emergent.Gamebryo.SceneDesigner.Framework.IFilter: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Methods:
+    FilterEntities(MEntity[]): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Class Emergent.Gamebryo.SceneDesigner.Framework.MFilterManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Properties:
+    UInt32 FilterCount 'get ' : 
+    Boolean FilterEnabled 'get set' : 
+  Methods:
+    get_FilterEnabled(): PrivateScope, Public, SpecialName
+    set_FilterEnabled(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    AddFilter(IFilter): PrivateScope, Public
+    RemoveFilter(IFilter): PrivateScope, Public
+    ClearFilters(): PrivateScope, Public
+    UpdateFilter(IFilter): PrivateScope, Public
+    get_FilterCount(): PrivateScope, Public, SpecialName
+    GetFilterAt(UInt32): PrivateScope, Public
+    FilterEntities(MEntity[]): PrivateScope, Public
+    EntityMatchesFilter(MEntity): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MSceneFactory: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Methods:
+    Get(NiScene*): PrivateScope, Public
+    Remove(MScene): PrivateScope, Public
+    Remove(NiScene*): PrivateScope, Public
+    Clear(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MSelectionSetFactory: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Methods:
+    Get(NiEntitySelectionSet*): PrivateScope, Public
+    Remove(MSelectionSet): PrivateScope, Public
+    Remove(NiEntitySelectionSet*): PrivateScope, Public
+    Clear(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MPickUtility: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    PerformPick(MScene, NiPoint3* IsImplicitlyDereferenced, NiPoint3* IsImplicitlyDereferenced, Boolean(HasFieldMarshal)): PrivateScope, Public
+    GetNiPick(): PrivateScope, Public
+    GetEntityFromPickedObject(NiAVObject*): PrivateScope, Public
+    GetEntityFromViewCoordinates(MScene, MViewport, Int32, Int32): PrivateScope, Public
+    FindPolicy(MEntity): PrivateScope, Public
+    AddPolicy(MPickPolicy): PrivateScope, Public
+    RemovePolicy(MPickPolicy): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MPickUtility+MPickPolicy: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Fields:
+    System.Guid mTemplateID : Public
+  Methods:
+    PickOnEntity(MEntity, NiPoint3* IsImplicitlyDereferenced, NiPoint3* IsImplicitlyDereferenced, NiPick*, Hashtable): PrivateScope, Public, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.UIState: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Text 'get set' : 
+    Boolean Checked 'get set' : 
+    Boolean Enabled 'get set' : 
+  Methods:
+    get_Enabled(): PrivateScope, Public, SpecialName
+    set_Enabled(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_Checked(): PrivateScope, Public, SpecialName
+    set_Checked(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_Text(): PrivateScope, Public, SpecialName
+    set_Text(String): PrivateScope, Public, SpecialName
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.UICommandEventArgs: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.EventArgs
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetParameters(): PrivateScope, Public
+    GetValue(String): PrivateScope, Public
+    SetValue(String, String): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.UICommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String, System.Object): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(System.String): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.Object Data 'get set' :  (Obsolete)
+    System.String Name 'get ' : 
+    Int32 InteractivityLevelMask 'get set' : 
+    Boolean CheckParameters 'get set' : 
+  Events:
+    ValidateCommandHandler Validate: 
+    System.EventHandler Click: 
+    ClickEventHandler CommandClicked: 
+  Methods:
+    GetRequiredParameterNames(): PrivateScope, Public
+    get_CheckParameters(): PrivateScope, Public, SpecialName
+    set_CheckParameters(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_InteractivityLevelMask(): PrivateScope, Public, SpecialName
+    set_InteractivityLevelMask(Int32): PrivateScope, Public, SpecialName
+    get_Name(): PrivateScope, Public, SpecialName
+    get_Data(): PrivateScope, Public, SpecialName
+    set_Data(Object): PrivateScope, Public, SpecialName
+    DoClick(Object, EventArgs): PrivateScope, Public, Virtual, VtableLayoutMask
+    add_Validate(ValidateCommandHandler): PrivateScope, Public, SpecialName
+    remove_Validate(ValidateCommandHandler): PrivateScope, Public, SpecialName
+    ValidateCommand(UIState): PrivateScope, Public, Virtual, VtableLayoutMask
+    UnregisterAllByTarget(Object): PrivateScope, Public
+    GetHandlerList(): PrivateScope, Public
+    GetValidator(): PrivateScope, Public
+    add_CommandClicked(ClickEventHandler): PrivateScope, Public, Static, SpecialName
+    remove_CommandClicked(ClickEventHandler): PrivateScope, Public, Static, SpecialName
+    add_Click(EventHandler): PrivateScope, Public, SpecialName
+    remove_Click(EventHandler): PrivateScope, Public, SpecialName
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.UICommand+ClickEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Object, EventArgs): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Object, EventArgs, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.UICommand+ValidateCommandHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Object, UIState): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Object, UIState, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IUICommandService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    GetCommand(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetAllCommands(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    BindCommands(Object): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    UnBindCommands(Object): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Class Emergent.Gamebryo.SceneDesigner.Framework.MFramework: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.Framework.MFramework Instance 'get ' : 
+    System.String CurrentFilename 'get ' : 
+    Boolean PerformingLongOperation 'get ' : 
+    System.String ImageSubfolder 'get ' : 
+    System.String ApplicationName 'get ' : 
+    NiExternalAssetManager* ExternalAssetManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MPickUtility PickUtility 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MScene Scene 'get ' : 
+    System.String AppStartupPath 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MComponentFactory ComponentFactory 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MSelectionSetFactory SelectionSetFactory 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MEntityFactory EntityFactory 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MSceneFactory SceneFactory 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MFilterManager FilterManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MTagsManager TagsManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MPrefabManager PrefabManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MLayerManager LayerManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MBoundManager BoundManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MLightManager LightManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MProxyManager ProxyManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MPaletteManager PaletteManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MViewportManager ViewportManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MCameraManager CameraManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MTimeManager TimeManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MEventManager EventManager 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MRenderer Renderer 'get ' : 
+  Methods:
+    Startup(): PrivateScope, Public
+    get_Renderer(): PrivateScope, Public, SpecialName
+    get_EventManager(): PrivateScope, Public, SpecialName
+    get_TimeManager(): PrivateScope, Public, SpecialName
+    get_CameraManager(): PrivateScope, Public, SpecialName
+    get_ViewportManager(): PrivateScope, Public, SpecialName
+    get_PaletteManager(): PrivateScope, Public, SpecialName
+    get_ProxyManager(): PrivateScope, Public, SpecialName
+    get_LightManager(): PrivateScope, Public, SpecialName
+    get_BoundManager(): PrivateScope, Public, SpecialName
+    get_LayerManager(): PrivateScope, Public, SpecialName
+    get_PrefabManager(): PrivateScope, Public, SpecialName
+    get_TagsManager(): PrivateScope, Public, SpecialName
+    get_FilterManager(): PrivateScope, Public, SpecialName
+    get_SceneFactory(): PrivateScope, Public, SpecialName
+    get_EntityFactory(): PrivateScope, Public, SpecialName
+    get_SelectionSetFactory(): PrivateScope, Public, SpecialName
+    get_ComponentFactory(): PrivateScope, Public, SpecialName
+    get_AppStartupPath(): PrivateScope, Public, SpecialName
+    get_Scene(): PrivateScope, Public, SpecialName
+    get_PickUtility(): PrivateScope, Public, SpecialName
+    get_ExternalAssetManager(): PrivateScope, Public, SpecialName
+    get_ApplicationName(): PrivateScope, Public, SpecialName
+    get_ImageSubfolder(): PrivateScope, Public, SpecialName
+    get_PerformingLongOperation(): PrivateScope, Public, SpecialName
+    get_CurrentFilename(): PrivateScope, Public, SpecialName
+    NewScene(UInt32): PrivateScope, Public
+    LoadScene(String, String): PrivateScope, Public
+    InitNewScene(List`1): PrivateScope, Public
+    SaveScene(String, String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    Update(): PrivateScope, Public
+    BeginLongOperation(): PrivateScope, Public
+    EndLongOperation(): PrivateScope, Public
+    RestartAnimation(): PrivateScope, Public
+    Init(): PrivateScope, Public, Static
+    Shutdown(): PrivateScope, Public, Static
+    InstanceIsValid(): PrivateScope, Public, Static
+    get_Instance(): PrivateScope, Public, Static, SpecialName
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MLayer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(System.String): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MScene, NiScene*): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    UInt32 SelectionSetCount 'get ' : 
+    UInt32 EntityCount 'get ' : 
+    System.String Format 'get ' : 
+    Boolean Dirty 'get set' : 
+    TriState LockedState 'get ' : 
+    Boolean Locked 'get set' : 
+    TriState VisibleState 'get ' : 
+    Boolean Visible 'get set' : 
+    Boolean Writable 'get set' : 
+    Boolean IsDefaultLayer 'get ' : 
+    System.String ShortName 'get ' : 
+    System.String Name 'get set' : 
+  Methods:
+    GetSubLayers(): PrivateScope, Public
+    get_Name(): PrivateScope, Public, SpecialName
+    set_Name(String): PrivateScope, Public, SpecialName
+    get_ShortName(): PrivateScope, Public, SpecialName
+    get_IsDefaultLayer(): PrivateScope, Public, SpecialName
+    get_Writable(): PrivateScope, Public, SpecialName
+    set_Writable(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_Visible(): PrivateScope, Public, SpecialName
+    set_Visible(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_VisibleState(): PrivateScope, Public, SpecialName
+    get_Locked(): PrivateScope, Public, SpecialName
+    set_Locked(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_LockedState(): PrivateScope, Public, SpecialName
+    get_Dirty(): PrivateScope, Public, SpecialName
+    set_Dirty(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_Format(): PrivateScope, Public, SpecialName
+    RemoveEntitiesFromMainScene(Boolean(HasFieldMarshal)): PrivateScope, Public
+    get_EntityCount(): PrivateScope, Public, SpecialName
+    GetEntities(): PrivateScope, Public
+    AddEntity(MEntity, Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public
+    RemoveEntity(MEntity, Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public
+    get_SelectionSetCount(): PrivateScope, Public, SpecialName
+    GetSelectionSets(): PrivateScope, Public
+    GetSelectionSetByName(String): PrivateScope, Public
+    AddSelectionSet(MSelectionSet): PrivateScope, Public
+    RemoveSelectionSet(MSelectionSet): PrivateScope, Public
+    RemoveAllSelectionSets(): PrivateScope, Public
+    IsEntityReferenced(MEntity): PrivateScope, Public
+    Save(Boolean(HasFieldMarshal)): PrivateScope, Public
+    SelectAllEntities(): PrivateScope, Public
+    MoveEntitiesToLayer(MEntity[], Boolean(HasFieldMarshal)): PrivateScope, Public
+    MoveEntitiesToLayer(MEntity[]): PrivateScope, Public
+    MoveSelectedEntities(): PrivateScope, Public
+    RemoveSceneFromStreamingObject(): PrivateScope, Public
+    FindEntityByName(String): PrivateScope, Public
+    ForceVisible(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public
+    ForceLocked(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public
+    IsExplicitSublayer(MLayer): PrivateScope, Public
+    AddExplicitLayer(MLayer): PrivateScope, Public
+    RemoveExplicitLayer(MLayer): PrivateScope, Public
+    Rename(String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    FindLayer(MEntity): PrivateScope, Public, Static
+    {dtor}(): PrivateScope, Public
+Struct Emergent.Gamebryo.SceneDesigner.Framework.MLayer+TriState: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    TriState Indeterminate = 2 : Public, Static, Literal, HasDefault
+    TriState True = 1 : Public, Static, Literal, HasDefault
+    TriState False = 0 : Public, Static, Literal, HasDefault
+Class Emergent.Gamebryo.SceneDesigner.Framework.MLayerManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.Framework.MLayer ActiveLayer 'get set' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MLayer DefaultLayer 'get ' : 
+    UInt32 Count 'get ' : 
+  Methods:
+    get_Count(): PrivateScope, Public, SpecialName
+    GetLayerByName(String): PrivateScope, Public
+    GetLayer(UInt32): PrivateScope, Public
+    GetLayers(): PrivateScope, Public
+    GetTopLevelLayers(): PrivateScope, Public
+    GetImplicitLayers(): PrivateScope, Public
+    AddEmptyLayer(String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    ImportLayer(String, String): PrivateScope, Public
+    AddLayerFromSelectedEntities(String): PrivateScope, Public
+    RemoveLayer(MLayer, Boolean(HasFieldMarshal)): PrivateScope, Public
+    get_DefaultLayer(): PrivateScope, Public, SpecialName
+    get_ActiveLayer(): PrivateScope, Public, SpecialName
+    set_ActiveLayer(MLayer): PrivateScope, Public, SpecialName
+    SetActiveLayer(MLayer, Boolean(HasFieldMarshal)): PrivateScope, Public
+    FindDependentReadOnlyLayers(MLayer): PrivateScope, Public
+    SearchReadOnlyLayersForEntityReference(MEntity): PrivateScope, Public
+    FindReferencingLayers(MLayer): PrivateScope, Public
+    SaveAll(String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    SaveAll(String): PrivateScope, Public
+    FindLayerByName(String): PrivateScope, Public
+    FindEntityByName(String): PrivateScope, Public
+    IsImplicit(MLayer): PrivateScope, Public
+    RemoveAllLayers(): PrivateScope, Public
+    AreAnyLayersDirty(): PrivateScope, Public
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IEntityPathService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    GetSimpleName(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetFullPath(MScene, MEntity): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    FindFullPath(MEntity): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    FindPaletteContainingEntity(MEntity): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    FindEntity(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Struct NiEntitySelectionSet: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiScene: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiBound: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct Emergent.Gamebryo.SceneDesigner.PluginAPI.SettingsCategory: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.SettingsCategory Temp = 4 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.SettingsCategory Global = 3 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.SettingsCategory PerUser = 2 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.SettingsCategory PerScene = 1 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.SettingsCategory None = 0 : Public, Static, Literal, HasDefault
+Struct NiCamera: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiAddRemoveComponentCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiRenameEntityCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiChangeHiddenStateCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct Emergent.Gamebryo.SceneDesigner.PluginAPI.Interactive: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.Interactive None = 0 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.Interactive Interactive = 4 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.Interactive NonInteractive = 2 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.Interactive Unspecified = 1 : Public, Static, Literal, HasDefault
+Struct NiFrustum: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiPick: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiPick+PickObjectPolicy: AutoLayout, AnsiClass, Class, NestedPublic, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiPick+Record: AutoLayout, AnsiClass, Class, NestedPublic, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiPick+Results: AutoLayout, AnsiClass, Class, NestedPublic, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Class Emergent.Gamebryo.SceneDesigner.Framework.MFileLocationConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.TypeConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    CanConvertFrom(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    CanConvertTo(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertFrom(ITypeDescriptorContext, CultureInfo, Object): PrivateScope, Public, Virtual
+    ConvertTo(ITypeDescriptorContext, CultureInfo, Object, Type): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MFileLocationNameEditor: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.Design.FileNameEditor
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    EditValue(ITypeDescriptorContext, IServiceProvider, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MFileLocation: AutoLayout, AnsiClass, Class, Public, Serializable, BeforeFieldInit
+    Void .ctor(System.String, System.String): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(System.String): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String DefaultBrowsePath 'get set' : 
+    System.String Path 'get set' : 
+  Methods:
+    get_Path(): PrivateScope, Public, SpecialName
+    set_Path(String): PrivateScope, Public, SpecialName
+    get_DefaultBrowsePath(): PrivateScope, Public, SpecialName
+    set_DefaultBrowsePath(String): PrivateScope, Public, SpecialName
+    ToString(): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MFolderLocationConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.TypeConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    CanConvertFrom(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    CanConvertTo(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertFrom(ITypeDescriptorContext, CultureInfo, Object): PrivateScope, Public, Virtual
+    ConvertTo(ITypeDescriptorContext, CultureInfo, Object, Type): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MFolderLocationNameEditor: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.Design.FolderNameEditor
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    EditValue(ITypeDescriptorContext, IServiceProvider, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MFolderLocation: AutoLayout, AnsiClass, Class, Public, Serializable, BeforeFieldInit
+    Void .ctor(System.String, System.String): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(System.String): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String DefaultBrowsePath 'get set' : 
+    System.String Path 'get set' : 
+  Methods:
+    get_Path(): PrivateScope, Public, SpecialName
+    set_Path(String): PrivateScope, Public, SpecialName
+    get_DefaultBrowsePath(): PrivateScope, Public, SpecialName
+    set_DefaultBrowsePath(String): PrivateScope, Public, SpecialName
+    ToString(): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MPrefabManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Properties:
+    Boolean PickPrefabEntities 'get set' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MPrefab ActivePrefab 'get set' : 
+    System.String PrefabFolder 'get ' : 
+  Methods:
+    RemoveAllPrefabs(): PrivateScope, Public
+    LoadPrefab(String): PrivateScope, Public
+    BuildSubcategories(String): PrivateScope, Public
+    GetPrefabsInCategory(String): PrivateScope, Public
+    GetPrefabByName(String, String): PrivateScope, Public
+    GetPrefabByFilename(String): PrivateScope, Public
+    get_PrefabFolder(): PrivateScope, Public, SpecialName
+    get_ActivePrefab(): PrivateScope, Public, SpecialName
+    set_ActivePrefab(MPrefab): PrivateScope, Public, SpecialName
+    get_PickPrefabEntities(): PrivateScope, Public, SpecialName
+    set_PickPrefabEntities(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    GetPrefabs(): PrivateScope, Public
+    CreatePrefabFromSelection(String, Boolean(HasFieldMarshal)): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MMoveEntitiesToLayerCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MLayer): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    AddEntity(MEntity): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MChangeLayerStateCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MLayer, StateType, Boolean): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Struct Emergent.Gamebryo.SceneDesigner.Framework.MChangeLayerStateCommand+StateType: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    StateType Locked = 1 : Public, Static, Literal, HasDefault
+    StateType Visible = 0 : Public, Static, Literal, HasDefault
+Class Emergent.Gamebryo.SceneDesigner.Framework.MRemoveLayerFilenameCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(System.String, Emergent.Gamebryo.SceneDesigner.Framework.MLayer): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MAddLayerCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(System.String, Emergent.Gamebryo.SceneDesigner.Framework.MLayer): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MLayerWritableOverrideLock: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MPrefab: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MScene): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Boolean Writable 'get ' : 
+    Boolean Dirty 'get set' : 
+    Boolean IsInstantiated 'get ' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MScene Scene 'get ' : 
+    System.String Path 'get ' : 
+    System.String Filename 'get ' : 
+    System.String ShortName 'get ' : 
+    System.String SourceFilename 'get ' : 
+  Methods:
+    get_SourceFilename(): PrivateScope, Public, SpecialName
+    get_ShortName(): PrivateScope, Public, SpecialName
+    get_Filename(): PrivateScope, Public, SpecialName
+    get_Path(): PrivateScope, Public, SpecialName
+    get_Scene(): PrivateScope, Public, SpecialName
+    get_IsInstantiated(): PrivateScope, Public, SpecialName
+    get_Dirty(): PrivateScope, Public, SpecialName
+    set_Dirty(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+    get_Writable(): PrivateScope, Public, SpecialName
+    Instantiate(): PrivateScope, Public
+    CreateRoot(String): PrivateScope, Public
+    Save(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MMakePropertyUniqueCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiMakePropertyUniqueCommand*, Emergent.Gamebryo.SceneDesigner.Framework.MPropertyContainer): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MPoint2: AutoLayout, AnsiClass, Class, Public, Serializable, BeforeFieldInit
+    Void .ctor(NiPoint2*): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(Single, Single): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Single Y   'get set' : 
+    Single X   'get set' : 
+  Methods:
+    SetData(NiPoint2* IsImplicitlyDereferenced): PrivateScope, Public
+    ToNiPoint2(NiPoint2* IsImplicitlyDereferenced): PrivateScope, Public
+    get_X(): PrivateScope, Public, SpecialName
+    set_X(Single): PrivateScope, Public, SpecialName
+    get_Y(): PrivateScope, Public, SpecialName
+    set_Y(Single): PrivateScope, Public, SpecialName
+    Add(MPoint2, MPoint2): PrivateScope, Public, Static
+    Subtract(MPoint2, MPoint2): PrivateScope, Public, Static
+    Equals(Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MQuaternion: AutoLayout, AnsiClass, Class, Public, Serializable, BeforeFieldInit
+    Void .ctor(NiQuaternion*): PrivateScope, Public, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Single ZAngle 'get ' : 
+    Single YAngle 'get ' : 
+    Single XAngle 'get ' : 
+    Single Z   'get set' : 
+    Single Y   'get set' : 
+    Single X   'get set' : 
+    Single W   'get set' : 
+  Methods:
+    SetData(NiQuaternion* IsImplicitlyDereferenced): PrivateScope, Public
+    ToNiQuaternion(NiQuaternion* IsImplicitlyDereferenced): PrivateScope, Public
+    get_W(): PrivateScope, Public, SpecialName
+    set_W(Single): PrivateScope, Public, SpecialName
+    get_X(): PrivateScope, Public, SpecialName
+    set_X(Single): PrivateScope, Public, SpecialName
+    get_Y(): PrivateScope, Public, SpecialName
+    set_Y(Single): PrivateScope, Public, SpecialName
+    get_Z(): PrivateScope, Public, SpecialName
+    set_Z(Single): PrivateScope, Public, SpecialName
+    get_XAngle(): PrivateScope, Public, SpecialName
+    get_YAngle(): PrivateScope, Public, SpecialName
+    get_ZAngle(): PrivateScope, Public, SpecialName
+    FromEulerAnglesXYZ(Single, Single, Single): PrivateScope, Public
+    Equals(Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.Framework.MChangePropertyCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiChangePropertyCommand*, Emergent.Gamebryo.SceneDesigner.Framework.MPropertyContainer): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+    UInt32 PropertyIndex 'get ' : 
+    System.String PropertyName 'get ' : 
+  Methods:
+    get_PropertyName(): PrivateScope, Public, SpecialName
+    get_PropertyIndex(): PrivateScope, Public, SpecialName
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MSetElementCountCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiSetElementCountCommand*, Emergent.Gamebryo.SceneDesigner.Framework.MPropertyContainer): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+    System.String PropertyName 'get ' : 
+  Methods:
+    get_PropertyName(): PrivateScope, Public, SpecialName
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Struct NiMakePropertyUniqueCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiChangePropertyCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Abstract, Sealed, BeforeFieldInit
+  :System.ValueType
+Class Emergent.Gamebryo.SceneDesigner.Framework.MAddRemoveEntityCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiAddRemoveEntityCommand*): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MAddRemoveSelectionSetCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiAddRemoveSelectionSetCommand*): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Struct NiAddRemoveEntityCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NiAddRemoveSelectionSetCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Class Emergent.Gamebryo.SceneDesigner.Framework.MRenameSelectionSetCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiRenameSelectionSetCommand*): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Struct NiRenameSelectionSetCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Class Emergent.Gamebryo.SceneDesigner.Framework.MChangeViewportCameraCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MViewport, Emergent.Gamebryo.SceneDesigner.Framework.MEntity): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Struct NiSelectEntitiesCommand: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Class Emergent.Gamebryo.SceneDesigner.Framework.MSetActiveLayerCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(Emergent.Gamebryo.SceneDesigner.Framework.MLayer, Emergent.Gamebryo.SceneDesigner.Framework.MLayer): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MSetMasterEntityCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    Add(MEntity, MEntity): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MSetPrefabRootCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    Add(MEntity, MEntity): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.Framework.MSelectEntitiesCommand: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(NiSelectEntitiesCommand*): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommand
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    GetNiEntityCommandInterface(): PrivateScope, Public, Virtual
+    DoCommand(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommand(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.RequiresParameterAttribute: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Attribute
+    Void .ctor(System.String): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get set' : 
+  Methods:
+    get_Name(): PrivateScope, Public, SpecialName
+    set_Name(String): PrivateScope, Public, SpecialName
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ICommandPanelService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    RegisterPanel(Form): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ShowAllPanels(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ShowPanel(String, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetPanel(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IComponentService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    RegisterComponent(MComponent, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RegisterComponent(MComponent): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    UnregisterComponent(MComponent): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    UnregisterAllComponents(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetComponentNames(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetAllComponents(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    CloneComponentByID(Guid): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetComponentByID(Guid): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    IsComponentVisibleToUser(MComponent): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IMenuService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    AddMenu(String, UICommand): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveMenu(String, UICommand, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    IsMenuEnabled(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    EnableMenu(String, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetAssignedMenus(UICommand): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ISelectionSetService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    UInt32 SelectionSetCount 'get ' : 
+  Methods:
+    get_SelectionSetCount(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    GetSelectionSets(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetSelectionSetByName(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    AddSelectionSet(MSelectionSet): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveSelectionSet(MSelectionSet): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveAllSelectionSets(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IToolBarService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    System.String StandardToolBarName 'get ' : 
+  Methods:
+    AddToolBar(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveToolBar(String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    AddToolBarButton(String, String, Image, UICommand): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    ReplaceToolBarButton(String, String, String, Image, UICommand): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    EnableToolBarButton(String, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    CheckToolBarButton(String, String, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    RemoveToolBarButton(String, String): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    UpdateToolTips(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    get_StandardToolBarName(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IShortcutService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    RegisterShortcut(Keys, UICommand): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    UnregisterShortcut(Keys): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetTextRepresentation(Keys): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetKey(UICommand): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.FileLoadHandler: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Object, String): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Object, String, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IFileHandlerService: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Methods:
+    RegisterFileLoader(String, FileLoadHandler): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.ICommandPanel: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Methods:
+    RegisterEventHandlers(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Interface Emergent.Gamebryo.SceneDesigner.PluginAPI.IPlugin: AutoLayout, AnsiClass, Class, Public, ClassSemanticsMask, Abstract, BeforeFieldInit
+  Properties:
+    System.Version ExpectedVersion 'get ' : 
+    System.Version Version 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    get_Version(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    get_ExpectedVersion(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract, SpecialName
+    Load(Int32, Int32): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    GetProvidedServices(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+    Start(): PrivateScope, Public, Virtual, VtableLayoutMask, Abstract
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.ContainsUICommandsAttribute: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Attribute
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.DllInitAttribute: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Attribute
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.DllShutdownAttribute: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Attribute
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.DockPositionAttribute: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Attribute
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    Boolean AllowFloat 'get set' : 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock Position 'get set' : 
+  Methods:
+    get_Position(): PrivateScope, Public, SpecialName
+    set_Position(DefaultDock): PrivateScope, Public, SpecialName
+    get_AllowFloat(): PrivateScope, Public, SpecialName
+    set_AllowFloat(Boolean(HasFieldMarshal)): PrivateScope, Public, SpecialName
+Struct Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock Hidden = 11 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock DockRight = 10 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock DockBottom = 9 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock DockLeft = 8 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock DockTop = 7 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock Document = 6 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock DockRightAutoHide = 5 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock DockBottomAutoHide = 4 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock DockLeftAutoHide = 3 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock DockTopAutoHide = 2 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock Float = 1 : Public, Static, Literal, HasDefault
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.DefaultDock Unknown = 0 : Public, Static, Literal, HasDefault
+Class Emergent.Gamebryo.SceneDesigner.PluginAPI.UICommandValidatorAttribute: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Attribute
+    Void .ctor(System.String): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get set' : 
+  Methods:
+    get_Name(): PrivateScope, Public, SpecialName
+    set_Name(String): PrivateScope, Public, SpecialName

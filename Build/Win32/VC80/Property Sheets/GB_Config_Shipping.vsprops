@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Config_Shipping"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		Optimization="2"
+		PreprocessorDefinitions="NDEBUG;NISHIPPING"
+		RuntimeLibrary="2"
+		DebugInformationFormat="3"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		LinkIncremental="1"
+		GenerateDebugInformation="true"
+		OptimizeReferences="2"
+		EnableCOMDATFolding="2"
+	/>
+	<UserMacro
+		Name="GB_Configuration_Name"
+		Value="Shipping"
+	/>
+	<UserMacro
+		Name="GB_DLL_Suffix"
+		Value="26VC80S"
+	/>
+	<UserMacro
+		Name="GB_Tool_Plugin_Extension"
+		Value="dll"
+	/>
+	<UserMacro
+		Name="GB_Shader_Library_Extension"
+		Value=".sl9"
+	/>
+	<UserMacro
+		Name="GB_Shader_Parser_Extension"
+		Value=".sp9"
+	/>
+</VisualStudioPropertySheet>

@@ -1,0 +1,739 @@
+Assembly StdPluginsCpp, Version=2.2.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=SHA1, flags=None
+Assembly System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=SHA1, flags=None
+Assembly System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=SHA1, flags=None
+Assembly System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=SHA1, flags=None
+Assembly System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=SHA1, flags=None
+Assembly SceneDesignerFramework, Version=2.2.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=None
+Assembly Microsoft.VisualC, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=SHA1, flags=None
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MGridManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    RegisterSettings(): PrivateScope, Public
+    OnSettingChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    OnViewportCameraChanged(MViewport, MEntity): PrivateScope, Public
+    CreateGridEntity(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MSettingsHelper: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+  Methods:
+    RegisterStandardSettings(): PrivateScope, Public, Static
+    GetSettingName(StandardSetting): PrivateScope, Public, Static
+    GetSettingDescription(StandardSetting): PrivateScope, Public, Static
+    GetSettingCategory(StandardSetting): PrivateScope, Public, Static
+    IsArgStandardSetting(SettingChangedEventArgs, StandardSetting): PrivateScope, Public, Static
+    GetStandardSetting(StandardSetting, NiColor* IsImplicitlyDereferenced, SettingChangedHandler): PrivateScope, Public, Static
+    GetStandardSetting(StandardSetting, NiPoint3* IsImplicitlyDereferenced, SettingChangedHandler): PrivateScope, Public, Static
+    GetStandardSetting(StandardSetting, Boolean& IsImplicitlyDereferenced, SettingChangedHandler): PrivateScope, Public, Static
+    GetStandardSetting(StandardSetting, Single& IsImplicitlyDereferenced, SettingChangedHandler): PrivateScope, Public, Static
+    RegisterSetting(String, String, String, NiColor* IsImplicitlyDereferenced, SettingsCategory, Boolean(HasFieldMarshal), SettingChangedHandler): PrivateScope, Public, Static
+    RegisterSetting(String, String, String, NiPoint3* IsImplicitlyDereferenced, SettingsCategory, Boolean(HasFieldMarshal), SettingChangedHandler): PrivateScope, Public, Static
+    RegisterSetting(String, String, String, Boolean& IsImplicitlyDereferenced, SettingsCategory, Boolean(HasFieldMarshal), SettingChangedHandler): PrivateScope, Public, Static
+    RegisterSetting(String, String, String, Single& IsImplicitlyDereferenced, SettingsCategory, Boolean(HasFieldMarshal), SettingChangedHandler): PrivateScope, Public, Static
+    {dtor}(): PrivateScope, Public
+Struct Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MSettingsHelper+StandardSetting: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    StandardSetting SETTING_COUNT = 22 : Public, Static, Literal, HasDefault
+    StandardSetting SCALE_PRECISION_ENABLED = 21 : Public, Static, Literal, HasDefault
+    StandardSetting SCALE_PRECISION = 20 : Public, Static, Literal, HasDefault
+    StandardSetting SCALE_SNAP_ENABLED = 19 : Public, Static, Literal, HasDefault
+    StandardSetting SCALE_SNAP = 18 : Public, Static, Literal, HasDefault
+    StandardSetting ALWAYS_USE_LINEAR_ROTATION = 17 : Public, Static, Literal, HasDefault
+    StandardSetting ROTATION_SNAP_ENABLED = 16 : Public, Static, Literal, HasDefault
+    StandardSetting ROTATION_SNAP = 15 : Public, Static, Literal, HasDefault
+    StandardSetting ALIGN_TO_SURFACE_ENABLED = 14 : Public, Static, Literal, HasDefault
+    StandardSetting SNAP_TO_SURFACE_ENABLED = 13 : Public, Static, Literal, HasDefault
+    StandardSetting TRANSLATION_PRECISION_ENABLED = 12 : Public, Static, Literal, HasDefault
+    StandardSetting TRANSLATION_PRECISION = 11 : Public, Static, Literal, HasDefault
+    StandardSetting TRANSLATION_SNAP_ENABLED = 10 : Public, Static, Literal, HasDefault
+    StandardSetting TRANSLATION_SNAP = 9 : Public, Static, Literal, HasDefault
+    StandardSetting SELECTION_UNDOABLE = 8 : Public, Static, Literal, HasDefault
+    StandardSetting VIEW_UNDOABLE = 7 : Public, Static, Literal, HasDefault
+    StandardSetting MOUSE_LOOK_SCALAR = 6 : Public, Static, Literal, HasDefault
+    StandardSetting PAN_SCALAR = 5 : Public, Static, Literal, HasDefault
+    StandardSetting DOLLY_SCALAR = 4 : Public, Static, Literal, HasDefault
+    StandardSetting ORBIT_DISTANCE = 3 : Public, Static, Literal, HasDefault
+    StandardSetting GIZMO_SCALE = 2 : Public, Static, Literal, HasDefault
+    StandardSetting HIGHLIGHT_COLOR = 1 : Public, Static, Literal, HasDefault
+    StandardSetting UP_AXIS = 0 : Public, Static, Literal, HasDefault
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MSelectionService: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ISelectionService
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.Framework.MPoint3 SelectionCenter 'get set' : 
+    Emergent.Gamebryo.SceneDesigner.Framework.MEntity SelectedEntity 'get set' : 
+    Boolean CommandsAreUndoable 'get ' : 
+    Int32 NumSelectedEntities 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    RegisterSettings(): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Start(): PrivateScope, Public, Virtual
+    AddEntitiesToSelection(MEntity[]): PrivateScope, Public, Virtual
+    AddEntityToSelection(MEntity): PrivateScope, Public, Virtual
+    AddSelectionSetToSelection(MSelectionSet): PrivateScope, Public, Virtual
+    RemoveEntitiesFromSelection(MEntity[]): PrivateScope, Public, Virtual
+    RemoveEntityFromSelection(MEntity): PrivateScope, Public, Virtual
+    RemoveSelectionSetFromSelection(MSelectionSet): PrivateScope, Public, Virtual
+    ReplaceSelection(MSelectionSet): PrivateScope, Public, Virtual
+    ReplaceSelection(MEntity[]): PrivateScope, Public, Virtual
+    ClearSelectedEntities(): PrivateScope, Public, Virtual
+    get_NumSelectedEntities(): PrivateScope, Public, Virtual, SpecialName
+    GetSelectedEntities(): PrivateScope, Public, Virtual
+    get_CommandsAreUndoable(): PrivateScope, Public, Virtual, SpecialName
+    get_SelectedEntity(): PrivateScope, Public, Virtual, SpecialName
+    set_SelectedEntity(MEntity): PrivateScope, Public, Virtual, SpecialName
+    get_SelectionCenter(): PrivateScope, Public, Virtual, SpecialName
+    set_SelectionCenter(MPoint3): PrivateScope, Public, Virtual, SpecialName
+    IsEntitySelected(MEntity): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MToolbarListener: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    RegisterSettings(): PrivateScope, Public
+    OnSettingChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    TranslateSnapHandler(Object, EventArgs): PrivateScope, Public
+    RotateSnapHandler(Object, EventArgs): PrivateScope, Public
+    ScaleSnapHandler(Object, EventArgs): PrivateScope, Public
+    TranslatePrecisionHandler(Object, EventArgs): PrivateScope, Public
+    ScalePrecisionHandler(Object, EventArgs): PrivateScope, Public
+    SnapToSurfaceHandler(Object, EventArgs): PrivateScope, Public
+    AlignToSurfaceHandler(Object, EventArgs): PrivateScope, Public
+    LookAtSelectionHandler(Object, EventArgs): PrivateScope, Public
+    MoveToSelectionHandler(Object, EventArgs): PrivateScope, Public
+    ZoomExtentsAllHandler(Object, EventArgs): PrivateScope, Public
+    OptimizeLightHandler(Object, EventArgs): PrivateScope, Public
+    SelectAffectingLightsHandler(Object, EventArgs): PrivateScope, Public
+    TranslateSnapValidator(Object, UIState): PrivateScope, Public
+    RotateSnapValidator(Object, UIState): PrivateScope, Public
+    ScaleSnapValidator(Object, UIState): PrivateScope, Public
+    TranslatePrecisionValidator(Object, UIState): PrivateScope, Public
+    ScalePrecisionValidator(Object, UIState): PrivateScope, Public
+    SnapToSurfaceValidator(Object, UIState): PrivateScope, Public
+    AlignToSurfaceValidator(Object, UIState): PrivateScope, Public
+    LookAtSelectionValidator(Object, UIState): PrivateScope, Public
+    MoveToSelectionValidator(Object, UIState): PrivateScope, Public
+    ZoomExtentsAllValidator(Object, UIState): PrivateScope, Public
+    OptimizeLightValidator(Object, UIState): PrivateScope, Public
+    SelectAffectingLightValidator(Object, UIState): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MPlugin: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IPlugin
+  Properties:
+    System.Version ExpectedVersion 'get ' : 
+    System.Version Version 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_Version(): PrivateScope, Public, Virtual, SpecialName
+    get_ExpectedVersion(): PrivateScope, Public, Virtual, SpecialName
+    Load(Int32, Int32): PrivateScope, Public, Virtual
+    GetProvidedServices(): PrivateScope, Public, Virtual
+    Start(): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MShadowHelper: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    RegisterSettings(): PrivateScope, Public, Static
+    ShadowSettingsChangedHandler(Object, SettingChangedEventArgs): PrivateScope, Public, Static
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MCommandService: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ICommandService
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    UInt32 RedoStackCount 'get ' : 
+    UInt32 UndoStackCount 'get ' : 
+    System.String Name 'get ' : 
+  Events:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.UndoRedoHandler CommandsRemovedFromRedoStack: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.UndoRedoHandler CommandsAddedToRedoStack: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.UndoRedoHandler CommandsRemovedFromUndoStack: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.UndoRedoHandler CommandsAddedToUndoStack: 
+  Methods:
+    BeginUndoFrame(String): PrivateScope, Public, Virtual
+    EndUndoFrame(Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Start(): PrivateScope, Public, Virtual
+    ExecuteCommand(ICommand, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    UndoCommands(UInt32): PrivateScope, Public, Virtual
+    RedoCommands(UInt32): PrivateScope, Public, Virtual
+    get_UndoStackCount(): PrivateScope, Public, Virtual, SpecialName
+    get_RedoStackCount(): PrivateScope, Public, Virtual, SpecialName
+    GetUndoCommandNames(): PrivateScope, Public, Virtual
+    GetRedoCommandNames(): PrivateScope, Public, Virtual
+    GetUndoCommands(): PrivateScope, Public, Virtual
+    GetRedoCommands(): PrivateScope, Public, Virtual
+    ClearUndoAndRedoStacks(): PrivateScope, Public, Virtual
+    RemoveFromUndoRedoStack(ICommand): PrivateScope, Public, Virtual
+    add_CommandsAddedToUndoStack(UndoRedoHandler): PrivateScope, Public, Virtual, SpecialName
+    remove_CommandsAddedToUndoStack(UndoRedoHandler): PrivateScope, Public, Virtual, SpecialName
+    add_CommandsRemovedFromUndoStack(UndoRedoHandler): PrivateScope, Public, Virtual, SpecialName
+    remove_CommandsRemovedFromUndoStack(UndoRedoHandler): PrivateScope, Public, Virtual, SpecialName
+    add_CommandsAddedToRedoStack(UndoRedoHandler): PrivateScope, Public, Virtual, SpecialName
+    remove_CommandsAddedToRedoStack(UndoRedoHandler): PrivateScope, Public, Virtual, SpecialName
+    add_CommandsRemovedFromRedoStack(UndoRedoHandler): PrivateScope, Public, Virtual, SpecialName
+    remove_CommandsRemovedFromRedoStack(UndoRedoHandler): PrivateScope, Public, Virtual, SpecialName
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MComponentService: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IComponentService
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Start(): PrivateScope, Public, Virtual
+    RegisterComponent(MComponent, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    RegisterComponent(MComponent): PrivateScope, Public, Virtual
+    UnregisterComponent(MComponent): PrivateScope, Public, Virtual
+    UnregisterAllComponents(): PrivateScope, Public, Virtual
+    GetComponentNames(): PrivateScope, Public, Virtual
+    GetAllComponents(): PrivateScope, Public, Virtual
+    CloneComponentByID(Guid): PrivateScope, Public, Virtual
+    GetComponentByID(Guid): PrivateScope, Public, Virtual
+    IsComponentVisibleToUser(MComponent): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MInteractionModeService: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IInteractionModeService
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IInteractionMode ActiveMode 'get set' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Start(): PrivateScope, Public, Virtual
+    AddInteractionMode(IInteractionMode): PrivateScope, Public, Virtual
+    GetInteractionModeByName(String): PrivateScope, Public, Virtual
+    GetInteractionModes(): PrivateScope, Public, Virtual
+    get_ActiveMode(): PrivateScope, Public, Virtual, SpecialName
+    set_ActiveMode(IInteractionMode): PrivateScope, Public, Virtual, SpecialName
+    Update(Single): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MMessageService: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IMessageService
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    System.String Name 'get ' : 
+  Events:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.AllMessagesClearedHandler AllMessagesCleared: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ChannelMessagesClearedHandler ChannelMessagesCleared: 
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.MessageAddedHandler MessageAdded: 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Start(): PrivateScope, Public, Virtual
+    GetChannelName(MessageChannelType): PrivateScope, Public, Virtual
+    AddMessage(MessageChannelType, Message): PrivateScope, Public, Virtual
+    AddMessage(MessageChannelType, String): PrivateScope, Public, Virtual
+    GetMessage(MessageChannelType, Int32): PrivateScope, Public, Virtual
+    GetLatestMessage(MessageChannelType): PrivateScope, Public, Virtual
+    GetMessages(MessageChannelType): PrivateScope, Public, Virtual
+    ClearMessages(MessageChannelType): PrivateScope, Public, Virtual
+    ClearAllMessages(): PrivateScope, Public, Virtual
+    add_MessageAdded(MessageAddedHandler): PrivateScope, Public, Virtual, SpecialName
+    remove_MessageAdded(MessageAddedHandler): PrivateScope, Public, Virtual, SpecialName
+    add_ChannelMessagesCleared(ChannelMessagesClearedHandler): PrivateScope, Public, Virtual, SpecialName
+    remove_ChannelMessagesCleared(ChannelMessagesClearedHandler): PrivateScope, Public, Virtual, SpecialName
+    add_AllMessagesCleared(AllMessagesClearedHandler): PrivateScope, Public, Virtual, SpecialName
+    remove_AllMessagesCleared(AllMessagesClearedHandler): PrivateScope, Public, Virtual, SpecialName
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MPropertyTypeService: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IPropertyTypeService
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Start(): PrivateScope, Public, Virtual
+    RegisterType(PropertyType, Boolean(HasFieldMarshal)): PrivateScope, Public, Virtual
+    RegisterType(PropertyType): PrivateScope, Public, Virtual
+    UnregisterType(PropertyType): PrivateScope, Public, Virtual
+    Clear(): PrivateScope, Public, Virtual
+    LookupType(String): PrivateScope, Public, Virtual
+    IsTypeVisibleToUser(PropertyType): PrivateScope, Public, Virtual
+    GetAllPropertyTypes(): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MRenderingModeService: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.IRenderingModeService
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Start(): PrivateScope, Public, Virtual
+    AddRenderingMode(IRenderingMode): PrivateScope, Public, Virtual
+    GetRenderingModeByName(String): PrivateScope, Public, Virtual
+    GetRenderingModes(): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MSelectionSetService: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.StandardServices.ISelectionSetService
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IService
+  Properties:
+    UInt32 SelectionSetCount 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Start(): PrivateScope, Public, Virtual
+    get_SelectionSetCount(): PrivateScope, Public, Virtual, SpecialName
+    GetSelectionSets(): PrivateScope, Public, Virtual
+    GetSelectionSetByName(String): PrivateScope, Public, Virtual
+    AddSelectionSet(MSelectionSet): PrivateScope, Public, Virtual
+    RemoveSelectionSet(MSelectionSet): PrivateScope, Public, Virtual
+    RemoveAllSelectionSets(): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MPoint2Converter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.TypeConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetProperties(ITypeDescriptorContext, Object, Attribute[]): PrivateScope, Public, Virtual
+    GetPropertiesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    CanConvertTo(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertTo(ITypeDescriptorContext, CultureInfo, Object, Type): PrivateScope, Public, Virtual
+    CanConvertFrom(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertFrom(ITypeDescriptorContext, CultureInfo, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MPoint3Converter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.TypeConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetProperties(ITypeDescriptorContext, Object, Attribute[]): PrivateScope, Public, Virtual
+    GetPropertiesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    CanConvertTo(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertTo(ITypeDescriptorContext, CultureInfo, Object, Type): PrivateScope, Public, Virtual
+    CanConvertFrom(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertFrom(ITypeDescriptorContext, CultureInfo, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MEulerQuaternionConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.TypeConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetProperties(ITypeDescriptorContext, Object, Attribute[]): PrivateScope, Public, Virtual
+    GetPropertiesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    CanConvertTo(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertTo(ITypeDescriptorContext, CultureInfo, Object, Type): PrivateScope, Public, Virtual
+    CanConvertFrom(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertFrom(ITypeDescriptorContext, CultureInfo, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MEulerMatrix3Converter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.TypeConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetProperties(ITypeDescriptorContext, Object, Attribute[]): PrivateScope, Public, Virtual
+    GetPropertiesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    CanConvertTo(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertTo(ITypeDescriptorContext, CultureInfo, Object, Type): PrivateScope, Public, Virtual
+    CanConvertFrom(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertFrom(ITypeDescriptorContext, CultureInfo, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MDepthBiasEditor: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Drawing.Design.UITypeEditor
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetEditStyle(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    EditValue(ITypeDescriptorContext, IServiceProvider, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MFilenameEditor: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Drawing.Design.UITypeEditor
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetEditStyle(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    EditValue(ITypeDescriptorContext, IServiceProvider, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MNifFilenameEditor: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MFilenameEditor
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MKfmFilenameEditor: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MFilenameEditor
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MDepthBiasConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.SingleConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    CanConvertTo(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertTo(ITypeDescriptorContext, CultureInfo, Object, Type): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MLightTypeConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.StringConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetStandardValuesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValuesExclusive(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValues(ITypeDescriptorContext): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MSequenceIDConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.TypeConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetStandardValuesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValuesExclusive(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValues(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    CanConvertTo(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertTo(ITypeDescriptorContext, CultureInfo, Object, Type): PrivateScope, Public, Virtual
+    CanConvertFrom(ITypeDescriptorContext, Type): PrivateScope, Public, Virtual
+    ConvertFrom(ITypeDescriptorContext, CultureInfo, Object): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MShadowMapSizeHintConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.UInt16Converter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetStandardValuesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValuesExclusive(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValues(ITypeDescriptorContext): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MShadowTechniqueConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.StringConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetStandardValuesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValuesExclusive(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValues(ITypeDescriptorContext): PrivateScope, Public, Virtual
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MViewInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IInteractionMode
+  Properties:
+    System.Windows.Forms.Cursor MouseCursor 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    RegisterSettings(): PrivateScope, Public
+    OnSettingChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    DoubleClick(): PrivateScope, Public, Virtual
+    DoubleClick(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual, VtableLayoutMask
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_MouseCursor(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Update(Single): PrivateScope, Public, Virtual
+    RenderGizmo(MRenderingContext): PrivateScope, Public, Virtual
+    MouseEnter(): PrivateScope, Public, Virtual
+    MouseLeave(): PrivateScope, Public, Virtual
+    MouseHover(): PrivateScope, Public, Virtual
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseMove(Int32, Int32): PrivateScope, Public, Virtual
+    MouseWheel(Int32): PrivateScope, Public, Virtual
+    GetHoverData(Int32*(Out), Int32*(Out)): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MSelectionInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MViewInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    RegisterSettings(): PrivateScope, Public
+    OnSettingChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    RenderGizmo(MRenderingContext): PrivateScope, Public, Virtual
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MTranslateInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MSelectionInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    RegisterSettings(): PrivateScope, Public
+    OnSettingChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    SetInteractionMode(Object, EventArgs): PrivateScope, Public
+    ValidateInteractionMode(Object, UIState): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Update(Single): PrivateScope, Public, Virtual
+    RenderGizmo(MRenderingContext): PrivateScope, Public, Virtual
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseMove(Int32, Int32): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Struct Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MTranslateInteractionMode+TranslateAxis: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    TranslateAxis PLANE_YZ = 5 : Public, Static, Literal, HasDefault
+    TranslateAxis PLANE_XZ = 4 : Public, Static, Literal, HasDefault
+    TranslateAxis PLANE_XY = 3 : Public, Static, Literal, HasDefault
+    TranslateAxis AXIS_Z = 2 : Public, Static, Literal, HasDefault
+    TranslateAxis AXIS_Y = 1 : Public, Static, Literal, HasDefault
+    TranslateAxis AXIS_X = 0 : Public, Static, Literal, HasDefault
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MRotationInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MSelectionInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    RegisterSettings(): PrivateScope, Public
+    OnSettingChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    SetInteractionMode(Object, EventArgs): PrivateScope, Public
+    ValidateInteractionMode(Object, UIState): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Update(Single): PrivateScope, Public, Virtual
+    RenderGizmo(MRenderingContext): PrivateScope, Public, Virtual
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseMove(Int32, Int32): PrivateScope, Public, Virtual
+    LoadGizmo(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Struct Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MRotationInteractionMode+RotateAxis: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    RotateAxis AXIS_Z = 2 : Public, Static, Literal, HasDefault
+    RotateAxis AXIS_Y = 1 : Public, Static, Literal, HasDefault
+    RotateAxis AXIS_X = 0 : Public, Static, Literal, HasDefault
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MScaleInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MSelectionInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    RegisterSettings(): PrivateScope, Public
+    OnSettingChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    SetInteractionMode(Object, EventArgs): PrivateScope, Public
+    ValidateInteractionMode(Object, UIState): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Update(Single): PrivateScope, Public, Virtual
+    RenderGizmo(MRenderingContext): PrivateScope, Public, Virtual
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseMove(Int32, Int32): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MExitableInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MViewInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetPreviousIM(): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MCreateInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MExitableInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.Windows.Forms.Cursor MouseCursor 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    RegisterSettings(): PrivateScope, Public
+    OnSettingChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    SetInteractionMode(Object, EventArgs): PrivateScope, Public
+    ValidateInteractionMode(Object, UIState): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_MouseCursor(): PrivateScope, Public, Virtual, SpecialName
+    Initialize(): PrivateScope, Public, Virtual
+    Update(Single): PrivateScope, Public, Virtual
+    RenderGizmo(MRenderingContext): PrivateScope, Public, Virtual
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseMove(Int32, Int32): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MPanInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MExitableInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    SetInteractionMode(Object, EventArgs): PrivateScope, Public
+    ValidateInteractionMode(Object, UIState): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MZoomInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MExitableInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    SetInteractionMode(Object, EventArgs): PrivateScope, Public
+    ValidateInteractionMode(Object, UIState): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseMove(Int32, Int32): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MLookInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MExitableInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    SetInteractionMode(Object, EventArgs): PrivateScope, Public
+    ValidateInteractionMode(Object, UIState): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MOrbitInteractionMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MExitableInteractionMode
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Properties:
+    System.String Name 'get ' : 
+  Methods:
+    SetInteractionMode(Object, EventArgs): PrivateScope, Public
+    ValidateInteractionMode(Object, UIState): PrivateScope, Public
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    MouseDown(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseUp(MouseButtonType, Int32, Int32): PrivateScope, Public, Virtual
+    MouseMove(Int32, Int32): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MGhostRenderingMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IRenderingMode
+  Properties:
+    Boolean DisplayToUser 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_DisplayToUser(): PrivateScope, Public, Virtual, SpecialName
+    Update(Single): PrivateScope, Public, Virtual
+    Begin(MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity[], MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity, MRenderingContext): PrivateScope, Public, Virtual
+    End(MRenderingContext): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MStandardRenderingMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IRenderingMode
+  Properties:
+    Boolean DisplayToUser 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_DisplayToUser(): PrivateScope, Public, Virtual, SpecialName
+    Update(Single): PrivateScope, Public, Virtual
+    Begin(MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity[], MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity, MRenderingContext): PrivateScope, Public, Virtual
+    End(MRenderingContext): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MWireframeRenderingMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IRenderingMode
+  Properties:
+    Boolean DisplayToUser 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_DisplayToUser(): PrivateScope, Public, Virtual, SpecialName
+    Update(Single): PrivateScope, Public, Virtual
+    Begin(MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity[], MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity, MRenderingContext): PrivateScope, Public, Virtual
+    End(MRenderingContext): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MFlatWireframeRenderingMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IRenderingMode
+  Properties:
+    Boolean DisplayToUser 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_DisplayToUser(): PrivateScope, Public, Virtual, SpecialName
+    Update(Single): PrivateScope, Public, Virtual
+    Begin(MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity[], MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity, MRenderingContext): PrivateScope, Public, Virtual
+    RegisterSettings(): PrivateScope, Public
+    End(MRenderingContext): PrivateScope, Public, Virtual
+    OnSettingChanged(Object, SettingChangedEventArgs): PrivateScope, Public
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MNoShadowsRenderingMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IRenderingMode
+  Properties:
+    Boolean DisplayToUser 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_DisplayToUser(): PrivateScope, Public, Virtual, SpecialName
+    Update(Single): PrivateScope, Public, Virtual
+    Begin(MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity[], MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity, MRenderingContext): PrivateScope, Public, Virtual
+    End(MRenderingContext): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MNoTexturesRenderingMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(Boolean): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IRenderingMode
+  Properties:
+    Boolean DisplayToUser 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_DisplayToUser(): PrivateScope, Public, Virtual, SpecialName
+    Update(Single): PrivateScope, Public, Virtual
+    Begin(MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity[], MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity, MRenderingContext): PrivateScope, Public, Virtual
+    End(MRenderingContext): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MNoBackfaceCullingRenderingMode: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Emergent.Gamebryo.SceneDesigner.Framework.MDisposable
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    Emergent.Gamebryo.SceneDesigner.PluginAPI.IRenderingMode
+  Properties:
+    Boolean DisplayToUser 'get ' : 
+    System.String Name 'get ' : 
+  Methods:
+    get_Name(): PrivateScope, Public, Virtual, SpecialName
+    get_DisplayToUser(): PrivateScope, Public, Virtual, SpecialName
+    Update(Single): PrivateScope, Public, Virtual
+    Begin(MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity[], MRenderingContext): PrivateScope, Public, Virtual
+    Render(MEntity, MRenderingContext): PrivateScope, Public, Virtual
+    End(MRenderingContext): PrivateScope, Public, Virtual
+    {dtor}(): PrivateScope, Public
+Class Emergent.Gamebryo.SceneDesigner.StdPluginsCpp.MShadowClickGeneratorConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.ComponentModel.StringConverter
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    GetStandardValuesSupported(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValuesExclusive(ITypeDescriptorContext): PrivateScope, Public, Virtual
+    GetStandardValues(ITypeDescriptorContext): PrivateScope, Public, Virtual

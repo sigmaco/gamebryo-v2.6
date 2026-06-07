@@ -1,0 +1,79 @@
+// --------------------------------------------------------------------------
+// This file has been generated from a COLLADA FX File. Do not edit manually.
+// --------------------------------------------------------------------------
+
+NSFShader WarpBars
+{
+    "Warp Bars Effect"
+    "This shader is used for the circular oscillating Warp Bars in the "
+    "Eturnum sample. This effect is highly dependent on the specific geometry "
+    "in that sample, and will not look good on arbitrary geometry. "
+    "Check the cgfx file for details on this shader, including how to set "
+    "the CenterlineConstants"
+
+    Global_Attributes
+    {
+        // Cosine:
+        Attrib_Float Cosine Hidden 1.0
+        // Sine:
+        Attrib_Float Sine Hidden 0.0
+        // WarpBarTexKill:
+        Attrib_Float WarpBarTexKill Artist 75.0 [0.0 1000.0]
+    }
+    Attributes
+    {
+        // WorldViewProj:WORLDVIEWPROJECTION
+        Attrib_Transform WorldViewProj Hidden -0.343435,0.0,-1.50018,-1.5,0.0,2.74748,0.0,0.0,-4.12122,0.0,0.125015,0.125,-5.49495,0.0,4.74421,4.74525
+        // InvWorld:WORLDINVERSE
+        Attrib_Transform InvWorld Hidden -0.0551724,-0.0,-0.662069,-0.0,0.0,1.0,0.0,0.0,0.662069,0.0,-0.0551724,0.0,-0.110345,-0.0,-1.32414,1.0
+        // EyePos:EYEPOS
+        Attrib_Point4 EyePos Hidden 0.0,0.0,0.0,0.0
+        // Zono:
+        Attrib_Point4 Zono Hidden 0.0,1.0,-1.0,1.0
+        // MaterialColor:DIFFUSE
+        Attrib_Color MaterialColor Artist 0.5,0.0,0.5,1.0
+        // CenterlineConstants:
+        Attrib_Point4 CenterlineConstants Artist 0.0,100.0,200.0,0.01
+        // Retraction:
+        Attrib_Float Retraction Artist -100.0 [-1000.0 1000.0]
+    }
+    Implementation PS3CG
+    {
+        Requirements 
+        {
+            Platform = PS3
+            UsesNIRenderState = true
+            UsesNILighting = false
+        }
+        Pass p0
+        {
+            RenderStates
+            {
+                AlphaBlendEnable = true
+                AlphaTestEnable = true
+                CullFaceEnable = true
+                SrcBlend = SrcAlpha
+                DestBlend = ONE
+                ZEnable = ZB_True
+                ZWriteEnable = false
+                ZFunc = LessEqual
+            }
+            VSProgram "WarpBars.cgfx" vmain
+            VS_Constantmap
+            {
+                CM_Defined WorldViewProjection WorldViewProj 0 
+                CM_Defined InvWorld InvWorld 0 
+                CM_Defined EyePos EyePos 0 
+                CM_Attribute Zono 0 0 0
+                CM_Attribute MaterialColor 0 0 0
+                CM_Attribute CenterlineConstants 0 0 0
+                CM_Global Cosine 0 0
+                CM_Global Sine 0 0
+                CM_Attribute Retraction 0 0 0
+                CM_Global WarpBarTexKill 0 0
+            }
+            PSProgram "WarpBars.cgfx" fmain
+        }
+
+    }
+}

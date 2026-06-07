@@ -1,0 +1,48 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+//---------------------------------------------------------------------------
+//	Texture Blend Dark Map
+//---------------------------------------------------------------------------
+//	Pixel shader for blending 3 textures together by their vertex colors
+//  with a modulated dark map added into the mix.
+//
+//  This pixel shader does the final work of TextureBlend.vsh.
+//  It assumes that you've already passed in the per-vertex lighting values 
+//  v0, your normalized opacity information in the r,g, and b channels of
+//  the specular channel, 3 textures, and a scaling factor. The scaling
+//  factor is often used to turn off a texture channel altogether if there
+//  is no associated texture. It will simply not accumulate that texture into
+//  the blend.
+//---------------------------------------------------------------------------
+// v0        vertex color lighting
+// v1        opacity information calculated from vertex shader
+// t0 - t3   textures
+// c1 - c3   scaling factor for vertex colors
+//           Set to 0 if the texture does not exist
+
+ps_1_1
+
+tex t0
+tex t1
+tex t2
+tex t3
+
+dp3 r1, v1, c1 ; copy red to all channels
+mul r0, r1, t0 
+dp3 r1, v1, c2 ; copy green to all channels
+mad r0, r1, t1, r0
+dp3 r1, v1, c3 ; copy blue to all channels
+mad r0, r1, t2, r0
+mul r0, v0, r0
+mul r0, t3, r0

@@ -1,0 +1,50 @@
+//
+// MyImmerseCreatePortalSystemRoomGroup.mel
+//
+//  Examines the selected object and generates a portal system room group.
+//  if there is just one object selected it renames the selected object
+//  if there are multiple selections it creates group and names it appropriately
+//
+
+global proc MyImmerseCreatePortalSystemRoom()
+{
+    int $intVal;
+
+    string $szTransformNodes[] = `ls -l -sl -typ transform`;
+    
+    // Check for Nothing Selected
+    if(size($szTransformNodes) == 0)
+    {
+        // Create an Empty Group
+        string $szGroup = `group -em`;
+
+        rename $szGroup "Room_NDLRM";
+        return;
+    }
+
+
+    // Turn the Selected Object into a Room Group
+    if(size($szTransformNodes) == 1)
+    {
+        string $szShortName[] = `ls -sl -typ transform`;
+
+        if(`gmatch $szShortName[0] "*_NDLRM*"` == 1)
+        {
+            warning ("MyImmerseCreatePortalSystemRoomGroup:: The Selected Object is already a room.\n");
+            return;
+        }
+
+        rename $szTransformNodes[0] ($szShortName[0] + "_NDLRM");
+        return;
+    }
+
+
+    if(size($szTransformNodes) > 1)
+    {
+        // Create an Empty Group
+        string $szGroup = `group $szTransformNodes`;
+
+        rename $szGroup "Room_NDLRM";
+        return;
+    }
+}

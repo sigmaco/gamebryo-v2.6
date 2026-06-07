@@ -1,0 +1,69 @@
+//
+// MyImmerseAddABVAttributes.mel
+//
+//  Loops through each selected transform and applies ABV Collision Data
+//
+
+global proc MyImmerseAddABVAttributes(string $nodeName)
+{
+    int $intVal;
+
+    string $szTransformNodes[];
+    if($nodeName == "")
+    {
+        $szTransformNodes = `ls -l -sl -typ shape -typ transform`;
+    }
+    else
+    {
+        if(size(`selectedNodes -dagObjects`) > 1)
+        {
+            $szTransformNodes = `ls -l -sl -typ shape -typ transform`;
+        }
+        else
+        {
+            $szTransformNodes[0] = $nodeName;
+        }
+    }
+
+    
+    // Check for Nothing Selected
+    if(size($szTransformNodes) == 0)
+    {
+        print("WARNING:: No Shapes or Transforms Selected\n");
+    }
+
+    int $iCount = 0;
+    while( $iCount < size($szTransformNodes))
+    {
+        string $szAttribute;
+
+        if(`attributeExists "Ni_EnableABVCollisionData" $szTransformNodes[$iCount]` == 0)
+        {
+            addAttr -ln Ni_EnableABVCollisionData -at bool -k false $szTransformNodes[$iCount];
+
+            $szAttribute = $szTransformNodes[$iCount] + ".Ni_EnableABVCollisionData";
+            setAttr $szAttribute true;
+        }
+
+
+        if(`attributeExists "Ni_ABV_Propogate" $szTransformNodes[$iCount]` == 0)
+        {
+            addAttr -ln Ni_ABV_Propogate -at enum -enumName "On Success:On Failure:Always:Never" $szTransformNodes[$iCount];
+            
+            $szAttribute = $szTransformNodes[$iCount] + ".Ni_ABV_Propogate";
+            setAttr $szAttribute 3;
+        }
+
+        if(`attributeExists "Ni_ABV_CollisionShape" $szTransformNodes[$iCount]` == 0)
+        {
+            addAttr -ln Ni_ABV_CollisionShape -at enum -enumName "Capsule:Sphere:Halfspace:Box:Union:Triangles:OBB:No Test:Bounding Sphere" $szTransformNodes[$iCount];
+            
+            $szAttribute = $szTransformNodes[$iCount] + ".Ni_ABV_CollisionShape";
+            setAttr $szAttribute 1;
+        }
+       
+
+        $iCount = $iCount + 1;
+    }
+
+}

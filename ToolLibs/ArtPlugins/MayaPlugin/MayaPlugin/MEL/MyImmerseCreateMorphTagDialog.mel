@@ -1,0 +1,509 @@
+//
+// MyImmerseCreateMorphTagDialog.mel
+//
+// Mel script for applying Net Immerse Morph Tags to an Node
+
+//---------------------------------------------------------------------------
+global proc float MyImmerseGetCurrentFrameRate()
+{
+    string $sFrameUnit = `currentUnit -q -t`;
+
+    if($sFrameUnit == "game")
+    {
+        return 15.0;
+    }
+    else if($sFrameUnit == "film")
+    {
+        return 24.0;
+    }
+    else if($sFrameUnit == "pal")
+    {
+        return 25.0;
+    }
+    else if($sFrameUnit == "ntsc")
+    {
+        return 30.0;
+    }
+    else if($sFrameUnit == "show")
+    {
+        return 48.0;
+    }
+    else if($sFrameUnit == "palf")
+    {
+        return 50.0;
+    }
+    else if($sFrameUnit == "ntscf")
+    {
+        return 60.0;
+    }
+    else 
+    {
+        print ("Error Reading current working unit for time: " + $sFrameUnit + " is not supported.\n");
+    }
+
+    return 1.0; 
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSetMorphTagInfo (string $sObject, int $iMorphTagNumber) 
+{
+    if($iMorphTagNumber == -1)
+    {
+        textFieldGrp -e -en false MorphTagName;
+        floatSliderGrp -e -en false MorphTagFrame;
+    }
+    else
+    {
+        string $szMorphTagName = `getAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Name")`;
+        float $fFrame = `getAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Time")`;
+
+        // Convert the Time to Frames
+        $fFrame = $fFrame * MyImmerseGetCurrentFrameRate();
+
+        textFieldGrp -e -en true -tx $szMorphTagName MorphTagName;
+        floatSliderGrp -e -en true -v $fFrame MorphTagFrame;
+    }
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetNumMorphTagFromCharacter (string $sObject) 
+{
+    // verify the object has MorphTags
+    if(`attributeExists Ni_MorphTag $sObject` == false)
+        return(0);
+
+    int $iNumValidMorphTags = 0;
+    $iNumMorphTags = `getAttr -s ($sObject + ".Ni_MorphTag")`;
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop < $iNumMorphTags; $iLoop++)
+    {
+        if(`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")` == true)
+        {
+            $iNumValidMorphTags = $iNumValidMorphTags + 1;
+        }
+    }
+
+    return( $iNumValidMorphTags );
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetDisplayMorphTagFromCharacter (string $sObject, int $iMorphTagNumber) 
+{
+    // verify the object has MorphTags
+    if(`attributeExists Ni_MorphTag $sObject` == false)
+        return(0);
+
+    int $iNumValidMorphTags = 0;
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop <= $iMorphTagNumber; $iLoop++)
+    {
+        if(`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")` == true)
+        {
+            $iNumValidMorphTags = $iNumValidMorphTags + 1;
+        }
+    }
+
+    return( $iNumValidMorphTags );
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetNextValidMorphTag (string $sObject, int $iMorphTagNumber) 
+{
+    // verify the object has MorphTags
+    if(`attributeExists Ni_MorphTag $sObject` == false)
+        return(-1);
+
+    $iNumMorphTags = `getAttr -s ($sObject + ".Ni_MorphTag")`;
+
+    int $iLoop;
+    for($iLoop = ($iMorphTagNumber + 1); $iLoop < $iNumMorphTags; $iLoop++)
+    {
+        if(`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")` == true)
+        {
+            return($iLoop);
+        }
+    }
+
+    return(-1);
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetPreviousValidMorphTag (string $sObject, int $iMorphTagNumber) 
+{
+    // verify the object has MorphTags
+    if(`attributeExists Ni_MorphTag $sObject` == false)
+        return(-1);
+
+    int $iLoop;
+    for($iLoop = ($iMorphTagNumber - 1); $iLoop >= 0; $iLoop--)
+    {
+        if(`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")` == true)
+        {
+            return($iLoop);
+        }
+    }
+
+    return(-1);
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseIsFirstMorphTag(string $sObject, int $iMorphTagNumber)
+{
+    // verify the object has MorphTags
+    if(`attributeExists Ni_MorphTag $sObject` == false)
+        return(true);
+
+    int $iLoop;
+
+    for($iLoop = ($iMorphTagNumber - 1); $iLoop >= 0; $iLoop = $iLoop - 1)
+    {
+        if(`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")` == true)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseIsLastMorphTag(string $sObject, int $iMorphTagNumber)
+{
+    // verify the object has MorphTags
+    if(`attributeExists Ni_MorphTag $sObject` == false)
+        return(true);
+
+    int $iLoop;
+    $iNumMorphTags = `getAttr -s ($sObject + ".Ni_MorphTag")`;
+
+    for($iLoop = ($iMorphTagNumber + 1); $iLoop < $iNumMorphTags; $iLoop = $iLoop + 1)
+    {
+        if(`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")` == true)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseUpdateMorphTagWindow(string $sObject)
+{
+    int $iMorphTagNumber = `intField -q -v MorphTagNumberField`;
+
+    MyImmerseSetMorphTagInfo($sObject, $iMorphTagNumber);
+
+    if($iMorphTagNumber == -1)
+    {
+        text -e -label "MorphTag 0 of 0" MorphTagCurrent;
+    }
+    else
+    {
+        int $iDisplayMorphTagNumber = MyImmerseGetDisplayMorphTagFromCharacter ($sObject, $iMorphTagNumber) ;
+        int $iMaxMorphTagNumber = MyImmerseGetNumMorphTagFromCharacter($sObject);
+    
+        text -e -label ("MorphTag " + $iDisplayMorphTagNumber + " of " + $iMaxMorphTagNumber + " MorphTags") MorphTagCurrent;
+    }
+
+    button -e -en (MyImmerseIsFirstMorphTag($sObject, $iMorphTagNumber) == false) MorphTagPrevious;
+    button -e -en (MyImmerseIsLastMorphTag($sObject, $iMorphTagNumber) == false) MorphTagNext;
+    button -e -en ($iMorphTagNumber != -1) MorphTagDelete;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteMorphTagPrevious(string $sObject)
+{
+    int $iMorphTagNumber = `intField -q -v MorphTagNumberField`;
+    
+    int $iNewMorphTag = MyImmerseGetPreviousValidMorphTag($sObject, $iMorphTagNumber);
+
+    if( $iNewMorphTag != -1 )
+    {
+        intField -e -v $iNewMorphTag MorphTagNumberField;
+    }
+
+    MyImmerseUpdateMorphTagWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteMorphTagNext(string $sObject)
+{
+    int $iMorphTagNumber = `intField -q -v MorphTagNumberField`;
+
+    int $iNewMorphTag = MyImmerseGetNextValidMorphTag($sObject, $iMorphTagNumber);
+
+    if( $iNewMorphTag != -1 )
+    {
+        intField -e -v $iNewMorphTag MorphTagNumberField;
+    }
+
+    MyImmerseUpdateMorphTagWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteDeleteMorphTag (string $sObject) 
+{
+    int $iMorphTagNumber = `intField -q -v MorphTagNumberField`;
+
+    setAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Valid") false;
+
+    int $iNewMorphTag = MyImmerseGetNextValidMorphTag($sObject, $iMorphTagNumber);
+
+    if( $iNewMorphTag != -1 )
+    {
+        intField -e -v $iNewMorphTag MorphTagNumberField;
+    }
+    else
+    {
+        $iNewMorphTag = MyImmerseGetPreviousValidMorphTag($sObject, $iMorphTagNumber);
+
+        intField -e -v $iNewMorphTag MorphTagNumberField;
+    }
+
+    if($iNewMorphTag == -1)
+    {
+        deleteAttr ($sObject + ".Ni_MorphTag");
+    }
+
+    MyImmerseUpdateMorphTagWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteCreateMorphTag (string $sObject) 
+{
+    MyImmerseCreateMorphTagAttribute($sObject);
+
+
+    // Find the Next ValidMorphTagNumber
+    int $iMorphTagNumber = -1;
+    
+
+    // Look for the first available whole
+    while(MyImmerseGetNextValidMorphTag($sObject, $iMorphTagNumber) == ($iMorphTagNumber + 1))
+    {
+        $iMorphTagNumber++;    
+    }
+
+    // Increment to the next place    
+    $iMorphTagNumber++;
+
+    intField -e -v $iMorphTagNumber MorphTagNumberField;
+
+    // Create a New MorphTag with the defaults
+    setAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Valid") true;
+    setAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Name") -type "string" "NEW MorphTag";
+    setAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Time") 0.0;
+
+    MyImmerseUpdateMorphTagWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteUpdateMorphTag (string $sObject) 
+{
+    int $iMorphTagNumber = `intField -q -v MorphTagNumberField`;
+    
+    string $sMorphTagName = `textFieldGrp -q -tx MorphTagName`;
+    float $fFrame = `floatSliderGrp -q -v MorphTagFrame`;
+
+
+    // Convert From Frames to Time
+    $fFrame = $fFrame / MyImmerseGetCurrentFrameRate();
+
+    setAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Name") -type "string" $sMorphTagName;
+    setAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Time") $fFrame;
+
+    MyImmerseSortMorphTags($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateMorphTagAttribute (string $sObject) 
+{
+    if(`attributeExists Ni_MorphTag $sObject` == false)
+    {
+        addAttr -ln Ni_MorphTag -nc 3 -at compound -m -im true $sObject;
+        addAttr -ln Ni_MorphTag_Valid -at bool -p Ni_MorphTag $sObject;
+        addAttr -ln Ni_MorphTag_Name -dt "string" -p Ni_MorphTag $sObject;
+        addAttr -ln Ni_MorphTag_Time -at "float" -p Ni_MorphTag $sObject;
+
+        setAttr ($sObject + ".Ni_MorphTag[0].Ni_MorphTag_Valid") false;
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSortMorphTags (string $sObject) 
+{
+    int $iMorphTagNumber = `intField -q -v MorphTagNumberField`;
+
+    if($iMorphTagNumber == -1)
+        return;
+
+    int $iNumMorphTags = `getAttr -s ($sObject + ".Ni_MorphTag")`;
+    float $fCurrentTime = `getAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Time")`;
+    string $sCurrentName = `getAttr ($sObject + ".Ni_MorphTag[" + $iMorphTagNumber + "].Ni_MorphTag_Name")`;
+
+    int $bFound = true;
+    int $iLoop;
+
+    while($bFound == true)
+    {
+        $bFound = false;
+
+        for($iLoop = 0; $iLoop < ($iNumMorphTags - 1); $iLoop++)
+        {
+            float $fLowTime = `getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Time")`;
+            float $fHighTime = `getAttr ($sObject + ".Ni_MorphTag[" + ($iLoop + 1) + "].Ni_MorphTag_Time")`;
+
+            if(((`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")` == false) &&
+                (`getAttr ($sObject + ".Ni_MorphTag[" + ($iLoop + 1) + "].Ni_MorphTag_Valid")` == true)) ||
+               ((`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")` == true) &&
+                (`getAttr ($sObject + ".Ni_MorphTag[" + ($iLoop + 1) + "].Ni_MorphTag_Valid")` == true) &&
+                ( $fLowTime > $fHighTime)))            
+            {
+                // Get the Low Values
+                int $bLowValid = `getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")`;
+                string $sLowName = `getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Name")`;
+
+                // Get the Hight Values
+                int $bHighValid = `getAttr ($sObject + ".Ni_MorphTag[" + ($iLoop + 1) + "].Ni_MorphTag_Valid")`;
+                string $sHighName = `getAttr ($sObject + ".Ni_MorphTag[" + ($iLoop + 1) + "].Ni_MorphTag_Name")`;
+
+                // Save the Hight values in the low spot
+                setAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid") $bHighValid;
+                setAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Name") -type "string" $sHighName;
+                setAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Time") $fHighTime;
+
+                // Save the Low Values in the hight spot
+                setAttr ($sObject + ".Ni_MorphTag[" + ($iLoop + 1) + "].Ni_MorphTag_Valid") $bLowValid;
+                setAttr ($sObject + ".Ni_MorphTag[" + ($iLoop + 1) + "].Ni_MorphTag_Name") -type "string" $sLowName;
+                setAttr ($sObject + ".Ni_MorphTag[" + ($iLoop + 1) + "].Ni_MorphTag_Time") $fLowTime;
+                $bFound = true;
+            }
+        }
+    }
+
+    // Search for our current entry
+    for($iLoop = 0; $iLoop < $iNumMorphTags; $iLoop++)
+    {
+        // If it was the entry we were looking at the reset the Tag Number Field
+        if((`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Valid")` == true) &&
+           (`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Name")` == $sCurrentName) &&
+           (`getAttr ($sObject + ".Ni_MorphTag[" + $iLoop + "].Ni_MorphTag_Time")` == $fCurrentTime))
+        {
+            intField -e -v $iLoop MorphTagNumberField;
+        }
+    }
+
+    MyImmerseUpdateMorphTagWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseMorphTagJumpToTagTime()
+{
+    float $fTime = `floatSliderGrp -q -v MorphTagFrame`;
+    currentTime $fTime;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateMorphTagDialog()
+{
+    // ONLY ALLOW ONE WINDOW AT A TIME SO WE WILL DELETE IT IF IT EXISTS
+
+    // Check if the window exists
+    if( MyImmerseWindowExists("MorphTagWindow") )
+    {
+        deleteUI MorphTagWindow;
+    }
+
+    window -title "Morph Tag Window" -widthHeight 400 210 MorphTagWindow;
+
+    columnLayout;
+
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) != 1)
+    {
+        if(size($dagnodes) <= 0)
+        {
+            text -label "ERROR::No Objects Selected" MorphTagCurrent;
+        }
+        else
+        {
+            text -label "ERROR::Multiple Objects Selected" MorphTagCurrent;
+        }
+    }
+    else
+    {
+        string $sObject = $dagnodes[0];
+        int $iMorphTagNumber = MyImmerseGetNextValidMorphTag($sObject, -1);
+        int $iDisplayMorphTagNumber = MyImmerseGetDisplayMorphTagFromCharacter ($sObject, $iMorphTagNumber) ;
+        int $iMaxMorphTagNumber = MyImmerseGetNumMorphTagFromCharacter($sObject);
+    
+        intField -v 0 -ed false -vis false MorphTagNumberField;
+
+        text -label "";
+
+        text 
+            -label ("  MorphTag " + $iDisplayMorphTagNumber + " of " + $iMaxMorphTagNumber + " MorphTags") 
+            -fn "boldLabelFont" 
+            -w 300
+            -al "left"
+            MorphTagCurrent;
+
+        text -label "" MorphTagSpacer;
+    
+        textFieldGrp 
+            -label "MorphTag Name" 
+            -changeCommand ("MyImmerseExecuteUpdateMorphTag " + $sObject)
+            MorphTagName;
+
+        floatSliderGrp 
+            -l "Frame" 
+            -field true 
+            -min 0.0 
+            -fmn 0.0 
+            -max 100.0
+            -fmx 1000000.0
+            -changeCommand ("MyImmerseExecuteUpdateMorphTag " + $sObject)
+            MorphTagFrame;
+
+        text -label "" MorphTagSpacer4;
+    
+        rowLayout 
+            -nc 4
+            -cw4 100 75 75 75;
+            
+            text -label "";
+
+            button 
+                -label "Previous" 
+                -en (MyImmerseIsFirstMorphTag($sObject, $iMorphTagNumber) == false)
+                -c ("MyImmerseExecuteMorphTagPrevious " + $sObject)
+                MorphTagPrevious;
+    
+            button 
+                -label "Next" 
+                -en (MyImmerseIsLastMorphTag($sObject, $iMorphTagNumber) == false)
+                -c ("MyImmerseExecuteMorphTagNext " + $sObject)
+                MorphTagNext;
+
+            button
+                -label "Jump To Tag Time"
+                -c "MyImmerseMorphTagJumpToTagTime()" 
+                MorphTagJumpToTagTime;
+    
+        setParent ..; // columnLayout
+    
+        text -label "" MorphTagSpacer2;
+        
+        rowLayout 
+            -nc 3
+            -cw3 50 125 150;
+
+            text -label "";
+    
+            button 
+                -label "Create Morph Tag" 
+                -c ("MyImmerseExecuteCreateMorphTag " + $sObject) 
+                MorphTagCreate;
+
+            button 
+                -label "Delete Morph Tag" 
+                -c ("MyImmerseExecuteDeleteMorphTag " + $sObject) 
+                -en ($iMorphTagNumber != -1)
+                MorphTagDelete;
+    
+        setParent ..; // columnLayout
+    
+        MyImmerseSetMorphTagInfo($sObject, $iMorphTagNumber );
+    }
+
+    showWindow MorphTagWindow;
+}

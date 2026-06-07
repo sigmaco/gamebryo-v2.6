@@ -1,0 +1,41 @@
+//
+// MyImmerseEulerToMatrix.mel
+//
+//  This function will take an X, Y, Z Euler rotations to a Matrix.
+//
+//  MANY MANY THANKS TO Peter Pipkorn from Jungle Peak Studios for this code.
+//
+//
+global proc MyImmerseEulerToMatrix(float $rx, float $ry, float $rz, matrix $mat)
+{
+
+	$rx = deg_to_rad($rx);
+	$ry = deg_to_rad($ry);
+	$rz = deg_to_rad($rz);
+
+	float $sx = sin($rx);
+	float $sy = sin($ry);
+	float $sz = sin($rz);
+	float $cx = cos($rx);
+	float $cy = cos($ry);
+	float $cz = cos($rz);
+	
+	matrix $RX[4][4] = << 1, 0, 0, 0;
+						  0, $cx, $sx, 0;
+						  0, -$sx, $cx, 0;
+						  0,0,0,1>>;
+	
+	matrix $RY[4][4] = << $cy, 0, -$sy, 0;
+						 0, 1, 0, 0;
+						 $sy, 0, $cy, 0;
+						 0, 0, 0,  1>>;
+						 
+	matrix $RZ[4][4] = << $cz, $sz, 0, 0;
+						  -$sz, $cz, 0, 0;
+						  0,0,1,0;
+						  0,0,0,1>>;
+						  
+						  
+						  				 
+	$mat =  $RX*$RY*$RZ;					  
+}

@@ -1,0 +1,172 @@
+global proc string GetNodeName(string $nodeAndAttr)
+{
+    string $buffer[];
+
+    tokenize $nodeAndAttr "." $buffer;
+
+    return $buffer[0];
+}
+
+global proc AEGamebryoToggle(string $nodeName, string $testAttrs[],
+                                     string $createFunction,
+                                     string $deleteFunction)
+{
+    if(!HasAnyAttrs($nodeName, $testAttrs))
+    {
+        catchQuiet(`eval($createFunction + " " + $nodeName)`);
+    }
+    else
+    {
+        catchQuiet(`eval($deleteFunction + " " + $nodeName)`);
+    }
+}
+
+global proc int HasAnyAttrs(string $nodeName, string $attrs[])
+{
+    int $attrIndex = 0;
+    int $sizeOfAttrs = size($attrs);
+    for($attrIndex; $attrIndex < $sizeOfAttrs; $attrIndex++)
+    {
+        if(`attributeExists $attrs[$attrIndex] $nodeName`)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+global proc AEGamebryoDeleteAttrList(string $attrs[], string $nodeName)
+{
+    string $currentAttr = "";
+    for($currentAttr in $attrs)
+    {
+        if(`attributeExists $currentAttr $nodeName`)
+        {
+            deleteAttr -at $currentAttr $nodeName;
+        }
+    }
+}
+
+global proc AEGamebryoAddFrame(string $frameLabel, string $frameBasename)
+{
+
+    frameLayout -label $frameLabel -collapse false 
+        ($frameBasename + "FrameLayout");
+        columnLayout ($frameBasename + "ColumnLayout");
+        setParent..;
+    setParent..;
+}
+
+global proc AddGenericAttr(string $labelName, string $nodeName, 
+                           string $attrName, string $columnNameBasename)
+{
+    //print("AddGenericAttr:: $labelName = " + $labelName + " $nodeName = " + $nodeName 
+    //    + " $attrName = " + $attrName + " $columnNameBasename = " + $columnNameBasename + "\n");
+
+    if(`columnLayout -ex ($attrName + "ColumnLayout")`)
+    {
+        deleteUI ($attrName + "ColumnLayout");
+    }
+
+    int $hasAttr = `attributeExists $attrName $nodeName`;
+
+    //print("$hasAttr = " + $hasAttr);
+
+    string $tokenBits[];
+    tokenize $nodeName "|" $tokenBits;
+    string $shortName = $tokenBits[size($tokenBits) - 1];
+    //print("$shortName " + $shortName);
+
+    if($hasAttr)
+    {
+        //count the names
+        //We have to get the long name somehow
+        //int $duplicateNameCount = size(`ls -long $shortName`);
+        //if($duplicateNameCount == 1)
+        //{
+        //    catchQuiet(AEBuildControls($nodeName, $columnNameBasename, $attrName, 
+        //        $labelName));
+        //}
+        //else
+        //{
+        //    //print out error message
+        //    text -label ($shortName + " is a duplicate name. \nUnable to build UI for nodes with duplicate names.\nRename and execute the mel command \"resetAE\".\n");
+        //}
+
+        catchQuiet(AEBuildControls($nodeName, $columnNameBasename, $attrName, 
+               $labelName));
+    }
+}
+
+global proc AEBuildControls(string $nodeName, string $columnNameBasename, 
+                            string $attrName, string $labelName)
+{
+    columnLayout -p ($columnNameBasename + "ColumnLayout") 
+        ($attrName + "ColumnLayout");
+    
+        //This to fix a bug where catchQuiet 
+        //get the list of enumeration attributes
+        //see if this attribute is one
+        string $enumAttributes[] = `attributeInfo -e on $nodeName`;
+        int $isEnum = false;
+        string $currentAttr;
+        for($currentAttr in $enumAttributes)
+        {
+            if($currentAttr == $attrName)
+            {
+                $isEnum = true;
+                break;
+            }
+        }
+
+        if($isEnum)
+        {
+          //didn't work, maybe the attr is an enumeration
+             catchQuiet(`attrEnumOptionMenuGrp -label $labelName
+                -at ($nodeName + "." + $attrName) ($attrName + "Control")`);
+        }
+        else
+        {
+            catchQuiet(`attrControlGrp  -label $labelName -hideMapButton true 
+                -a ($nodeName + "." + $attrName) ($attrName + "Control")`);
+        }
+
+    setParent..;
+}
+
+global proc AEGamebryoAddManyAttrs(string $nodeName, string $frameBasename, 
+                                   string $labels[], string $attrNames[])
+{
+    if(size($labels) != size($attrNames))
+    {
+        error "size($labels) != size($attrNames)";
+    }
+
+    int $attrIndex = 0;
+    for($attrIndex; $attrIndex < size($labels); $attrIndex++)
+    {
+        AddGenericAttr($labels[$attrIndex], $nodeName, $attrNames[$attrIndex],
+            $frameBasename);
+    }
+}
+
+global proc AEGamebryoSetEnableStateOframe(int $state, string $frameBasename)
+{
+    string $frameName = $frameBasename + "FrameLayout";
+
+    if($state)
+    {
+        if(`frameLayout -ex $frameName `)
+        {
+            frameLayout -e -vis true $frameName ;
+        }
+    }
+    else
+    {
+        if(`frameLayout -ex $frameName`)
+        {
+            frameLayout -e -vis false $frameName;
+        }
+    }
+}

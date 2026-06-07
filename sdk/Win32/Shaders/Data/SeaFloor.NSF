@@ -1,0 +1,351 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader SeaFloor
+{
+    "This shader implements the look of the sea floor found in the "
+    "DirectX DolphinVS sample. It uses assembly shaders. "
+    "This shader is used for the sea floor in the ShaderSample demo. "
+
+    // Attribute list
+    Global_Attributes
+    {
+        Attrib_Point4   AmbientColor      Hidden  1.0, 1.0, 1.0, 1.0
+        Attrib_Point4   LightDiffuse      Hidden  1.0, 1.0, 1.0, 1.0
+        Attrib_Point4   Caustics          Hidden  0.05, 0.05, 0.0, 0.1
+    }
+
+    // Packing Definition
+    PackingDef PosNormTexCoord
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      3   PDT_Float3
+            PDP_TexCoord0   6   PDT_Float2
+    }
+    
+    // Implementation
+    Implementation SeaFloorDX9
+    {
+        "This implementation is intended for DX9 hardware 
+         that supports VS 1.1."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform            = DX9
+            VSVersion           = v1.1
+            UserVersion         = v0.0
+            PSVersion           = v0.0
+            UsesNiRenderState   = true
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosNormTexCoord
+
+        // 'Global' render states
+        RenderStates
+        {
+            ZEnable             = true
+            Lighting            = false
+
+            FogEnable           = true
+            FogStart            = 0x00000000 //0.0f
+            FogEnd              = 0x3f800000 //1.0f
+            FogDensity          = 0x3f800000 //1.0f
+            RangeFogEnable      = false
+
+            FogTableMode        = NONE
+            FogVertexMode       = NONE
+        }
+
+        // First pass
+        Pass BaseMap
+        {
+            RenderStates
+            {
+                AlphaBlendEnable    = false
+                FogColor            = 0x00004080
+            }
+
+            // Vertex shader program
+            VSProgram
+            {
+                Platform = DX9|XENON
+                Program = "SeaFloor.vsh"
+            }
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Constant     Zero                    0   1   
+                    0.0, 0.0, 0.0, 0.0
+                CM_Constant     OneHalfTwoFour          1   1   
+                    1.0, 0.5, 2.0, 4.0
+                CM_Defined      WorldViewProjTranspose  4   0
+                CM_Defined      WorldViewTranspose      8   0
+                CM_Defined      ViewTranspose           12  0
+                CM_Constant     WSLightDirection        20  1
+                     0.0,  1.0, 0.0, 0.0
+                CM_Defined      MaterialDiffuse        -1   0
+                CM_Global       LightDiffuse           -1   1
+                CM_Operator     LitDiffuse              21  1   
+                    MaterialDiffuse * LightDiffuse
+                CM_Defined      MaterialAmbient         22  0
+                CM_Constant     FogParams               23  1   
+                    0.5, 100.0, 0.010101010, 0.0 //Half, far, 1/(far - near), 0
+                CM_Defined      ProjectionTranspose     28  0
+            }
+            
+            // Fixed function pixel pipeline on DX9
+
+            Stage 0 BaseStage
+            {
+                TSS_ColorOp     = TOP_Modulate
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Diffuse
+                TSS_AlphaOp     = TOP_Modulate
+                TSS_AlphaArg1   = TA_Texture
+                TSS_AlphaArg2   = TA_Diffuse
+            }
+
+            Sampler 0 BaseMap
+            {
+                TSS_Texture     = NTM_Base
+
+                TSAMP_AddressU  = TADDR_Clamp
+                TSAMP_AddressV  = TADDR_Clamp
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+
+        // Second pass
+        Pass Caustics
+        {
+            RenderStates
+            {
+                AlphaBlendEnable    = true
+                SrcBlend            = One
+                DestBlend           = One
+                FogColor            = 0x00000000
+            }
+
+            // Vertex shader program
+            VSProgram
+            {
+                Platform = DX9
+                Program = "SeaFloor2.vso"
+            }
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Constant     Zero                    0   1   
+                    0.0, 0.0, 0.0, 0.0
+                CM_Constant     OneHalfTwoFour          1   1   
+                    1.0, 0.5, 2.0, 4.0
+                CM_Defined      WorldViewProjTranspose  4   0
+                CM_Defined      WorldViewTranspose      8   0
+                CM_Defined      ViewTranspose           12  0
+                CM_Constant     WSLightDirection        20  1
+                     0.0,  1.0, 0.0, 0.0
+                CM_Defined      MaterialDiffuse        -1   0
+                CM_Global       LightDiffuse           -1   1
+                CM_Operator     LitDiffuse              21  1   
+                    MaterialDiffuse * LightDiffuse
+                CM_Defined      MaterialAmbient         22  0
+                CM_Constant     FogParams               23  1   
+                    0.5, 100.0, 0.010101010, 0.0 //Half, far, 1/(far - near), 0
+                CM_Global       Caustics                24  1
+                CM_Defined      ProjectionTranspose     28  0
+            }
+            
+            // Fixed function pixel pipeline on DX9
+            
+            Stage 0 BaseStage
+            {
+                TSS_ColorOp     = TOP_Modulate
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Diffuse
+                TSS_AlphaOp     = TOP_Modulate
+                TSS_AlphaArg1   = TA_Texture
+                TSS_AlphaArg2   = TA_Diffuse
+            }
+
+            Sampler 0 BaseMap
+            {
+                TSS_Texture     = NTM_Detail
+
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+    }
+
+    Implementation SeaFloorVSPS
+    {
+        "This implementation is intended for hardware that does not support "
+        "a fixed-function pixel pipeline."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform            = XENON
+            VSVersion           = v1.1
+            UserVersion         = v0.0
+            PSVersion           = v1.1
+            UsesNiRenderState   = true
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosNormTexCoord
+
+        // 'Global' render states
+        RenderStates
+        {
+            ZEnable             = true
+            Lighting            = false
+
+            FogEnable           = true
+            FogStart            = 0x00000000 //0.0f
+            FogEnd              = 0x3f800000 //1.0f
+            FogDensity          = 0x3f800000 //1.0f
+            RangeFogEnable      = false
+
+            FogTableMode        = NONE
+            FogVertexMode       = NONE
+        }
+
+        // First pass
+        Pass BaseMap
+        {
+            RenderStates
+            {
+                AlphaBlendEnable    = false
+                FogColor            = 0x00004080
+            }
+
+            // Vertex shader program
+            VSProgram
+            {
+                Platform = DX9|XENON
+                Program = "SeaFloor.vsh"
+            }
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Constant     Zero                    0   1   
+                    0.0, 0.0, 0.0, 0.0
+                CM_Constant     OneHalfTwoFour          1   1   
+                    1.0, 0.5, 2.0, 4.0
+                CM_Defined      WorldViewProjTranspose  4   0
+                CM_Defined      WorldViewTranspose      8   0
+                CM_Defined      ViewTranspose           12  0
+                CM_Constant     WSLightDirection        20  1
+                     0.0,  1.0, 0.0, 0.0
+                CM_Defined      MaterialDiffuse        -1   0
+                CM_Global       LightDiffuse           -1   1
+                CM_Operator     LitDiffuse              21  1   
+                    MaterialDiffuse * LightDiffuse
+                CM_Defined      MaterialAmbient         22  0
+                CM_Constant     FogParams               23  1   
+                    0.5, 100.0, 0.010101010, 0.0 //Half, far, 1/(far - near), 0
+                CM_Defined      ProjectionTranspose     28  0
+            }
+            
+            // Pixel shader program on Xenon
+            PSProgram
+            {
+               Platform = XENON
+               Program = "DolphinTween.psh"
+            }
+
+            Sampler 0 BaseMap
+            {
+                TSS_Texture     = NTM_Base
+
+                TSAMP_AddressU  = TADDR_Clamp
+                TSAMP_AddressV  = TADDR_Clamp
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+
+        // Second pass
+        Pass Caustics
+        {
+            RenderStates
+            {
+                AlphaBlendEnable    = true
+                SrcBlend            = One
+                DestBlend           = One
+                FogColor            = 0x00000000
+            }
+
+            // Vertex shader program
+            VSProgram
+            {
+                Platform = XENON
+                Program = "SeaFloor2.vsh"
+            }
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Constant     Zero                    0   1   
+                    0.0, 0.0, 0.0, 0.0
+                CM_Constant     OneHalfTwoFour          1   1   
+                    1.0, 0.5, 2.0, 4.0
+                CM_Defined      WorldViewProjTranspose  4   0
+                CM_Defined      WorldViewTranspose      8   0
+                CM_Defined      ViewTranspose           12  0
+                CM_Constant     WSLightDirection        20  1
+                     0.0,  1.0, 0.0, 0.0
+                CM_Defined      MaterialDiffuse        -1   0
+                CM_Global       LightDiffuse           -1   1
+                CM_Operator     LitDiffuse              21  1   
+                    MaterialDiffuse * LightDiffuse
+                CM_Defined      MaterialAmbient         22  0
+                CM_Constant     FogParams               23  1   
+                    0.5, 100.0, 0.010101010, 0.0 //Half, far, 1/(far - near), 0
+                CM_Global       Caustics                24  1
+                CM_Defined      ProjectionTranspose     28  0
+            }
+            
+            // Pixel shader program on Xenon
+            PSProgram
+            {
+               Platform = XENON
+               Program = "DolphinTween.psh"
+            }
+
+            Sampler 0 BaseMap
+            {
+                TSS_Texture     = NTM_Detail
+
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+    }
+}

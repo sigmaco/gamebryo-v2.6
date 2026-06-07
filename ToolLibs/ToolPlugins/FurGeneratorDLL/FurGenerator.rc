@@ -1,0 +1,121 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "FurGenerator_resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "FurGenerator_resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_OPT_FURGENERATOR DIALOGEX 0, 0, 178, 214
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Fur Generator Options"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,19,190,54,14
+    PUSHBUTTON      "Cancel",IDCANCEL,103,190,54,14
+    EDITTEXT        IDC_OPT_EDIT_FUR_LENGTH,130,4,40,14,ES_AUTOHSCROLL
+    LTEXT           "Fur Length",IDC_STATIC,13,4,35,8
+    EDITTEXT        IDC_OPT_EDIT_SHELL_TEXTURE_SIZE,130,101,40,14,ES_AUTOHSCROLL
+    LTEXT           "Shell Texture Size",IDC_STATIC,13,102,58,8
+    EDITTEXT        IDC_OPT_EDIT_NUM_SHELLS,130,69,40,14,ES_AUTOHSCROLL
+    LTEXT           "Num Shells",IDC_STATIC,13,69,36,8
+    CONTROL         "Generate dense fins",IDC_CHECK_GENERATE_DENSE_FINS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,19,169,79,10
+    EDITTEXT        IDC_OPT_EDIT_TEXTURE_TILES_PER_FIN,130,36,40,14,ES_AUTOHSCROLL
+    LTEXT           "Texture Tiles Per Fin",IDC_STATIC,13,36,66,8
+    EDITTEXT        IDC_OPT_EDIT_FUR_LENGTH_RANDOMNESS,130,20,40,14,ES_AUTOHSCROLL
+    LTEXT           "Fur Length Randomness",IDC_STATIC,13,20,78,8
+    EDITTEXT        IDC_OPT_EDIT_TEXTURE_TILES_PER_FIN_RANDOMNESS,130,52,40,14,ES_AUTOHSCROLL
+    LTEXT           "Texture Tiles Per Fin Randomness",IDC_STATIC,13,55,109,8
+    EDITTEXT        IDC_OPT_EDIT_SHELL_SIZE_FACTOR,130,85,40,14,ES_AUTOHSCROLL
+    LTEXT           "Shell Size Factor",IDC_STATIC,13,85,54,8
+    EDITTEXT        IDC_OPT_EDIT_FUR_DENSITY,130,117,40,14,ES_AUTOHSCROLL
+    LTEXT           "Fur Density",IDC_STATIC,13,118,36,8
+    LTEXT           "Fur Tint Color",IDC_STATIC,13,149,43,8
+    EDITTEXT        IDC_OPT_EDIT_FUR_TINT_R,87,147,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_OPT_EDIT_FUR_TINT_G,108,147,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_OPT_EDIT_FUR_TINT_B,129,147,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_OPT_EDIT_FUR_TINT_A,150,147,19,14,ES_AUTOHSCROLL
+    LTEXT           "R",IDC_STATIC,93,134,8,8
+    LTEXT           "G",IDC_STATIC,114,134,8,8
+    LTEXT           "B",IDC_STATIC,135,134,8,8
+    LTEXT           "A",IDC_STATIC,156,134,8,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_OPT_FURGENERATOR, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 204
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

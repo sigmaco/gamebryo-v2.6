@@ -1,0 +1,75 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+// 
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not
+// be copied or disclosed except in accordance with the terms of that
+// agreement.
+// 
+// Copyright (c) 1996-2008 Emergent Game Technologies.
+// All Rights Reserved.
+// 
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+
+struct XSI_AppToVertex
+{
+    float4 position : POSITION;
+    float4 normal : NORMAL;
+    float4 color0 : COLOR0;
+    float4 color1 : COLOR1;
+    float4 texcoord0 : TEXCOORD0;
+    float4 texcoord1 : TEXCOORD1;
+    float4 texcoord2 : TEXCOORD2;
+    float4 texcoord3 : TEXCOORD3;
+    float4 texcoord4 : TEXCOORD4;
+    float4 texcoord5 : TEXCOORD5;
+    float4 texcoord6 : TEXCOORD6;
+    float4 texcoord7 : TEXCOORD7;
+    float4 BoneIndices : BLENDINDICES0;
+    float BoneWeights : BLENDWEIGHT0;
+};
+
+struct XSI_VertexToPixel
+{
+	float4 position : POSITION;
+	float4 color0 : COLOR0;
+	float4 color1 : COLOR1;
+	float4 texcoord0 : TEXCOORD0;
+	float4 texcoord1 : TEXCOORD1;
+	float4 texcoord2 : TEXCOORD2;
+	float4 texcoord3 : TEXCOORD3;
+	float4 texcoord4 : TEXCOORD4;
+	float4 texcoord5 : TEXCOORD5;
+	float4 texcoord6 : TEXCOORD6;
+	float4 texcoord7 : TEXCOORD7;	
+};
+
+
+XSI_VertexToPixel main(
+     XSI_AppToVertex IN,
+ uniform float4x4 mModel,
+ uniform float4x4 mView,
+ uniform float4x4 mProjection,
+ uniform float4x4 mModelViewProj,
+ uniform float4x4 mModelView,
+ uniform float4x4 mModelViewIT,
+ uniform float3   cKa,
+ uniform float3   cKd,
+ uniform float3   cKs,
+ uniform float3   cKe,
+ uniform float    fShininess,
+ uniform float    fAlpha
+)
+{
+    XSI_VertexToPixel OUT; 
+
+   // transform in screen space
+   OUT.position  = mul( mModelViewProj, IN.position );
+
+   // return input
+   OUT.color0    = IN.color0;
+   OUT.color1    = IN.color1;
+    
+    return OUT;
+}

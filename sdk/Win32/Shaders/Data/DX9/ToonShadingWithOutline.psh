@@ -1,0 +1,36 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+;Simple toon shading with outlining.
+ps_1_1
+
+def c0, 1.0, 1.0, 1.0, 1.0
+def c3, -0.5, -0.5, -0.5, -0.5
+
+tex t0                       ;sample the base map
+tex t1                       ;sample the toon ramp
+texcoord t2                  ;Get N dot V for outlining
+
+mul r0, t0, v0               ;Base map * Material Color
+mul r0.rgb, r0, t1           ;Base map * toon lighting
+
+mad r0.a, c2, c3, t2.b       ;Move values into r0.a for comparison.  We must
+    ;halve the outlineThickness constant in c2 since the artist has a range
+    ;from 0 to 1.  Note that we negate constant c3 itself rather than using
+    ;-c2 or -c3 in the instruction since source register modifiers on constants
+    ;produce undefined results and will not validate in DX9.
+
+cnd r0.rgb, r0.a, r0, c1     ;Run cnd.  If N dot V is less than 
+    ;outlineThickness then we select outlineColor, c1.  Otherwise, we take the
+    ;color from the pixel ops out of r0.
++mov r0.a, c0.a

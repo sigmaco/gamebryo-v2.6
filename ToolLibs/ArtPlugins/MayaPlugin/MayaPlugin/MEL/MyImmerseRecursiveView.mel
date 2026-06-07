@@ -1,0 +1,129 @@
+//
+// MyImmerseRecursiveView.mel
+//
+// Mel script for Recursive View of Maya files as NIF
+
+//---------------------------------------------------------------------------
+global proc string[] MyImmerseBuildRecursiveFileList(string $directory, string $szFiles[])
+{
+    int     $intVal;
+    int     $index;
+    string  $stringVal;
+
+    //  print ("Directory: " + $directory + "\n");
+
+    // Change the Directory
+    $intVal = `chdir $directory`;
+
+    // If the Change Directory Fails the Return 
+    if($intVal == -1)
+    {
+        return $szFiles;
+    }
+
+    // Get the List of All the Files
+    string $fileList[];
+    $fileList = `getFileList -filespec "*.mb"`;
+
+    // print $fileList;
+
+    // For Each File Open it and Then Export
+    for ($index = 0; $index < size($fileList); $index++) 
+    {
+        // print ("File: " + $fileList[$index] + "\n");
+
+        // Append each file to the szFileList
+        $szFiles[size($szFiles)] = $directory + "/" + $fileList[$index];
+    }
+
+    // Get the List of All the Files
+    string $directoryList[];
+    $directoryList = `getFileList -filespec "*."`;
+
+    // For each Directory Call the Recursive Export
+                
+    for ($index = 0; $index < size($directoryList); $index++) 
+    {
+        string $fullPathDirectory = $directory + "/" + $directoryList[$index];
+
+        string $szReturn[] = MyImmerseBuildRecursiveFileList($fullPathDirectory, $szFiles);
+
+        $szFiles = $szReturn;
+
+    }
+
+    return $szFiles;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseChangeScene()
+{
+    int $iCurrent[] = `textScrollList -q -sii RecursiveViewSceneScrollList`;
+
+    string $szFileNames[] = `textScrollList -q -si RecursiveViewSceneScrollList`;
+
+
+    if( catch(`file -f -open $szFileNames[0]`))
+    {
+        print("Failed to Open::" + $szFileNames[0] + "\n");
+    }
+    else
+    {
+        // Prepare the Scene and run all of our scripts
+        MyImmerseOnSceneLoad();
+    
+        MyImmerseQuickView(0);
+    }
+
+    // Check for the end of the list    
+    if($iCurrent[0] == `textScrollList -q -numberOfItems RecursiveViewSceneScrollList`)
+    {
+        return;
+    }
+
+    // Increment the Current
+    textScrollList -e -sii ($iCurrent[0] + 1) RecursiveViewSceneScrollList;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseRecursiveView(string $directory, string $callType)
+{
+
+    string $szFileList[];
+    
+    $szFileList =  MyImmerseBuildRecursiveFileList($directory, $szFileList);
+
+
+    if(MyImmerseWindowExists("Ni_RecursiveViewWindow"))
+    {
+        deleteUI Ni_RecursiveViewWindow;
+    }
+
+    window -title "Gamebryo Recursive View" -rtf true Ni_RecursiveViewWindow;
+
+    columnLayout;
+
+        text -label "";
+
+        textScrollList -nr 10 -ams false RecursiveViewSceneScrollList;
+
+        int $iLoop;
+
+        for($iLoop = 0; $iLoop < size($szFileList); $iLoop++)
+        {
+            print($szFileList[$iLoop] + "\n");
+            textScrollList -e -a $szFileList[$iLoop] RecursiveViewSceneScrollList;
+        }
+
+        textScrollList -e -selectIndexedItem 1 RecursiveViewSceneScrollList;
+
+        text -label "";
+
+        button 
+            -label "View Next Scene" 
+            -c "MyImmerseChangeScene"
+            RecursiveViewNextButton;
+   
+    setParent ..; // columnLayout
+
+    showWindow Ni_RecursiveViewWindow;
+}
+//---------------------------------------------------------------------------

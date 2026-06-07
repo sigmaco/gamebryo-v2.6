@@ -1,0 +1,22 @@
+//
+//  MyImmerseWindowExists.mel will determine if a window exists already.
+//  This way we can delete it if we want to create a new one.
+//
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseWindowExists(string $szWindow)
+{
+    string $szWindows[] = `lsUI -wnd`;
+
+    int $iLoop = 0;
+    for($iLoop = 0; $iLoop < size($szWindows); $iLoop++)
+    {
+        if($szWindows[$iLoop] == $szWindow)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+

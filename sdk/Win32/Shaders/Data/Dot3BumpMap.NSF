@@ -1,0 +1,123 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader Dot3BumpMap
+{
+    "Apply a dot3 bump mapping effect to a static object using two "
+    "dynamic lights and an ambient light. The lights that are used are "
+    "found on the object at runtime, and can be applied in the art package. "
+
+    Objects
+    {
+        Effect_GeneralLight   0   Light1
+        Effect_GeneralLight   1   Light2
+    }
+    
+    Attributes
+    {
+        // The normal map for the bump mapping.  This is done as an extra 
+        // attribute so that the texture is not forward differenced when
+        // loaded from the bump map slot.
+        Attrib_Texture
+            normalMap
+            Artist
+            0
+            "normals.bmp"
+    }
+
+    // We pack the binormal and tangent vectors here to move light vectors
+    // into tangent space in the vertex shader. We could just pack the
+    // tangentand calculate the binormal in the vertex shaders. Applications 
+    // with bus bandwidth issues should experiment with this approach.
+    PackingDef PosNormUV0BinormalTangent
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      1   PDT_Float3
+            PDP_TexCoord0   2   PDT_Float2
+            PDP_Tangent     3   PDT_Float3
+            PDP_Binormal    4   PDT_Float3
+    }
+
+    Implementation VS11_PS11
+    {
+        "This implementation requires hardware that supports "
+        "Vertex Shader v1.1 and Pixel Shader v1.1. "
+
+        //We set UsesNIRenderState for safety.  Applications wishing to
+        //optimize fully with a sorted rendering order should consider 
+        //setting this value to false to avoid setting duplicate render
+        //states.
+        Requirements
+        {
+            VSVersion   = v1.1
+            UserVersion = v0.0
+            PSVersion   = v1.1
+            Platform    = DX9|XENON
+            UsesNIRenderState = true
+            BinormalTangentMethod = NBTMethod_ATI
+            BinormalTangentUVSource = 0
+        }
+
+        PackingDef  PosNormUV0BinormalTangent
+
+        Pass Dot3Bump
+        {
+            VSProgram   "Dot3BumpMap"
+
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0  0
+                //This constant is necessary in the vertex shader for each
+                //light that is added.
+                CM_Object       Light1  ModelDirection  7
+                CM_Object       Light2  ModelDirection  8  
+                CM_Defined      AmbientLight            9   0   
+                CM_Defined      MaterialAmbient         10  0
+                CM_Defined      MaterialDiffuse         11  0
+                CM_Constant     Half                    12  1   0.5,0.5,0.5,0.5
+            }
+
+            Sampler 0   BaseMapSampler
+            {
+                TSS_Texture     = NTM_Base
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+            Sampler 1   BaseMapSampler
+            {
+                TSS_Texture     = <normalMap>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+
+            PSProgram   "Dot3BumpMap"
+            
+            PS_Constantmap
+            {
+                //Applications with multiple lights should set more constants
+                //here.
+                CM_Object       Light1      Diffuse  2  
+                CM_Object       Light2      Diffuse  3  
+            }
+        }
+    }
+}

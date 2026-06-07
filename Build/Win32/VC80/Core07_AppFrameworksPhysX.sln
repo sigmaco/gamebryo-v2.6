@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NiTerrainPhysX", "..\..\..\AppFrameworks\NiTerrainPhysX\Win32\VC80\NiTerrainPhysX.vcproj", "{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL|Win32 = Debug DLL|Win32
+		Debug|Win32 = Debug|Win32
+		Release DLL|Win32 = Release DLL|Win32
+		Release|Win32 = Release|Win32
+		Shipping DLL|Win32 = Shipping DLL|Win32
+		Shipping|Win32 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Debug|Win32.Build.0 = Debug|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Release|Win32.ActiveCfg = Release|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Release|Win32.Build.0 = Release|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{E1A9B13D-2C66-4876-ABBF-5529EAA246CC}.Shipping|Win32.Build.0 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

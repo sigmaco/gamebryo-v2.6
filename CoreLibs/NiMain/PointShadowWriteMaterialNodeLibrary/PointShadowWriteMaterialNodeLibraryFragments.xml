@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<library version="2">
+<!--========================================================================-->
+<fragment type="Pixel" name="WriteDepthToColor">
+    <desc>
+    This fragment writes projected depth to all color component outputs.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="ViewVector" label="World" 
+            variable="WorldViewVector" /> 
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="OutputColor" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    float Depth = dot(WorldViewVector, WorldViewVector);
+    OutputColor.x = sqrt(Depth);
+    OutputColor.yzw = 1.0f;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name ="TeeFloat4">
+    <desc>
+    This fragment splits and passes through a single float4 input into two 
+    float4 outputs.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" variable="Input" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" variable="Output1" />
+        <resource type="float4" semantic="" label="" variable="Output2" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output1 = Input;
+    Output2 = Input;
+    </code>
+</fragment>
+<!--========================================================================-->
+</library>

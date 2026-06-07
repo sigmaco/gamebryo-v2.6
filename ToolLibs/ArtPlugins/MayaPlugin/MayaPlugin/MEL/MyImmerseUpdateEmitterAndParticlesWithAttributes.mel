@@ -1,0 +1,45 @@
+//
+// MyImmerseUpdateEmitterAndParticlesWithAttributes.mel
+//
+// Mel script for applying Net Immerse Attributes to an particle system
+
+
+global proc MyImmerseUpdateEmitterAndParticlesWithAttributes()
+{
+
+    int $iLoop = 0; 
+    string $szParticles[] = `ls -l -typ "particle"`;   
+    
+    for($iLoop = 0; $iLoop < size($szParticles); $iLoop++)
+    {
+        MyImmerseAddGamebryoParticlesAttributes($szParticles[$iLoop]);
+    }
+    
+    
+    string $szEmitters[] = `ls -l -typ "pointEmitter"`;
+
+    for ($iLoop = 0; $iLoop < size($szEmitters); $iLoop++)
+    {
+        MyImmerseAddGamebryoEmitterAttributes($szEmitters[$iLoop]);
+    }
+    
+
+    // Convert the Particle Colors because the defaul alpha value is bad    
+    for($iLoop = 0; $iLoop < size($szParticles); $iLoop++)
+    {
+        float $fColorR = `getAttr ($szParticles[$iLoop] + ".Ni_ParticleVertexColorR")`;
+        float $fColorG = `getAttr ($szParticles[$iLoop] + ".Ni_ParticleVertexColorG")`;
+        float $fColorB = `getAttr ($szParticles[$iLoop] + ".Ni_ParticleVertexColorB")`;
+        float $fColorA = `getAttr ($szParticles[$iLoop] + ".Ni_ParticleVertexColorAlpha")`;
+        
+        // Check for the old default value
+        if ( ($fColorR == 1.0) && ($fColorG == 1.0) && ($fColorB == 1.0) &&
+            ($fColorA == 0.0))
+        {
+            setAttr ($szParticles[$iLoop] + ".Ni_ParticleVertexColorAlpha") 1.0;
+        }
+    }       
+}
+
+
+//MyImmerseUpdateEmitterAndParticlesWithAttributes();

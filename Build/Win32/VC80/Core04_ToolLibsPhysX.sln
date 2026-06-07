@@ -1,0 +1,60 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NiPhysXSharedData", "..\..\..\ToolLibs\NiPhysXSharedData\Win32\VC80\NiPhysXSharedData.vcproj", "{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core04_ToolLibsPhysX", "Core04_ToolLibsPhysX", "{30BD2D17-0716-4236-8C2F-EAFE4C8B8036}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NiPhysXTools", "..\..\..\ToolLibs\NiPhysXTools\Win32\VC80\NiPhysXTools.vcproj", "{112F5588-964A-4D68-AE7E-C7B07E05487C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL|Win32 = Debug DLL|Win32
+		Debug|Win32 = Debug|Win32
+		Release DLL|Win32 = Release DLL|Win32
+		Release|Win32 = Release|Win32
+		Shipping DLL|Win32 = Shipping DLL|Win32
+		Shipping|Win32 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}.Debug|Win32.ActiveCfg = Debug DLL|Win32
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}.Release|Win32.ActiveCfg = Release DLL|Win32
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3}.Shipping|Win32.ActiveCfg = Shipping DLL|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Debug|Win32.Build.0 = Debug|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Release|Win32.ActiveCfg = Release|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Release|Win32.Build.0 = Release|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{112F5588-964A-4D68-AE7E-C7B07E05487C}.Shipping|Win32.Build.0 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B8E4E62B-9AF6-4CD2-9466-EE011FB880A3} = {30BD2D17-0716-4236-8C2F-EAFE4C8B8036}
+		{112F5588-964A-4D68-AE7E-C7B07E05487C} = {30BD2D17-0716-4236-8C2F-EAFE4C8B8036}
+	EndGlobalSection
+EndGlobal

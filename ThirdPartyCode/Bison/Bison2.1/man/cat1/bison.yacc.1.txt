@@ -1,0 +1,35 @@
+bison.yacc(1)                                     bison.yacc(1)
+
+
+
+
+
+NAME
+       bison.yacc - GNU Project parser generator (yacc replace-
+       ment)
+
+
+DESCRIPTION
+       bison.yacc acts exacly as  "bison  -y"  with  all  other
+       parameters  passed,  that  is  the output file is called
+       y.tab.c and the other outputs are  called  y.output  and
+       y.tab.h. This means bison.yacc cann be used as a substi-
+       tute for yacc.
+
+       Please  consult  the  bison  documentation  for  further
+       information.
+
+
+SEE ALSO
+       bison(1)
+
+
+AUTHOR
+       This  manual  page  was written for the Debian GNU/Linux
+       system by Robert Lemmen  <robertle@semistable.com>  (but
+       may be used by others, of course)
+
+
+
+
+Bison parser generator 30. December 2002          bison.yacc(1)

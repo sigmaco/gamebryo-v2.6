@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Maya80"
+	InheritedPropertySheets=".\GB_MayaPlugin_Base.vsprops"
+	>
+	<UserMacro
+		Name="MAYA_INSTALL_PATH"
+		Value="$(MAYAINSTALLPATH80)"
+	/>
+</VisualStudioPropertySheet>

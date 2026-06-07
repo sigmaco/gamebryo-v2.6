@@ -1,0 +1,82 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lenguins", "..\..\..\Samples\FullDemos\LenguinsOnIce\Win32\VC80\Lenguins.vcproj", "{75081350-0715-4347-A716-7078E1295FF3}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DodgeBall", "..\..\..\Samples\FullDemos\DodgeBall\Win32\VC80\DodgeBall.vcproj", "{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples06_FullDemosPhysX", "Samples06_FullDemosPhysX", "{AD7F89C9-A8CB-4DD6-A812-0DE39060A62D}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MeshDicer", "..\..\..\Samples\FullDemos\LenguinsOnIce\Tools\MESHDICER\Win32\VC80\MeshDicer.vcproj", "{65251157-C611-4A16-83C1-38ADC45C901E}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Miles Sound|Win32 = Debug Miles Sound|Win32
+		Debug|Win32 = Debug|Win32
+		Release Miles Sound|Win32 = Release Miles Sound|Win32
+		Release|Win32 = Release|Win32
+		Shipping Miles Sound|Win32 = Shipping Miles Sound|Win32
+		Shipping|Win32 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75081350-0715-4347-A716-7078E1295FF3}.Debug Miles Sound|Win32.ActiveCfg = Debug Miles Sound|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Debug Miles Sound|Win32.Build.0 = Debug Miles Sound|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Debug|Win32.Build.0 = Debug|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Release Miles Sound|Win32.ActiveCfg = Release Miles Sound|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Release Miles Sound|Win32.Build.0 = Release Miles Sound|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Release|Win32.ActiveCfg = Release|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Release|Win32.Build.0 = Release|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Shipping Miles Sound|Win32.ActiveCfg = Shipping Miles Sound|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Shipping Miles Sound|Win32.Build.0 = Shipping Miles Sound|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{75081350-0715-4347-A716-7078E1295FF3}.Shipping|Win32.Build.0 = Shipping|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Debug Miles Sound|Win32.ActiveCfg = Debug Miles Sound|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Debug Miles Sound|Win32.Build.0 = Debug Miles Sound|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Debug|Win32.Build.0 = Debug|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Release Miles Sound|Win32.ActiveCfg = Release Miles Sound|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Release Miles Sound|Win32.Build.0 = Release Miles Sound|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Release|Win32.ActiveCfg = Release|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Release|Win32.Build.0 = Release|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Shipping Miles Sound|Win32.ActiveCfg = Shipping Miles Sound|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Shipping Miles Sound|Win32.Build.0 = Shipping Miles Sound|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202}.Shipping|Win32.Build.0 = Shipping|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Debug Miles Sound|Win32.ActiveCfg = Debug|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Debug Miles Sound|Win32.Build.0 = Debug|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Debug|Win32.Build.0 = Debug|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Release Miles Sound|Win32.ActiveCfg = Release|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Release Miles Sound|Win32.Build.0 = Release|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Release|Win32.ActiveCfg = Release|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Release|Win32.Build.0 = Release|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Shipping Miles Sound|Win32.ActiveCfg = Shipping|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Shipping Miles Sound|Win32.Build.0 = Shipping|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{65251157-C611-4A16-83C1-38ADC45C901E}.Shipping|Win32.Build.0 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9FF46A44-DBF4-4CCE-BBD6-619E2A0C3202} = {AD7F89C9-A8CB-4DD6-A812-0DE39060A62D}
+		{75081350-0715-4347-A716-7078E1295FF3} = {AD7F89C9-A8CB-4DD6-A812-0DE39060A62D}
+		{65251157-C611-4A16-83C1-38ADC45C901E} = {AD7F89C9-A8CB-4DD6-A812-0DE39060A62D}
+	EndGlobalSection
+EndGlobal

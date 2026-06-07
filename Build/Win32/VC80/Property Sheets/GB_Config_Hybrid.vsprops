@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Config_Hybrid"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		Optimization="0"
+		PreprocessorDefinitions="_HYBRID;IS_HYBRID;_SECURE_SCL-0;NIDEBUG"
+		MinimalRebuild="true"
+		BasicRuntimeChecks="3"
+		RuntimeLibrary="2"
+		DebugInformationFormat="4"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		LinkIncremental="2"
+		IgnoreDefaultLibraryNames="msvcrtd.lib"
+		GenerateDebugInformation="true"
+	/>
+	<UserMacro
+		Name="GB_Configuration_Name"
+		Value="Debug"
+	/>
+	<UserMacro
+		Name="GB_DLL_Suffix"
+		Value="26VC80D"
+	/>
+	<UserMacro
+		Name="GB_Tool_Plugin_Extension"
+		Value="dld"
+	/>
+	<UserMacro
+		Name="GB_Shader_Library_Extension"
+		Value=".dl9"
+	/>
+	<UserMacro
+		Name="GB_Shader_Parser_Extension"
+		Value=".dp9"
+	/>
+</VisualStudioPropertySheet>

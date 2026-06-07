@@ -1,0 +1,58 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+;Light the skin with two directional lights and the bump map.
+;
+;B  = Base map
+;N  = Per pixel normal
+;WE = Warp Effect
+;V  = View Vector in tangent space
+;D1 = Light 1 Direction
+;D2 = Light 2 Direction
+;C1 = Light 1 Color
+;C2 = Light 2 Color
+;v0 = Material color
+;Oc = Output color
+;Oa = Output alpha
+;
+;Oc = B * v0 * ((N dot D1) * C1 + (N dot D2) * C2) + WE
+;Oa = WE * B
+
+ps_1_4
+
+
+texcrd r1.xyz, t1            ;Load V into r0
+texld r2, t2                 ;Sample normal map
+texcrd r3.xyz, t3            ;Load up D1
+texcrd r4.xyz, t4            ;Load up D2
+
+; N dot L.  The light vector is not biased coming out of the vertex shader.
+dp3_sat r5, r2_bx2, r3       ;N dot L for Light1
+mul_sat r5, r5, c2           ;Color for Light2
+dp3_sat r0, r2_bx2, r4       ;N dot L for Light2
+mad_sat r5, r0, c3, r5       ;Color for Light2
+
+dp3_sat r1, r2_bx2, r1       ;Perform per pixel N dot V calc
+mov r1.g, c4.r               ;Move WarpAlpha in to r1 for texture read.
+
+;We need vertex colors now.
+phase
+
+texld r0, t0                 ;Sample the base map
+texld r1, r1                 ;Sample the warp effect.
+
+mul r5.rgb, r5, v0           ;Modulate lighting by material
+
+mad r0.rgb, r0, r5, r1       ;Modulate base by lighting and add warp
++mul r0.a, r1.a, r0.a        ;Modulate in alpha from WE and B
+

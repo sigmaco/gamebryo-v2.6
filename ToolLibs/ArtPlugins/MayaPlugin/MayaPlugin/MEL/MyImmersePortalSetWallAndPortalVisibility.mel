@@ -1,0 +1,75 @@
+//
+// MyImmersePortalSetWallAndPortalVisibility.mel
+//
+//  Loops through All Transform and if they are a "Portal Wall" set there visibility
+//
+
+global proc MyImmersePortalSetWallAndPortalVisibility(int $iVisible)
+{
+    int $intVal;
+    int $iFound = 0;
+    int $iSelected = 1;
+    int $iCount = 0;
+
+    string $szTransformNodes[] = `ls -l -sl -typ transform -ni`;
+    string $szTransformNodesShort[] = `ls -sl -typ transform -ni`;
+
+    string $szSelectedNodes[];
+    string $szShortNames[];
+    
+    // Check for Nothing Selected
+    if(size($szTransformNodes) == 0)
+    {
+        // if Nothing is selected then do the entire scene
+        $szSelectedNodes = `ls -l -typ transform -ni`;
+        $szShortNames = `ls -typ transform -ni`;
+        $iSelected = 0;
+    }
+    else
+    {
+        // appendStringArray(To, From, Count);
+        for ($iCount = 0; $iCount < size($szTransformNodes); $iCount++)
+        {
+            string $szChildrenLong[] = `listRelatives -ad -f $szTransformNodes[$iCount]`;
+            string $szChildrenShort[] = `listRelatives -ad $szTransformNodes[$iCount]`;
+
+            $szSelectedNodes[ size($szSelectedNodes) ] = $szTransformNodes[$iCount];
+            $szShortNames[ size($szShortNames) ] = $szTransformNodesShort[$iCount];
+
+            appendStringArray($szSelectedNodes, $szChildrenLong, size($szChildrenLong));
+            appendStringArray($szShortNames, $szChildrenShort, size($szChildrenShort));
+        }
+    }
+
+    for($iCount = 0; $iCount < size($szSelectedNodes); $iCount++)
+    {
+//        print ($szSelectedNodes[$iCount] + "\n");
+
+        // Only Set the Visibility of Walls
+        if (`gmatch $szShortNames[$iCount] "*_NDLWL*"` == 1)
+        {
+            setAttr ($szSelectedNodes[$iCount] + ".visibility") $iVisible;
+            $iFound = 1;
+        }
+
+        // Only Set the Visibility of Portals
+        if (`gmatch $szShortNames[$iCount] "*_NDLPR*"` == 1)
+        {
+            setAttr ($szSelectedNodes[$iCount] + ".visibility") $iVisible;
+            $iFound = 1;
+        }
+
+    }
+
+
+    // Show an appropriate warning
+    if ($iFound == 0)
+    {
+        if ($iSelected == 0)
+            warning ("MyImmerseSetPortalWallVisibility:: No Portal Walls Found in the Scene");
+        else
+            warning ("MyImmerseSetPortalWallVisibility:: No Portal Walls Were Selected");
+
+    }
+
+}

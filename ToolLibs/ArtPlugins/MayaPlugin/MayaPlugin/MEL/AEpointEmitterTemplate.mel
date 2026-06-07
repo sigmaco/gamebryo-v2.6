@@ -1,0 +1,9 @@
+//Gamebryo Forwarding File DO NOT MODIFY!
+
+global proc AEpointEmitterTemplate ( string $nodeName )
+{
+    GamebryoLoadPlugins();
+    eval AEGamebryoPointEmitterTemplate $nodeName;
+    eval _gb_AEpointEmitterTemplate $nodeName;
+    
+}

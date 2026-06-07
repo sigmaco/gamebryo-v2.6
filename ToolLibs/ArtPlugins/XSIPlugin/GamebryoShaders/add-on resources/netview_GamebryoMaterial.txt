@@ -1,0 +1,1 @@
+Gamebryo real-time shader material v1.1 add-on for Softimage|XSI 6.5.

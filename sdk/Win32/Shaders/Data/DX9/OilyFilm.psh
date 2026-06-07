@@ -1,0 +1,50 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+;Oily Film pixel shader for the alien's gauntlets.  WarpAlpha is passed in as
+;c1.  t0 is the packed texture coordinate and t1 is N dot V.  If we assume that
+;the thin film on the gauntlet is of uniform thickness, then N dot V actually
+;approximates the distance that light travels through the film and is accurate
+;in the lookup of the thin film ramp. The final output is summarized below.
+;
+;B  = Base map
+;TF = Thin film interference map
+;WE = Warp Effect map
+;v0 = Diffuse lighting from vertex shader
+;v1 = Specular lighting from vertex shader
+;Oc = Output color
+;Oa = Output alpha
+;
+;Oc = B * v0 + TF * v1 + WE
+;Oa = WE
+
+ps_1_4
+
+texcrd r1.xyz, t1            ;get N dot V interpolated
+
+mov r4.x, r1.x               ;Set up r4.x with N dot V
+mov r4.yz, c1.xx             ;r4.y is WarpAlpha.  We use r4 to sample WE
+
+;Need to phase to get access to vertex colors
+phase 
+
+texld  r1, t1                ;Sample filmRamp based off of thickness in t1
+texld  r0, t0                ;Sample baseMap with t0
+texld  r2, r4                ;Sample warp effect map
+
+mul r0, r0, v0               ;Modulate base map by diffuse lighting.
+;Multiply the film interference by the specular color and add interference
+mad r0.rgb, r1, v1, r0
+
+add r0.rgb, r2, r0           ;Add warp effect color.
++mov r0.a, c1.x              ;Move in warp alpha

@@ -1,0 +1,211 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//	  Copyright (c) 1996-2008 Emergent Game Technologies.
+//	  All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+string description
+<
+	string detail0 = "This shader is a multipass example";
+	string detail1 = "The individual passes are simple enough that they could probably be";
+	string detail2 = "combined into a single pass with little effort, so don't use this as";
+	string detail3 = "an example of how to partition the work, just how to create multiple";
+	string detail4 = "passes";
+> = "Multipass Example";
+
+float4x4 WorldViewProj : WorldViewProjection 
+<
+	string UIWidget="None";
+>;
+
+float time : Time
+<
+	string UIWidget="None";
+>;
+
+float4 MaterialColor : Diffuse 
+<
+	string UIName =  "Material Color";
+	string UIWidget = "Color";
+> = {0.5f, 0.0f, 0.5f, 1.0f};
+
+/////////////////////////////////////////////////////////////
+
+struct VS_INPUT 
+{
+	float3 Pos	: POSITION;
+	float3 Normal	: NORMAL;
+	float4 TexCoord	: TEXCOORD0;
+};
+
+struct VS_OUTPUT
+{
+	float4 Pos	: POSITION;
+	float4 TexCoord	: TEXCOORD0;
+	float4 Diffuse	: COLOR0;
+};
+
+/////////////////////////////////////////////////////////////
+
+VS_OUTPUT vmain_unchanged(VS_INPUT In)
+{
+	VS_OUTPUT Out;
+	float4 NewPos = float4(In.Pos, 1.0);
+	Out.Pos = mul(NewPos, WorldViewProj);
+	Out.Diffuse = float4(1.0, 1.0, 1.0, 1.0);
+	Out.TexCoord = In.TexCoord;
+	return Out;
+}
+
+VS_OUTPUT vmain_pulsealpha(VS_INPUT In, uniform float frequency, uniform float phase)
+{
+	float amplitude = 0.5;
+	float bias = 0.5;
+	float shiftFreq = 0.1;
+
+	VS_OUTPUT Out;
+	float4 NewPos = float4(In.Pos, 1.0);
+	Out.Pos = mul(NewPos, WorldViewProj);
+	Out.Diffuse = float4(1.0, 1.0, 1.0, bias+amplitude*sin(time*frequency + phase));
+	Out.TexCoord = In.TexCoord + (phase+time*shiftFreq)*float4(0.1, 0.2, 0.0, 0.0);
+	return Out;
+}
+
+VS_OUTPUT vmain_greenright(VS_INPUT In)
+{
+	VS_OUTPUT Out;
+	float4 NewPos = float4(In.Pos, 1.0);
+	Out.Pos = mul(NewPos, WorldViewProj);
+	Out.Diffuse = float4(0.0, 1.0, 0.0, (In.Normal.x > 0.25) ? 1.0 : 0.0);
+	Out.TexCoord = In.TexCoord;
+	return Out;
+}
+
+VS_OUTPUT vmain_redleft(VS_INPUT In)
+{
+	VS_OUTPUT Out;
+	float4 NewPos = float4(In.Pos, 1.0);
+	Out.Pos = mul(NewPos, WorldViewProj);
+	Out.Diffuse = float4(1.0, 0.0, 0.0, (In.Normal.x <= 0.25) ? 1.0 : 0.0);
+	Out.TexCoord = In.TexCoord;
+	return Out;
+}
+
+VS_OUTPUT vmain_shadow(VS_INPUT In)
+{
+	VS_OUTPUT Out;
+	float4 NewPos = float4(In.Pos, 1.0) + 0.05*float4(In.Normal, 0.0);
+	Out.Pos = mul(NewPos, WorldViewProj);
+	Out.Diffuse = float4(0.0, 0.0, 0.0, 1.0);
+	Out.TexCoord = In.TexCoord;
+	return Out;
+}
+
+/////////////////////////////////////////////////////////////
+
+// Diffuse texture and sampler
+texture diffuseMap
+<
+	string ResourceName = "diffuse.bmp";
+	string ResourceType = "2D";
+>;
+
+sampler2D DiffuseMapSampler: register(s1) = sampler_state 
+{
+	WrapS = Wrap;
+	WrapT = Wrap;
+	Texture = <diffuseMap>;
+	MinFilter = LinearMipMapLinear;
+	MagFilter = Linear;
+};
+
+/////////////////////////////////////////////////////////////
+
+float4 fmain_unchanged(VS_OUTPUT In) : COLOR
+{
+	return In.Diffuse;
+}
+
+float4 fmain_tex(VS_OUTPUT In) : COLOR
+{
+	return In.Diffuse * tex2D(DiffuseMapSampler, In.TexCoord.xy);
+}
+
+/////////////////////////////////////////////////////////////
+
+technique main 
+{
+	pass shadow
+	{
+		VertexProgram = compile arbvp1 vmain_shadow();
+		BlendEnable = false;
+		AlphaTestEnable = false;
+		CullFaceEnable = true;
+		DepthTestEnable = true;
+		DepthFunc = LEqual;
+		PolygonMode = int2(Back, Fill);
+		FragmentProgram = compile arbfp1 fmain_unchanged();
+	}
+	pass green_right
+	{
+		VertexProgram = compile arbvp1 vmain_greenright();
+		BlendEnable = true;
+		AlphaTestEnable = false;
+		CullFaceEnable = false;
+		BlendFunc = int2(SrcAlpha,OneMinusSrcAlpha);
+		DepthTestEnable = false;
+		DepthMask = false;
+		DepthFunc = LEqual;
+		PolygonMode = int2(Front, Fill);
+		
+		FragmentProgram = compile arbfp1 fmain_unchanged();
+	}
+	pass red_left
+	{
+		VertexProgram = compile arbvp1 vmain_redleft();
+		BlendEnable = true;
+		AlphaTestEnable = false;
+		CullFaceEnable = false;
+		BlendFunc = int2(SrcAlpha,OneMinusSrcAlpha);
+		DepthTestEnable = false;
+		DepthMask = false;
+		DepthFunc = LEqual;
+		PolygonMode = int2(Front, Fill);
+		
+		FragmentProgram = compile arbfp1 fmain_unchanged();
+	}
+	pass wavy_overlay0
+	{
+		VertexProgram = compile arbvp1 vmain_pulsealpha(0.1, 0.0);
+		BlendEnable = true;
+		AlphaTestEnable = false;
+		CullFaceEnable = true;
+		BlendFunc = int2(SrcAlpha,OneMinusSrcAlpha);
+		DepthTestEnable = false;
+		DepthMask = false;
+		DepthFunc = LEqual;
+		PolygonMode = int2(FrontAndBack, Fill);
+		
+		FragmentProgram = compile arbfp1 fmain_tex();
+	}
+	pass wavy_overlay1
+	{
+		VertexProgram = compile arbvp1 vmain_pulsealpha(0.21, 1.254);
+		BlendEnable = true;
+		AlphaTestEnable = false;
+		CullFaceEnable = true;
+		BlendFunc = int2(SrcAlpha,OneMinusSrcAlpha);
+		DepthTestEnable = false;
+		DepthMask = false;
+		DepthFunc = LEqual;
+		PolygonMode = int2(FrontAndBack, Fill);
+		
+		FragmentProgram = compile arbfp1 fmain_tex();
+	}
+}

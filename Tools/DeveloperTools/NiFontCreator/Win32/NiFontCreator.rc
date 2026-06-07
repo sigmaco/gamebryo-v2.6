@@ -1,0 +1,226 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\NiFontCreator.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\NiFontCreator.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About NiFontCreator"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "NiFontCreator Version 1.0",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (c) 1996-2008 Emergent Game Technologies",IDC_STATIC,40,25,179,8
+    DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
+END
+
+IDD_NIFONTCREATOR_DIALOG DIALOGEX 0, 0, 438, 210
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "NiFontCreator"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Select Font",IDC_SELECT_FONT,11,13,60,22
+    PUSHBUTTON      "Select Font Color",IDC_SELECT_FONT_COLOR,11,44,61,22
+    PUSHBUTTON      "Select Font CFG",IDC_SELECT_FONT_CFG,11,76,62,22
+    CONTROL         "AntiAlias",IDC_CHECK_ANTIALIAS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,112,68,43,10
+    CONTROL         "Use external atlas TGA files",IDC_CHECK_EXTERNAL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,175,68,110,10
+    CONTROL         "Add Default ASCII",IDC_CHECK_DEFAULTASCII,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,305,67,73,10
+    EDITTEXT        IDC_EDIT_PAD_TOP,336,149,21,14,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
+    EDITTEXT        IDC_EDIT_PAD_BOTTOM,336,168,22,14,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
+    EDITTEXT        IDC_EDIT_PAD_LEFT,396,149,21,14,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
+    EDITTEXT        IDC_EDIT_PAD_RIGHT,396,168,21,14,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
+    CONTROL         "Atlas Guide Grid",IDC_CHECK_ATLASGRID,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,319,186,67,10
+    PUSHBUTTON      "Save NFF",IDC_SAVE_NFF,11,136,62,22,WS_DISABLED
+    DEFPUSHBUTTON   "Exit",IDOK,194,183,50,21
+    LTEXT           "Font:",IDC_STATIC,83,19,17,8
+    EDITTEXT        IDC_EDIT_FONTNAME,108,17,227,14,ES_AUTOHSCROLL | WS_DISABLED | NOT WS_TABSTOP
+    LTEXT           "Point Size:",IDC_STATIC,348,19,34,8
+    EDITTEXT        IDC_EDIT_FONTSIZE,392,16,21,14,ES_AUTOHSCROLL | WS_DISABLED | NOT WS_TABSTOP
+    CONTROL         "Bold",IDC_CHECK_BOLD,"Button",BS_AUTOCHECKBOX | WS_DISABLED,112,45,30,10
+    CONTROL         "Italic",IDC_CHECK_ITALIC,"Button",BS_AUTOCHECKBOX | WS_DISABLED,176,45,31,10
+    CONTROL         "Underline",IDC_CHECK_UNDERLINE,"Button",BS_AUTOCHECKBOX | WS_DISABLED,240,45,46,10
+    CONTROL         "Strikeout",IDC_CHECK_STRIKEOUT,"Button",BS_AUTOCHECKBOX | WS_DISABLED,304,45,44,10
+    LTEXT           "Font Configuration:",IDC_STATIC,10,106,60,8
+    EDITTEXT        IDC_EDIT_FONTCFG_FILENAME,80,108,351,14,ES_AUTOHSCROLL | WS_DISABLED | NOT WS_TABSTOP
+    LTEXT           "(required for Unicode)",IDC_STATIC,10,117,69,8
+    LTEXT           "Atlas Padding (pixels)",IDC_STATIC_ATLAS,330,136,68,8,WS_DISABLED
+    LTEXT           "Left",IDC_STATIC_ATLAS_LEFT,374,152,13,8,WS_DISABLED
+    LTEXT           "Right",IDC_STATIC_ATLAS_RIGHT,374,170,18,8,WS_DISABLED
+    LTEXT           "Top",IDC_STATIC_ATLAS_TOP,308,153,14,8,WS_DISABLED
+    LTEXT           "Bottom",IDC_STATIC_ATLAS_BOTTOM,309,170,23,8,WS_DISABLED
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "FileDescription", "NiFontCreator MFC Application"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "NiFontCreator"
+            VALUE "LegalCopyright", "Copyright (c) 1996-2008 Emergent Game Technologies"
+            VALUE "OriginalFilename", "NiFontCreator.EXE"
+            VALUE "ProductName", "NiFontCreator Application"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_NIFONTCREATOR_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 431
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 204
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "&About NiFontCreator..."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\NiFontCreator.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,1311 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<library version="2">
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="TransformPosition">
+    <desc>
+    This fragment is responsible for applying the view projection transform
+    to the input position. Additionally, this fragment applies the world 
+    transform to the input position. 
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Position" label="Local" 
+            variable="Position" />
+        <resource type="float4x4" semantic="WorldMatrix" label="" 
+            variable="World" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    // Transform the position into world space for lighting, and projected 
+    // space for display
+    WorldPos = mul( float4(Position, 1.0f), World );
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="TransformSkinnedPosition">
+    <desc>
+    This fragment is responsible for applying the view projection and skinning 
+    transform to the input position. Additionally, this fragment applies the 
+    computed world transform to the input position. The weighted world 
+    transform defined by the blendweights is output for use in normals or
+    other calculations as the new world matrix.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Position" label="Local" 
+            variable="Position" />
+        <resource type="int4" semantic="BlendIndices" label="" 
+            variable="BlendIndices" />
+        <resource type="float4" semantic="BlendWeight" label="Local" 
+            variable="BlendWeights" />
+        <resource type="BONEMATRIX_TYPE" count="30" semantic="SkinBoneMatrix" 
+            label="World" variable="Bones" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+        <resource type="float4x4" semantic="WorldMatrix" label="" 
+            variable="SkinBoneTransform" />
+    </outputs>
+  <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon" 
+        target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    // TransformSkinnedPosition *********************************************
+    // Transform the skinned position into world space
+    // Composite the skinning transform which will take the vertex
+    // and normal to world space.
+    float fWeight3 = 1.0 - BlendWeights[0] - BlendWeights[1] - BlendWeights[2];
+    BONEMATRIX_TYPE ShortSkinBoneTransform;
+    ShortSkinBoneTransform  = Bones[BlendIndices[0]] * BlendWeights[0];
+    ShortSkinBoneTransform += Bones[BlendIndices[1]] * BlendWeights[1];
+    ShortSkinBoneTransform += Bones[BlendIndices[2]] * BlendWeights[2];
+    ShortSkinBoneTransform += Bones[BlendIndices[3]] * fWeight3;
+    SkinBoneTransform = float4x4(ShortSkinBoneTransform[0], 0.0f,
+    ShortSkinBoneTransform[1], 0.0f,
+    ShortSkinBoneTransform[2], 0.0f,
+    ShortSkinBoneTransform[3], 1.0f);
+
+    // Transform into world space.
+    WorldPos.xyz = mul(float4(Position, 1.0), ShortSkinBoneTransform);
+    WorldPos.w = 1.0f;
+  </code>
+  <code lang="Cg" platform="PS3" 
+      target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    // TransformSkinnedPosition *********************************************
+    // Transform the skinned position into world space
+    // Composite the skinning transform which will take the vertex
+    // and normal to world space.
+    float fWeight3 = 1.0 - BlendWeights[0] - BlendWeights[1] - BlendWeights[2];
+    BONEMATRIX_TYPE ShortSkinBoneTransform;
+    ShortSkinBoneTransform  = Bones[BlendIndices[0]] * BlendWeights[0];
+    ShortSkinBoneTransform += Bones[BlendIndices[1]] * BlendWeights[1];
+    ShortSkinBoneTransform += Bones[BlendIndices[2]] * BlendWeights[2];
+    ShortSkinBoneTransform += Bones[BlendIndices[3]] * fWeight3;
+    SkinBoneTransform = transpose(float4x4(ShortSkinBoneTransform[0],
+    ShortSkinBoneTransform[1],
+    ShortSkinBoneTransform[2],
+    float4(0.0f, 0.0f, 0.0f, 1.0f)));
+
+    // Transform into world space.
+    WorldPos.xyz = mul(ShortSkinBoneTransform, float4(Position, 1.0));
+    WorldPos.w = 1.0f;
+  </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="ProjectPositionWorldToProj">
+    <desc>
+    This fragment is responsible for applying the view projection transform
+    to the input world position.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+        variable="WorldPosition" />
+        <resource type="float4x4" semantic="ViewProjMatrix" label="" 
+        variable="ViewProjection" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Position" label="Proj" 
+        variable="ProjPos" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    ProjPos = mul(WorldPosition, ViewProjection );
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="ProjectPositionWorldToViewToProj">
+    <desc>
+    This fragment is responsible for applying the view projection transform
+    to the input world position.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+        variable="WorldPosition" />
+        <resource type="float4x4" semantic="ViewMatrix" label="" 
+        variable="ViewTransform" />
+        <resource type="float4x4" semantic="ProjMatrix" label="" 
+        variable="ProjTransform" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Position" label="View" 
+        variable="ViewPos" />
+        <resource type="float4" semantic="Position" label="Proj" 
+        variable="ProjPos" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    ViewPos = mul(WorldPosition, ViewTransform );
+    ProjPos = mul(ViewPos, ProjTransform );
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="CalculateViewVector">
+    <desc>
+    This fragment is responsible for calculating the camera view vector.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="World" 
+            variable="WorldPos" />
+        <resource type="float3" semantic="CameraPosition" label="World" 
+            variable="CameraPos" default="(0.0, 0.0, 0.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="ViewVector" label="World" 
+            variable="WorldViewVector"/>
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    WorldViewVector = CameraPos - WorldPos;
+    </code>
+</fragment>	  	
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="AddFloat4">
+    <desc>
+    This fragment is responsible for adding two float4's.   
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+        <resource type="float4" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 + V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="AddFloat3">
+    <desc>
+    This fragment is responsible for adding two float3's.   
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+        <resource type="float3" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 + V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="AddFloat2">
+    <desc>
+    This fragment is responsible for adding two float2's.   
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+        <resource type="float2" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 + V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="AddFloat">
+    <desc>
+    This fragment is responsible for adding two floats.   
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 + V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="MultiplyFloat4">
+    <desc>
+    This fragment is responsible for multiplying two float4's.   
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+        <resource type="float4" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 * V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="MultiplyFloat3">
+    <desc>
+    This fragment is responsible for multiplying two float3's.   
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+        <resource type="float3" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 * V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="MultiplyFloat2">
+    <desc>
+    This fragment is responsible for multiplying two float2's.   
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+        <resource type="float2" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 * V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="MultiplyFloat">
+    <desc>
+    This fragment is responsible for multiplying two floats.   
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = V1 * V2;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="ScaleFloat4">
+    <desc>
+    This fragment is responsible for scaling a float4 by a constant.     
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="Scale" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = Scale * V1;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="ScaleFloat3">
+    <desc>    
+    This fragment is responsible for scaling a float3 by a constant.   
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="Scale" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = Scale * V1;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="ScaleFloat2">
+    <desc>
+    This fragment is responsible for scaling a float2 by a constant.   
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="Scale" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = Scale * V1;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SaturateFloat4">
+    <desc>
+    This fragment is responsible for saturating a float4.   
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = saturate(V1);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SaturateFloat3">
+    <desc>
+    This fragment is responsible for saturating a float3.   
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = saturate(V1);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SaturateFloat2">
+    <desc>
+    This fragment is responsible for saturating a float2.   
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = saturate(V1);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="SaturateFloat">
+    <desc>
+    This fragment is responsible for saturating a float.   
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="V1" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = saturate(V1);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="LerpFloat4">
+    <desc>
+    This fragment is responsible for linearly interpolating two float4's.   
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="V1" />
+        <resource type="float4" semantic="" label="" 
+            variable="V2" />
+        <resource type="float" semantic="" label="" 
+            variable="LerpAmount" default="(0.5)" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = lerp(V1, V2, LerpAmount);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="LerpFloat3">
+    <desc>
+    This fragment is responsible for linearly interpolating two float3's.   
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+        <resource type="float3" semantic="" label="" 
+            variable="V2" />
+        <resource type="float" semantic="" label="" 
+            variable="LerpAmount" default="(0.5)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = lerp(V1, V2, LerpAmount);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="LerpFloat2">
+    <desc>
+    This fragment is responsible for linearly interpolating two float2's.   
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="V1" />
+        <resource type="float2" semantic="" label="" 
+            variable="V2" />
+        <resource type="float" semantic="" label="" 
+            variable="LerpAmount" default="(0.5)" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = lerp(V1, V2, LerpAmount);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel/Vertex" name="LerpFloat">
+    <desc>
+    This fragment is responsible for linearly interpolating two floats.   
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="V1" />
+        <resource type="float" semantic="" label="" 
+            variable="V2" />
+        <resource type="float" semantic="" label="" 
+            variable="LerpAmount" default="(0.5)" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    Output = lerp(V1, V2, LerpAmount);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="NormalizeFloat4">
+    <desc>
+    This fragment is responsible for normalizing a float4.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="VectorIn" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="" label="" 
+            variable="VectorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    VectorOut = normalize(VectorIn);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="NormalizeFloat2">
+    <desc>
+    This fragment is responsible for normalizing a float2.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="VectorIn" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="" label="" 
+            variable="VectorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    VectorOut = normalize(VectorIn);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="NormalizeFloat3">
+    <desc>
+    This fragment is responsible for normalizing a float3.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="VectorIn" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="VectorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    VectorOut = normalize(VectorIn);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="MultiplyAddFloat3">
+    <desc>
+    This fragment implements the equation:
+    Output = (V1 * V2) + V3
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="V1" default="(1.0, 1.0, 1.0)"/>
+        <resource type="float3" semantic="Color" label="" 
+            variable="V2" default="(1.0, 1.0, 1.0)"/>
+        <resource type="float3" semantic="Scalar" label=""
+            variable="V3" default="(1.0, 1.0, 1.0)" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = (V1 * V2) + V3;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="FloatToFloat3">
+    <desc>
+    This fragment implements the operation:
+    Output = float3(Input, Input, Input);
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="Input" default="(1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = Input.rrr;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="FloatToFloat4">
+    <desc>
+    This fragment implements the operation:
+    Output = float4(Input, Input, Input, Input);
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="Input" default="(1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = Input.rrrr;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="Float4ToFloat">
+    <desc>
+    This fragment implements the operation:
+    Output = Input.r;
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Input" default="(1.0, 1.0, 1.0, 1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = Input.r;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="Float3ToFloat">
+    <desc>
+    This fragment implements the operation:
+    Output = Input.r;
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Input" default="(1.0, 1.0, 1.0, 1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="Color" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    Output = Input.r;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="BlurColor">
+    <desc>
+    This fragment writes projected depth to all color component outputs.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="Proj" 
+            variable="WorldPosProjected" />
+
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="OutputColor" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    float Depth = WorldPosProjected.z / WorldPosProjected.w;
+    OutputColor = Depth;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="WriteDepthToColor">
+    <desc>
+    This fragment writes projected depth to all color component outputs.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="Proj" 
+            variable="WorldPosProjected" />
+        <resource type="float3" semantic="ViewVector" label="World" 
+            variable="WorldViewVector" /> 
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="OutputColor" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    float Depth = WorldPosProjected.z / WorldPosProjected.w;
+    OutputColor = Depth;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="WriteVSMDepthToColor">
+    <desc>
+    This fragment writes projected depth to all color component outputs.
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="Position" label="Proj" 
+            variable="WorldPosProjected" />
+        <resource type="float3" semantic="ViewVector" label="World" 
+            variable="WorldViewVector" /> 
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="OutputColor" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    float Depth = WorldPosProjected.z / WorldPosProjected.w;
+            
+    OutputColor.x = Depth;
+    OutputColor.y = Depth * Depth;
+    OutputColor.z = 1.0;
+    OutputColor.w = 1.0;
+
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name ="TeeFloat4">
+    <desc>
+      This fragment splits and passes through a single float4 input into two
+      float4 outputs.
+    </desc>
+    <inputs>
+      <resource type="float4" semantic="" label="" variable="Input" />
+    </inputs>
+    <outputs>
+      <resource type="float4" semantic="" label="" variable="Output1" />
+      <resource type="float4" semantic="" label="" variable="Output2" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+      Output1 = Input;
+      Output2 = Input;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="TextureRGBASample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value and an A value.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="sampler2D" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(false)" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    ColorOut = tex2D(Sampler, TexCoord);
+    if (Saturate)
+    {
+        ColorOut = saturate(ColorOut);
+    }
+    </code>
+</fragment>
+
+<!--========================================================================-->
+<fragment type="Pixel" name="TextureRGBProjectSample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value and an A value.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="sampler2D" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(false)" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    float4 ProjTexCoord = TexCoord.xyzz;
+    ColorOut.a = 1.0f;    
+    ColorOut.rgb = tex2Dproj(Sampler, ProjTexCoord).rgb;    
+    if (Saturate)
+    {
+        ColorOut.rgb = saturate(ColorOut.rgb);
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="TextureRGBCubeSample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="samplerCUBE" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(false)" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    ColorOut.a = 1.0f;
+    ColorOut.rgb = texCUBE(Sampler, TexCoord).rgb;
+    if (Saturate)
+    {
+        ColorOut.rgb = saturate(ColorOut.rgb);
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="TextureRGBSample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="sampler2D" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(false)" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+    ColorOut.a = 1.0f;
+    ColorOut.rgb = tex2D(Sampler, TexCoord).rgb;
+    if (Saturate)
+    {
+        ColorOut.rgb = saturate(ColorOut.rgb);
+    }
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="TexTransformApply">
+    <desc>
+    This fragment is responsible for applying a transform to the input set
+    of texture coordinates.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="float4x4" semantic="TexTransform" label="" 
+            variable="TexTransform" />
+    </inputs>
+    <outputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoordOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+    
+    TexCoordOut = mul(float4(TexCoord.x, TexCoord.y, 0.0, 1.0), TexTransform);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="ProjectTextureCoordinates">
+    <desc>
+    This fragment is responsible for applying a projection to the input set
+    of texture coordinates.
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="float4x4" semantic="TexTransform" label="" 
+            variable="TexTransform" />
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="TexCoord" label="" 
+            variable="TexCoordOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+  
+    TexCoordOut = mul(float4(TexCoord, 1.0), TexTransform);
+    
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="HorzBlurSample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="sampler2D" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(false)" />
+        <resource type="float2" semantic="TexSizeBase" label="" 
+            variable="MapSize" />                                  
+        <resource type="float" semantic="" label="" 
+            variable="KernelSize" />                                           
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+    target="ps_2_0/vs_4_0/ps_4_0">
+
+    // Blurs the texel at vTexCoord in the X direction.   
+    float fInvTexSize = 1.0 / MapSize.x;
+    float fHalfBlurKernelSize = KernelSize * 0.5f;
+    float fInvTotalWeights = 1.0 / (KernelSize * KernelSize);    
+    float fBlurWeight = 2;
+   
+    float4 fTotalColor = 0;   
+    float2 vTexCoord = TexCoord;
+    vTexCoord.x -= fInvTexSize * fHalfBlurKernelSize;    
+    float i = 0;
+
+    // Blur x2
+    if ( 2 &lt;= KernelSize)
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.x += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.x += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+
+    // Blur x4
+    if ( 4 &lt;= KernelSize)
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.x += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.x += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+    
+    // Blur x6
+    if ( 6 &lt;= KernelSize)
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.x += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.x += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }    
+    
+    // Blur x8
+    if ( 8 &lt;= KernelSize)
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.x += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.x += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }    
+    
+    // Blur x10
+    if ( 10 &lt;= KernelSize)
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.x += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.x += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+
+    // Blur x12
+    if ( 12 &lt;= KernelSize)
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.x += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.x += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+       
+    // Blur x14
+    if ( 14 &lt;= KernelSize)
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.x += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.x += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }    
+    
+    // Blur x16
+    if ( 16 &lt;= KernelSize)
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.x += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.x += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+        
+    ColorOut = fTotalColor;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Pixel" name="VertBlurSample">
+    <desc>
+    This fragment is responsible for sampling a texture and returning its value
+    as a RGB value.
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="TexCoord" label="" 
+            variable="TexCoord" />
+        <resource type="sampler2D" semantic="Texture" label="" 
+            variable="Sampler" />
+        <resource type="bool" semantic="" label="" 
+            variable="Saturate" default="(false)" />
+        <resource type="float2" semantic="TexSizeBase" label="" 
+            variable="MapSize" />                 
+        <resource type="float" semantic="" label="" 
+            variable="KernelSize" />                                             
+    </inputs>
+    <outputs>
+        <resource type="float4" semantic="Color" label="" 
+            variable="ColorOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+    target="ps_2_0/vs_4_0/ps_4_0">
+
+    // Blurs the texel at vTexCoord in the Y direction.   
+    float fInvTexSize = 1.0 / MapSize.y;
+    float fHalfBlurKernelSize = KernelSize * 0.5f;
+    float fInvTotalWeights = 1.0 / (KernelSize * KernelSize);    
+    float fBlurWeight = 2;
+   
+    float4 fTotalColor = 0;   
+    float2 vTexCoord = TexCoord;
+    vTexCoord.y -= fInvTexSize * fHalfBlurKernelSize;    
+    float i = 0;
+
+    // Blur x2
+    if ( 2 &lt;= KernelSize)    
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.y += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.y += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+    
+    // Blur x4
+    if ( 4 &lt;= KernelSize)    
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.y += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.y += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }    
+
+    // Blur x6
+    if ( 6 &lt;= KernelSize)    
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.y += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.y += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+
+    // Blur x8
+    if ( 8 &lt;= KernelSize)    
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.y += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.y += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+
+    // Blur x10
+    if ( 10 &lt;= KernelSize)    
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.y += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.y += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+
+    // Blur x12
+    if ( 12 &lt;= KernelSize)    
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.y += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.y += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+    
+    // Blur x14
+    if ( 14 &lt;= KernelSize)    
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.y += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.y += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }    
+
+    // Blur x16
+    if ( 16 &lt;= KernelSize)    
+    {
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;        
+        vTexCoord.y += fInvTexSize;
+        
+        float fSign = sign( i + 1 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;
+        
+        fTotalColor += tex2D(Sampler, vTexCoord) * 
+            fBlurWeight * fInvTotalWeights;
+        vTexCoord.y += fInvTexSize;            
+        
+        fSign = sign( i + 2 - fHalfBlurKernelSize);
+        fBlurWeight -= fSign * 4;        
+        i+=2;
+    }
+
+    ColorOut = fTotalColor;
+    </code>
+</fragment>
+<!--========================================================================-->
+
+</library>

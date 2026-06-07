@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Max_2009"
+	>
+	<UserMacro
+		Name="MAXINSTALLPATH"
+		Value="$(MAXINSTALLPATH2009)"
+	/>
+	<UserMacro
+		Name="MAXSDKPATH"
+		Value="$(MAXSDKPATH2009)"
+	/>
+	<UserMacro
+		Name="GB_Max_Version_Name"
+		Value="Max2009"
+	/>
+</VisualStudioPropertySheet>

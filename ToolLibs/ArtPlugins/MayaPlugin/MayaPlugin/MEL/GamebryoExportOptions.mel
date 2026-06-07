@@ -1,0 +1,37 @@
+//---------------------------------------------------------------------------
+global proc GamebryoDoNothingFunction(string $nothing)
+{
+}
+//---------------------------------------------------------------------------
+global proc ExecGamebryoExportOptions()
+{
+    source GamebryoExporting;
+
+    //Make the parent window
+    string $parentWindow = `window 
+                            -title  "Nif Options"
+                            -iconName "Nif Options"
+                            -rtf true`;
+                            
+    string $currentOptions = GamebryoGetExportOptions();
+
+    rowColumnLayout -nr 3 -rh 1 600;
+
+    string $scrollLayout = `scrollLayout -w 600 -h 600 -cr true`;
+    MyImmerseGUI($scrollLayout, "post", $currentOptions, "GamebryoDoNothingFunction");
+    setParent..;
+    setParent..;
+
+    button -label "Save" -c ("MyImmerseGUI( \"" + $scrollLayout + "\", \"query\", \"\", \"GamebryoDoNothingFunction\"); deleteUI -window " + $parentWindow + ";");
+    button -label "Cancel" -c ("deleteUI -window " + $parentWindow);
+    setParent..;
+
+    showWindow $parentWindow;
+}
+//---------------------------------------------------------------------------
+global proc GamebryoExportOptions()
+{
+    GamebryoLoadPlugins();
+    eval "ExecGamebryoExportOptions()";
+}
+//---------------------------------------------------------------------------

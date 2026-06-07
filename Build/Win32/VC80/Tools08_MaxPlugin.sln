@@ -1,0 +1,45 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MaxPlugin", "..\..\..\ToolLibs\ArtPlugins\MaxPlugin\Win32\VC80\MaxPlugin.vcproj", "{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools08_MaxPlugin", "Tools08_MaxPlugin", "{40F84525-B2F8-45DD-BDFF-985E2D945FA0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL Max 2008|Win32 = Debug DLL Max 2008|Win32
+		Debug DLL Max 2009|Win32 = Debug DLL Max 2009|Win32
+		Debug DLL Max90|Win32 = Debug DLL Max90|Win32
+		Release DLL Max 2008|Win32 = Release DLL Max 2008|Win32
+		Release DLL Max 2009|Win32 = Release DLL Max 2009|Win32
+		Release DLL Max90|Win32 = Release DLL Max90|Win32
+		Shipping DLL Max 2008|Win32 = Shipping DLL Max 2008|Win32
+		Shipping DLL Max 2009|Win32 = Shipping DLL Max 2009|Win32
+		Shipping DLL Max90|Win32 = Shipping DLL Max90|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Debug DLL Max 2008|Win32.ActiveCfg = Debug DLL Max 2008|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Debug DLL Max 2008|Win32.Build.0 = Debug DLL Max 2008|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Debug DLL Max 2009|Win32.ActiveCfg = Debug DLL Max 2009|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Debug DLL Max 2009|Win32.Build.0 = Debug DLL Max 2009|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Debug DLL Max90|Win32.ActiveCfg = Debug DLL Max90|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Debug DLL Max90|Win32.Build.0 = Debug DLL Max90|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Release DLL Max 2008|Win32.ActiveCfg = Release DLL Max 2008|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Release DLL Max 2008|Win32.Build.0 = Release DLL Max 2008|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Release DLL Max 2009|Win32.ActiveCfg = Release DLL Max 2009|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Release DLL Max 2009|Win32.Build.0 = Release DLL Max 2009|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Release DLL Max90|Win32.ActiveCfg = Release DLL Max90|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Release DLL Max90|Win32.Build.0 = Release DLL Max90|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Shipping DLL Max 2008|Win32.ActiveCfg = Shipping DLL Max 2008|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Shipping DLL Max 2008|Win32.Build.0 = Shipping DLL Max 2008|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Shipping DLL Max 2009|Win32.ActiveCfg = Shipping DLL Max 2009|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Shipping DLL Max 2009|Win32.Build.0 = Shipping DLL Max 2009|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Shipping DLL Max90|Win32.ActiveCfg = Shipping DLL Max90|Win32
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598}.Shipping DLL Max90|Win32.Build.0 = Shipping DLL Max90|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C7048FFE-60FE-40FB-B4C6-EC9A044DA598} = {40F84525-B2F8-45DD-BDFF-985E2D945FA0}
+	EndGlobalSection
+EndGlobal

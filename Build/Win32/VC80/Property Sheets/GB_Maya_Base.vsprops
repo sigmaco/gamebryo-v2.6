@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Maya_Base"
+	OutputDirectory="$(ConfigurationName)"
+	IntermediateDirectory="$(ConfigurationName)"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories=""
+		ExceptionHandling="1"
+		WarningLevel="4"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		OutputFile=""
+		AdditionalLibraryDirectories=""
+	/>
+	<UserMacro
+		Name="MAYA_VERSION_SUFFIX"
+		Value=""
+	/>
+	<UserMacro
+		Name="MAYA_INSTALL_PATH"
+		Value=""
+	/>
+</VisualStudioPropertySheet>

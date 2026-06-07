@@ -1,0 +1,284 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+// Snow Rock Terrain shader 
+texture RockBaseTexture
+<
+    string NTM = "shader";
+>;
+sampler RockBaseSampler
+<
+    string NTM = "shader";
+    int NTMIndex = 0;
+>  = sampler_state 
+{
+    texture = (RockBaseTexture);
+    AddressU  = WRAP;        
+    AddressV  = WRAP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;
+};
+
+texture RockNormalTexture
+<
+    string NTM = "shader";
+>;
+sampler RockNormalSampler
+<
+    string NTM = "shader";
+    int NTMIndex = 1;
+>  = sampler_state 
+{
+    texture = (RockNormalTexture);
+    AddressU  = WRAP;        
+    AddressV  = WRAP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;
+};
+
+texture SnowBaseTexture
+<
+    string NTM = "shader";
+>;
+sampler SnowBaseSampler
+<
+    string NTM = "shader";
+    int NTMIndex = 2;
+>  = sampler_state 
+{
+    texture = (SnowBaseTexture);
+    AddressU  = WRAP;        
+    AddressV  = WRAP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;
+};
+
+texture SnowNormalTexture
+<
+    string NTM = "shader";
+>;
+sampler SnowNormalSampler
+<
+    string NTM = "shader";
+    int NTMIndex = 3;
+>  = sampler_state 
+{
+    texture = (SnowNormalTexture);
+    AddressU  = WRAP;        
+    AddressV  = WRAP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;
+};
+
+texture NoiseTexture
+<
+    string NTM = "shader";
+>;
+sampler NoiseSampler
+<
+    string NTM = "shader";
+    int NTMIndex = 4;
+>  = sampler_state 
+{
+    texture = (NoiseTexture);
+    AddressU  = WRAP;        
+    AddressV  = WRAP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;    
+};
+
+float4x4 worldViewProj
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLDVIEWPROJECTION";
+>;
+
+float4x4 World
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLD";
+>;
+
+float4x4 worldInverseTranspose
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLDINVERSETRANSPOSE";
+>;
+
+float4x4 viewInverse
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "VIEWINVERSE";
+>;
+
+float3 LightPos0 : POSITION
+<
+    string VarType = "Object";
+    string Object = "PointLight";
+    string ObjectProperty = "Position";
+    int ObjectIndex = 0;
+> = {0.0f, 0.0f, 0.0f};
+
+float4 LightDiff0 : DIFFUSE
+<
+    string VarType = "Object";
+    string Object = "PointLight";
+    string ObjectProperty = "Diffuse";
+    int ObjectIndex = 0;
+> = {1.0f, 1.0f, 1.0f, 0.0f};
+
+float3 AmbLightColor
+<
+    string VarType = "Global";
+> = {0.0f, 0.0f, 0.0f};
+
+float3 MinSnowColor : Attribute
+<
+	bool Color = true;
+>  = {0.4f, 0.4f, 0.9f};
+
+float3 RockSpecular : Attribute
+<
+	bool Color = true;
+> = {0.5f, 0.5f, 0.5f};
+
+float3 SnowSpecular : Attribute 
+<
+	bool Color = true;
+> = {1.0f, 1.0f, 1.0f};
+
+float SnowMinShininess : ATTRIBUTE = 64.0;
+float SnowMaxShininess : ATTRIBUTE = 128.0;
+float RockShininess : ATTRIBUTE  = 200.0;
+
+float Bump : ATTRIBUTE 
+<
+	float min = 0;
+	float max = 1;
+> = 0.6;
+
+float NoiseScale : ATTRIBUTE
+<
+	float min = 1;
+	float max = 256;
+> = 8;
+
+struct vertexOutput {
+    float4 hPosition		: POSITION;
+    float2 RockCoord		: TEXCOORD0;
+    float2 SnowCoord		: TEXCOORD1;
+    float3 TSLightVect		: TEXCOORD2;
+    float3 TSHalfAngle		: TEXCOORD3;
+    float4 Color			: Color;
+};
+
+vertexOutput VS_TransformAndTexture(float3 Position : POSITION,
+    float3 Normal   : NORMAL,
+    float3 Binormal : BINORMAL,
+    float3 Tangent  : TANGENT,    
+    float2 RockCoord : TEXCOORD0,
+    float2 SnowCoord : TEXCOORD1,
+    float4 Color : Color) 
+{
+    vertexOutput OUT;
+    OUT.hPosition = mul( float4(Position.xyz , 1.0) , worldViewProj);
+    OUT.Color = Color;
+    OUT.RockCoord = RockCoord;
+    OUT.SnowCoord = SnowCoord;
+    
+    float3 WorldNormal = normalize(mul(Normal, World).xyz);
+    float3 WorldTangent = normalize(mul(Tangent, World).xyz);
+    float3 WorldBinorm = normalize(mul(Binormal, World).xyz);
+     
+    float3 worldEyePos = viewInverse[3].xyz;
+    float3 worldVertPos = mul(Position, World).xyz;    
+    float3 EyeVect = normalize(worldEyePos - worldVertPos); //eye vector
+    float3 LightDir = normalize(LightPos0	- worldVertPos);
+	
+    // Transform into tangent-space light direction
+    float fX = dot(WorldTangent, LightDir);
+    float fY = dot(WorldBinorm, LightDir);
+    float fZ = dot(WorldNormal, LightDir);
+    OUT.TSLightVect = normalize(float3(fX, fY, fZ));
+    
+    float3 HalfAngle = normalize(EyeVect + LightDir); //half angle vector
+    fX = dot(WorldTangent, HalfAngle);
+    fY = dot(WorldBinorm, HalfAngle);
+    fZ = dot(WorldNormal, HalfAngle);
+    OUT.TSHalfAngle = normalize(float3(fX, fY, fZ));
+
+    return OUT;
+}
+
+float4 PS_Textured( vertexOutput IN): COLOR
+{
+    float3 RockNormal = tex2D( RockNormalSampler, IN.RockCoord);
+    float3 SnowNormal = tex2D( SnowNormalSampler, IN.SnowCoord);
+    float3 BlendedNormal  = lerp(RockNormal,SnowNormal,IN.Color.a);
+    BlendedNormal = normalize(BlendedNormal * 2 - 1);
+
+    // Compute Rock Color  
+    float3 Diffuse = max(0 , dot(BlendedNormal,IN.TSLightVect)) * LightDiff0;
+    float4 rockColor = (tex2D( RockBaseSampler, IN.RockCoord) * float4(Diffuse,1));  
+    rockColor += float4(AmbLightColor,1);
+	
+    // Compute Snow Color
+    Diffuse = max(0 , dot(BlendedNormal,IN.TSLightVect));
+    float3 Noise = tex2D( NoiseSampler, IN.SnowCoord*NoiseScale);  
+    float shine = lerp(SnowMinShininess,SnowMaxShininess,Noise.x);
+    float Specular = pow( max(0 , dot(BlendedNormal,IN.TSHalfAngle) ), shine );  
+    if( !any(Diffuse))
+    {
+        Specular = 0;
+    }  
+    
+    // Scale Diffuse snow color
+    Diffuse = lerp(MinSnowColor,float3(1,1,1),Diffuse).x * LightDiff0;  
+
+    float4 snowColor = (tex2D(SnowBaseSampler, IN.SnowCoord) * float4(Diffuse,1)) + 
+        (Specular *float4(SnowSpecular,1) * Noise.y) + float4(IN.Color.rgb,0);  	
+    snowColor += float4(AmbLightColor,1);
+ 
+    return lerp(rockColor, snowColor,IN.Color.a);
+}
+
+
+//-----------------------------------
+technique SnowRockTerrain
+<
+    string Description = "This shader uses the alpha channel of the provided "
+    "vertex color to blend between normal mapped snow and normal mapped rock. "
+    "The rock maps are sampled using texture coordinate set one and the snow "
+    "is sampled using texture coordinate set two. A noise texture is sampled "
+    "to determine the amount of specular highlight to apply to the snow. This "
+    "noise texture is purposely not mip-mapped so when it is sampled the input " 
+    "will appear speckled. Having a specked input for the specular highlight "
+    "amount results in the snow appearing to sparkle as the camera is moved "
+    "around. It uses HLSL shaders through an FX file. ";
+    string NBTMethod = "ATI";
+    bool UsesNiRenderState = true;
+    bool UsesNiLightState = false;
+>
+{
+    pass p0 
+    {		
+		VertexShader = compile vs_2_0 VS_TransformAndTexture();
+		PixelShader  = compile ps_2_0 PS_Textured();
+		AlphaBlendEnable = false;
+    }
+}

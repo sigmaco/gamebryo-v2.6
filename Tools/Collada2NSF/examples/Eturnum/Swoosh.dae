@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+	<asset>
+		<contributor>
+			<author>ed.holzwarth</author>
+			<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+			<comments/>
+			<copyright/>
+		</contributor>
+		<contributor>
+			<author>Michael.Noland</author>
+			<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+			<comments/>
+			<copyright/>
+		</contributor>
+		<created>2007-09-13T17:09:26</created>
+		<keywords>FXComposer, NVIDIA</keywords>
+		<modified>2007-11-15T15:04:55</modified>
+		<subject/>
+		<title/>
+	</asset>
+	<library_effects>
+		<effect id="Swoosh0" name="Swoosh">
+			<profile_CG platform="PC-OGL">
+				<include sid="default" url="Swoosh.cgfx"/>
+				<newparam sid="description">
+					<string>The swoosh on the alien's staff.</string>
+				</newparam>
+				<newparam sid="ViewProj">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>VIEWPROJECTION</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="BaseTexture">
+					<annotate name="NTM">
+						<string>base</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<surface type="2D">
+						<init_as_null/>
+						<format>A8R8G8B8</format>
+						<size>64 64 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="Base">
+					<sampler2D>
+						<source>BaseTexture</source>
+						<wrap_s>CLAMP</wrap_s>
+						<wrap_t>CLAMP</wrap_t>
+						<minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<technique sid="main">
+					<pass sid="p0">
+						<blend_enable value="true"/>
+						<alpha_test_enable/>
+						<cull_face_enable/>
+						<blend_func>
+							<src value="SRC_ALPHA"/>
+							<dest value="ONE"/>
+						</blend_func>
+						<depth_test_enable value="true"/>
+						<depth_mask value="false"/>
+						<depth_func value="LEQUAL"/>
+						<shader stage="VERTEX">
+							<compiler_target>arbvp1</compiler_target>
+							<name source="default">vmain</name>
+							<bind symbol="ViewProj">
+								<param ref="ViewProj"/>
+							</bind>
+						</shader>
+						<shader stage="FRAGMENT">
+							<compiler_target>arbfp1</compiler_target>
+							<name source="default">fmain</name>
+							<bind symbol="Base">
+								<param ref="Base"/>
+							</bind>
+						</shader>
+						<extra type="passenable">
+							<technique profile="NVIDIA_FXCOMPOSER">
+								<true/>
+							</technique>
+						</extra>
+					</pass>
+					<extra type="import">
+						<technique profile="NVIDIA_FXCOMPOSER">
+							<import compiler_options=""/>
+						</technique>
+					</extra>
+				</technique>
+			</profile_CG>
+			<profile_CG platform="PS3">
+				<include sid="default" url="Swoosh.cgfx"/>
+				<include sid="Swoosh_main_p0_vmain_compiled" url="Swoosh_main_p0.vpo"/>
+				<include sid="Swoosh_main_p0_fmain_compiled" url="Swoosh_main_p0.fpo"/>
+				<newparam sid="description">
+					<string>The swoosh on the alien's staff.</string>
+				</newparam>
+				<newparam sid="ViewProj">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>VIEWPROJECTION</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="BaseTexture">
+					<annotate name="NTM">
+						<string>base</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<surface type="2D">
+						<init_as_null/>
+						<format>A8R8G8B8</format>
+						<size>64 64 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="Base">
+					<sampler2D>
+						<source>BaseTexture</source>
+						<wrap_s>CLAMP</wrap_s>
+						<wrap_t>CLAMP</wrap_t>
+						<minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<technique sid="main">
+					<pass sid="p0">
+						<blend_enable value="true"/>
+						<alpha_test_enable/>
+						<cull_face_enable/>
+						<blend_func>
+							<src value="SRC_ALPHA"/>
+							<dest value="ONE"/>
+						</blend_func>
+						<depth_test_enable value="true"/>
+						<depth_mask value="false"/>
+						<depth_func value="LEQUAL"/>
+						<shader stage="VERTEX">
+							<compiler_target>arbvp1</compiler_target>
+							<name source="Swoosh_main_p0_vmain_compiled">vmain</name>
+							<bind symbol="ViewProj">
+								<param ref="ViewProj"/>
+							</bind>
+						</shader>
+						<shader stage="FRAGMENT">
+							<compiler_target>arbfp1</compiler_target>
+							<name source="Swoosh_main_p0_fmain_compiled">fmain</name>
+							<bind symbol="Base">
+								<param ref="Base"/>
+							</bind>
+						</shader>
+						<extra type="passenable">
+							<technique profile="NVIDIA_FXCOMPOSER">
+								<true/>
+							</technique>
+						</extra>
+					</pass>
+					<extra type="import">
+						<technique profile="NVIDIA_FXCOMPOSER">
+							<import compiler_options=""/>
+						</technique>
+					</extra>
+				</technique>
+			</profile_CG>
+		</effect>
+	</library_effects>
+	<library_images>
+		<image id="NewImage" name="NewImage">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:07</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:33</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>W:/gml221/Samples/FullDemos/Eturnum/Data/Alien%252520Eye.BMP</init_from>
+		</image>
+		<image id="warpEffect" name="warpEffect">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:07</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:33</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect1" name="warpEffect1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:07</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:33</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp" name="filmRamp">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:07</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:33</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="filmRamp1" name="filmRamp1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:07</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:33</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+	</library_images>
+	<library_materials>
+		<material id="Material0" name="Swoosh">
+			<instance_effect url="#Swoosh0">
+				<technique_hint platform="PC-D3D" ref="Constant"/>
+				<technique_hint platform="PS3" ref="main"/>
+				<technique_hint platform="PC-OGL" ref="main"/>
+				<setparam ref="ViewProj">
+					<float4x4>2.74748 0 0 0 0 2.74748 0 0 0 0 -1.00012 -1 0 0 4.74421 4.74525</float4x4>
+				</setparam>
+				<setparam ref="BaseTexture">
+					<surface type="2D">
+						<init_as_null/>
+						<format>A8R8G8B8</format>
+						<size>64 64 1</size>
+					</surface>
+				</setparam>
+			</instance_effect>
+		</material>
+	</library_materials>
+</COLLADA>

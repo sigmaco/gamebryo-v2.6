@@ -1,0 +1,72 @@
+Version: 1
+Script ("Default PhysX Export","PROCESS")
+{
+	Plugin ("NiSceneGraphOptimizationPlugin","Scene Graph Optimization","2.0","PROCESS")
+	{
+		Parameter ("AnimationKeyReductionTolerance","0.000100");
+		Parameter ("RemoveDupProperties","TRUE");
+		Parameter ("RemoveChildlessNodes","TRUE");
+		Parameter ("RemoveMultiMtlNodes","TRUE");
+		Parameter ("RemoveSingleChildNodes","TRUE");
+		Parameter ("MergeSiblingNodes","TRUE");
+		Parameter ("OptimizeTriShapes","TRUE");
+		Parameter ("MergeSiblingTriShapes","TRUE");
+		Parameter ("NoMergeOnAlpha","TRUE");
+		Parameter ("RemoveExtraUVSets","TRUE");
+		Parameter ("RemoveUnnecessaryNormals","TRUE");
+		Parameter ("RemoveUnnecessaryVisControllers","TRUE");
+		Parameter ("RemoveNames","FALSE");
+		Parameter ("NameUnnamedObjects","FALSE");
+		Parameter ("RemoveBadTexturingProps","TRUE");
+		Parameter ("RemoveUnnecessaryExtraData","TRUE");
+		Parameter ("RemoveSgoKeepTags","TRUE");
+		Parameter ("RemoveUnnecessaryLookAtControllers","TRUE");
+		Parameter ("RemoveHiddenBoneGeometry","TRUE");
+		Parameter ("ReduceAnimationKeys","TRUE");
+		Parameter ("SortByTexturingProp","FALSE");
+		Parameter ("WeldSkin","TRUE");
+		Parameter ("ExportSoftwareSkin","FALSE");
+		Parameter ("ExportHardwareSkin","TRUE");
+		Parameter ("BonesPerPartition","30");
+		Parameter ("OptimizeMeshSizeModifier","1.000000");
+		Parameter ("OptimizeMeshNormalModifier","1.000000");
+		Parameter ("OptimizeMeshPositionModifier","1.000000");
+		Parameter ("OptimizeDX9MeshVertexCacheSize","16");
+		Parameter ("OptimizeD3D10MeshVertexCacheSize","16");
+		Parameter ("OptimizeXenonMeshVertexCacheSize","15");
+		Parameter ("OptimizePS3MeshVertexCacheSize","24");
+	}
+	Plugin ("NiPhysXExtractorPlugin","PhysX Extractor Plug-in","1.2","PROCESS")
+	{
+		Parameter ("PhysXExtractorSceneName","PhysX Prop");
+		Parameter ("PhysXExtractorScale","1.000000");
+		Parameter ("PhysXExtractorFluidScene","FALSE");
+		Parameter ("PhysXExtractorMaterialBase","1");
+		Parameter ("PhysXExtractorConvexSkin","0.010000");
+		Parameter ("PhysXExtractorHardware","FALSE");
+		Parameter ("PhysXExtractorKeep","FALSE");
+		Parameter ("PhysXExtractorConvertPSys","FALSE");
+		Parameter ("PhysXExtractorPSysSameSpace","FALSE");
+		Parameter ("PhysXExtractorPSysUseRot","FALSE");
+		Parameter ("PhysXExtractorInflate","FALSE");
+		Parameter ("PhysXExtractorUncompressed","FALSE");
+		Parameter ("PhysXExtractorSequenceStates","FALSE");
+		Parameter ("PhysXExtractorStateKeepAll","FALSE");
+		Parameter ("PhysXExtractorStateKeepDefault","TRUE");
+	}
+	Plugin ("RemoveHiddenObjectsPlugin","Remove Hidden Objects Plug-in","1.0","PROCESS")
+	{
+	}
+	Plugin ("RemoveTaggedObjectsPlugin","Remove Tagged Objects Plug-in","2.0","PROCESS")
+	{
+	}
+	Plugin ("SaveSourceTextureRendererDataPlugin","Save SourceTextureRendererData","1.0","PROCESS")
+	{
+	}
+	Plugin ("MeshFinalizePlugin","Mesh Finalize","1.0","PROCESS")
+	{
+	}
+	Plugin ("NifExportPlugin","NIF Exporter","1.2","EXPORT")
+	{
+	}
+}

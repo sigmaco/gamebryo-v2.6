@@ -1,0 +1,110 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "NiPhysXRagdoll_resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "NiPhysXRagdoll_resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PHYSXRAGDOLL_OPTIONS DIALOGEX 0, 0, 186, 106
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "PhysX Ragdoll Options"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,8,85,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,68,85,50,14
+    CONTROL         "Keep collision shape nodes",IDC_OPT_CHECK_KEEP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,8,67,148,13
+    LTEXT           "Skeleton Node name:",IDC_STATIC,8,7,73,12
+    LTEXT           "Rag-doll Node name:",IDC_STATIC,8,26,67,8
+    EDITTEXT        IDC_EDIT_SKELETON_NAME,79,7,90,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_RAGDOLL_NAME,79,26,90,13,ES_AUTOHSCROLL
+    PUSHBUTTON      "Reset Defaults",IDC_OPT_BUTTON_RESETDEFAULTS,126,85,53,
+                    14
+    EDITTEXT        IDC_EDIT_POSTFIX,120,46,49,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PREFIX,35,46,49,14,ES_AUTOHSCROLL
+    LTEXT           "Prefix:",IDC_STATIC,8,49,24,10
+    LTEXT           "Postfix:",IDC_STATIC,93,49,25,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_PHYSXRAGDOLL_OPTIONS, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

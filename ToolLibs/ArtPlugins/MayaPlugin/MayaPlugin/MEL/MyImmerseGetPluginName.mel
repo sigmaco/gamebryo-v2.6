@@ -1,0 +1,9 @@
+//
+// MyImmerseGetPluginName.mel
+//
+// Mel script for Getting the Plugin Name for this version of Maya
+
+global proc string MyImmerseGetPluginName()
+{
+    return "GamebryoMayaPlugin";
+}

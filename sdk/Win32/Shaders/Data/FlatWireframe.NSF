@@ -1,0 +1,271 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader FlatWireframeSkinned
+{
+    "This is a utility shader for use by the NiFlatWireframe material."
+    "This shader performs skinning in the vertex shader using 30 bones. "
+    
+    Global_Attributes
+    {
+        Attrib_Point4   WireframeColor    Hidden  0.0, 0.0, 0.0, 1.0
+    }
+
+    // Packing Definition
+    PackingDef PosBlendWeightColorBlendIndices
+    {
+        PD_Stream   0
+            PDP_Position        0   PDT_Float3
+            PDP_BlendWeights    1   PDT_Float3
+            PDP_BlendIndices    2   PDT_UByteColor
+    }
+
+    // Packing Definition
+    PackingDef PosBlendWeightBlendIndices
+    {
+        PD_Stream   0
+            PDP_Position        0   PDT_Float3
+            PDP_BlendWeights    1   PDT_Float3
+            PDP_BlendIndices    2   PDT_UByte4
+    }
+    
+    
+    // Implementations
+    Implementation VS11PS11
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v1.1."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform                = DX9
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v1.1
+            BonesPerPartition       = 30
+            UsesNiRenderState       = false
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosBlendWeightColorBlendIndices
+
+        // 'Global' render states
+        RenderStates
+        {
+            Lighting            = false
+            AlphaBlendEnable 	= false
+	        ZEnable          	= ZB_True
+   	        ZWriteEnable     	= true
+	        FillMode            = WIREFRAME
+	        CullMode            = CW
+	        Zfunc               = LESSEQUAL
+        }
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "FlatWireframe.hlsl" VS_SKINNED vs_1_1
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      ViewProj   ViewProj   0
+                CM_Defined      SkinBoneMatrix3 Bone                0   30
+            }
+            
+            PSProgram   "FlatWireframe.psh"
+            
+            PS_Constantmap
+            {
+                CM_Global       WireframeColor      0      0
+            }
+
+        }
+    }
+    
+    Implementation VS11PS20
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v2.0."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform                = D3D10|XENON
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v2.0
+            BonesPerPartition       = 30
+            UsesNiRenderState       = false
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosBlendWeightBlendIndices
+
+        // 'Global' render states
+        RenderStates
+        {
+            Lighting            = false
+            AlphaBlendEnable 	= false
+	        ZEnable          	= ZB_True
+   	        ZWriteEnable     	= true
+	        FillMode            = WIREFRAME
+	        CullMode            = CW
+	        Zfunc               = LESSEQUAL
+        }
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "FlatWireframe.hlsl" VS_SKINNED vs_1_1
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      ViewProj   ViewProj   0
+                CM_Defined      SkinBoneMatrix3 Bone                0   30
+            }
+            
+            PSProgram   "FlatWireframe.hlsl" PS ps_2_0
+            
+            PS_Constantmap
+            {
+                CM_Global       WireframeColor      0      0
+            }
+
+        }
+    }
+}
+
+NSFShader FlatWireframe
+{
+    "This is a utility shader for use by the NiFlatWireframe material."
+
+    Global_Attributes
+    {
+        Attrib_Point4   WireframeColor    Hidden  0.0, 0.0, 0.0, 1.0
+    }
+    
+    // Packing Definition
+    PackingDef PosDef
+    {
+        PD_Stream   0
+            PDP_Position        0   PDT_Float3
+    }
+    
+    // Implementations
+    Implementation VS11PS11
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v1.1."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform                = DX9
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v1.1
+            UsesNiRenderState       = false
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosDef
+
+        // 'Global' render states
+        RenderStates
+        {
+            Lighting            = false
+            AlphaBlendEnable 	= false
+	        ZEnable          	= ZB_True
+   	        ZWriteEnable     	= true
+	        FillMode            = WIREFRAME
+	        CullMode            = CW
+	        Zfunc               = LESSEQUAL
+        }
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "FlatWireframe.hlsl" VS vs_1_1
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProj   WorldViewProj   0
+            }
+            
+            PSProgram   "FlatWireframe.psh"
+
+            PS_Constantmap
+            {
+                CM_Global       WireframeColor  0       0
+            }
+        }
+    }
+    
+    Implementation VS11PS20
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v2.0."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform                = D3D10|XENON
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v2.0
+            UsesNiRenderState       = false
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosDef
+
+        // 'Global' render states
+        RenderStates
+        {
+            Lighting            = false
+            AlphaBlendEnable 	= false
+	        ZEnable          	= ZB_True
+   	        ZWriteEnable     	= true
+	        FillMode            = WIREFRAME
+	        CullMode            = CW
+	        Zfunc               = LESSEQUAL
+        }
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "FlatWireframe.hlsl" VS vs_1_1
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProj   WorldViewProj   0
+            }
+            
+            PSProgram   "FlatWireframe.hlsl" PS ps_2_0
+
+            PS_Constantmap
+            {
+                CM_Global       WireframeColor  0       0
+            }
+        }
+    }
+}

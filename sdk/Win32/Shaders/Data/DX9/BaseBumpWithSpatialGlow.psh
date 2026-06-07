@@ -1,0 +1,59 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+;This shader normal maps the walls with two lights and adds in the glow
+;effect.  The glow is scaled with the value in v1 from the vertex shader.
+;The final lighting calculation is outlined below.
+;
+;v0 = Packed vertex color
+;v1 = Glow scale [0,1]
+;N  = Normal sampled from map
+;B  = Base map color
+;G  = Glow map color
+;D1 = Direction of light 1
+;D2 = Direction of light 2
+;C1 = Color of light 1
+;C2 = Color of light 2
+;Oc = Fragment output color
+;Oa = Fragment output alpha
+;
+;Oc = B * (v0 * ((N DOT D1) * C1 + (N DOT D2) * C2)) + G * v1 * 2
+;Oa = 1
+
+ps_1_4
+
+def c0, 0,0,0,1
+
+texld r1, t1                 ;Sample the bump map
+texcrd r3.xyz, t3            ;Read in light vector 1
+texcrd r4.xyz, t4            ;Read in light vector 2
+
+; N dot L.  The light vector is not biased coming out of the vertex shader.
+dp3_sat r2, r1_bx2, r3       ;N dot L for Light1
+mul_sat r2, r2, c4           ;Color for Light2
+dp3_sat r5, r1_bx2, r4       ;N dot L for Light2
+mad_sat r5, r5, c5, r2       ;Color for Light2
+
+;We need vertex colors now so we must phase.  r4 holds the accumulated lighting
+;information from the dot3 calcs.
+phase
+
+texld r0, t0 ;Sample the base map
+texld r2, t2 ;Sample the glow map
+
+mul r5.rgb, r5, v0           ;Modulate lighting by vertex colors.
++mov r5.a, c0                ;Co-issue an alpha move since phase zeros it.
+
+mul r0, r5, r0               ;Modulate the base map by the lighting results.
+mad_x2_sat r0, r2, v1.a, r0  ;Add in the glow effect times 2.
+

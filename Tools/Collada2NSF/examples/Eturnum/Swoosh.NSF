@@ -1,0 +1,53 @@
+// --------------------------------------------------------------------------
+// This file has been generated from a COLLADA FX File. Do not edit manually.
+// --------------------------------------------------------------------------
+
+NSFShader Swoosh
+{
+    "The swoosh on the alien's staff."
+
+    Attributes
+    {
+        // ViewProj:VIEWPROJECTION
+        Attrib_Transform ViewProj Hidden 2.74748,0.0,0.0,0.0,0.0,2.74748,0.0,0.0,0.0,0.0,-1.00012,-1.0,0.0,0.0,4.74421,4.74525
+    }
+    Implementation PS3CG
+    {
+        Requirements 
+        {
+            Platform = PS3
+            UsesNIRenderState = true
+            UsesNILighting = false
+        }
+        Pass p0
+        {
+            RenderStates
+            {
+                AlphaBlendEnable = true
+                AlphaTestEnable = false
+                CullFaceEnable = false
+                SrcBlend = SrcAlpha
+                DestBlend = ONE
+                ZEnable = ZB_True
+                ZWriteEnable = false
+                ZFunc = LessEqual
+            }
+            VSProgram "Swoosh.cgfx" vmain
+            VS_Constantmap
+            {
+                CM_Defined ViewProjection ViewProj 0 
+            }
+            Sampler  Base
+            {
+                TSS_Texture = NTM_BASE
+                TSAMP_AddressU = TADDR_CLAMP
+                TSAMP_AddressV = TADDR_CLAMP
+                TSAMP_MinFilter = TEXF_LINEAR
+                TSAMP_MagFilter = TEXF_LINEAR
+                TSAMP_MipFilter = TEXF_LINEAR
+            }
+            PSProgram "Swoosh.cgfx" fmain
+        }
+
+    }
+}

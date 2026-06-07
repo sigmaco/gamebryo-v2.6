@@ -1,0 +1,1645 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<library version="1">
+  <!--========================================================================-->
+  <fragment type="Vertex" name="TransformPositionToWorld">
+    <desc>
+      This fragment is responsible for applying the world transform to the
+      incoming local vertex position.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="Position"
+                label="Local"
+                variable="LocalPosition" />
+      <resource type="float4x4"
+                semantic="WorldMatrix"
+                label=""
+                variable="WorldMatrix" />
+    </inputs>
+
+    <outputs>
+      <resource type="float4"
+                semantic="Position"
+                label="World"
+                variable="WorldPos" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      WorldPos = mul(LocalPosition, WorldMatrix);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="TransformPositionToView">
+    <desc>
+      This fragment is responsible for applying the view transform to the
+      incoming world space vertex position.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="Position"
+                label="World"
+                variable="WorldPosition" />
+      <resource type="float4x4"
+                semantic="ViewMatrix"
+                label=""
+                variable="ViewMatrix" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic="Position"
+                label="View"
+                variable="ViewPos" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      ViewPos = mul(WorldPosition, ViewMatrix).xyz;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="ApplyWorldRotation">
+    <desc>
+      This fragment only applys the rotation portion of the world transformation to
+      the incoming float3.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="ValueToRotate" />
+      <resource type="float4x4"
+                semantic="WorldMatrix"
+                label=""
+                variable="WorldMatrix" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label="World"
+                variable="WorldRotationOfValue" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      WorldRotationOfValue = mul(ValueToRotate, (float3x3)WorldMatrix);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="TransformPositionToClip">
+    <desc>
+      This fragment is responsible for applying the view-projection matrix
+      to the incoming world space vertex position.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="Position"
+                label="World"
+                variable="WorldPosition" />
+      <resource type="float4x4"
+                semantic="ViewProjMatrix"
+                label=""
+                variable="ViewProjMatrix" />
+    </inputs>
+
+    <outputs>
+      <resource type="float4"
+                semantic="Position"
+                label="World"
+                variable="WorldProj" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      WorldProj = mul(WorldPosition, ViewProjMatrix);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="SplitPosition">
+    <desc>
+      This fragment takes an incoming float4 vertex position with the xyz
+      components containing the position, and the w component containing the
+      height in the vertex of the next level of detail. The height or z value of
+      the final vertex position is interpolated between the 2 levels of detail.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="Position"
+                label="Local"
+                variable="CombinedPosition" />
+    </inputs>
+
+    <outputs>
+      <resource type="float4"
+                semantic="Position"
+                label="Local"
+                variable="PositionHigh" />
+
+      <resource type="float4"
+                semantic="Position"
+                label="Local"
+                variable="PositionLow" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      PositionHigh = float4(CombinedPosition.xyz, 1.0);
+      PositionLow = float4(CombinedPosition.xyw, 1.0);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="SplitNormal">
+    <desc>
+      This fragment takes an incoming float4 encoding the xy of the vertex normal.
+      The zw components encode the xy of the lower lod vertex normal. The output
+      is a 3 component vertex normal of the incoming normal and the lower lod
+      normal.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="CombinedNormal" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic="Normal"
+                label="Local"
+                variable="NormalHigh" />
+
+      <resource type="float3"
+                semantic="Normal"
+                label="Local"
+                variable="NormalLow" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      NormalHigh = float3(CombinedNormal.xy, 1.0);
+      NormalLow = float3(CombinedNormal.zw, 1.0);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="SplitTangent">
+    <desc>
+      This fragment takes an incoming float4 encoding the xz of the vertex tangent.
+      The zw components encode the xz of the lower lod vertex tangent. The output
+      is a 3 component vertex tangent of the incoming tangent and the lower lod
+      tangent.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="CombinedTangent" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic="Tangent"
+                label="Local"
+                variable="TangentHigh" />
+
+      <resource type="float3"
+                semantic="Tangent"
+                label="Local"
+                variable="TangentLow" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      TangentHigh = float3(CombinedTangent.x, 0.0, CombinedTangent.y);
+      TangentLow = float3(CombinedTangent.z, 0.0, CombinedTangent.w);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex" name="CalculateTextureCoordinates">
+    <desc>
+      Scales and offsets the specified texture coordinate based on the block's
+      level of detail. This is too allow blocks to share the same UV set instead
+      of allocate once large UV set for each layer.
+    </desc>
+
+    <inputs>
+      <resource type="float2"
+                semantic="TexCoord"
+                label=""
+                variable="UVCoord" />
+
+      <resource type="float2"
+                semantic=""
+                label=""
+                variable="UVBlendScale"/>
+
+      <resource type="float2"
+                semantic=""
+                label=""
+                variable="UVBlendOffset"/>
+
+      <resource type="float2"
+                semantic=""
+                label=""
+                variable="UVSurfaceScale"/>
+
+      <resource type="float2"
+                semantic=""
+                label=""
+                variable="UVSurfaceOffset"/>
+    </inputs>
+
+    <outputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="OutputUVCoord" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputUVCoord.zw = UVCoord * UVBlendScale + UVBlendOffset;
+      OutputUVCoord.xy = (OutputUVCoord.zw) * UVSurfaceScale + UVSurfaceOffset;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="LerpFloat4">
+    <desc>
+      Linearly interpolates a float4.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="InputOne" />
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="InputTwo" />
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Amount" />
+    </inputs>
+
+    <outputs>
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="InterpolatedOutput" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      InterpolatedOutput = lerp(InputOne, InputTwo, Amount);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="LerpFloat4ToFloat3Result">
+    <desc>
+      Linearly interpolates a two float4 values but only outputs the xyz components
+      of the result.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="InputOne" />
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="InputTwo" />
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Amount" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="InterpolatedOutput" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      InterpolatedOutput = lerp(InputOne, InputTwo, Amount).xyz;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="LerpFloat3AndNormalize">
+    <desc>
+      Linearly interpolates a float3 value and normalizes the result.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="InputOne" />
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="InputTwo" />
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Amount" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="InterpolatedOutput" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      InterpolatedOutput = normalize(lerp(InputOne, InputTwo, Amount));
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="Calculate2DVertexMorph">
+    <desc>
+        Calculates the amount in which to morph one vertex in the terrain to the
+        target vertex in the next terrain lod. This function uses the 2D distance
+        of the camera to the vertex to select the morphing value
+    </desc>
+
+    <inputs>
+        <resource type="float"
+                  semantic=""
+                  label=""
+                  variable="LODThresholdDistance"
+                  default="200.0" />
+        <resource type="float"
+                  semantic=""
+                  label=""
+                  variable="LODMorphDistance" />
+        <resource type="float3"
+                  semantic=""
+                  label=""
+                  variable="TerrainCameraPos" />
+        <resource type="float4"
+                  semantic=""
+                  label=""
+                  variable="LocalPos" />
+    </inputs>
+
+    <outputs>
+        <resource type="float"
+                  semantic=""
+                  label=""
+                  variable="LODMorphValue"
+                  default="300.0" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+        float d = distance(LocalPos.xy, TerrainCameraPos.xy);
+        LODMorphValue = saturate((d - LODThresholdDistance) / LODMorphDistance);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="Calculate25DVertexMorph">
+    <desc>
+        Calculates the amount in which to morph one vertex in the terrain to the
+        target vertex in the next terrain lod. This function uses the distance
+        from the vert and the height of the camera above the terrain
+        to select the morphing value.
+    </desc>
+
+    <inputs>
+        <resource type="float"
+                  semantic=""
+                  label=""
+                  variable="LODThresholdDistance"
+                  default="200.0" />
+        <resource type="float"
+                  semantic=""
+                  label=""
+                  variable="LODMorphDistance" />
+        <resource type="float3"
+                  semantic=""
+                  label=""
+                  variable="TerrainCameraPos" />
+        <resource type="float4"
+                  semantic=""
+                  label=""
+                  variable="LocalPos" />
+    </inputs>
+
+    <outputs>
+        <resource type="float"
+                  semantic=""
+                  label=""
+                  variable="LODMorphValue"
+                  default="300.0" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+        float d = distance(LocalPos.xy, TerrainCameraPos.xy);
+        d = max(d, TerrainCameraPos.z);
+        LODMorphValue = saturate((d - LODThresholdDistance) / LODMorphDistance);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="CalculateNoVertexMorph">
+    <desc>
+        Calculates the amount in which to morph one vertex in the terrain to the
+        target vertex in the next terrain lod. This function uses stitching
+        information given to the shader from the terrain system to detect
+        verts on the edge of a block that require stitching.
+    </desc>
+
+    <inputs>
+        <resource type="float"
+                  semantic=""
+                  label=""
+                  variable="LODThresholdDistance"
+                  default="200.0" />
+        <resource type="float"
+                  semantic=""
+                  label=""
+                  variable="LODMorphDistance" />
+        <resource type="float3"
+                  semantic=""
+                  label=""
+                  variable="TerrainCameraPos" />
+        <resource type="float4"
+                  semantic=""
+                  label=""
+                  variable="LocalPos" />
+        <resource type="float4"
+                  semantic=""
+                  label=""
+                  variable="StitchingInfo" />
+    </inputs>
+
+    <outputs>
+        <resource type="float"
+                  semantic=""
+                  label=""
+                  variable="LODMorphValue"
+                  default="300.0" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+        // 0 = High Detail
+        // 1 = Low Detail
+        
+        float2 minXY = StitchingInfo.xy;
+        float2 maxXY = StitchingInfo.zw;
+        float2 normalised = (LocalPos.xy - minXY) / (maxXY - minXY);
+
+        LODMorphValue = 0;
+        if (normalised.x &lt; 0 || normalised.y &lt; 0 ||
+            normalised.x &gt; 1 || normalised.y &gt; 1)
+        {
+            LODMorphValue = 1;
+        }
+    </code>
+  </fragment>
+  <!--========================================================================-->    
+  <fragment type="Vertex/Pixel" name="Calculate3DVertexMorph">
+    <desc>
+      Calculates the amount in which to morph one vertex in the terrain to the
+      target vertex in the next terrain lod. This function uses the 3D distance
+      to a vertex to select the morphing value.
+    </desc>
+
+    <inputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="LODThresholdDistance"
+                default="200.0" />
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="LODMorphDistance" />
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="TerrainCameraPos" />
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="LocalPos" />
+    </inputs>
+
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="LODMorphValue"
+                default="300.0" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+        float d = distance(LocalPos.xyz, TerrainCameraPos.xyz);
+        LODMorphValue = saturate((d - LODThresholdDistance) / LODMorphDistance);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="CalculateFog">
+    <desc>
+      This fragment is responsible for handling fogging calculations.
+      FogType can be one of 4 values:
+
+      NONE   - 0
+      EXP    - 1
+      EXP2   - 2
+      LINEAR - 3
+    </desc>
+    <inputs>
+      <resource type="int" 
+                semantic="FogType" label=""
+                variable="FogType" />
+      
+      <resource type="float" 
+                semantic="FogDensity" 
+                label=""
+                variable="FogDensity" 
+                default="(1.0)"/>
+      
+      <resource type="float3" 
+                semantic="Position" 
+                label="View"
+                variable="ViewPosition" 
+                default="(0.0, 0.0, 0.0)"/>
+      
+      <resource type="bool" 
+                semantic="FogRange" 
+                label=""
+                variable="FogRange" 
+                default="(false)"/>
+      
+      <resource type="float2" 
+                semantic="FogStartEnd" 
+                label=""
+                variable="FogStartEnd" 
+                default="(0.0, 1.0)"/>
+    </inputs>
+    <outputs>
+      <resource type="float" semantic="Fog" label="" variable="FogOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+      float d;
+      if (FogRange)
+      {
+        d = length(ViewPosition);
+      }
+      else
+      {
+        d = ViewPosition.z;
+      }
+
+      if (FogType == 0) // NONE
+      {
+        FogOut = 1.0;
+      }
+      else if (FogType == 1) // EXP
+      {
+        FogOut = 1.0 / exp( d * FogDensity);
+      }
+      else if (FogType == 2) // EXP2
+      {
+        FogOut = 1.0 / exp( pow( d * FogDensity, 2));
+      }
+      else if (FogType == 3) // LINEAR
+      {
+        FogOut = saturate((FogStartEnd.y - d) /
+          (FogStartEnd.y - FogStartEnd.x));
+      }
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel/Vertex" name="ApplyFog">
+    <desc>
+      This fragment is responsible for applying the fog amount.
+    </desc>
+    <inputs>
+      <resource type="float4"
+                semantic="Color"
+                label=""
+                variable="UnfoggedColor"/>                
+      
+      <resource type="float3" 
+                semantic="Color" 
+                label=""
+                variable="FogColor" 
+                default="(0.5, 0.5, 0.5)"/>
+      
+      <resource type="float" 
+                semantic="Fog" 
+                label=""
+                variable="FogAmount" />
+    </inputs>
+    
+    <outputs>
+      <resource type="float4" 
+                semantic="Color" 
+                label=""
+                variable="FoggedColor" />
+    </outputs>
+    
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+      FoggedColor = float4(lerp(FogColor, UnfoggedColor.rgb, FogAmount), 1.0);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="CalculateViewVector">
+    <desc>
+      This fragment is responsible for calculating the camera view vector.
+    </desc>
+    <inputs>
+      <resource type="float4"
+                semantic="Position"
+                label="World"
+                variable="WorldPos" />
+
+      <resource type="float3"
+                semantic="CameraPosition"
+                label="World"
+                variable="CameraPos"
+                default="(0.0, 0.0, 0.0)" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic="ViewVector"
+                label="World"
+                variable="WorldViewVector"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      WorldViewVector = CameraPos - WorldPos;
+    </code>
+  </fragment>  
+  <!--========================================================================-->
+  <fragment type="Vertex" name="CalculateBinormal">
+    <desc>
+      Takes the cross product of a vertex normal and a tangent to create a binormal.      
+      Assumes the vertex normal and tangent are normalized.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic="Normal"
+                label="World"
+                variable="WorldNormal" />
+      <resource type="float3"
+                semantic="Tangent"
+                label="World"
+                variable="WorldTangent" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic="Binormal"
+                label="World"
+                variable="WorldBinormal" />      
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      WorldBinormal = cross(WorldNormal, WorldTangent);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalculateNormalFromColor">
+    <desc>
+      This fragment is responsible for sampling a normal map to generate a
+      world-space normal. Note, compressed normal maps are not supported.
+    </desc>
+    <inputs>
+      <resource type="float3" 
+                semantic="Color" 
+                label=""
+                variable="NormalMap" />
+      
+      <resource type="float3" 
+                semantic="Normal" 
+                label="World"
+                variable="WorldNormal" />
+      
+      <resource type="float3" 
+                semantic="Binormal" 
+                label="World"
+                variable="WorldBinormal" />
+      
+      <resource type="float3" 
+                semantic="Tangent" 
+                label="World"
+                variable="WorldTangent" />      
+    </inputs>
+    <outputs>
+      <resource type="float3" 
+                semantic="Normal" label="World"
+                variable="WorldNormalOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+      NormalMap = NormalMap * 2.0 - 1.0;
+
+      float3x3 xForm = float3x3(WorldTangent, WorldBinormal, WorldNormal);
+      xForm = transpose(xForm);
+      WorldNormalOut = mul(xForm, NormalMap.rgb);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalculateParallaxOffset">
+    <desc>
+      This fragment is responsible for calculating the UV offset to apply
+      as a result of a parallax map.
+    </desc>
+    <inputs>
+      <resource type="float4" 
+                semantic="TexCoord" 
+                label=""
+                variable="TexCoord" />
+      
+      <resource type="float" 
+                semantic="Color" 
+                label=""
+                variable="Height" />
+      
+      <resource type="float" 
+                semantic="ParallaxOffsetScale" 
+                label=""
+                variable="OffsetScale" default="(0.05)"/>
+      
+      <resource type="float3" 
+                semantic="ViewVector" 
+                label=""
+                variable="TangentSpaceEyeVec"/>
+    </inputs>    
+    <outputs>
+      
+      <resource type="float4" 
+                semantic="TexCoord" 
+                label=""
+                variable="ParallaxOffsetUV" />
+    
+    </outputs>
+    
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+      // Calculate offset scaling constant bias.
+      float2 Bias = float2(OffsetScale, OffsetScale) * -0.5;
+
+      // Calculate offset
+      float2 Offset = float2(Height, Height) * OffsetScale + Bias;
+
+      // Get texcoord.
+      ParallaxOffsetUV = float4(TexCoord.xy + Offset * TangentSpaceEyeVec.xy, 
+        TexCoord.zw);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="WorldToTangent">
+    <desc>
+      This fragment is responsible for transforming a vector from world space
+      to tangent space.
+    </desc>
+    <inputs>
+      <resource type="float3" 
+                semantic="" 
+                label="World"
+              variable="VectorIn" />
+      
+      <resource type="float3" 
+                semantic="Normal" 
+                label="World"
+                variable="WorldNormal" />
+      
+      <resource type="float3" 
+                semantic="Binormal" 
+                label="World"
+                variable="WorldBinormal" />
+      
+      <resource type="float3" 
+                semantic="Tangent" 
+                label="World"
+                variable="WorldTangent" />
+    </inputs>
+    <outputs>
+      
+      <resource type="float3" 
+                semantic="" 
+                label=""
+                variable="VectorOut" />
+      
+    </outputs>
+    
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0">
+      float3x3 xForm = float3x3(WorldTangent, WorldBinormal, WorldNormal);
+      VectorOut = mul(xForm, VectorIn);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="GeneratePerPixelTangentFrame">
+    <desc>
+      This fragment calculates a tangent frame per pixel using the derivative of 
+      the current pixel position and pixel uv coodinate. Assumes the world normal is 
+      normalized.
+    </desc>
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="WorldPosition" />
+
+      <resource type="float3"
+                semantic="Normal"
+                label="World"
+                variable="WorldNormal" />
+
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="UV" />
+      
+    </inputs>
+    <outputs>      
+      <resource type="float3"
+                semantic="Tangent"
+                label="World"
+                variable="WorldTangentOut" />
+
+      <resource type="float3"
+                semantic="Binormal"
+                label="World"
+                variable="WorldBinormalOut" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" target="ps_2_0/ps_4_0">
+      // get edge vectors of the pixel triangle
+      float3 dp1 = ddx(WorldPosition);
+      float3 dp2 = ddy(WorldPosition);
+      float2 duv1 = ddx(UV.xy);
+      float2 duv2 = ddy(UV.xy);
+
+      // Assume M is orthogonal.
+      float2x3 M = float2x3(dp1, dp2);
+      float3 T = mul(float2(duv1.x, duv2.x), M);
+      float3 B = mul(float2(duv1.y, duv2.y), M);
+
+      WorldTangentOut = normalize(T);
+      WorldBinormalOut = normalize(B);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CompositeFinalColor">
+    <desc>
+      This fragment is responsible for computing the final RGBA color by applying
+      the lighting model used for the terrain.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="DiffuseColor"/>
+
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="DiffuseFactor"/>
+    
+    </inputs>
+    <outputs>
+      <resource type="float4"
+                semantic="Color"
+                label=""
+                variable="OutputColor"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputColor = float4(DiffuseColor * DiffuseFactor, 1.0);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="AccumulateLight">
+    <desc>            
+      WorldNormal and LightDirection are assumed to be normalized.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="WorldNormal"/>
+
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="LightDirection"/>
+
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="LightDiffuse"
+                default="(1.0, 1.0, 1.0)"/>
+
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="LightAmbient"
+                default="(0.0, 0.0, 0.0)"/>
+
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="DiffuseAccum"/>
+      
+    </inputs>
+    <outputs>
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="OutputDiffuse"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      
+      float NdotL = saturate(dot(WorldNormal, -LightDirection));
+      OutputDiffuse = DiffuseAccum + LightAmbient;
+      OutputDiffuse += LightDiffuse * NdotL;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="SampleBlendMap">
+    <desc>
+      This fragment samples an RGBA texture and returns each component where 
+      each component contains a mask for a given texture layer.
+    </desc>
+
+    <inputs>
+      <resource type="float4" 
+                semantic="TexCoord" 
+                label="" 
+                variable="MapUV"/>
+
+      <resource type="sampler2D"
+                semantic="Texture"
+                label=""
+                variable="Sampler" />
+                
+    </inputs>
+
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="OutputRed"/>
+
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="OutputGreen"/>
+
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="OutputBlue"/>
+
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="OutputAlpha"/>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="TotalMask"/>
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      float4 color = tex2D(Sampler, MapUV.zw);
+      OutputRed = color.r;
+      OutputGreen = color.g;
+      OutputBlue = color.b;
+      OutputAlpha = color.a;
+      TotalMask = dot(color, float4(1,1,1,1));
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="SampleSingleChannel">
+    <desc>
+      This sample samples a channel based on the specified index (0 - 3).
+    </desc>
+
+    <inputs>
+      <resource type="float4" 
+                semantic="TexCoord" 
+                label="" 
+                variable="MapUV"/>
+
+      <resource type="sampler2D"
+                semantic="Texture"
+                label=""
+                variable="Sampler" />
+                
+      <resource type="int"
+                semantic=""
+                label=""
+                variable="ChannelIndex"/>
+                
+    </inputs>
+
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Output"/>
+      
+    </outputs>
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      if (ChannelIndex == 0)
+        Output = tex2D(Sampler, MapUV.xy).r;
+      else if (ChannelIndex == 1)
+        Output =  tex2D(Sampler, MapUV.xy).g;
+      else if (ChannelIndex == 2)
+        Output =  tex2D(Sampler, MapUV.xy).b;
+      else if (ChannelIndex == 3)
+        Output =  tex2D(Sampler, MapUV.xy).a;
+      
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="ComputeTotalMaskValue">
+    <desc>
+      This fragment combines mask values from the "global" mask with per layer 
+      mask to produce a final composited mask.
+    </desc>
+
+    <inputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="lMask0" default="(0.0f)"/>
+                
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="lMask1" default="(0.0f)"/>
+                
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="lMask2" default="(0.0f)"/>
+                
+       <resource type="float"
+                semantic=""
+                label=""
+                variable="lMask3" default="(0.0f)"/>
+
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="gMask0" default="(0.0f)"/>
+                
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="gMask1" default="(0.0f)"/>
+                
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="gMask2" default="(0.0f)"/>
+                
+       <resource type="float"
+                semantic=""
+                label=""
+                variable="gMask3" default="(0.0f)"/>
+                
+       <resource type="float4"
+                 semantic=""
+                 label=""
+                 variable="DistStrength" default="(1.0f, 1.0f, 1.0f, 1.0f)"/>
+    </inputs>
+
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="gMask0_Out" />
+                
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="gMask1_Out" />
+                
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="gMask2_Out" />
+                
+       <resource type="float"
+                semantic=""
+                label=""
+                variable="gMask3_Out" />
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+                    
+          float4 gMaskTotal = float4(gMask0, gMask1, gMask2, gMask3);
+          float4 lMaskTotal = float4(lMask0, lMask1, lMask2, lMask3);
+          
+          float4 value = gMaskTotal * lMaskTotal * DistStrength;
+          float4 result = normalize(gMaskTotal + lerp(float4(0.0f, 0.0f, 0.0f, 0.0f), 
+            lMaskTotal, value));
+          
+          gMask0_Out = result.x;
+          gMask1_Out = result.y;
+          gMask2_Out = result.z;
+          gMask3_Out = result.w;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="SampleLayerTextureRGB">
+    <desc>
+      This fragment samples an RGB texture for a given terrain layer and
+      returns the float3 value.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="MapUV"/>
+
+      <resource type="sampler2D"
+                semantic="Texture"
+                label=""
+                variable="Sampler" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="OutputColor"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputColor = tex2D(Sampler, MapUV.xy).rgb;
+    </code>
+  </fragment>
+  !--========================================================================-->
+  <fragment type="Pixel" name="SampleLayerTextureRGBA">
+    <desc>
+      This fragment samples an RGBA texture for a given terrain layer and
+      returns the float3 value along with a single floating point value contained
+      in the alpha channel.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="MapUV"/>
+
+      <resource type="sampler2D"
+                semantic="Texture"
+                label=""
+                variable="Sampler" />
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="OutputColor"/>
+                
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="OutputAlpha"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      float4 color = tex2D(Sampler, MapUV.xy);
+      OutputColor = color.rgb;
+      OutputAlpha = color.a;
+    </code>
+  </fragment>  
+  <!--========================================================================-->
+  <fragment type="Pixel" name="SampleLayerTextureAlpha">
+    <desc>
+      This fragment samples the alpha channel of the specified texture.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="MapUV"/>
+
+      <resource type="sampler2D"
+                semantic="Texture"
+                label=""
+                variable="Sampler" />
+    </inputs>
+
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="OutputAlpha"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputAlpha = tex2D(Sampler, MapUV.xy).a;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="SampleBaseMapWithDetailMap">
+    <desc>
+      Samples an RGBA texture where the RGB channels contain the base map 
+      information and the alpha channel contains the detail map data. The detail
+      map is sampled at a much higher frequency that the base map.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="MapUV"/>
+                
+      <resource type="float2"
+                semantic="TexCoord"
+                label=""
+                variable="DetailMapUV"/>
+
+      <resource type="sampler2D"
+                semantic="Texture"
+                label=""
+                variable="Sampler" />
+     
+    </inputs>
+
+    <outputs>
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="OutputColor"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">      
+      float3 base = tex2D(Sampler, MapUV.xy);
+      float detail = tex2D(Sampler, DetailMapUV).a;      
+      OutputColor = float4(base, detail);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="ScaleUVForDetailMap">
+    <desc>
+      Computes UV coordinates by multiplying the xy components of the input float4
+      and a scale factor.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="MapUV"/>
+                
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="ScaleFactor" default="(8.0)"/>
+    </inputs>
+
+    <outputs>
+      <resource type="float2"
+                semantic=""
+                label=""
+                variable="OutputUV"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">      
+      OutputUV = MapUV.xy * ScaleFactor;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel/Vertex" name="NormalizeVector">
+    <desc>
+      Normalizes the specified 3D vector.
+    </desc>
+
+    <inputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="Input"/>
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="Output"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      Output = normalize(Input);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalcBlendRGBAndAccumulate">
+    <desc>
+      This fragment multiplies an RGB color by a mask value from 0.0 - 1.0 and
+      adds the result to the additional input.
+    </desc>
+
+    <inputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Mask"/>
+
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="InputColor" />
+
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="AccumColor"/>
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="OutputColor"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputColor = AccumColor + (InputColor * Mask);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalcBlendFloatAndAccumulate">
+    <desc>
+      This fragment multiplies a single floating point value by a mask value from 0.0 - 1.0 and
+      adds the result to the additional input.
+    </desc>
+
+    <inputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Mask"/>
+
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Input" />
+
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="AccumValue"/>
+    </inputs>
+
+    <outputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Output"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      Output = AccumValue + (Mask * Input);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel" name="CalcBlendBaseMapWithDetailMap">
+    <desc>
+      This fragment multiplies an RGBA color by a mask value from 0.0 - 1.0 and
+      adds the result to the additional input. The RGB and A channels are
+      seperated where the A channel represents a detail mask value.
+    </desc>
+
+    <inputs>
+      <resource type="float"
+                semantic=""
+                label=""
+                variable="Mask"/>
+
+      <resource type="float4"
+                semantic="Color"
+                label=""
+                variable="InputColor" />
+
+      <resource type="float3"
+                semantic="Color"
+                label=""
+                variable="AccumColor"/>
+
+    </inputs>
+
+    <outputs>
+      <resource type="float3"
+                semantic=""
+                label=""
+                variable="OutputColor"/>
+
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputColor = AccumColor + (InputColor.rgb * Mask * 2 * InputColor.a);
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="CalcSurfaceUVSet_ScaleAndOffset">
+    <desc>
+      This fragment scales and offsets a uv texture coordinate value. 
+      Usefull for linearly modifying a texture coordinate. Used by a surface
+      to modify its texture coordinates independantly of the other surfaces.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="InputUV" />
+
+      <resource type="float2"
+                semantic="TexCoord"
+                label=""
+                variable="Scale"/>
+
+      <resource type="float2"
+                semantic="TexCoord"
+                label=""
+                variable="Offset"/>
+    </inputs>
+
+    <outputs>
+      <resource type="float4"
+                semantic="TexCoord"
+                label=""
+                variable="OutputUV"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputUV.x = InputUV.x * Scale.x + Offset.x;
+      OutputUV.y = InputUV.y * Scale.y + Offset.y;
+      OutputUV.z = InputUV.z * Scale.x + Offset.x;
+      OutputUV.w = InputUV.w * Scale.y + Offset.y;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="AccessSurfaceUVModifiersArray">
+    <desc>
+      This fragment extracts the scale and offset parameters for the specified
+      surface from the UV Modifier arrays.
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="UVModifierArray" />
+
+      <resource type="int"
+                semantic=""
+                label=""
+                variable="Index"/>
+    </inputs>
+
+    <outputs>
+      <resource type="float2"
+                semantic="TexCoord"
+                label=""
+                variable="OutputScale"/>
+      <resource type="float2"
+                semantic="TexCoord"
+                label=""
+                variable="OutputOffset"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+          platform="D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputScale.xy = UVModifierArray[Index].xy;
+      OutputOffset.xy = UVModifierArray[Index].zw;
+    </code>
+  </fragment>
+  <fragment type="Vertex/Pixel" name="AccessSurfaceUVModifiers">
+    <desc>
+      This fragment extracts the scale and offset parameters for the specified
+      surface from the UV Modifier arrays. 
+    </desc>
+
+    <inputs>
+      <resource type="float4"
+                semantic=""
+                label=""
+                variable="UVModifierArray" />
+
+    </inputs>
+
+    <outputs>
+      <resource type="float2"
+                semantic="TexCoord"
+                label=""
+                variable="OutputScale"/>
+      <resource type="float2"
+                semantic="TexCoord"
+                label=""
+                variable="OutputOffset"/>
+    </outputs>
+
+    <code lang="hlsl/Cg"
+        platform="D3D10/DX9/Xenon/PS3"
+        target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+      OutputScale.xy = UVModifierArray.xy;
+      OutputOffset.xy = UVModifierArray.zw;
+    </code>
+  </fragment>
+  <!--========================================================================-->
+  <fragment type="Pixel/Vertex" name="InverseRatio">
+    <desc>
+    This fragment is responsible for linearly interpolating two float3's. 
+    </desc>
+    <inputs>
+        <resource type="float" semantic="" label="" 
+            variable="Ratio" />
+    </inputs>
+    <outputs>
+        <resource type="float" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0">
+    Output = 1.0 - Ratio;
+    </code>
+  </fragment>
+</library>

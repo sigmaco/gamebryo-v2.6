@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeshProfiles version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./NiMeshProfileSchema.xsd">
+    <MeshProfile name="PosNormPicking" description="Separates the position and normal elements into separate CPU_READ 
+        streams for use with picking. Does not support morphing">
+        <FinalizeStream name="Indices" access="CPU_READ;GPU_READ;CPU_WRITE_STATIC">
+            <Element convertformat="UINT16" converttype="SMARTCLAMP">INDEX</Element>
+        </FinalizeStream>
+        <FinalizeStream name="CPUandGPUVertDataStream" access="CPU_READ;GPU_READ;CPU_WRITE_STATIC">
+            <Element>POSITION</Element>
+            <Element>NORMAL</Element>
+        </FinalizeStream>
+        <FinalizeStream name="GPUVertDataStream">
+            <Element type="COLOR" convertformat="UINT8" converttype="NORMALIZE" range="0-7">COLOR</Element>
+            <Element range="0-7">TEXCOORD</Element>
+            <Element>BINORMAL</Element>
+            <Element>TANGENT</Element>
+            <Element convertformat="UINT8" converttype="SMARTCLAMP">BLENDINDICES</Element>
+            <Element>POSITION_BP</Element>
+            <Element>NORMAL_BP</Element>
+            <Element>BINORMAL_BP</Element>
+            <Element>TANGENT_BP</Element>
+            <Element name="BLENDWEIGHT" type="BLENDWEIGHT">
+                <Component value="BLENDWEIGHT.0" />
+                <Component value="BLENDWEIGHT.1" />
+                <Component value="BLENDWEIGHT.2" />
+            </Element>
+        </FinalizeStream>
+        <FinalizeStream name="BoneIndexRemapStream">
+            <Element>BONE_PALETTE</Element>
+        </FinalizeStream>
+    </MeshProfile>
+</MeshProfiles>

@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXNifViewer", "..\..\..\Tools\DeveloperTools\PhysXNifViewer\Win32\VC80\PhysXNifViewer.vcproj", "{EB015935-645D-4452-B269-DA42F3616040}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXSceneGraphPrinter", "..\..\..\Tools\DeveloperTools\SceneGraphPrinter\Win32\VC80\PhysXSceneGraphPrinter.vcproj", "{8B59A2BB-3204-4F59-AEC0-DF16268FB058}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools02_DeveloperToolsPhysX", "Tools02_DeveloperToolsPhysX", "{1F174D45-E6F8-4C58-9F73-9A5914F22912}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL|Win32 = Debug DLL|Win32
+		Debug|Win32 = Debug|Win32
+		Release DLL|Win32 = Release DLL|Win32
+		Release|Win32 = Release|Win32
+		Shipping DLL|Win32 = Shipping DLL|Win32
+		Shipping|Win32 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB015935-645D-4452-B269-DA42F3616040}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Debug|Win32.Build.0 = Debug|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Release|Win32.ActiveCfg = Release|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Release|Win32.Build.0 = Release|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{EB015935-645D-4452-B269-DA42F3616040}.Shipping|Win32.Build.0 = Shipping|Win32
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058}.Debug DLL|Win32.ActiveCfg = Debug|Win32
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058}.Debug|Win32.Build.0 = Debug|Win32
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058}.Release DLL|Win32.ActiveCfg = Release|Win32
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058}.Release|Win32.ActiveCfg = Release|Win32
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058}.Release|Win32.Build.0 = Release|Win32
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058}.Shipping DLL|Win32.ActiveCfg = Shipping|Win32
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058}.Shipping|Win32.Build.0 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8B59A2BB-3204-4F59-AEC0-DF16268FB058} = {1F174D45-E6F8-4C58-9F73-9A5914F22912}
+		{EB015935-645D-4452-B269-DA42F3616040} = {1F174D45-E6F8-4C58-9F73-9A5914F22912}
+	EndGlobalSection
+EndGlobal

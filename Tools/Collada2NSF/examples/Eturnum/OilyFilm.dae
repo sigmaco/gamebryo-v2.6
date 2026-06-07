@@ -1,0 +1,1201 @@
+<?xml version="1.0"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+	<asset>
+		<contributor>
+			<author>ed.holzwarth</author>
+			<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+			<comments/>
+			<copyright/>
+		</contributor>
+		<contributor>
+			<author>Michael.Noland</author>
+			<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+			<comments/>
+			<copyright/>
+		</contributor>
+		<created>2007-09-13T17:09:25</created>
+		<keywords>FXComposer, NVIDIA</keywords>
+		<modified>2007-11-15T15:04:56</modified>
+		<subject/>
+		<title/>
+	</asset>
+	<library_effects>
+		<effect id="OilyFilm0" name="OilyFilm">
+			<profile_CG platform="PC-OGL">
+				<include sid="default" url="OilyFilm.cgfx"/>
+				<newparam sid="description">
+					<annotate name="detail0">
+						<string>This shader applies a base map lit with two lights, and then uses the </string>
+					</annotate>
+					<annotate name="detail2">
+						<string>interference effect. Finally, the entire effect is modified by a </string>
+					</annotate>
+					<annotate name="detail4">
+						<string>The 'Exponent' attribute is the power of the specular effect. </string>
+					</annotate>
+					<annotate name="detail1">
+						<string>specular component of the lighting to generate a thin film </string>
+					</annotate>
+					<annotate name="detail3">
+						<string>warping effect that allows the shader to fade out over time. </string>
+					</annotate>
+					<annotate name="detail5">
+						<string>The thin film texture should be a 1D thin film destuctive interference </string>
+					</annotate>
+					<annotate name="detail7">
+						<string>(N dot V) as the U coordinate and 'warpAlpha' as the V coordinate. </string>
+					</annotate>
+					<annotate name="detail8">
+						<string>This shader was used for the alien's gauntlets in the Eturnum sample.</string>
+					</annotate>
+					<annotate name="detail6">
+						<string>pattern. The warp effect is a 2D texture that will be sampled using </string>
+					</annotate>
+					<string>Oily Film Effect</string>
+				</newparam>
+				<newparam sid="WorldViewProj">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>WORLDVIEWPROJECTION</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="InvWorld">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>WORLDINVERSE</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="EyePos">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>EYEPOS</semantic>
+					<float4>0 0 0 0</float4>
+				</newparam>
+				<newparam sid="Zoze">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<float4>0 1 0 1</float4>
+				</newparam>
+				<newparam sid="Exponent">
+					<annotate name="UIName">
+						<string>Specular Exponent</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>8</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>64</float>
+					</annotate>
+					<float>48</float>
+				</newparam>
+				<newparam sid="WarpAlpha">
+					<annotate name="UIName">
+						<string>V coordinate</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>0</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>1</float>
+					</annotate>
+					<float>1</float>
+				</newparam>
+				<newparam sid="Light1">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectIndex">
+						<string>0</string>
+					</annotate>
+					<annotate name="Object">
+						<string>GeneralLight</string>
+					</annotate>
+					<string>Light1</string>
+				</newparam>
+				<newparam sid="Light2">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectIndex">
+						<string>1</string>
+					</annotate>
+					<annotate name="Object">
+						<string>GeneralLight</string>
+					</annotate>
+					<string>Light2</string>
+				</newparam>
+				<newparam sid="Light1Direction">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>ModelDirection</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light1</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light2Direction">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>ModelDirection</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light2</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light1Color">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>Diffuse</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light1</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light2Color">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>Diffuse</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light2</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="BaseTexture">
+					<annotate name="NTM">
+						<string>base</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<surface type="2D">
+						<init_as_null/>
+						<format>A8R8G8B8</format>
+						<size>64 64 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="BaseMapSampler">
+					<semantic>TEXUNIT0</semantic>
+					<sampler2D>
+						<source>BaseTexture</source>
+						<wrap_s>WRAP</wrap_s>
+						<wrap_t>WRAP</wrap_t>
+						<minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<newparam sid="filmRamp">
+					<annotate name="ResourceName">
+						<string>thinFilmRamp.bmp</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinFilmRamp.bmp</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinfilmramp.bmp</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinfilmramp.bmp</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinfilmramp.bmp</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinFilmRamp.bmp</string>
+					</annotate>
+					<surface type="1D">
+						<init_from>thinFilmRamp2</init_from>
+						<format>Unknown</format>
+						<size>64 64 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="OilyFilm">
+					<semantic>TEXUNIT1</semantic>
+					<sampler2D>
+						<source>filmRamp</source>
+						<wrap_s>WRAP</wrap_s>
+						<wrap_t>WRAP</wrap_t>
+						<minfilter>LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<newparam sid="warpEffect">
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>warpeffects.tga</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>warpeffects.tga</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>warpeffects.tga</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<surface type="2D">
+						<init_from>WarpEffects2</init_from>
+						<format>Unknown</format>
+						<size>64 64 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="WarpSampler">
+					<semantic>TEXUNIT2</semantic>
+					<sampler2D>
+						<source>warpEffect</source>
+						<wrap_s>WRAP</wrap_s>
+						<wrap_t>WRAP</wrap_t>
+						<minfilter>LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<technique sid="main">
+					<pass sid="p0">
+						<blend_enable value="true"/>
+						<blend_func>
+							<src value="SRC_ALPHA"/>
+							<dest value="ONE_MINUS_SRC_ALPHA"/>
+						</blend_func>
+						<shader stage="VERTEX">
+							<compiler_target>arbvp1</compiler_target>
+							<name source="default">vmain</name>
+							<bind symbol="WorldViewProj">
+								<param ref="WorldViewProj"/>
+							</bind>
+							<bind symbol="InvWorld">
+								<param ref="InvWorld"/>
+							</bind>
+							<bind symbol="EyePos">
+								<param ref="EyePos"/>
+							</bind>
+							<bind symbol="Exponent">
+								<param ref="Exponent"/>
+							</bind>
+							<bind symbol="Light1Direction">
+								<param ref="Light1Direction"/>
+							</bind>
+							<bind symbol="Light2Direction">
+								<param ref="Light2Direction"/>
+							</bind>
+							<bind symbol="Light1Color">
+								<param ref="Light1Color"/>
+							</bind>
+							<bind symbol="Light2Color">
+								<param ref="Light2Color"/>
+							</bind>
+						</shader>
+						<shader stage="FRAGMENT">
+							<compiler_target>arbfp1</compiler_target>
+							<name source="default">fmain</name>
+							<bind symbol="WarpAlpha">
+								<param ref="WarpAlpha"/>
+							</bind>
+							<bind symbol="BaseMapSampler">
+								<param ref="BaseMapSampler"/>
+							</bind>
+							<bind symbol="OilyFilm">
+								<param ref="OilyFilm"/>
+							</bind>
+							<bind symbol="WarpSampler">
+								<param ref="WarpSampler"/>
+							</bind>
+						</shader>
+						<extra type="passenable">
+							<technique profile="NVIDIA_FXCOMPOSER">
+								<true/>
+							</technique>
+						</extra>
+					</pass>
+					<extra type="import">
+						<technique profile="NVIDIA_FXCOMPOSER">
+							<import compiler_options=""/>
+						</technique>
+					</extra>
+				</technique>
+			</profile_CG>
+			<profile_CG platform="PS3">
+				<include sid="default" url="OilyFilm.cgfx"/>
+				<include sid="OilyFilm_main_p0_vmain_compiled" url="OilyFilm_main_p0.vpo"/>
+				<include sid="OilyFilm_main_p0_fmain_compiled" url="OilyFilm_main_p0.fpo"/>
+				<newparam sid="description">
+					<annotate name="detail0">
+						<string>This shader applies a base map lit with two lights, and then uses the </string>
+					</annotate>
+					<annotate name="detail2">
+						<string>interference effect. Finally, the entire effect is modified by a </string>
+					</annotate>
+					<annotate name="detail4">
+						<string>The 'Exponent' attribute is the power of the specular effect. </string>
+					</annotate>
+					<annotate name="detail1">
+						<string>specular component of the lighting to generate a thin film </string>
+					</annotate>
+					<annotate name="detail3">
+						<string>warping effect that allows the shader to fade out over time. </string>
+					</annotate>
+					<annotate name="detail5">
+						<string>The thin film texture should be a 1D thin film destuctive interference </string>
+					</annotate>
+					<annotate name="detail7">
+						<string>(N dot V) as the U coordinate and 'warpAlpha' as the V coordinate. </string>
+					</annotate>
+					<annotate name="detail8">
+						<string>This shader was used for the alien's gauntlets in the Eturnum sample.</string>
+					</annotate>
+					<annotate name="detail6">
+						<string>pattern. The warp effect is a 2D texture that will be sampled using </string>
+					</annotate>
+					<string>Oily Film Effect</string>
+				</newparam>
+				<newparam sid="WorldViewProj">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>WORLDVIEWPROJECTION</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="InvWorld">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>WORLDINVERSE</semantic>
+					<float4x4>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float4x4>
+				</newparam>
+				<newparam sid="EyePos">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<semantic>EYEPOS</semantic>
+					<float4>0 0 0 0</float4>
+				</newparam>
+				<newparam sid="Zoze">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<float4>0 1 0 1</float4>
+				</newparam>
+				<newparam sid="Exponent">
+					<annotate name="UIName">
+						<string>Specular Exponent</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>8</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>64</float>
+					</annotate>
+					<float>48</float>
+				</newparam>
+				<newparam sid="WarpAlpha">
+					<annotate name="UIName">
+						<string>V coordinate</string>
+					</annotate>
+					<annotate name="UIWidget">
+						<string>Slider</string>
+					</annotate>
+					<annotate name="UIMin">
+						<float>0</float>
+					</annotate>
+					<annotate name="UIStep">
+						<float>1</float>
+					</annotate>
+					<annotate name="UIMax">
+						<float>1</float>
+					</annotate>
+					<float>1</float>
+				</newparam>
+				<newparam sid="Light1">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectIndex">
+						<string>0</string>
+					</annotate>
+					<annotate name="Object">
+						<string>GeneralLight</string>
+					</annotate>
+					<string>Light1</string>
+				</newparam>
+				<newparam sid="Light2">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectIndex">
+						<string>1</string>
+					</annotate>
+					<annotate name="Object">
+						<string>GeneralLight</string>
+					</annotate>
+					<string>Light2</string>
+				</newparam>
+				<newparam sid="Light1Direction">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>ModelDirection</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light1</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light2Direction">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>ModelDirection</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light2</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light1Color">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>Diffuse</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light1</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="Light2Color">
+					<annotate name="UIWidget">
+						<string>None</string>
+					</annotate>
+					<annotate name="VarType">
+						<string>Object</string>
+					</annotate>
+					<annotate name="ObjectProperty">
+						<string>Diffuse</string>
+					</annotate>
+					<annotate name="ObjectName">
+						<string>Light2</string>
+					</annotate>
+					<float3>0 0 0</float3>
+				</newparam>
+				<newparam sid="BaseTexture">
+					<annotate name="NTM">
+						<string>base</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<surface type="2D">
+						<init_as_null/>
+						<format>A8R8G8B8</format>
+						<size>64 64 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="BaseMapSampler">
+					<semantic>TEXUNIT0</semantic>
+					<sampler2D>
+						<source>BaseTexture</source>
+						<wrap_s>WRAP</wrap_s>
+						<wrap_t>WRAP</wrap_t>
+						<minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<newparam sid="filmRamp">
+					<annotate name="ResourceName">
+						<string>thinFilmRamp.bmp</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinFilmRamp.bmp</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinfilmramp.bmp</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinfilmramp.bmp</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinfilmramp.bmp</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>thinFilmRamp.bmp</string>
+					</annotate>
+					<surface type="1D">
+						<init_from>thinFilmRamp2</init_from>
+						<format>Unknown</format>
+						<size>64 64 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="OilyFilm">
+					<semantic>TEXUNIT1</semantic>
+					<sampler2D>
+						<source>filmRamp</source>
+						<wrap_s>WRAP</wrap_s>
+						<wrap_t>WRAP</wrap_t>
+						<minfilter>LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<newparam sid="warpEffect">
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<annotate name="ResourceType">
+						<string>2D</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>warpeffects.tga</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>warpeffects.tga</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>warpeffects.tga</string>
+					</annotate>
+					<annotate name="ResourceName">
+						<string>WarpEffects.tga</string>
+					</annotate>
+					<surface type="2D">
+						<init_from>WarpEffects2</init_from>
+						<format>Unknown</format>
+						<size>64 64 1</size>
+					</surface>
+				</newparam>
+				<newparam sid="WarpSampler">
+					<semantic>TEXUNIT2</semantic>
+					<sampler2D>
+						<source>warpEffect</source>
+						<wrap_s>WRAP</wrap_s>
+						<wrap_t>WRAP</wrap_t>
+						<minfilter>LINEAR</minfilter>
+						<magfilter>LINEAR</magfilter>
+					</sampler2D>
+				</newparam>
+				<technique sid="main">
+					<pass sid="p0">
+						<blend_enable value="true"/>
+						<blend_func>
+							<src value="SRC_ALPHA"/>
+							<dest value="ONE_MINUS_SRC_ALPHA"/>
+						</blend_func>
+						<shader stage="VERTEX">
+							<compiler_target>arbvp1</compiler_target>
+							<name source="OilyFilm_main_p0_vmain_compiled">vmain</name>
+							<bind symbol="WorldViewProj">
+								<param ref="WorldViewProj"/>
+							</bind>
+							<bind symbol="InvWorld">
+								<param ref="InvWorld"/>
+							</bind>
+							<bind symbol="EyePos">
+								<param ref="EyePos"/>
+							</bind>
+							<bind symbol="Exponent">
+								<param ref="Exponent"/>
+							</bind>
+							<bind symbol="Light1Direction">
+								<param ref="Light1Direction"/>
+							</bind>
+							<bind symbol="Light2Direction">
+								<param ref="Light2Direction"/>
+							</bind>
+							<bind symbol="Light1Color">
+								<param ref="Light1Color"/>
+							</bind>
+							<bind symbol="Light2Color">
+								<param ref="Light2Color"/>
+							</bind>
+						</shader>
+						<shader stage="FRAGMENT">
+							<compiler_target>arbfp1</compiler_target>
+							<name source="OilyFilm_main_p0_fmain_compiled">fmain</name>
+							<bind symbol="WarpAlpha">
+								<param ref="WarpAlpha"/>
+							</bind>
+							<bind symbol="BaseMapSampler">
+								<param ref="BaseMapSampler"/>
+							</bind>
+							<bind symbol="OilyFilm">
+								<param ref="OilyFilm"/>
+							</bind>
+							<bind symbol="WarpSampler">
+								<param ref="WarpSampler"/>
+							</bind>
+						</shader>
+						<extra type="passenable">
+							<technique profile="NVIDIA_FXCOMPOSER">
+								<true/>
+							</technique>
+						</extra>
+					</pass>
+					<extra type="import">
+						<technique profile="NVIDIA_FXCOMPOSER">
+							<import compiler_options=""/>
+						</technique>
+					</extra>
+				</technique>
+			</profile_CG>
+		</effect>
+	</library_effects>
+	<library_images>
+		<image id="warpEffect" name="warpEffect">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect1" name="warpEffect1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect2" name="warpEffect2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp" name="filmRamp">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect3" name="warpEffect3">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp1" name="filmRamp1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect4" name="warpEffect4">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect5" name="warpEffect5">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect6" name="warpEffect6">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="warpEffect7" name="warpEffect7">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp2" name="filmRamp2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect8" name="warpEffect8">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp3" name="filmRamp3">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="filmRamp4" name="filmRamp4">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="filmRamp5" name="filmRamp5">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="warpEffect9" name="warpEffect9">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="filmRamp6" name="filmRamp6">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="filmRamp7" name="filmRamp7">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="filmRamp8" name="filmRamp8">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="filmRamp9" name="filmRamp9">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="thinFilmRamp" name="thinFilmRamp">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinfilmramp.bmp</init_from>
+		</image>
+		<image id="WarpEffects" name="WarpEffects">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>warpeffects.tga</init_from>
+		</image>
+		<image id="thinFilmRamp1" name="thinFilmRamp1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinFilmRamp.bmp</init_from>
+		</image>
+		<image id="WarpEffects1" name="WarpEffects1">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T13:23:06</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>WarpEffects.tga</init_from>
+		</image>
+		<image id="thinFilmRamp2" name="thinFilmRamp2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T14:02:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>thinFilmRamp.bmp</init_from>
+		</image>
+		<image id="WarpEffects2" name="WarpEffects2">
+			<asset>
+				<contributor>
+					<author>Michael.Noland</author>
+					<authoring_tool>NVIDIA FX Composer 2.0</authoring_tool>
+					<comments/>
+					<copyright/>
+				</contributor>
+				<created>2007-11-15T14:02:04</created>
+				<keywords>FXComposer, NVIDIA</keywords>
+				<modified>2007-11-15T14:25:34</modified>
+				<subject/>
+				<title/>
+			</asset>
+			<init_from>WarpEffects.tga</init_from>
+		</image>
+	</library_images>
+	<library_materials>
+		<material id="Material0" name="OilyFilm">
+			<instance_effect url="#OilyFilm0">
+				<technique_hint platform="PS3" ref="main"/>
+				<technique_hint platform="PC-OGL" ref="main"/>
+				<setparam ref="WorldViewProj">
+					<float4x4>-0.343435 0 -1.50018 -1.5 0 2.74748 0 0 -4.12122 0 0.125015 0.125 -5.49495 0 4.74421 4.74525</float4x4>
+				</setparam>
+				<setparam ref="InvWorld">
+					<float4x4>-0.0551724 -0 -0.662069 -0 0 1 0 0 0.662069 0 -0.0551724 0 -0.110345 -0 -1.32414 1</float4x4>
+				</setparam>
+				<setparam ref="EyePos">
+					<float4>0 0 0 0</float4>
+				</setparam>
+				<setparam ref="Zoze">
+					<float4>0 1 0 1</float4>
+				</setparam>
+				<setparam ref="Exponent">
+					<float>64</float>
+				</setparam>
+				<setparam ref="WarpAlpha">
+					<float>1</float>
+				</setparam>
+				<setparam ref="Light1Direction">
+					<float3>0 0 0</float3>
+				</setparam>
+				<setparam ref="Light2Direction">
+					<float3>0 0 0</float3>
+				</setparam>
+				<setparam ref="Light1Color">
+					<float3>0 0 0</float3>
+				</setparam>
+				<setparam ref="Light2Color">
+					<float3>0 0 0</float3>
+				</setparam>
+				<setparam ref="BaseTexture">
+					<surface type="2D">
+						<init_as_null/>
+						<format>A8R8G8B8</format>
+						<size>64 64 1</size>
+					</surface>
+				</setparam>
+				<setparam ref="filmRamp">
+					<surface type="1D">
+						<init_from>thinFilmRamp</init_from>
+						<format>Unknown</format>
+						<size>64 64 1</size>
+					</surface>
+				</setparam>
+				<setparam ref="warpEffect">
+					<surface type="2D">
+						<init_from>WarpEffects</init_from>
+						<format>Unknown</format>
+						<size>64 64 1</size>
+					</surface>
+				</setparam>
+			</instance_effect>
+		</material>
+	</library_materials>
+</COLLADA>

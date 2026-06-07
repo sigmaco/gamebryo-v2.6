@@ -1,0 +1,85 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimationTool_VC80", "..\..\..\Tools\AnimationTool\AnimationToolUI\AnimationTool_VC80.csproj", "{56EDF427-4FE0-414F-A83E-F73D462F64BA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9A20C33C-9D58-492B-B155-75409190E166} = {9A20C33C-9D58-492B-B155-75409190E166}
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943} = {3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGrid2_VC80", "..\..\..\Tools\AnimationTool\SourceGrid2\SourceGrid\SourceGrid2_VC80.csproj", "{9A20C33C-9D58-492B-B155-75409190E166}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SegmentedTrackBar_VC80", "..\..\..\Tools\AnimationTool\SegmentedTrackBar\SegmentedTrackBar_VC80.csproj", "{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NiManagedToolInterface", "..\..\..\Tools\AnimationTool\NiManagedToolInterface\Win32\VC80\NiManagedToolInterface.vcproj", "{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools03_AnimationTool", "Tools03_AnimationTool", "{BBE6375B-BCD7-4799-BF6B-9C5983A82BD8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL PhysX|Any CPU = Debug DLL PhysX|Any CPU
+		Debug DLL|Any CPU = Debug DLL|Any CPU
+		Release DLL PhysX|Any CPU = Release DLL PhysX|Any CPU
+		Release DLL|Any CPU = Release DLL|Any CPU
+		Shipping DLL PhysX|Any CPU = Shipping DLL PhysX|Any CPU
+		Shipping DLL|Any CPU = Shipping DLL|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Debug DLL PhysX|Any CPU.ActiveCfg = Debug DLL PhysX|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Debug DLL PhysX|Any CPU.Build.0 = Debug DLL PhysX|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Debug DLL|Any CPU.ActiveCfg = Debug DLL|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Debug DLL|Any CPU.Build.0 = Debug DLL|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Release DLL PhysX|Any CPU.ActiveCfg = Release DLL PhysX|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Release DLL PhysX|Any CPU.Build.0 = Release DLL PhysX|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Release DLL|Any CPU.ActiveCfg = Release DLL|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Release DLL|Any CPU.Build.0 = Release DLL|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Shipping DLL PhysX|Any CPU.ActiveCfg = Shipping DLL PhysX|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Shipping DLL PhysX|Any CPU.Build.0 = Shipping DLL PhysX|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Shipping DLL|Any CPU.ActiveCfg = Shipping DLL|Any CPU
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA}.Shipping DLL|Any CPU.Build.0 = Shipping DLL|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Debug DLL PhysX|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Debug DLL PhysX|Any CPU.Build.0 = Debug|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Debug DLL|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Debug DLL|Any CPU.Build.0 = Debug|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Release DLL PhysX|Any CPU.ActiveCfg = Release|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Release DLL PhysX|Any CPU.Build.0 = Release|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Release DLL|Any CPU.ActiveCfg = Release|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Release DLL|Any CPU.Build.0 = Release|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Shipping DLL PhysX|Any CPU.ActiveCfg = Shipping|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Shipping DLL PhysX|Any CPU.Build.0 = Shipping|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Shipping DLL|Any CPU.ActiveCfg = Shipping|Any CPU
+		{9A20C33C-9D58-492B-B155-75409190E166}.Shipping DLL|Any CPU.Build.0 = Shipping|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Debug DLL PhysX|Any CPU.ActiveCfg = Debug|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Debug DLL PhysX|Any CPU.Build.0 = Debug|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Debug DLL|Any CPU.ActiveCfg = Debug|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Debug DLL|Any CPU.Build.0 = Debug|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Release DLL PhysX|Any CPU.ActiveCfg = Release|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Release DLL PhysX|Any CPU.Build.0 = Release|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Release DLL|Any CPU.ActiveCfg = Release|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Release DLL|Any CPU.Build.0 = Release|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Shipping DLL PhysX|Any CPU.ActiveCfg = Shipping|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Shipping DLL PhysX|Any CPU.Build.0 = Shipping|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Shipping DLL|Any CPU.ActiveCfg = Shipping|Any CPU
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943}.Shipping DLL|Any CPU.Build.0 = Shipping|Any CPU
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Debug DLL PhysX|Any CPU.ActiveCfg = Debug DLL PhysX|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Debug DLL PhysX|Any CPU.Build.0 = Debug DLL PhysX|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Debug DLL|Any CPU.ActiveCfg = Debug DLL|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Debug DLL|Any CPU.Build.0 = Debug DLL|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Release DLL PhysX|Any CPU.ActiveCfg = Release DLL PhysX|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Release DLL PhysX|Any CPU.Build.0 = Release DLL PhysX|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Release DLL|Any CPU.ActiveCfg = Release DLL|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Release DLL|Any CPU.Build.0 = Release DLL|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Shipping DLL PhysX|Any CPU.ActiveCfg = Shipping DLL PhysX|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Shipping DLL PhysX|Any CPU.Build.0 = Shipping DLL PhysX|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Shipping DLL|Any CPU.ActiveCfg = Shipping DLL|Win32
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}.Shipping DLL|Any CPU.Build.0 = Shipping DLL|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A20C33C-9D58-492B-B155-75409190E166} = {BBE6375B-BCD7-4799-BF6B-9C5983A82BD8}
+		{3995E4EC-E2D3-4500-9FA0-5B94EBE8C943} = {BBE6375B-BCD7-4799-BF6B-9C5983A82BD8}
+		{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D} = {BBE6375B-BCD7-4799-BF6B-9C5983A82BD8}
+		{56EDF427-4FE0-414F-A83E-F73D462F64BA} = {BBE6375B-BCD7-4799-BF6B-9C5983A82BD8}
+	EndGlobalSection
+EndGlobal

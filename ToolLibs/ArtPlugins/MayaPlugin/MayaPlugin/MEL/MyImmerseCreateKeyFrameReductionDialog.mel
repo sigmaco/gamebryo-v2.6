@@ -1,0 +1,620 @@
+//
+// MyImmerseCreateKeyFrameReductionDialog.mel
+//
+// Mel script for automatically reducing key frame animations.
+
+// Automatically load the sequence functions
+source "MyImmerseCreateSequenceDialog.mel";
+
+//---------------------------------------------------------------------------
+global proc string MyImmerseKeyFrameReductionGetCharacterRoot(string $szObject)
+{
+    string $szCharacterRoot = MyImmerseSequenceDialogGetCharacterRoot($szObject);
+
+    if ((`attributeExists "Ni_Sequence" $szCharacterRoot` == 0) &&
+        (`attributeExists "Ni_CharacterRoot" $szCharacterRoot` == 0))
+    {
+        $szCharacterRoot = "(NONE)";
+    }
+    
+    return $szCharacterRoot;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseKeyFrameReductionGetAllSequences(string $szObject)
+{
+    string $szLayers[] = MyImmerseFindAllLayerTransforms($szObject);
+    
+    int $iLayer = 0;
+    for($iLayer = 0; $iLayer < size($szLayers); $iLayer++)
+    {
+        string $szSequenceNames[] = MyImmerseGetValidSequenceNames($szLayers[$iLayer]);
+        
+        float $fSequenceFrames[] = MyImmerseGetValidSequenceFrames($szLayers[$iLayer]);
+
+        // Enable the Sequences button.
+        if ( size($szSequenceNames) > 0)
+        {
+            button -e -en true KFReductionReduceSequenceButton;
+            button -e -en true KFReductionReduceAllSequencesButton;
+            button -e -en true KFReductionReduceJumpToSequenceButton;
+        }
+        
+        int $iSequence = 0;
+        for($iSequence = 0; $iSequence < size($szSequenceNames); $iSequence++)
+        {
+            // print ("Name " + $szSequenceNames[$iSequence] + " Min " + $fSequenceFrames[($iSequence * 2)] + " Max " + $fSequenceFrames[($iSequence * 2) + 1] + "\n");
+            textScrollList -e -append $szSequenceNames[$iSequence] KFReductionCharacterSequences;
+            textScrollList -e -append $fSequenceFrames[($iSequence * 2)] KFReductionCharacterSequencesStartTime;
+            textScrollList -e -append $fSequenceFrames[($iSequence * 2) + 1] KFReductionCharacterSequencesEndTime;
+        }
+
+        if ( size($szSequenceNames) > 0)
+        {
+            textScrollList -e -sii 1 KFReductionCharacterSequences;
+        }        
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseKeyFrameReductionJumpToSequence()
+{
+    int $iSequence[] = `textScrollList -q -sii KFReductionCharacterSequences`;
+    
+    if (size($iSequence) == 0)
+        return;
+
+    string $szMinTimes[] = `textScrollList -q -allItems KFReductionCharacterSequencesStartTime`;
+    string $szMaxTimes[] = `textScrollList -q -allItems KFReductionCharacterSequencesEndTime`;
+
+    // print ("Min " + $szMinTimes[$iSequence[0] - 1] + " Max " + $szMaxTimes[$iSequence[0]] + "\n");
+
+    float $fMin = (float)$szMinTimes[$iSequence[0] - 1];
+    float $fMax = (float)$szMaxTimes[$iSequence[0] - 1];
+
+    // print ("Min " + $fMin + " Max " + $fMax + "\n");
+
+    playbackOptions -min $fMin -max $fMax;
+    currentTime $fMin;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseKeyFameReductionReduceKeys(
+        float $fMinTime, 
+        float $fMaxTime,
+        float $fTimeTolerance,
+        float $fValueTolerance,
+        string $szAttribute, 
+        string $szObject)
+{
+    int $iMinTime = ($fMinTime + 0.5);
+    int $iMaxTime = ($fMaxTime + 0.5);
+
+    // print ("MinTime " + $iMinTime + " MaxTime " + $iMaxTime + "\n");
+    string $szTime = ($iMinTime + ":" + $iMaxTime);
+
+    if (`radioButtonGrp -q -sl KFReductionSimplifyMethod` == 1)
+    {
+        simplify 
+            -timeTolerance $fTimeTolerance
+            -floatTolerance $fTimeTolerance
+            -valueTolerance $fValueTolerance
+            -attribute $szAttribute
+            -time $szTime
+            $szObject;
+    }
+    else
+    {    
+        string $szTime = ($iMinTime + ":" + $iMaxTime);
+        
+        if ((`attributeExists $szAttribute $szObject` == 1) &&
+            (`keyframe -t $szTime -q -kc ($szObject + "." + $szAttribute)` > 0))
+        {
+            catch( `filterCurve 
+                    -f simplify 
+                    -startTime $iMinTime 
+                    -endTime $iMaxTime 
+                    -timeTolerance $fTimeTolerance  
+                    ($szObject + "." + $szAttribute)`);
+        }
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseKeyFrameReductionReduceSequence(int $iSequence, float $fMin, float $fMax)
+{
+    int $iSetWaitCursor = 0;
+    
+    // Read the Scroll List if nothing is passed in
+    if ($iSequence == -1)
+    {
+        int $iSelSequence[] = `textScrollList -q -sii KFReductionCharacterSequences`;
+    
+        if (size($iSelSequence) == 0)
+            return;
+
+        $iSequence = $iSelSequence[0];
+
+        // Turn on the Wait Cursor        
+        $iSetWaitCursor = 1;
+        waitCursor -state on;
+    }
+
+    if ($iSequence > 0)
+    {
+        string $szMinTimes[] = `textScrollList -q -allItems KFReductionCharacterSequencesStartTime`;
+        string $szMaxTimes[] = `textScrollList -q -allItems KFReductionCharacterSequencesEndTime`;
+
+        // print ("Min " + $szMinTimes[$iSequence - 1] + " Max " + $szMaxTimes[$iSequence] + "\n");
+
+        $fMin = (float)$szMinTimes[$iSequence - 1];
+        $fMax = (float)$szMaxTimes[$iSequence - 1];
+    }
+
+    // print ("Min " + $fMin + " Max " + $fMax + "\n");
+
+    float $fTimeTolerance = `floatFieldGrp -q -v1 KFReductionTimeTolerance`;
+    float $fValueTolerance = `floatFieldGrp -q -v1 KFReductionValueTolerance`;
+
+    int $iTX = `checkBoxGrp -q -value1 KFReductionTranslation`;
+    int $iTY = `checkBoxGrp -q -value2 KFReductionTranslation`;
+    int $iTZ = `checkBoxGrp -q -value3 KFReductionTranslation`;
+
+    int $iRX = `checkBoxGrp -q -value1 KFReductionRotation`;
+    int $iRY = `checkBoxGrp -q -value2 KFReductionRotation`;
+    int $iRZ = `checkBoxGrp -q -value3 KFReductionRotation`;
+
+    int $iScale = `checkBoxGrp -q -value1 KFReductionScale`;
+
+    int $iVisibility = `checkBoxGrp -q -value1 KFReductionVisibility`;
+
+    string $szSelected[] = `ls -sl -l`;
+    string $szObjectsReduced[];
+
+    if (`radioButtonGrp -q -sl KFReductionSelectionType` == 1)
+    {
+        // Only work on the selected objects
+        $szObjectsReduced = $szSelected;
+    }
+    else
+    {
+        string $szTemp;
+        string $szChildren[];
+        string $szAllChildren[];
+
+        // Get all of the children of each of the selected objects
+        for($szTemp in $szSelected)
+        {
+            $szChildren = `listRelatives -f -ad $szTemp`;
+
+            appendStringArray( $szAllChildren, $szChildren, size($szChildren));            
+        }
+
+        // Add in the selected objects
+        appendStringArray($szAllChildren, $szSelected, size( $szSelected ));
+
+        // Remove all duplicates
+        $szObjectsReduced = stringArrayRemoveDuplicates($szAllChildren);
+    }
+
+    int $iLoop = 0;
+    string $szObject;
+    for($szObject in $szObjectsReduced)
+    {
+        if ($iTX == 1)
+        {
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "translateX", $szObject);
+        }
+        
+        if ($iTY == 1)
+        {
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "translateY", $szObject);
+        }
+        
+        if ($iTZ == 1)
+        {
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "translateZ", $szObject);
+        }
+        
+        if ($iRX == 1)
+        {
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "rotateX", $szObject);
+        }
+        
+        if ($iRY == 1)
+        {
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "rotateY", $szObject);
+        }
+        
+        if ($iRZ == 1)
+        {
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "rotateZ", $szObject);
+        }
+        
+        if ($iScale == 1)
+        {
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "scaleX", $szObject);
+                
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "scaleY", $szObject);
+                
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "scaleZ", $szObject);
+        }
+
+        if ($iVisibility == 1)
+        {
+            MyImmerseKeyFameReductionReduceKeys( $fMin, $fMax,
+                $fTimeTolerance, $fValueTolerance, "visibility", $szObject);
+        }
+    }
+
+    // Turn on the Wait Cursor        
+    if ($iSetWaitCursor == 1)
+    {
+        waitCursor -state off;
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseKeyFrameReductionReduceAllSequences()
+{
+    int $iNumSequences = `textScrollList -q -numberOfItems KFReductionCharacterSequences`;
+    
+    if ($iNumSequences == 0)
+        return;
+
+    // Turn On the Wait Cursor
+    waitCursor -state on;
+        
+    int $iLoop;
+    
+    // Create the Process Window
+    progressWindow 
+        -t "Reducing All Sequences"
+        -min 0 
+        -max $iNumSequences
+        -pr 0;
+    
+    // Reduce Each Sequence    Sequences are 1 based
+    for($iLoop = 1; $iLoop <= $iNumSequences; $iLoop++)
+    {
+        MyImmerseKeyFrameReductionReduceSequence($iLoop, 0, 0);
+        
+        // Increment the process window
+        progressWindow -e -s 1;
+    }
+
+    // Destroy the process window
+    progressWindow -ep;
+    
+    // Turn off the Wait Cursor
+    waitCursor -state off;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseKeyFrameReductionTimeSliderRange()
+{
+    // Turn on the Wait Cursor
+    waitCursor -state on;
+
+    float $fMinTime = `playbackOptions -q -min`;
+    float $fMaxTime = `playbackOptions -q -max`;
+
+    string $szMinTimes[] = `textScrollList -q -allItems KFReductionCharacterSequencesStartTime`;
+    string $szMaxTimes[] = `textScrollList -q -allItems KFReductionCharacterSequencesEndTime`;
+
+    // Check for no sequences
+    if (size($szMinTimes) == 0)
+    {
+        MyImmerseKeyFrameReductionReduceSequence( -2, $fMinTime, $fMaxTime);
+        
+        // Turn off the Wait Cursor
+        waitCursor -state off;
+        return;
+    }
+
+    float $fTimes[];
+
+    // list together all of the times        
+    int $iLoop = 0;
+    for($iLoop = 0; $iLoop < size($szMinTimes); $iLoop++)
+    {
+        $fTimes[$iLoop * 2] = (float)$szMinTimes[$iLoop];
+        $fTimes[($iLoop *2) + 1] = (float)$szMaxTimes[$iLoop];
+    }
+
+    // Add in the Min and Max Times
+    $fTimes[$iLoop * 2] = $fMinTime;
+    $fTimes[($iLoop *2) + 1] = $fMaxTime;
+    
+    // Sort the list of times
+    $fTimes = `sort $fTimes`;
+
+    // Create the Process Window
+    progressWindow 
+        -t "Reducing Time Range"
+        -min 0 
+        -max (size($fTimes))
+        -pr 0;
+
+    for($iLoop = 0; $iLoop < (size($fTimes) - 1); $iLoop++)
+    {
+        if (($fTimes[$iLoop] >= $fMinTime) &&
+            ($fTimes[$iLoop] != $fTimes[$iLoop + 1]))
+        {
+            // print ($fTimes[$iLoop] + " " + $fTimes[$iLoop + 1] + "\n");
+            
+            MyImmerseKeyFrameReductionReduceSequence( -2, $fTimes[$iLoop], $fTimes[$iLoop + 1]);
+            
+            // Increment the process window
+            progressWindow -e -s 1;
+        }
+
+        // Quit because we are done
+        if ($fTimes[$iLoop] == $fMaxTime)
+        {
+            // Destroy the process window
+            progressWindow -ep;
+
+            // Turn off the Wait Cursor
+            waitCursor -state off;
+            return;
+        }
+    }
+
+    // Destroy the process window
+    progressWindow -ep;
+
+    // Turn off the Wait Cursor
+    waitCursor -state off;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateKeyFrameReductionDialog()
+{
+    // ONLY ALLOW ONE WINDOW AT A TIME SO WE WILL DELETE IT IF IT EXISTS
+
+    // Check if the window exists
+    if( MyImmerseWindowExists("KeyFrameReductionWindow") )
+    {
+        deleteUI KeyFrameReductionWindow;
+    }
+
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) <= 0)
+    {
+        error "MyImmerseCreateKeyFrameReductionDialog::No Objects Selected";
+        return;
+    }
+
+    int $iLeftMargin = 30;
+    string $szCharacterRoot = MyImmerseKeyFrameReductionGetCharacterRoot($dagnodes[0]);
+
+    window -title "Key Frame Reduction" -widthHeight 445 645 KeyFrameReductionWindow;
+
+    columnLayout;
+
+    text -label "";
+
+    rowLayout -nc 2 -cw2 $iLeftMargin 130;
+
+        text -label "";
+        
+        frameLayout
+            -cll false
+            -cl false
+            -bv true
+            -bs "in"
+            -fn "boldLabelFont"
+            -mh 10
+            -mw 10
+            -l "Reduce Selected";
+
+            radioButtonGrp
+                -l "" 
+                -nrb 2 
+                -label1 "Selected Only" 
+                -label2 "Selected and Below"
+                -sl 1
+                KFReductionSelectionType;
+
+        setParent ..; // frameLayout
+
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    rowLayout -nc 2 -cw2 $iLeftMargin 130;
+
+        text -label "";
+
+        text -l "Simplify Parameters" -al "left" -fn "boldLabelFont" -w 200;
+
+    setParent ..; // rowLayout
+
+    radioButtonGrp
+        -l "Simplify Method" 
+        -nrb 2 
+        -label1 "Classic" 
+        -label2 "Dense Data"
+        -sl 1
+        KFReductionSimplifyMethod;
+
+    floatFieldGrp 
+        -label "Time Tolerance" 
+        -nf 1
+        -v1 0.05
+        -pre 5
+        KFReductionTimeTolerance;
+
+    floatFieldGrp 
+        -label "Value Tolerance" 
+        -nf 1
+        -v1 0.01
+        -pre 5
+        KFReductionValueTolerance;
+
+    text -label "";
+    
+    rowLayout -nc 2 -cw2 $iLeftMargin 130;
+
+        text -label "";
+
+        text -l "Reduce Attributes" -al "left" -fn "boldLabelFont" -w 130;
+
+    setParent ..; // rowLayout
+
+    checkBoxGrp
+        -label "Translation"
+        -ncb 3
+        -label1 "X"
+        -label2 "Y"
+        -label3 "Z"
+        -value1 true
+        -value2 true
+        -value3 true
+        KFReductionTranslation;
+
+    checkBoxGrp
+        -label "Rotation"
+        -ncb 3
+        -label1 "X"
+        -label2 "Y"
+        -label3 "Z"
+        -value1 true
+        -value2 true
+        -value3 true
+        KFReductionRotation;
+
+    checkBoxGrp
+        -label "Scale"
+        -ncb 1
+        -label1 ""
+        -value1 true
+        KFReductionScale;
+
+    checkBoxGrp
+        -label "Visibility"
+        -ncb 1
+        -label1 ""
+        -value1 true
+        KFReductionVisibility;
+        
+    text -label "";
+
+    rowLayout -nc 3 -cw3 $iLeftMargin 130 200;
+
+        text -label "";
+
+        text -l "Character Root:" -al "left" -fn "boldLabelFont" -w 130;
+
+        text -l $szCharacterRoot -al "left" KFReductionCharacterRoot;
+
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    rowLayout -nc 2 -cw2 $iLeftMargin 200;
+
+        text -label "";
+
+        text -l "Character Sequences:" -al "left" -fn "boldLabelFont" -w 130;
+
+    setParent ..; // rowLayout
+
+    rowLayout -nc 2 -cw2 $iLeftMargin 200;
+
+        text -label "";
+
+        textScrollList
+            -nr 10
+            -ams false
+            KFReductionCharacterSequences;
+
+    setParent ..; // rowLayout
+
+    textScrollList
+        -vis false
+        -nr 5
+        -ams true
+        KFReductionCharacterSequencesStartTime;
+
+    textScrollList
+        -vis false
+        -nr 5
+        -ams true 
+        KFReductionCharacterSequencesEndTime;
+
+    text -label "";
+
+    rowLayout -nc 2  -cw2 $iLeftMargin 150;
+
+        text -label "";
+
+        button 
+            -label "Jump To Selected Sequence" 
+            -en false
+            -c MyImmerseKeyFrameReductionJumpToSequence
+            KFReductionReduceJumpToSequenceButton;
+                
+    setParent ..; // rowLayout
+
+    text -label "";
+    
+    rowLayout -nc 2 -cw2 $iLeftMargin 130;
+
+        text -label "";
+
+        text -l "Reduction Method" -al "left" -fn "boldLabelFont" -w 130;
+        
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    rowLayout -nc 3  -cw3 50 200 140;
+
+        text -label "";
+
+        button 
+            -label "Reduce Selected Sequence" 
+            -en false
+            -c "MyImmerseKeyFrameReductionReduceSequence( -1, 0, 0)"
+            KFReductionReduceSequenceButton;
+
+        button 
+            -label "Reduce All Sequences" 
+            -en false
+            -c MyImmerseKeyFrameReductionReduceAllSequences
+            KFReductionReduceAllSequencesButton;
+
+    setParent ..; // rowLayout
+
+    text -label "";
+
+    rowLayout -nc 2  -cw2 150 130;
+
+        text -label "";
+
+        button 
+            -label "Reduce Time Slider Range" 
+            -c MyImmerseKeyFrameReductionTimeSliderRange
+            KFReductionReduceTimeSliderRangeButton;
+
+    setParent ..; // rowLayout
+
+    text -label "";
+        
+    setParent ..; // columnLayout
+
+    if ($szCharacterRoot != "(NONE)")
+    {
+        MyImmerseKeyFrameReductionGetAllSequences($szCharacterRoot);
+    }
+
+    showWindow KeyFrameReductionWindow;
+}
+//---------------------------------------------------------------------------

@@ -1,0 +1,19 @@
+Version: 1
+Script ("Single KF Export with NIF","Export")
+{
+	Plugin ("NiControllerExtractorPlugin","Controller Extractor","1.2","EXPORT")
+	{
+		Parameter ("SingleKF","TRUE");
+		Parameter ("ExportedFileName","TRUE");
+		Parameter ("CharacterName","TRUE");
+		Parameter ("UpperCase","FALSE");
+		Parameter ("Separator","_");
+		Parameter ("CreateKFM","TRUE");
+		Parameter ("CharacterNameInKFMFile","TRUE");
+		Parameter ("TransDuration","0.100000");
+		Parameter ("StoreControllers","FALSE");
+	}
+	Plugin ("NifExportPlugin","NIF Exporter","1.0","EXPORT")
+	{
+	}
+}

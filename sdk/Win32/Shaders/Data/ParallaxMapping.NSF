@@ -1,0 +1,139 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader ParallaxMapping
+{
+    "This shader applies a base map and normal map with two lights, and "
+    "also uses a height map to provide a parallax effect. This is done by "
+    "using the height map to offset the texture coordinates for the lookup "
+    "of the other two maps. The 'OffsetScale' attribute controls how much "
+    "the height map affects the offset. It should be set to maximum height "
+    "of the height field divided by the span of the texture. For example, "
+    "if a value of 1.0 in the height map represents a 2 inch displacement, "
+    "and the texture spans a surface of 100 inches, then the OffsetScale "
+    "would be 0.02. OffsetScale is VERY sensitive and is limited between "
+    "0.0 and 0.1 by the shader."
+
+    Objects
+    {
+        Effect_GeneralLight   0   Light1
+        Effect_GeneralLight   1   Light2
+    }
+    
+    Attributes
+    {
+        // The normal map for the bump mapping.
+        Attrib_Texture
+            normalMap
+            Artist
+            0
+            "normals.bmp"
+        // The height map for the parallax mapping.
+        Attrib_Texture
+            heightField
+            Artist
+            1
+            "height.bmp"
+        // The scale of the height field onto the offset
+        Attrib_Float
+            OffsetScale
+            Artist
+            0.02
+            [0.0 0.1]
+    }
+
+    PackingDef PosNormUV0BinormalTangent
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      1   PDT_Float3
+            PDP_TexCoord0   2   PDT_Float2
+            PDP_Tangent     3   PDT_Float3
+            PDP_Binormal    4   PDT_Float3
+            PDP_Color       5   PDT_UByteColor
+    }
+
+    Implementation VS11_PS20
+    {
+        "This implementation requires hardware that supports "
+        "Vertex Shader v1.1 and Pixel Shader v2.0. "
+
+        Requirements
+        {
+            VSVersion   = v1.1
+            UserVersion = v0.0
+            PSVersion   = v2.0
+            UsesNIRenderState = true
+            BinormalTangentMethod = NBTMethod_NI
+            BinormalTangentUVSource = 0
+            Platform    = DX9|XENON
+        }
+
+        PackingDef  PosNormUV0BinormalTangent
+
+        Pass BaseBump
+        {
+            VSProgram   "ParallaxMapping.vsh"
+
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0       0
+                CM_Defined      InvWorldTranspose       4       0
+                CM_Constant     Zoze                    9   1   0.0, 1.0, 0.0, 0.5
+                CM_Object       Light1  ModelDirection  11
+                CM_Object       Light2  ModelDirection  12     
+                CM_Defined      InvWorldViewTranspose   13      0
+            }
+
+            Sampler 0   BaseMapSampler
+            {
+                TSS_Texture     = NTM_Base
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+            Sampler 1   NormalMapSampler
+            {
+                TSS_Texture     = <normalMap>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+            Sampler 2   HeightFieldSampler
+            {
+                TSS_Texture     = <heightField>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+
+            PSProgram   "ParallaxMapping.psh"
+            
+            PS_Constantmap
+            {
+                CM_Object       Light1      Diffuse  0  
+                CM_Object       Light2      Diffuse  1     
+                CM_Attribute    OffsetScale          2  1  0
+            }
+        }
+    }
+}

@@ -1,0 +1,82 @@
+//
+// MyImmerseFixJoint.mel
+//
+//  This function removes the Joint Orientation and Rotation Axis from a joint.
+//  It assumes that the joint has already been baked or sampled every frame. Further 
+//  it will also convert each to have "linear" tangents.
+//
+//  MANY MANY THANKS TO Peter Pipkorn from Jungle Peak Studios for this code.
+//
+//
+
+global proc MyImmerseFixJoint(string $joint)
+{
+    // Only operate on Joints
+    if (`objectType $joint` != "joint")
+        return;
+
+
+	string $connectionsX[] = `listConnections -d off -s on ($joint + ".rotateX")`;
+	string $connectionsY[] = `listConnections -d off -s on ($joint + ".rotateY")`;	
+	string $connectionsZ[] = `listConnections -d off -s on ($joint + ".rotateZ")`;		
+	
+	float $JO[] = `getAttr ($joint + ".jointOrient")`;
+	float $RA[] = `getAttr ($joint + ".rotateAxis")`;	
+	matrix $mJO[4][4];
+	matrix $mRA[4][4];
+	matrix $mR[4][4];
+	float $R[3];
+	MyImmerseEulerToMatrix($JO[0], $JO[1], $JO[2],$mJO);	
+	MyImmerseEulerToMatrix($RA[0], $RA[1], $RA[2],$mRA);
+	
+	//If the node is not animated, apply the new rotate
+	//values directly, and reset the jointOrientation
+	if( size($connectionsX) == 0 &&
+		size($connectionsY) == 0 &&
+		size($connectionsZ) == 0 )
+	{
+		$R = `getAttr ($joint + ".rotate")`;		
+		
+		MyImmerseEulerToMatrix($R[0], $R[1], $R[2], $mR);
+		
+		float $newRotate[] = MyImmerseMatrixToEuler($mRA*$mR*$mJO);
+		setAttr ($joint+".rotateX") $newRotate[0];
+		setAttr ($joint+".rotateY") $newRotate[1];
+		setAttr ($joint+".rotateZ") $newRotate[2];
+		
+	} else {  //The node is animated with keyframes
+		string $curves[] = {$connectionsX[0], $connectionsY[0], $connectionsZ[0]};
+		string $rot[] = {".rotateX", ".rotateY", ".rotateZ"};
+	
+		int $numKeys = `keyframe -query -keyframeCount $curves[0]`;
+		int $j;
+		for($j = 0; $j < $numKeys; ++$j){
+			float $time[] = `keyframe -index $j -query $curves[0]`;
+			
+			float $x[] = `keyframe -time $time[0] -query -eval $curves[0]`;
+			float $y[] = `keyframe -time $time[0] -query -eval $curves[1]`;
+			float $z[] = `keyframe -time $time[0] -query -eval $curves[2]`;
+				
+			MyImmerseEulerToMatrix($x[0], $y[0], $z[0], $mR);
+			
+			float $newRotate[] = MyImmerseMatrixToEuler($mRA*$mR*$mJO);
+			keyframe -time $time[0] -edit -valueChange $newRotate[0] $curves[0];
+			keyframe -time $time[0] -edit -valueChange $newRotate[1] $curves[1];
+			keyframe -time $time[0] -edit -valueChange $newRotate[2] $curves[2];
+
+            keyTangent -time $time[0] -edit -inTangentType "linear" -outTangentType "linear" $curves[0];
+            keyTangent -time $time[0] -edit -inTangentType "linear" -outTangentType "linear" $curves[1];
+            keyTangent -time $time[0] -edit -inTangentType "linear" -outTangentType "linear" $curves[2];
+		}
+	}
+	
+	//reset the joint orient
+	setAttr ($joint + ".jointOrientX") 0.0;
+	setAttr ($joint + ".jointOrientY") 0.0;
+	setAttr ($joint + ".jointOrientZ") 0.0;
+	
+	setAttr ($joint + ".rotateAxisX") 0.0;
+	setAttr ($joint + ".rotateAxisY") 0.0;
+	setAttr ($joint + ".rotateAxisZ") 0.0;
+	
+}

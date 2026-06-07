@@ -1,0 +1,46 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+;Light the skin with a directional lights and a bump map.
+;
+;B  = Base map
+;N  = Per pixel normal from normal map
+;D1 = Light 1 Direction in t2
+;C1 = Light 1 Color in c2
+;AL = Ambient lighting in oD0
+;MC = Material color in oD1
+;Oc = Output color
+;Oa = Output alpha
+;
+;Oc = B * MC * (((N dot D1) * C1) + ((N dot D2) * C2))
+;Oa = 1
+
+ps_1_1
+
+def c0, 1.0, 0.0, 0.0, 1.0
+
+tex  t0                      ;Sample base map
+tex  t1                      ;Sample normal map
+texcoord t2                  ;Load up D1
+texcoord t3                  ;Load up D2
+
+; N dot L.  Both vectors are biased coming out of the vertex shader.
+dp3_sat r1, t1_bx2, t2_bx2   ;N dot L for Light1
+mul_sat r1, r1, c2           ;Color for Light1
+dp3_sat r0, t1_bx2, t3_bx2   ;N dot L for Light2
+mad r0, r0, c3, r1           ;Color for Light2
+
+mul_sat r0, r0, c1           ;Material Diffuse * Light
+
+mul r0.rgb, r0, t0           ;Modulate Base Map
++mov r0.a, c0                ;Set alpha to 1

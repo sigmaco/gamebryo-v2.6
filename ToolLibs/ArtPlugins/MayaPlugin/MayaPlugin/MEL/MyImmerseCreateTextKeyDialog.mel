@@ -1,0 +1,515 @@
+//
+// MyImmerseCreateTextKeyDialog.mel
+//
+// Mel script for applying Net Immerse Text Key to an Node
+
+//---------------------------------------------------------------------------
+global proc float MyImmerseGetCurrentFrameRate()
+{
+    string $sFrameUnit = `currentUnit -q -t`;
+
+    if($sFrameUnit == "game")
+    {
+        return 15.0;
+    }
+    else if($sFrameUnit == "film")
+    {
+        return 24.0;
+    }
+    else if($sFrameUnit == "pal")
+    {
+        return 25.0;
+    }
+    else if($sFrameUnit == "ntsc")
+    {
+        return 30.0;
+    }
+    else if($sFrameUnit == "show")
+    {
+        return 48.0;
+    }
+    else if($sFrameUnit == "palf")
+    {
+        return 50.0;
+    }
+    else if($sFrameUnit == "ntscf")
+    {
+        return 60.0;
+    }
+    else 
+    {
+        print ("Error Reading current working unit for time: " + $sFrameUnit + " is not supported.\n");
+    }
+
+    return 1.0; 
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSetTextKeyInfo (string $sObject, int $iTextKeyNumber) 
+{
+    if($iTextKeyNumber == -1)
+    {
+        textFieldGrp -e -en false TextKeyName;
+        floatSliderGrp -e -en false TextKeyFrame;
+    }
+    else
+    {
+        string $szTextKeyName = `getAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Name")`;
+        float $fFrame = `getAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Time")`;
+
+        // Convert the Time to Frames
+        $fFrame = $fFrame * MyImmerseGetCurrentFrameRate();
+
+        textFieldGrp -e -en true -tx $szTextKeyName TextKeyName;
+        floatSliderGrp -e -en true -v $fFrame TextKeyFrame;
+    }
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetNumTextKeyFromCharacter (string $sObject) 
+{
+    // verify the object has TextKeys
+    if(`attributeExists Ni_TextKey $sObject` == false)
+        return(0);
+
+    int $iNumValidTextKeys = 0;
+    $iNumTextKeys = `getAttr -s ($sObject + ".Ni_TextKey")`;
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop < $iNumTextKeys; $iLoop++)
+    {
+        if(`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")` == true)
+        {
+            $iNumValidTextKeys = $iNumValidTextKeys + 1;
+        }
+    }
+
+    return( $iNumValidTextKeys );
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetDisplayTextKeyFromCharacter (string $sObject, int $iTextKeyNumber) 
+{
+    // verify the object has TextKeys
+    if(`attributeExists Ni_TextKey $sObject` == false)
+        return(0);
+
+    int $iNumValidTextKeys = 0;
+
+    int $iLoop;
+    for($iLoop = 0; $iLoop <= $iTextKeyNumber; $iLoop++)
+    {
+        if(`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")` == true)
+        {
+            $iNumValidTextKeys = $iNumValidTextKeys + 1;
+        }
+    }
+
+    return( $iNumValidTextKeys );
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetNextValidTextKey (string $sObject, int $iTextKeyNumber) 
+{
+    // verify the object has TextKeys
+    if(`attributeExists Ni_TextKey $sObject` == false)
+        return(-1);
+
+    $iNumTextKeys = `getAttr -s ($sObject + ".Ni_TextKey")`;
+
+    int $iLoop;
+    for($iLoop = ($iTextKeyNumber + 1); $iLoop < $iNumTextKeys; $iLoop++)
+    {
+        if(`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")` == true)
+        {
+            return($iLoop);
+        }
+    }
+
+    return(-1);
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseGetPreviousValidTextKey (string $sObject, int $iTextKeyNumber) 
+{
+    // verify the object has TextKeys
+    if(`attributeExists Ni_TextKey $sObject` == false)
+        return(-1);
+
+
+    int $iLoop;
+    for($iLoop = ($iTextKeyNumber - 1); $iLoop >= 0; $iLoop--)
+    {
+        if(`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")` == true)
+        {
+            return($iLoop);
+        }
+    }
+
+    return(-1);
+}
+//---------------------------------------------------------------------------
+global proc int MyImmerseIsFirstTextKey(string $sObject, int $iTextKeyNumber)
+{
+    // verify the object has TextKeys
+    if(`attributeExists Ni_TextKey $sObject` == false)
+        return(true);
+
+    int $iLoop;
+
+    for($iLoop = ($iTextKeyNumber - 1); $iLoop >= 0; $iLoop = $iLoop - 1)
+    {
+        if(`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")` == true)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseIsLastTextKey(string $sObject, int $iTextKeyNumber)
+{
+    // verify the object has TextKeys
+    if(`attributeExists Ni_TextKey $sObject` == false)
+        return(true);
+
+
+    int $iLoop;
+    $iNumTextKeys = `getAttr -s ($sObject + ".Ni_TextKey")`;
+
+    for($iLoop = ($iTextKeyNumber + 1); $iLoop < $iNumTextKeys; $iLoop = $iLoop + 1)
+    {
+        if(`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")` == true)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseUpdateTextKeyWindow(string $sObject)
+{
+    int $iTextKeyNumber = `intField -q -v TextKeyNumberField`;
+
+    MyImmerseSetTextKeyInfo($sObject, $iTextKeyNumber);
+
+    if($iTextKeyNumber == -1)
+    {
+        text -e -label "TextKey 0 of 0" TextKeyCurrent;
+    }
+    else
+    {
+        int $iDisplayTextKeyNumber = MyImmerseGetDisplayTextKeyFromCharacter ($sObject, $iTextKeyNumber) ;
+        int $iMaxTextKeyNumber = MyImmerseGetNumTextKeyFromCharacter($sObject);
+    
+        text -e -label ("TextKey " + $iDisplayTextKeyNumber + " of " + $iMaxTextKeyNumber + " TextKeys") TextKeyCurrent;
+    }
+
+    button -e -en (MyImmerseIsFirstTextKey($sObject, $iTextKeyNumber) == false) TextKeyPrevious;
+    button -e -en (MyImmerseIsLastTextKey($sObject, $iTextKeyNumber) == false) TextKeyNext;
+    button -e -en ($iTextKeyNumber != -1) TextKeyDelete;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteTextKeyPrevious(string $sObject)
+{
+    int $iTextKeyNumber = `intField -q -v TextKeyNumberField`;
+    
+    int $iNewTextKey = MyImmerseGetPreviousValidTextKey($sObject, $iTextKeyNumber);
+
+    if( $iNewTextKey != -1 )
+    {
+        intField -e -v $iNewTextKey TextKeyNumberField;
+    }
+
+    MyImmerseUpdateTextKeyWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteTextKeyNext(string $sObject)
+{
+    int $iTextKeyNumber = `intField -q -v TextKeyNumberField`;
+
+    int $iNewTextKey = MyImmerseGetNextValidTextKey($sObject, $iTextKeyNumber);
+
+    if( $iNewTextKey != -1 )
+    {
+        intField -e -v $iNewTextKey TextKeyNumberField;
+    }
+
+    MyImmerseUpdateTextKeyWindow($sObject);
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseExecuteDeleteTextKey (string $sObject) 
+{
+    int $iTextKeyNumber = `intField -q -v TextKeyNumberField`;
+
+    setAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Valid") false;
+
+    int $iNewTextKey = MyImmerseGetNextValidTextKey($sObject, $iTextKeyNumber);
+
+    if( $iNewTextKey != -1 )
+    {
+        intField -e -v $iNewTextKey TextKeyNumberField;
+    }
+    else
+    {
+        $iNewTextKey = MyImmerseGetPreviousValidTextKey($sObject, $iTextKeyNumber);
+
+        intField -e -v $iNewTextKey TextKeyNumberField;
+    }
+
+    if($iNewTextKey == -1)
+    {
+        deleteAttr ($sObject + ".Ni_TextKey");
+    }
+
+    MyImmerseUpdateTextKeyWindow($sObject);
+}
+
+//---------------------------------------------------------------------------
+
+global proc MyImmerseExecuteCreateTextKey (string $sObject) 
+{
+    MyImmerseCreateTextKeyAttribute($sObject);
+
+    // Find the Next ValidTextKeyNumber
+    int $iTextKeyNumber = -1;
+    
+
+    // Look for the first available whole
+    while(MyImmerseGetNextValidTextKey($sObject, $iTextKeyNumber) == ($iTextKeyNumber + 1))
+    {
+        $iTextKeyNumber++;    
+    }
+
+    // Increment to the next place    
+    $iTextKeyNumber++;
+
+    intField -e -v $iTextKeyNumber TextKeyNumberField;
+
+    // Create a New TextKey with the defaults
+    setAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Valid") true;
+    setAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Name") -type "string" "NEW TextKey";
+    setAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Time") 0.0;
+
+    MyImmerseUpdateTextKeyWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseExecuteUpdateTextKey (string $sObject) 
+{
+    int $iTextKeyNumber = `intField -q -v TextKeyNumberField`;
+    
+    string $sTextKeyName = `textFieldGrp -q -tx TextKeyName`;
+    float $fFrame = `floatSliderGrp -q -v TextKeyFrame`;
+
+    // Convert From Frames to Time
+    $fFrame = $fFrame / MyImmerseGetCurrentFrameRate();
+
+    setAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Name") -type "string" $sTextKeyName;
+    setAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Time") $fFrame;
+
+    MyImmerseSortTextKeys($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateTextKeyAttribute (string $sObject) 
+{
+    if(`attributeExists Ni_TextKey $sObject` == false)
+    {
+        addAttr -ln Ni_TextKey -nc 3 -at compound -m -im true $sObject;
+        addAttr -ln Ni_TextKey_Valid -at bool -p Ni_TextKey $sObject;
+        addAttr -ln Ni_TextKey_Name -dt "string" -p Ni_TextKey $sObject;
+        addAttr -ln Ni_TextKey_Time -at "float" -p Ni_TextKey $sObject;
+
+        setAttr ($sObject + ".Ni_TextKey[0].Ni_TextKey_Valid") false;
+    }
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseSortTextKeys (string $sObject) 
+{
+    int $iTextKeyNumber = `intField -q -v TextKeyNumberField`;
+
+    if($iTextKeyNumber == -1)
+        return;
+
+    int $iNumTextKeys = `getAttr -s ($sObject + ".Ni_TextKey")`;
+    float $fCurrentTime = `getAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Time")`;
+    string $sCurrentName = `getAttr ($sObject + ".Ni_TextKey[" + $iTextKeyNumber + "].Ni_TextKey_Name")`;
+
+    int $bFound = true;
+    int $iLoop;
+
+    while($bFound == true)
+    {
+        $bFound = false;
+
+        for($iLoop = 0; $iLoop < ($iNumTextKeys - 1); $iLoop++)
+        {
+            float $fLowTime = `getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Time")`;
+            float $fHighTime = `getAttr ($sObject + ".Ni_TextKey[" + ($iLoop + 1) + "].Ni_TextKey_Time")`;
+
+            if(((`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")` == false) &&
+                (`getAttr ($sObject + ".Ni_TextKey[" + ($iLoop + 1) + "].Ni_TextKey_Valid")` == true)) ||
+               ((`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")` == true) &&
+                (`getAttr ($sObject + ".Ni_TextKey[" + ($iLoop + 1) + "].Ni_TextKey_Valid")` == true) &&
+                ( $fLowTime > $fHighTime)))            
+            {
+                // Get the Low Values
+                int $bLowValid = `getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")`;
+                string $sLowName = `getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Name")`;
+
+                // Get the Hight Values
+                int $bHighValid = `getAttr ($sObject + ".Ni_TextKey[" + ($iLoop + 1) + "].Ni_TextKey_Valid")`;
+                string $sHighName = `getAttr ($sObject + ".Ni_TextKey[" + ($iLoop + 1) + "].Ni_TextKey_Name")`;
+
+                // Save the Hight values in the low spot
+                setAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid") $bHighValid;
+                setAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Name") -type "string" $sHighName;
+                setAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Time") $fHighTime;
+
+                // Save the Low Values in the hight spot
+                setAttr ($sObject + ".Ni_TextKey[" + ($iLoop + 1) + "].Ni_TextKey_Valid") $bLowValid;
+                setAttr ($sObject + ".Ni_TextKey[" + ($iLoop + 1) + "].Ni_TextKey_Name") -type "string" $sLowName;
+                setAttr ($sObject + ".Ni_TextKey[" + ($iLoop + 1) + "].Ni_TextKey_Time") $fLowTime;
+                $bFound = true;
+            }
+        }
+    }
+
+    // Search for our current entry
+    for($iLoop = 0; $iLoop < $iNumTextKeys; $iLoop++)
+    {
+        // If it was the entry we were looking at the reset the Tag Number Field
+        if((`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Valid")` == true) &&
+           (`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Name")` == $sCurrentName) &&
+           (`getAttr ($sObject + ".Ni_TextKey[" + $iLoop + "].Ni_TextKey_Time")` == $fCurrentTime))
+        {
+            intField -e -v $iLoop TextKeyNumberField;
+        }
+    }
+
+    MyImmerseUpdateTextKeyWindow($sObject);
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseTextKeyJumpToKeyTime()
+{
+    float $fTime = `floatSliderGrp -q -v TextKeyFrame`;
+    currentTime $fTime;
+}
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateTextKeyDialog()
+{
+    // ONLY ALLOW ONE WINDOW AT A TIME SO WE WILL DELETE IT IF IT EXISTS
+
+    // Check if the window exists
+    if( MyImmerseWindowExists("TextKeyWindow") )
+    {
+        deleteUI TextKeyWindow;
+    }
+
+    window -title "Text Key Window" -widthHeight 400 210 TextKeyWindow;
+
+    columnLayout;
+
+    // Return dag objects only
+    string $dagnodes[];
+    $dagnodes = `selectedNodes -dagObjects`;
+
+    if(size($dagnodes) != 1)
+    {
+        if(size($dagnodes) <= 0)
+        {
+            text -label "ERROR::No Objects Selected" TextKeyCurrent;
+        }
+        else
+        {
+            text -label "ERROR::Multiple Objects Selected" TextKeyCurrent;
+        }
+    }
+    else
+    {
+        string $sObject = $dagnodes[0];
+        int $iTextKeyNumber = MyImmerseGetNextValidTextKey($sObject, -1);
+        int $iDisplayTextKeyNumber = MyImmerseGetDisplayTextKeyFromCharacter ($sObject, $iTextKeyNumber) ;
+        int $iMaxTextKeyNumber = MyImmerseGetNumTextKeyFromCharacter($sObject);
+    
+        intField -v 0 -ed false -vis false TextKeyNumberField;
+
+        text -label "";
+
+        text 
+            -label ("  TextKey " + $iDisplayTextKeyNumber + " of " + $iMaxTextKeyNumber + " TextKeys") 
+            -fn "boldLabelFont" 
+            -w 300
+            -al "left"
+            TextKeyCurrent;
+
+        text -label "" TextKeySpacer;
+    
+        textFieldGrp 
+            -label "TextKey Name" 
+            -changeCommand ("MyImmerseExecuteUpdateTextKey " + $sObject)
+            TextKeyName;
+
+        floatSliderGrp 
+            -l "Frame" 
+            -field true 
+            -min 0.0 
+            -fmn 0.0 
+            -max 100.0
+            -fmx 1000000.0
+            -changeCommand ("MyImmerseExecuteUpdateTextKey " + $sObject)
+            TextKeyFrame;
+
+        text -label "" TextKeySpacer4;
+    
+        rowLayout 
+            -nc 4
+            -cw4 100 75 75 75;
+            
+            text -label "";
+
+            button 
+                -label "Previous" 
+                -en (MyImmerseIsFirstTextKey($sObject, $iTextKeyNumber) == false)
+                -c ("MyImmerseExecuteTextKeyPrevious " + $sObject)
+                TextKeyPrevious;
+    
+            button 
+                -label "Next" 
+                -en (MyImmerseIsLastTextKey($sObject, $iTextKeyNumber) == false)
+                -c ("MyImmerseExecuteTextKeyNext " + $sObject)
+                TextKeyNext;
+    
+            button
+                -label "Jump To Key Time"
+                -c "MyImmerseTextKeyJumpToKeyTime()" 
+                TextKeyJumpToKeyTime;
+
+        setParent ..; // columnLayout
+    
+        text -label "" TextKeySpacer2;
+        
+        rowLayout 
+            -nc 3
+            -cw3 50 125 150;
+
+            text -label "";
+    
+            button 
+                -label "Create Text Key" 
+                -c ("MyImmerseExecuteCreateTextKey " + $sObject) 
+                TextKeyCreate;
+
+            button 
+                -label "Delete Text Key" 
+                -c ("MyImmerseExecuteDeleteTextKey " + $sObject) 
+                -en ($iTextKeyNumber != -1)
+                TextKeyDelete;
+    
+        setParent ..; // columnLayout
+    
+        MyImmerseSetTextKeyInfo($sObject, $iTextKeyNumber );
+    }
+
+    showWindow TextKeyWindow;
+}
+//---------------------------------------------------------------------------

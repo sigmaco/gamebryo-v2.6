@@ -1,0 +1,54 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXExtractor", "..\..\..\ToolLibs\ToolPlugins\PhysXExtractorDLL\Win32\VC80\PhysXExtractorDLL.vcproj", "{BCCBC676-9783-4305-ACCA-43EBD80A9866}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXRagdollDLL", "..\..\..\ToolLibs\ToolPlugins\PhysXRagdollDLL\Win32\VC80\PhysXRagdoll.vcproj", "{63985B32-1F64-4F1C-8314-4159A4471998}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXViewer", "..\..\..\ToolLibs\ToolPlugins\PhysXViewerDLL\Win32\VC80\PhysXViewerDLL.vcproj", "{A79A53F0-9AEF-4B43-990D-4A979E9A846B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools07_ToolPluginsPhysX", "Tools07_ToolPluginsPhysX", "{B6522F61-9660-4256-9DDA-56DD8A6A3530}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXMeshConverter", "..\..\..\ToolLibs\ToolPlugins\PhysXMeshConverterDLL\Win32\VC80\PhysXMeshConverterDLL.vcproj", "{847B12AF-3933-4989-94E3-7DB5C3C0FA55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL|Win32 = Debug DLL|Win32
+		Release DLL|Win32 = Release DLL|Win32
+		Shipping DLL|Win32 = Shipping DLL|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCCBC676-9783-4305-ACCA-43EBD80A9866}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{BCCBC676-9783-4305-ACCA-43EBD80A9866}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{BCCBC676-9783-4305-ACCA-43EBD80A9866}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{BCCBC676-9783-4305-ACCA-43EBD80A9866}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{BCCBC676-9783-4305-ACCA-43EBD80A9866}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{BCCBC676-9783-4305-ACCA-43EBD80A9866}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+		{63985B32-1F64-4F1C-8314-4159A4471998}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{63985B32-1F64-4F1C-8314-4159A4471998}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{63985B32-1F64-4F1C-8314-4159A4471998}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{63985B32-1F64-4F1C-8314-4159A4471998}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{63985B32-1F64-4F1C-8314-4159A4471998}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{63985B32-1F64-4F1C-8314-4159A4471998}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+		{A79A53F0-9AEF-4B43-990D-4A979E9A846B}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{A79A53F0-9AEF-4B43-990D-4A979E9A846B}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{A79A53F0-9AEF-4B43-990D-4A979E9A846B}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{A79A53F0-9AEF-4B43-990D-4A979E9A846B}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{A79A53F0-9AEF-4B43-990D-4A979E9A846B}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{A79A53F0-9AEF-4B43-990D-4A979E9A846B}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+		{847B12AF-3933-4989-94E3-7DB5C3C0FA55}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{847B12AF-3933-4989-94E3-7DB5C3C0FA55}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{847B12AF-3933-4989-94E3-7DB5C3C0FA55}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{847B12AF-3933-4989-94E3-7DB5C3C0FA55}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{847B12AF-3933-4989-94E3-7DB5C3C0FA55}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{847B12AF-3933-4989-94E3-7DB5C3C0FA55}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{63985B32-1F64-4F1C-8314-4159A4471998} = {B6522F61-9660-4256-9DDA-56DD8A6A3530}
+		{A79A53F0-9AEF-4B43-990D-4A979E9A846B} = {B6522F61-9660-4256-9DDA-56DD8A6A3530}
+		{BCCBC676-9783-4305-ACCA-43EBD80A9866} = {B6522F61-9660-4256-9DDA-56DD8A6A3530}
+		{847B12AF-3933-4989-94E3-7DB5C3C0FA55} = {B6522F61-9660-4256-9DDA-56DD8A6A3530}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<xsi_file type="Shelf" xsi_version="6.5.2007.0829" syntax_version="1.0">
+   <shelf_view name="Gamebryo Material" clsid="{D480B777-1A22-4506-92AC-D23FEAA80775}">
+      <properties>
+         <showtabs>false</showtabs>
+      </properties>
+      <definition maxinstances="10000" acceptfocus="true" private="false" defaultsize="0,100,200,300" cmdmap="{00000000-0000-0000-0000-000000000000}" supportedtypes="6" category=""></definition>
+      <tabs layout="top" active="DS Toolbar">
+         <tab label="DS Toolbar" type="toolbar">
+            <properties id="{D1E71B25-6AD0-4490-8E66-BAC53585E37D}" name="" display_preset_as_small="False" display_as_text_only="False"></properties>
+            <item type="scriptbutton" label="Apply Gamebryo Material" userwidth="180" scriptengine="VBScript" tooltip="Apply the Gamebryo material to all materials of the current selection.">
+               <scripttext>&lt;![CDATA[Set l_Selection = Application.Selection(0)
+If TypeName(l_Selection) &lt;&gt; &quot;Nothing&quot; Then
+    For Each mat in l_Selection.Materials
+        SIApplyShaderToCnxPoint &quot;RealTime\GamebryoMaterial&quot;, mat.RealTime
+    Next
+End If
+]]&gt;</scripttext>
+            </item>
+         </tab>
+      </tabs>
+   </shelf_view>
+</xsi_file>

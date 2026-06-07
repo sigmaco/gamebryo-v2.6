@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="232861"
+   name=""
+   committed-date="2005-08-15T19:24:56.805244Z"
+   url="https://svn.apache.org/repos/asf/xerces/c/branches/xerces-2.7/samples/Projects/Win32/VC6/DOMPrint"
+   last-author="jberry"
+   kind="dir"
+   uuid="13f79535-47bb-0310-9956-ffa450edef68"
+   prop-time="2005-08-26T16:19:44.000000Z"
+   revision="240275"/>
+<entry
+   committed-rev="174193"
+   name="DOMPrint.dsp"
+   text-time="2005-08-26T16:19:44.000000Z"
+   committed-date="2002-08-27T20:42:00.000000Z"
+   checksum="99505f9b74bd3c4bfa6843b731383423"
+   last-author="peiyongz"
+   kind="file"
+   prop-time="2005-08-26T16:19:44.000000Z"/>
+<entry
+   committed-rev="174193"
+   name="DOMPrint.mak"
+   text-time="2005-08-26T16:19:44.000000Z"
+   committed-date="2002-08-27T20:42:00.000000Z"
+   checksum="a489cf1d30a72727dab9c37015e45b74"
+   last-author="peiyongz"
+   kind="file"
+   prop-time="2005-08-26T16:19:44.000000Z"/>
+</wc-entries>

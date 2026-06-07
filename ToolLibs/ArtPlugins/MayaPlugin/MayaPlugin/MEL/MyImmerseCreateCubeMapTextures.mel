@@ -1,0 +1,160 @@
+//
+// MyImmerseCreateCubeMapTextures.mel
+//
+// Mel script for applying CubeMap textures to a File Texture
+
+//---------------------------------------------------------------------------
+global proc MyImmerseCreateCubeMapTextures()
+{
+    // Return dag objects only
+    string $FileTextures[];
+    $FileTextures = `ls -sl -typ file`;
+
+    if(size($FileTextures) <= 0)
+    {
+        print("ERROR::Create Cube Map Textures. No file textures selected.\n");
+        return;
+    }
+
+    int $iLoop = 0;
+
+    while($iLoop < size($FileTextures))
+    {
+
+        // POSITIVE X    
+        if(`attributeExists Ni_CubeMap_Front $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_Front -nc 3 -at float3 -uac $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_FrontR $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_FrontR -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Front $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_FrontG $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_FrontG -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Front $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_FrontB $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_FrontB -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Front $FileTextures[$iLoop];
+        }
+
+        // NEGATIVE X    
+        if(`attributeExists Ni_CubeMap_Back $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_Back -nc 3 -at float3 -uac $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_BackR $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_BackR -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Back $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_BackG $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_BackG -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Back $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_BackB $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_BackB -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Back $FileTextures[$iLoop];
+        }
+
+        // POSITIVE Y    
+        if(`attributeExists Ni_CubeMap_Top $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_Top -nc 3 -at float3 -uac $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_TopR $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_TopR -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Top $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_TopG $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_TopG -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Top $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_TopB $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_TopB -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Top $FileTextures[$iLoop];
+        }
+
+        // NEGATIVE Y    
+        if(`attributeExists Ni_CubeMap_Bottom $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_Bottom -nc 3 -at float3 -uac $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_BottomR $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_BottomR -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Bottom $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_BottomG $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_BottomG -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Bottom $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_BottomB $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_BottomB -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Bottom $FileTextures[$iLoop];
+        }
+
+        // POSITIVE Z    
+        if(`attributeExists Ni_CubeMap_Left $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_Left -nc 3 -at float3 -uac $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_LeftR $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_LeftR -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Left $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_LeftG $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_LeftG -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Left $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_LeftB $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_LeftB -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Left $FileTextures[$iLoop];
+        }
+
+        // NEGATIVE Z
+        if(`attributeExists Ni_CubeMap_Right $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_Right -nc 3 -at float3 -uac $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_RightR $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_RightR -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Right $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_RightG $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_RightG -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Right $FileTextures[$iLoop];
+        }
+
+        if(`attributeExists Ni_CubeMap_RightB $FileTextures[$iLoop]` == false)
+        {
+            addAttr -ln Ni_CubeMap_RightB -at "float" -min 0.0 -max 1.0 -dv 1.0 -p Ni_CubeMap_Right $FileTextures[$iLoop];
+        }
+
+        // Increment the current Node
+        $iLoop = $iLoop + 1;
+    }
+
+    if (size($FileTextures) == 1)
+    {
+        showEditor $FileTextures[0];
+    }
+}
+//---------------------------------------------------------------------------
+

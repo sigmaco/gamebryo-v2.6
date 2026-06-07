@@ -1,0 +1,11 @@
+//
+// GamebryoShelf.mel
+//
+
+//---------------------------------------------------------------------------
+global proc GamebryoShelf()
+{
+    GamebryoLoadPlugins();
+    eval GamebryoBuildShelf;
+}
+

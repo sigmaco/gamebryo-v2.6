@@ -1,0 +1,70 @@
+source AEGamebryoCommonUtils;
+
+global proc AEGamebryoMaterialAddFilterButton(string $nodeNameAndAttr)
+{
+
+    string $nodeName = GetNodeName($nodeNameAndAttr);
+
+    columnLayout;
+        text -label "Add Gamebryo Attributes";
+    setParent..;
+
+    //make a popup window with a shelf to add attributes
+    rowColumnLayout -numberOfColumns 4 
+            -columnWidth 1 40
+            -columnWidth 2 140;
+
+        iconTextButton -label "Add Texture Filter Attribute"
+                -image1 "MyImmerseMayaTextureFilterIcon.bmp"
+                -style "iconOnly"
+                -command ("AEGamebryoToggleMatrialFilter(\"" + 
+                $nodeName + "\")")
+                AddGamebryoFilterAttributeButton;
+
+        text -label "Add Texture Filter Attribute";
+
+    setParent..;
+}
+
+global proc AEGamebryoToggleMatrialFilter(string $nodeName)
+{
+    AEGamebryoToggle($nodeName, 
+        {"Ni_TextureFilter","Ni_MaxAnisotropy"}, 
+        "MyImmerseAddColorFilterToMayaMaterials",
+        ("AEGamebryoDeleteAttrList {\"Ni_TextureFilter\",\"Ni_MaxAnisotropy\"}"));            
+}
+
+global proc AEGamebryoMaterialResetFilterButton(string $nodeNameAndAttr)
+{
+    string $nodeName = GetNodeName($nodeNameAndAttr);
+
+    iconTextButton -e -command ("AEGamebryoToggleMatrialFilter(\"" + 
+                $nodeName + "\")") AddGamebryoFilterAttributeButton;
+}
+
+global proc AEGamebryoMaterialMaxAnisotropyOverride(string $nodeName)
+{
+    int $value = `getAttr ($nodeName + ".Ni_TextureFilter")`;
+	
+    if($value == 6)
+    {
+        editorTemplate -dimControl $nodeName "Ni_MaxAnisotropy" false;
+    }
+    else
+    {
+        editorTemplate -dimControl $nodeName "Ni_MaxAnisotropy" true;
+    }
+}
+
+global proc AEGamebryoMaterialCommon(string $nodeName)
+{
+    editorTemplate -beginLayout "Gamebryo";
+        
+        editorTemplate -callCustom "AEGamebryoMaterialAddFilterButton"
+            "AEGamebryoMaterialResetFilterButton" "Nothing";
+        
+        editorTemplate -label "Texture Filter" -addControl Ni_TextureFilter "AEGamebryoMaterialMaxAnisotropyOverride";
+        editorTemplate -label "Max Anisotropy" -addControl Ni_MaxAnisotropy;
+
+    editorTemplate -endLayout;
+}

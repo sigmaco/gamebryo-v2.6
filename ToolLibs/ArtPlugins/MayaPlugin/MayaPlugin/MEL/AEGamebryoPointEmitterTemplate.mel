@@ -1,0 +1,219 @@
+source AEGamebryoCommonUtils;
+
+global proc AEGamebryoEmitterAddAttributeButton(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    if(!`columnLayout -ex GamebryoEmitterMainAttrButtons`)
+    {
+        columnLayout GamebryoEmitterMainAttrButtons;
+
+            text -label "Add Gamebryo Attributes";
+
+            rowColumnLayout -numberOfColumns 1 
+                -columnWidth 1 45;
+                
+                iconTextButton -label "Add Emitter Attributes"
+                    -image1 "MyImmerseParticleSystemIcon.bmp"
+                    -style "iconOnly"
+                    -command ("AEGamebryoAddEmitterAndParticleAttributes(\"" + $nodeName + "\")")
+                    AEGamebryoEmitterButton;
+                        
+            setParent..;
+        
+        setParent..;
+    }
+}
+
+global proc AEGamebryoEmitterResetAttributeButton(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(!`columnLayout -ex GamebryoEmitterMainAttrButtons`)
+    {
+        AEGamebryoEmitterAddAttributeButton $nodeAndAttr;
+    }
+    else
+    {
+        iconTextButton -e -command ("AEGamebryoAddEmitterAndParticleAttributes(\"" + $nodeName + "\")")
+            AEGamebryoEmitterButton;
+    }    
+}
+
+global proc AEGamebryoEmitterToggleAttributes(string $nodeName)
+{
+        AEGamebryoToggle($nodeName, {"Ni_EmitterBeginKeyFrame"}, 
+            "AEGamebryoAddEmitterAndParticleAttributes",
+            "MyImmerseDeleteGamebryoEmitterAttributes");
+}
+
+global proc AEGamebryoAddEmitterAndParticleAttributes(string $nodeName)
+{
+    MyImmerseAddGamebryoEmitterAttributes($nodeName);
+    string $particleTransforms[] = `listConnections -s on ($nodeName + ".output")`;
+
+    string $particleTransform;
+    for($particleTransform in $particleTransforms)
+    {
+        print("$particleTransform  = " + $particleTransform);
+        string $shapes[] = `listRelatives -shapes $particleTransform`;
+        string $shape;
+        for($shape in $shapes)
+        {
+            print("$shape  = " + $shape);
+            MyImmerseAddGamebryoParticlesAttributes($shape);
+        }
+    }
+}
+
+global proc int AEGamebryoHasAnimation(string $nodeName)
+{
+    if(`attributeExists Ni_EmitterBeginKeyFrame $nodeName` ||
+       `attributeExists Ni_EmitterEndKeyFrame $nodeName` ||
+       `attributeExists Ni_EmitterEmitterStartFrame $nodeName` ||
+       `attributeExists Ni_EmitterEmitterEndFrame $nodeName` ||
+       `attributeExists k $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddAnimationAttrs(string $nodeName)
+{
+    string $labels[] = {"Begin Keyframe", 
+                        "End Keyframe",
+                        "Emitter Start Frame",
+                        "Emitter End Frame",
+                        "Emitter Stop Frame",
+                        "Emitter Looping Type",
+                        "Reset On Loop"};
+
+    string $attrNames[] = {"Ni_EmitterBeginKeyFrame", "Ni_EmitterEndKeyFrame",
+                           "Ni_EmitterEmitterStartFrame", 
+                           "Ni_EmitterEmitterEndFrame",
+                           "Ni_EmitterEmitterStopFrame",
+                           "Ni_EmitterLoopingType",
+                           "Ni_ResetOnLoop"};
+    
+   AEGamebryoAddManyAttrs($nodeName, "Animation", $labels, 
+    $attrNames);
+}
+
+global proc AEGamebryoAddAnimation(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Animation", "Animation");
+    AEGamebryoSetEnableStateOframe(false, "Animation");
+
+    if(AEGamebryoHasAnimation($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Animation");
+        AEGamebryoAddAnimationAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetAnimation(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasAnimation($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "Animation");
+        AEGamebryoAddAnimationAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "Animation");
+    }
+}
+
+
+global proc int AEGamebryoHasSurfaceEmission(string $nodeName)
+{
+    if(`attributeExists Ni_SurfaceEmitLocation $nodeName` ||
+       `attributeExists Ni_SurfaceEmitDirection $nodeName` ||
+       `attributeExists Ni_EmitterSurfaceEmitAxisX $nodeName` ||
+       `attributeExists Ni_EmitterSurfaceEmitAxisY $nodeName` ||
+       `attributeExists Ni_EmitterSurfaceEmitAxisZ $nodeName`)
+    {
+        return true;    
+    }
+    else
+    {
+        return false;
+    }
+}
+
+global proc AEGamebryoAddSurfaceEmissionAttrs(string $nodeName)
+{
+    string $labels[] = {"Location", 
+                        "Direction",
+                        "Emit X",
+                        "Emit Y",
+                        "Emit Z"};
+
+    string $attrNames[] = {"Ni_SurfaceEmitLocation", "Ni_SurfaceEmitDirection",
+                            "Ni_EmitterSurfaceEmitAxisX", 
+                            "Ni_EmitterSurfaceEmitAxisY",
+                            "Ni_EmitterSurfaceEmitAxisZ"};
+    
+    AEGamebryoAddManyAttrs($nodeName, "SurfaceEmission", $labels, 
+        $attrNames);
+}
+
+global proc AEGamebryoAddSurfaceEmission(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+    
+    AEGamebryoAddFrame("Surface Emission", "SurfaceEmission");
+    AEGamebryoSetEnableStateOframe(false, "SurfaceEmission");
+
+    if(AEGamebryoHasSurfaceEmission($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "SurfaceEmission");
+        AEGamebryoAddSurfaceEmissionAttrs($nodeName);
+    }
+}
+
+global proc AEGamebryoResetSurfaceEmission(string $nodeAndAttr)
+{
+    string $nodeName = GetNodeName($nodeAndAttr);
+
+    if(AEGamebryoHasSurfaceEmission($nodeName))
+    {
+        AEGamebryoSetEnableStateOframe(true, "SurfaceEmission");
+        AEGamebryoAddSurfaceEmissionAttrs($nodeName);
+    }
+    else
+    {
+        AEGamebryoSetEnableStateOframe(false, "SurfaceEmission");
+    }
+}
+
+
+global proc AEGamebryoPointEmitterTemplate(string $nodeName)
+{
+    editorTemplate -beginLayout "Gamebryo";
+        editorTemplate -callCustom "AEGamebryoEmitterAddAttributeButton" "AEGamebryoEmitterResetAttributeButton" "Nothing";
+        editorTemplate -callCustom "AEGamebryoAddSurfaceEmission" "AEGamebryoResetSurfaceEmission" "Nothing";
+        editorTemplate -callCustom "AEGamebryoAddAnimation" "AEGamebryoResetAnimation" "Nothing";
+    editorTemplate -endLayout;
+    
+    editorTemplate -suppress Ni_EmitterBeginKeyFrame;
+    editorTemplate -suppress Ni_EmitterEndKeyFrame;
+    editorTemplate -suppress Ni_EmitterEmitterStartFrame;
+    editorTemplate -suppress Ni_EmitterEmitterEndFrame;
+    editorTemplate -suppress Ni_EmitterEmitterStopFrame;
+    editorTemplate -suppress Ni_SurfaceEmitLocation;
+    editorTemplate -suppress Ni_SurfaceEmitDirection;
+    editorTemplate -suppress Ni_EmitterSurfaceEmitAxisX;
+    editorTemplate -suppress Ni_EmitterSurfaceEmitAxisY;
+    editorTemplate -suppress Ni_EmitterSurfaceEmitAxisZ;
+    editorTemplate -suppress Ni_EmitterLoopingType;
+    editorTemplate -suppress Ni_ResetOnLoop;
+
+}

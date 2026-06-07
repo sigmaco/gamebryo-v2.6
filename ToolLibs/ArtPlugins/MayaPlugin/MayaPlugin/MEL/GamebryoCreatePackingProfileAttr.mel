@@ -1,0 +1,15 @@
+global proc GamebryoCreatePackingProfileAttr(string $nodeName)
+{
+    string $szPluginName = MyImmerseGetPluginName();
+
+    if(!MyImmerseCheckAndLoadPlugin($szPluginName))
+    {
+        addAttr -longName "Gb_PackingProfile" -dt "string";
+        setAttr ($nodeName + ".Gb_PackingProfile") -type "string" "Default";
+    }
+    else
+    {
+        warning "Plugin not loaded! Could not create Mesh Packing Profile Attribute!";
+    }
+    
+}

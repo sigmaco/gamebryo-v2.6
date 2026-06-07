@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeshProfiles version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./NiMeshProfileSchema.xsd">
+    <MeshProfile name="BadSushi_MeshProfile_Fish" description="Mesh Profile to use on fish in BadSushi Demo">
+        <!--
+            This profile is specifically tailored to deal with the bad sushi
+            fish asset in the most optimal manner.
+        -->
+        <FinalizeStream name="Indices" access="GPU_READ | CPU_WRITE_STATIC">
+            <Element convertformat="UINT16" converttype="SMARTCLAMP" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">INDEX</Element>
+        </FinalizeStream>
+    <!--
+            For DX9 and D3D10 renderers, F_NORMINT16_4 is a good compressed
+            format as it is supported by both renderers. An extra component
+            is injected so that we can get the 4 component count. Note that
+            this 4th component will not actually be used and in fact, when
+            running asset viewer through the debugger, you will see the 
+            following message in the output window:
+
+            "NiRenderer WARNING: NiMeshMaterialBinding::CreateBinding> 
+            Shader is not using values from the data stream. Should shader 
+            use these, or is there wasted memory? Semantic adapter table 
+            for mesh (pointer: 0xXXXXXXXX, name: Editable Mesh): Component 
+            count of the table entries for renderer semantic/index NORMAL/0
+            is 3, which is less than that of the corresponding 
+            NiDataStreamElement 4"
+
+            The extra component, is indeed a waste but necessary as the
+            format F_NORMINT16_3 is not supported for DX9 and D3D10. Over-
+            all, using F_NORMINT16_4 is still a win over a non-compressed
+            3 component format like F_FLOAT32_3.
+        -->
+        <FinalizeStream name="BaseVertexStream" access="GPU_READ | CPU_WRITE_STATIC">
+            <Element type="NORMAL" convertformat="INT16" converttype="NORMALIZE" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">
+                <Component value="NORMAL.x" />
+                <Component value="NORMAL.y" />
+                <Component value="NORMAL.z" />
+                <Component value="1.0" />
+            </Element>
+            <Element type="NORMAL" convertformat="INT16" converttype="NORMALIZE" renderer="WII" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">NORMAL</Element>
+            <Element type="NORMAL" specialformat="NORMINT_10_10_10_L1" renderer="XENON" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">NORMAL</Element>
+            <Element type="NORMAL" specialformat="NORMINT_11_11_10" renderer="PS3" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">NORMAL</Element>
+            <Element type="TEXCOORD" convertformat="INT16" converttype="NORMALIZE" index="0" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">TEXCOORD</Element>
+            <Element type="TEXCOORD" convertformat="UINT16" converttype="NORMALIZE" index="0" renderer="XENON" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">TEXCOORD</Element>
+            <Element type="TEXCOORD" convertformat="UINT8" converttype="NORMALIZE" index="0" renderer="PS3" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">TEXCOORD</Element>
+        </FinalizeStream>
+
+        <FinalizeStream name="PositionVertexStream" access="GPU_READ | CPU_WRITE_VOLATILE">
+            <Element strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">POSITION</Element>
+            <Element type="POSITION" convertformat="FLOAT16" renderer="PS3" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">
+                <Component value="POSITION.x" />
+                <Component value="POSITION.y" />
+                <Component value="POSITION.z" />
+            </Element>
+        </FinalizeStream>
+
+        <FinalizeStream name="PositionVertexStream" access="GPU_READ | CPU_READ | CPU_WRITE_MUTABLE" renderer="XENON">
+            <Element strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">POSITION</Element>
+        </FinalizeStream>
+
+        <!--
+            The line below this comment is specifying that all MORPH_POSITION
+            elements should be interleaved together which is impossible. Since,
+            however, STRICT_INTERLEAVE is not specified, this will work as the
+            mesh modifier will be allowed to break the MORPH_POSITION elements
+            into their own separate data-streams. Effectively, the lines below
+            this comment block replaces the following lines:
+ 
+            <FinalizeStream name="MorphVertexStream0" access="CPU_READ | CPU_WRITE_STATIC">
+               <Element index="0" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">MORPH_POSITION</Element>
+            </FinalizeStream>
+            <FinalizeStream name="MorphVertexStream1" access="CPU_READ | CPU_WRITE_STATIC">
+                <Element index="1" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">MORPH_POSITION</Element>
+            </FinalizeStream>
+            <FinalizeStream name="MorphVertexStream2" access="CPU_READ | CPU_WRITE_STATIC">
+                <Element index="2" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">MORPH_POSITION</Element>
+            </FinalizeStream>
+            <FinalizeStream name="MorphVertexStream3" access="CPU_READ | CPU_WRITE_STATIC">
+                <Element index="3" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">MORPH_POSITION</Element>
+            </FinalizeStream>
+
+            Also, the line below this comment specifies REQUIRED_FAIL. This is 
+            done to explictly require the expected data-streams from the point
+            of view of the mesh profile. It should be pointed out, however,
+            that this isn't strictly necessary since the MORPH_POSITION data-
+            streams would have been required by the morph-mesh modifier...
+            which would generate an error anyway. This profile requires the
+            0-3 MORPH_POSITION data-streams.
+        -->
+        <FinalizeStream name="MorphVertexStream" access="CPU_READ | CPU_WRITE_STATIC">
+            <Element range="0-3" strict="STRICT_FORMAT" required="REQUIRED_FAIL">MORPH_POSITION</Element>
+        </FinalizeStream>
+
+        <FinalizeStream name="MorphWeightStream" access="CPU_READ | CPU_WRITE_MUTABLE">
+            <Element strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">MORPHWEIGHTS</Element>
+        </FinalizeStream>
+    </MeshProfile>
+</MeshProfiles>

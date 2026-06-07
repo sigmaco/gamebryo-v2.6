@@ -1,0 +1,202 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "NiApplicationResource.hrc"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "NiApplicationResource.hr\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SETTINGSDIALOG DIALOGEX 0, 0, 231, 112
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Settings"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,46,89,54,14,BS_BOTTOM
+    PUSHBUTTON      "Cancel",IDCANCEL,107,89,53,14,BS_BOTTOM
+    CONTROL         "",IDC_SETTINGSTAB,"SysTabControl32",0x0,7,7,217,51
+    CONTROL         "Do not show this dialog again",IDC_NODIALOG_CHECK,
+                    "Button",BS_AUTOCHECKBOX | BS_BOTTOM | WS_TABSTOP,7,62,109,10
+    CONTROL         "Save settings",IDC_SAVESETTINGS_CHECK,"Button",BS_AUTOCHECKBOX | BS_BOTTOM | WS_TABSTOP,7,74,59,10
+    PUSHBUTTON      "Advanced >>",IDADVANCED,169,89,53,14,BS_BOTTOM
+END
+
+IDD_RENDERERTAB DIALOGEX 0, 0, 212, 27
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    COMBOBOX        IDC_RENDERER_SEL_COMBO,48,7,53,36,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Renderer:",IDC_STATIC,7,8,34,10
+END
+
+IDD_BASEOPTIONSVIEW DIALOGEX 0, 0, 211, 201
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    LTEXT           "Resolution:",IDC_STATIC,7,10,36,10
+    COMBOBOX        IDC_RESOLUTION_COMBO,48,8,89,210,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Aspect ratio:",IDC_STATIC,7,23,23,18
+    CONTROL         "Full Screen",IDC_FULLSCREEN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,146,9,51,10
+    LTEXT           "Adapter:",IDC_STATIC,9,54,36,10
+    COMBOBOX        IDC_ADAPTER_COMBO,42,52,151,49,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Use NVPerfHud device",IDC_NVPERFHUD_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,19,98,87,10
+    LTEXT           "Multisampling:",IDC_STATIC,11,177,44,10
+    COMBOBOX        IDC_MULTISAMPLE_COMBO,62,175,98,103,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Device options",IDC_STATIC,15,66,95,45
+    CONTROL         "HAL",IDC_HAL_RADIO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,19,76,29,10
+    CONTROL         "REF",IDC_REF_RADIO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,19,86,29,10
+    LTEXT           "Render Target Format:",IDC_STATIC,9,130,47,16
+    COMBOBOX        IDC_RTFORMAT_COMBO,62,132,98,91,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Depth / Stencil Buffer Format:",IDC_STATIC,10,152,49,18
+    COMBOBOX        IDC_DSFORMAT_COMBO,62,154,98,86,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Hardware",IDC_HWVERTEX_RADIO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,133,76,47,10
+    CONTROL         "Mixed",IDC_MIXVERTEX_RADIO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,133,87,35,10
+    CONTROL         "Software",IDC_SWVERTEX_RADIO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,133,97,45,10
+    CONTROL         "Pure device",IDC_PURE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,80,53,10
+    CONTROL         "Any",IDC_SCRSIZE_ALL_RADIO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,35,26,29,10
+    CONTROL         "Normal (4:3)",IDC_SCRSIZE_NORMAL_RADIO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,69,26,56,10
+    CONTROL         "Widescreen (16:9)",IDC_SCRSIZE_WIDE_RADIO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,130,26,75,10
+    GROUPBOX        "Advanced options",IDC_ADVANCED_GROUP,7,40,197,152
+    GROUPBOX        "Vertex processing",IDC_STATIC,127,66,69,45
+    CONTROL         "Lock to vsync",IDC_VSYNC_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,116,55,10
+END
+
+IDD_D3D10OPTIONSVIEW DIALOGEX 0, 0, 211, 42
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Direct3D10 Specific Options",IDC_STATIC,7,3,197,31
+    LTEXT           "Display:",IDC_STATIC,10,16,31,10
+    COMBOBOX        IDC_DISPLAY_COMBO,40,15,99,91,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SETTINGSDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 224
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 105
+    END
+
+    IDD_RENDERERTAB, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 205
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 20
+    END
+
+    IDD_BASEOPTIONSVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 204
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 192
+    END
+
+    IDD_D3D10OPTIONSVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 204
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 34
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_RENDERERTAB DLGINIT
+BEGIN
+    IDC_RENDERER_SEL_COMBO, 0x403, 11, 0
+0x6944, 0x6572, 0x7463, 0x2058, 0x3031, "\000" 
+    IDC_RENDERER_SEL_COMBO, 0x403, 10, 0
+0x6944, 0x6572, 0x7463, 0x2058, 0x0039, 
+    0
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

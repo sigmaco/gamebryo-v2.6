@@ -1,0 +1,513 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="MeshProfiles">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- Begin Element Definition -->
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="Element">
+                    <xs:complexType mixed="true">
+                        <xs:sequence>
+                            <!-- Begin Component Definition -->
+                            <xs:element minOccurs="0" maxOccurs="unbounded" name="Component">
+                                <xs:complexType>
+                                    <xs:attribute name="value" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="((POSITION|NORMAL|BINORMAL|TANGENT|POSITION_BP|NORMAL_BP|BINORMAL_BP|TANGENT_BP|MORPH_POSITION|MORPH_POSITION_BP|MORPH_NORMAL|MORPH_NORMAL_BP|MORPHWEIGHTS).[x-z])|((BINORMAL|TANGENT|BINORMAL_BP|TANGENT_BP|MORPH_POSITION|MORPH_POSITION_BP|MORPH_NORMAL|MORPH_NORMAL_BP)((\[([0-255])\])|(\[\])).[x-z])|(TEXCOORD((\[([0-255])\])|(\[\])).[u|v])|(COLOR((\[([0-255])\])|(\[\])).[r|g|b|a])|((INDEX|BONE_PALETTE|BLENDWEIGHT|BLENDINDICES).[0-3])|(TEXCOORD.[u|v])|(COLOR.[r|g|b|a])|((TRANSFORMS|INSTANCETRANSFORMS)((\[([0-2])\])|(\[\])))" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="clamp" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="min=(-*)(.*)([0-9]*) max=(-*)(.*)([0-9]*)" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="remap" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="src-a=(-*)(.*)([0-9]*) src-b=(-*)(.*)([0-9]*) dst-a=(-*)(.*)([0-9]*) dst-b=(-*)(.*)([0-9]*)" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                            <!-- End Component Definition -->
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="optional" />
+                        <xs:attribute name="type" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="POSITION" />
+                                    <xs:enumeration value="NORMAL" />
+                                    <xs:enumeration value="BINORMAL" />
+                                    <xs:enumeration value="TANGENT" />
+                                    <xs:enumeration value="TEXCOORD" />
+                                    <xs:enumeration value="BLENDWEIGHT" />
+                                    <xs:enumeration value="BLENDINDICES" />
+                                    <xs:enumeration value="COLOR" />
+                                    <xs:enumeration value="PSIZE" />
+                                    <xs:enumeration value="TESSFACTOR" />
+                                    <xs:enumeration value="DEPTH" />
+                                    <xs:enumeration value="FOG" />
+                                    <xs:enumeration value="POSITIONT" />
+                                    <xs:enumeration value="SAMPLE" />
+                                    <xs:enumeration value="DATASTREAM" />
+                                    <xs:enumeration value="INDEX" />
+                                    <xs:enumeration value="BONEMATRICIES" />
+                                    <xs:enumeration value="BONE_PALETTE" />
+                                    <xs:enumeration value="POSITION_BP" />
+                                    <xs:enumeration value="NORMAL_BP" />
+                                    <xs:enumeration value="BINORMAL_BP" />
+                                    <xs:enumeration value="TANGENT_BP" />
+                                    <xs:enumeration value="MORPHWEIGHTS" />
+                                    <xs:enumeration value="NORMALSHAREINDEX" />
+                                    <xs:enumeration value="NORMALSHAREGROUP" />
+                                    <xs:enumeration value="TRANSFORMS" />
+                                    <xs:enumeration value="INSTANCETRANSFORMS" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="index" type="xs:unsignedByte" use="optional" />
+                        <xs:attribute name="specialformat" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="NORMUINT8_4_BGRA" />
+                                    <xs:enumeration value="UINT_10_10_10_2" />
+                                    <xs:enumeration value="UINT_10_10_10_L1" />
+                                    <xs:enumeration value="NORMINT_10_10_10_2" />
+                                    <xs:enumeration value="NORMINT_10_10_10_L1" />
+                                    <xs:enumeration value="NORMINT_11_11_10" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="convertformat" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="INT8" />
+                                    <xs:enumeration value="UINT8" />
+                                    <xs:enumeration value="INT16" />
+                                    <xs:enumeration value="UINT16" />
+                                    <xs:enumeration value="INT32" />
+                                    <xs:enumeration value="UINT32" />
+                                    <xs:enumeration value="FLOAT16" />
+                                    <xs:enumeration value="FLOAT32" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="converttype" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="SMARTCLAMP" />
+                                    <xs:enumeration value="NORMALIZE" />
+                                    <xs:enumeration value="TYPECLAMP" />
+                                    <xs:enumeration value="BLINDCAST" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="renderer" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="All" />
+                                    <xs:enumeration value="XENON" />
+                                    <xs:enumeration value="PS3" />
+                                    <xs:enumeration value="DX9" />
+                                    <xs:enumeration value="D3D10" />
+                                    <xs:enumeration value="WII" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="required" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="NOT_REQUIRED" />
+                                    <xs:enumeration value="REQUIRED_FAIL" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="strict" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="STRICT_FORMAT" />
+                                    <xs:enumeration value="STRICT_INTERLEAVE" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="range" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="([0-9]*\-[0-9]*)" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <!-- End Element Definition -->
+                <!-- Begin PrepStream Definition -->
+                <!-- End PrepStream Definition -->
+                <!-- Begin FinalizeStream Definition -->
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="FinalizeStream">
+                    <xs:complexType mixed="true">
+                        <xs:sequence minOccurs="0">
+                            <!-- Begin FinalizeStream Element Definition -->
+                            <xs:element minOccurs="0" maxOccurs="unbounded" name="Element">
+                                <xs:complexType mixed="true">
+                                    <xs:sequence minOccurs="0">
+                                        <!-- Begin FinalizeStream Element Component Definition -->
+                                        <xs:element minOccurs="0" maxOccurs="unbounded" name="Component">
+                                            <xs:complexType>
+                                                <xs:attribute name="value" type="xs:string" use="required" />
+                                                <xs:attribute name="clamp" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:pattern value="min=(-*)(.*)([0-9]*) max=(-*)(.*)([0-9]*)" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="remap" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:pattern value="src-a=(-*)(.*)([0-9]*) src-b=(-*)(.*)([0-9]*) dst-a=(-*)(.*)([0-9]*) dst-b=(-*)(.*)([0-9]*)" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <!-- End FinalizeStream Element Component Definition -->
+                                    </xs:sequence>
+                                    <xs:attribute name="name" type="xs:string" use="optional" />
+                                    <xs:attribute name="type" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="POSITION" />
+                                                <xs:enumeration value="NORMAL" />
+                                                <xs:enumeration value="BINORMAL" />
+                                                <xs:enumeration value="TANGENT" />
+                                                <xs:enumeration value="TEXCOORD" />
+                                                <xs:enumeration value="BLENDWEIGHT" />
+                                                <xs:enumeration value="BLENDINDICES" />
+                                                <xs:enumeration value="COLOR" />
+                                                <xs:enumeration value="PSIZE" />
+                                                <xs:enumeration value="TESSFACTOR" />
+                                                <xs:enumeration value="DEPTH" />
+                                                <xs:enumeration value="FOG" />
+                                                <xs:enumeration value="POSITIONT" />
+                                                <xs:enumeration value="SAMPLE" />
+                                                <xs:enumeration value="DATASTREAM" />
+                                                <xs:enumeration value="INDEX" />
+                                                <xs:enumeration value="BONEMATRICIES" />
+                                                <xs:enumeration value="BONE_PALETTE" />
+                                                <xs:enumeration value="POSITION_BP" />
+                                                <xs:enumeration value="NORMAL_BP" />
+                                                <xs:enumeration value="BINORMAL_BP" />
+                                                <xs:enumeration value="TANGENT_BP" />
+                                                <xs:enumeration value="MORPHWEIGHTS" />
+                                                <xs:enumeration value="NORMALSHAREINDEX" />
+                                                <xs:enumeration value="NORMALSHAREGROUP" />
+                                                <xs:enumeration value="TRANSFORMS" />
+                                                <xs:enumeration value="INSTANCETRANSFORMS" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="index" type="xs:unsignedByte" use="optional" />
+                                    <xs:attribute name="specialformat" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="NORMUINT8_4_BGRA" />
+                                                <xs:enumeration value="UINT_10_10_10_2" />
+                                                <xs:enumeration value="UINT_10_10_10_L1" />
+                                                <xs:enumeration value="NORMINT_10_10_10_2" />
+                                                <xs:enumeration value="NORMINT_10_10_10_L1" />
+                                                <xs:enumeration value="NORMINT_11_11_10" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="convertformat" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="INT8" />
+                                                <xs:enumeration value="UINT8" />
+                                                <xs:enumeration value="INT16" />
+                                                <xs:enumeration value="UINT16" />
+                                                <xs:enumeration value="INT32" />
+                                                <xs:enumeration value="UINT32" />
+                                                <xs:enumeration value="FLOAT16" />
+                                                <xs:enumeration value="FLOAT32" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="converttype" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="SMARTCLAMP" />
+                                                <xs:enumeration value="NORMALIZE" />
+                                                <xs:enumeration value="TYPECLAMP" />
+                                                <xs:enumeration value="BLINDCAST" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="renderer" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="All" />
+                                                <xs:enumeration value="XENON" />
+                                                <xs:enumeration value="PS3" />
+                                                <xs:enumeration value="DX9" />
+                                                <xs:enumeration value="D3D10" />
+                                                <xs:enumeration value="WII" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="required" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="NOT_REQUIRED" />
+                                                <xs:enumeration value="REQUIRED_FAIL" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="strict" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="STRICT_FORMAT" />
+                                                <xs:enumeration value="STRICT_INTERLEAVE" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="range" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="([0-9]*\-[0-9]*)" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                            <!-- End FinalizeStream Element Definition -->
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="access" use="optional" />
+                        <xs:attribute name="usage" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="USAGE_VERTEX" />
+                                    <xs:enumeration value="USAGE_VERTEX_INDEX" />
+                                    <xs:enumeration value="USAGE_USER" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="renderer" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="All" />
+                                    <xs:enumeration value="XENON" />
+                                    <xs:enumeration value="PS3" />
+                                    <xs:enumeration value="DX9" />
+                                    <xs:enumeration value="D3D10" />
+                                    <xs:enumeration value="WII" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <!-- End FinalizeStream Definition -->
+                <!-- Begin MeshProfile Definition -->
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="MeshProfile">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <!-- Begin MeshProfile PrepStream Definition -->
+                            <!-- End MeshProfile PrepStream Definition -->
+                            <!-- Begin MeshProfile FinalizeStream Definition -->
+                            <xs:element minOccurs="0" maxOccurs="unbounded" name="FinalizeStream">
+                                <xs:complexType mixed="true">
+                                    <xs:sequence minOccurs="0">
+                                        <!-- Begin MeshProfile FinalizeStream Element Definition -->
+                                        <xs:element minOccurs="0" maxOccurs="unbounded" name="Element">
+                                            <xs:complexType mixed="true">
+                                                <xs:sequence>
+                                                    <!-- Begin MeshProfile FinalizeStream Element Component Definition -->
+                                                    <xs:element minOccurs="0" maxOccurs="unbounded" name="Component">
+                                                        <xs:complexType>
+                                                            <xs:attribute name="value" type="xs:string" use="required" />
+                                                            <xs:attribute name="clamp" use="optional">
+                                                                <xs:simpleType>
+                                                                    <xs:restriction base="xs:string">
+                                                                        <xs:pattern value="min=(-*)(.*)([0-9]*) max=(-*)(.*)([0-9]*)" />
+                                                                    </xs:restriction>
+                                                                </xs:simpleType>
+                                                            </xs:attribute>
+                                                            <xs:attribute name="remap" use="optional">
+                                                                <xs:simpleType>
+                                                                    <xs:restriction base="xs:string">
+                                                                        <xs:pattern value="src-a=(-*)(.*)([0-9]*) src-b=(-*)(.*)([0-9]*) dst-a=(-*)(.*)([0-9]*) dst-b=(-*)(.*)([0-9]*)" />
+                                                                    </xs:restriction>
+                                                                </xs:simpleType>
+                                                            </xs:attribute>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <!-- End MeshProfile FinalizeStream Element Component Definition -->
+                                                </xs:sequence>
+                                                <xs:attribute name="name" type="xs:string" use="optional" />
+                                                <xs:attribute name="type" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="POSITION" />
+                                                            <xs:enumeration value="NORMAL" />
+                                                            <xs:enumeration value="BINORMAL" />
+                                                            <xs:enumeration value="TANGENT" />
+                                                            <xs:enumeration value="TEXCOORD" />
+                                                            <xs:enumeration value="BLENDWEIGHT" />
+                                                            <xs:enumeration value="BLENDINDICES" />
+                                                            <xs:enumeration value="COLOR" />
+                                                            <xs:enumeration value="PSIZE" />
+                                                            <xs:enumeration value="TESSFACTOR" />
+                                                            <xs:enumeration value="DEPTH" />
+                                                            <xs:enumeration value="FOG" />
+                                                            <xs:enumeration value="POSITIONT" />
+                                                            <xs:enumeration value="SAMPLE" />
+                                                            <xs:enumeration value="DATASTREAM" />
+                                                            <xs:enumeration value="INDEX" />
+                                                            <xs:enumeration value="BONEMATRICIES" />
+                                                            <xs:enumeration value="BONE_PALETTE" />
+                                                            <xs:enumeration value="POSITION_BP" />
+                                                            <xs:enumeration value="NORMAL_BP" />
+                                                            <xs:enumeration value="BINORMAL_BP" />
+                                                            <xs:enumeration value="TANGENT_BP" />
+                                                            <xs:enumeration value="MORPHWEIGHTS" />
+                                                            <xs:enumeration value="NORMALSHAREINDEX" />
+                                                            <xs:enumeration value="NORMALSHAREGROUP" />
+                                                            <xs:enumeration value="TRANSFORMS" />
+                                                            <xs:enumeration value="INSTANCETRANSFORMS" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="index" type="xs:unsignedByte" use="optional" />
+                                                <xs:attribute name="specialformat" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="NORMUINT8_4_BGRA" />
+                                                            <xs:enumeration value="UINT_10_10_10_2" />
+                                                            <xs:enumeration value="UINT_10_10_10_L1" />
+                                                            <xs:enumeration value="NORMINT_10_10_10_2" />
+                                                            <xs:enumeration value="NORMINT_10_10_10_L1" />
+                                                            <xs:enumeration value="NORMINT_11_11_10" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="convertformat" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="INT8" />
+                                                            <xs:enumeration value="UINT8" />
+                                                            <xs:enumeration value="INT16" />
+                                                            <xs:enumeration value="UINT16" />
+                                                            <xs:enumeration value="INT32" />
+                                                            <xs:enumeration value="UINT32" />
+                                                            <xs:enumeration value="FLOAT16" />
+                                                            <xs:enumeration value="FLOAT32" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="converttype" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="SMARTCLAMP" />
+                                                            <xs:enumeration value="NORMALIZE" />
+                                                            <xs:enumeration value="TYPECLAMP" />
+                                                            <xs:enumeration value="BLINDCAST" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="renderer" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="All" />
+                                                            <xs:enumeration value="XENON" />
+                                                            <xs:enumeration value="PS3" />
+                                                            <xs:enumeration value="DX9" />
+                                                            <xs:enumeration value="D3D10" />
+                                                            <xs:enumeration value="WII" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="required" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="NOT_REQUIRED" />
+                                                            <xs:enumeration value="REQUIRED_FAIL" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="strict" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="STRICT_FORMAT" />
+                                                            <xs:enumeration value="STRICT_INTERLEAVE" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="range" use="optional">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:pattern value="([0-9]*\-[0-9]*)" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <!-- End MeshProfile FinalizeStream Element Definition -->
+                                    </xs:sequence>
+                                    <xs:attribute name="name" type="xs:string" use="required" />
+                                    <xs:attribute name="access" use="optional" />
+                                    <xs:attribute name="usage" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="USAGE_VERTEX" />
+                                                <xs:enumeration value="USAGE_VERTEX_INDEX" />
+                                                <xs:enumeration value="USAGE_USER" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="renderer" use="optional">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="All" />
+                                                <xs:enumeration value="XENON" />
+                                                <xs:enumeration value="PS3" />
+                                                <xs:enumeration value="DX9" />
+                                                <xs:enumeration value="D3D10" />
+                                                <xs:enumeration value="WII" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                            <!-- End MeshProfile FinalizeStream Definition -->
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="description" type="xs:string" use="optional" />
+                        <xs:attribute name="recomputenormals" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="true" />
+                                    <xs:enumeration value="false" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="keepUnspecifiedFinalizeStreams" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="true" />
+                                    <xs:enumeration value="false" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <!-- End MeshProfile Definition -->
+            </xs:sequence>
+            <xs:attribute name="version" type="xs:float" use="required" />
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

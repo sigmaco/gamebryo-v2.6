@@ -1,0 +1,25 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+;Simple toon shading.
+ps_1_1
+
+def c0, 1.0, 1.0, 1.0, 1.0
+
+tex t0                       ;sample the base map
+tex t1                       ;sample the toon ramp ramp
+
+mul r0, t0, v0               ;Base map * Material Color
+mul r0.rgb, r0, t1           ;Base map * toon lighting
++mov r0.a, c0
+

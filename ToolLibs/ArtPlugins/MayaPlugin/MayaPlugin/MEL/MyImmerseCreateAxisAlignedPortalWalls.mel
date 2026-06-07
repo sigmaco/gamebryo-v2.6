@@ -1,0 +1,158 @@
+//
+// MyImmerseCreateAxisAlignedPortalWalls.mel
+//
+//  Examines the selected Portal System Room and auto generates 6 axis aligned walls
+//
+
+global proc MyImmerseCreateAxisAlignedPortalWalls()
+{
+    int $intVal;
+
+    string $szTransformNodes[] = `ls -l -sl -typ transform`;
+    
+    // Check for Nothing Selected
+    if(size($szTransformNodes) == 0)
+    {
+        error("MyImmerseCreateABVAxisAlignedPortalWalls:: Portal System Room Not Selected\n");
+        return;
+    }
+
+    if(size($szTransformNodes) > 1)
+    {
+        error("MyImmerseCreateABVAxisAlignedPortalWalls:: Only Select ONE Portal System Room\n");
+        return;
+    }
+
+    string $szShortName[] = `ls -sl -typ transform`;
+    if (`gmatch $szShortName[0] "*_NDLRM*"` == 0)
+    {
+        error ("MyImmerseCreateABVAxisAlignedPortalWalls:: You must select Portal System Room. ie it's name contains '_NDLRM'");
+        return;
+    } 
+
+
+        // Create the Portal Wall Shader if Needed
+    if (`objExists PortalWallShader` == 0)
+    {
+        string $szShaderNode = `shadingNode -asShader NiMultiShader -name "PortalWallShader"`;
+
+        string $szSet = `sets -renderable true -noSurfaceShader true -empty -name PortalWallShaderSG`;
+
+        connectAttr -f PortalWallShader.outColor PortalWallShaderSG.surfaceShader;
+
+        // Make the Shader Mostly Transparent
+        setAttr "PortalWallShader.transparency" -type double3 0.75 0.75 0.75;
+        setAttr "PortalWallShader.MaterialEmittance" -type double3 1 0 1 ;
+    }
+
+    // Find the Bound
+    float $afBounds[] = `xform -q -bb $szTransformNodes[0]`;
+
+    float $fWX = ($afBounds[3] - $afBounds[0]);
+    float $fWY = ($afBounds[4] - $afBounds[1]);
+    float $fWZ = ($afBounds[5] - $afBounds[2]);
+
+    float $fCX = ($afBounds[3] + $afBounds[0]) / 2.0;
+    float $fCY = ($afBounds[4] + $afBounds[1]) / 2.0;
+    float $fCZ = ($afBounds[5] + $afBounds[2]) / 2.0;
+
+
+    // **** Create the Planes
+
+    //**** +X Plane
+    string $szPlane[] = `polyPlane -w $fWZ -h $fWY -sx 1 -sy 1 -ax 1 0 0 -tx 1 -ch 1`;
+
+    // Position the Plane
+    move -r $afBounds[0] $fCY $fCZ $szPlane[0];
+
+    // Parent the Plane
+    parent -a $szPlane[0] $szTransformNodes[0];
+
+    // Apply Portal Shader
+    sets -e -forceElement PortalWallShaderSG $szPlane[0];
+
+    // Rename 
+    rename $szPlane[0] "PortalWall_NDLWL";
+
+    //**** -X Plane
+    $szPlane = `polyPlane -w $fWZ -h $fWY -sx 1 -sy 1 -ax -1 0 0 -tx 1 -ch 1`;
+
+    // Position the Plane
+    move -r $afBounds[3] $fCY $fCZ $szPlane[0];
+
+    // Parent the Plane
+    parent -a $szPlane[0] $szTransformNodes[0];
+
+    // Apply Portal Shader
+    sets -e -forceElement PortalWallShaderSG $szPlane[0];
+
+    // Rename 
+    rename $szPlane[0] "PortalWall_NDLWL";
+
+
+
+
+    //**** +Y Plane
+    $szPlane = `polyPlane -w $fWX -h $fWZ -sx 1 -sy 1 -ax 0 1 0 -tx 1 -ch 1`;
+
+    // Position the Plane
+    move -r $fCX $afBounds[1] $fCZ $szPlane[0];
+
+    // Parent the Plane
+    parent -a $szPlane[0] $szTransformNodes[0];
+
+    // Apply Portal Shader
+    sets -e -forceElement PortalWallShaderSG $szPlane[0];
+
+    // Rename 
+    rename $szPlane[0] "PortalWall_NDLWL";
+
+    //**** -Y Plane
+    $szPlane = `polyPlane -w $fWX -h $fWZ -sx 1 -sy 1 -ax 0 -1 0 -tx 1 -ch 1`;
+
+    // Position the Plane
+    move -r $fCX $afBounds[4] $fCZ $szPlane[0];
+
+    // Parent the Plane
+    parent -a $szPlane[0] $szTransformNodes[0];
+
+    // Apply Portal Shader
+    sets -e -forceElement PortalWallShaderSG $szPlane[0];
+
+    // Rename 
+    rename $szPlane[0] "PortalWall_NDLWL";
+
+
+
+
+    //**** +Z Plane
+    $szPlane = `polyPlane -w $fWX -h $fWY -sx 1 -sy 1 -ax 0 0 1 -tx 1 -ch 1`;
+
+    // Position the Plane
+    move -r $fCX $fCY $afBounds[2] $szPlane[0];
+
+    // Parent the Plane
+    parent -a $szPlane[0] $szTransformNodes[0];
+
+    // Apply Portal Shader
+    sets -e -forceElement PortalWallShaderSG $szPlane[0];
+
+    // Rename 
+    rename $szPlane[0] "PortalWall_NDLWL";
+
+    //**** -Z Plane
+    $szPlane = `polyPlane -w $fWX -h $fWY -sx 1 -sy 1 -ax 0 0 -1 -tx 1 -ch 1`;
+
+    // Position the Plane
+    move -r $fCX $fCY $afBounds[5] $szPlane[0];
+
+    // Parent the Plane
+    parent -a $szPlane[0] $szTransformNodes[0];
+
+    // Apply Portal Shader
+    sets -e -forceElement PortalWallShaderSG $szPlane[0];
+
+    // Rename 
+    rename $szPlane[0] "PortalWall_NDLWL";
+
+}

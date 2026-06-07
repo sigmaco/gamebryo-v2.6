@@ -1,0 +1,359 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>Resources\Icons\scene_designer.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>SceneDesigner_VC80</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Emergent.Gamebryo.SceneDesigner.GUI</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <ProjectGuid>{0F831969-C008-4FD6-9256-C4792BCAC899}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugDLL|AnyCPU' ">
+    <OutputPath>..\Application\VC80\DebugDLL\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseDLL|AnyCPU' ">
+    <OutputPath>..\Application\VC80\ReleaseDLL\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ShippingDLL|AnyCPU' ">
+    <OutputPath>..\Application\VC80\ShippingDLL\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugDLL|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Application\VC80\DebugDLL\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseDLL|x86' ">
+    <OutputPath>..\Application\VC80\ReleaseDLL\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <DebugType>
+    </DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ShippingDLL|x86' ">
+    <OutputPath>..\Application\VC80\ShippingDLL\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <DebugType>
+    </DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Design">
+      <Name>System.Design</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap">
+      <Name>System.Runtime.Serialization.Formatters.Soap</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking">
+      <Name>WeifenLuo.WinFormsUI.Docking</Name>
+      <HintPath>..\..\..\ThirdPartyCode\DockPanel\WinFormsUI\VC80\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <Content Include="Data\document_new.png" />
+    <Content Include="Data\document_open.png" />
+    <Content Include="Data\document_save.png" />
+    <Content Include="Data\Main.Menu.xml" />
+    <Content Include="Data\Main.OptBind.xml" />
+    <Content Include="Data\Main.Shortcuts.xml" />
+    <Content Include="Data\Main.Toolbar.xml" />
+    <Content Include="Data\options.png" />
+    <Content Include="Data\redo.png" />
+    <Content Include="Data\undo.png" />
+    <Content Include="Resources\Icons\properties_panel.ico" />
+    <Content Include="Resources\Icons\scene_designer.ico" />
+    <Content Include="Resources\Icons\selection_panel.ico" />
+    <Content Include="Resources\Icons\viewport_settings_panel.ico" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\00_select_all.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\01_select_none.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\02_invert_selection.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\03_hide_unhide.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\04_freeze_unfreeze.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\05_visible.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\06_hidden.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\07_frozen.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\08_AddTag.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\09_RemoveTags.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\10_EditCommonTags.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\11_EnableSelectionFilter.png" />
+    <Content Include="Resources\Images\SelectionPanelToolbar\12_DisableSelectionFilter.png" />
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CommandPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBoxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EnableThemingInScope.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Invalidator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewSceneForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PluginCore\PluginManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PluginCore\ServiceProviderImplementation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PluginCore\StandardServices\CommandPanelAdapter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PluginCore\StandardServices\CommandPanelServiceImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PluginCore\StandardServices\FileHandlerServiceImpl.cs" />
+    <Compile Include="PluginCore\StandardServices\MenuServiceImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PluginCore\StandardServices\SettingsServiceImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PluginCore\StandardServices\ShortCutServiceImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PluginCore\StandardServices\StandardPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PluginCore\StandardServices\StandardServiceBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PluginCore\StandardServices\ToolBarServiceImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PluginCore\StandardServices\WinFormsUtility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PropertiesPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RenderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectionPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectionSetNameDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectionSetPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utility\AssemblyUtilities.cs" />
+    <Compile Include="Utility\AssociateFileTypes.cs" />
+    <Compile Include="Utility\ComponentManagementUtilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\HelpManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\DirtyBitUtilities.cs" />
+    <Compile Include="Utility\EntityManagementUtilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\EventChecker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\MRUManager.cs" />
+    <Compile Include="Utility\OptionObjectDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\OptionPropertyDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\OptionUtilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\NativeWin32.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\ConflictManagementUtilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\SceneManagementUtilities.cs" />
+    <Compile Include="Utility\TimedInvoker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewportSettingsPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <EmbeddedResource Include="CommandPanel.resx">
+      <DependentUpon>CommandPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultDocking.config" />
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewSceneForm.resx">
+      <DependentUpon>NewSceneForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsDlg.resx">
+      <DependentUpon>OptionsDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginCore\StandardServices\CommandPanelAdapter.resx">
+      <DependentUpon>CommandPanelAdapter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertiesPanel.resx">
+      <DependentUpon>PropertiesPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RenderForm.resx">
+      <DependentUpon>RenderForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectionPanel.resx">
+      <DependentUpon>SelectionPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectionSetNameDlg.resx">
+      <DependentUpon>SelectionSetNameDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectionSetPanel.resx">
+      <DependentUpon>SelectionSetPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AboutBoxForm.resx">
+      <DependentUpon>AboutBoxForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewportSettingsPanel.resx">
+      <DependentUpon>ViewportSettingsPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SceneDesignerFramework\Win32\VC80\SceneDesignerFramework.vcproj">
+      <Project>{60C1FF6B-CF7E-4D83-BF7F-CA974EF1A753}</Project>
+      <Name>SceneDesignerFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>if not exist "$(TargetDir)\Data\" mkdir "$(TargetDir)\Data\"
+xcopy /D /F /I /R /Y "$(ProjectDir)\Data\*.*" "$(TargetDir)\Data\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

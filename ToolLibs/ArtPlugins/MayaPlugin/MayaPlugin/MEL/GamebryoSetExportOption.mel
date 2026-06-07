@@ -1,0 +1,55 @@
+//
+//  GamebryoSetExportOption
+//
+//  This function is used to set any of the Maya export options stored 
+//  per-scene in the myimmerse node. Returns 1 if the option was found and 
+//  set, 0 if it was not found
+//---------------------------------------------------------------------------
+
+global proc int GamebryoSetExportOption(string $optionName, 
+    string $optionValue)
+{
+    // create the export options node if it doesn't exist
+    MyImmerseCreateExportOptionsLocator();
+
+    // get the export options string from the node
+    string $optionString = GamebryoGetExportOptions();
+
+    // tokenize the options
+	string $optionArray[];
+	tokenize $optionString ";" $optionArray;
+
+    // try to find the value we are looking for
+	int $optionsIndex = 0;
+	string $optionBreakDown[];
+	int $optionFound = 0;
+	for ($optionsIndex = 0; $optionsIndex < size($optionArray); $optionsIndex++)
+    {
+        tokenize($optionArray[$optionsIndex], "=", $optionBreakDown);
+        if ($optionBreakDown[0] == $optionName)
+        {
+
+            // if we find it, replace just that element with the new name value pair
+            string $newOption = $optionName + "=" + $optionValue;
+            $optionArray[$optionsIndex] = $newOption;
+            $optionFound = 1;
+        }
+    }
+
+    if ($optionFound == 0)
+    {
+        // if we didn't find the option, we need to append it to the existing options
+        string $newOption = $optionName + "=" + $optionValue;
+        $optionArray[size($optionArray)] = $newOption;
+    }
+    // rebuild the options string
+    $optionString = stringArrayToString($optionArray, ";");
+
+    // set the new options string on the options node
+    setAttr |Please_Dont_Delete_MyImmerse_Export_Options.MyImmerseNIFOptionsVar -type "string" $optionString;
+    optionVar -sv "NifOptions" $optionString;
+
+    // if we can't find it return false
+    return $optionFound;
+}
+

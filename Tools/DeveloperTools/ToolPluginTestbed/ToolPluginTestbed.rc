@@ -1,0 +1,232 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "ToolPluginTestbed.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 249, 68
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About Gamebryo Tool Plug-in Testbed"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,10,11,20,20
+    LTEXT           "Gamebryo Tool Plug-in Testbed Version 1.0.1",IDC_STATIC,
+                    40,10,143,8,SS_NOPREFIX
+    LTEXT           "Copyright (c) 1996-2008 Emergent Game Technologies",
+                    IDC_STATIC,40,32,178,8
+    LTEXT           "This application is designed to assist in the development of plug-ins for the Gamebryo tool pipeline.",
+                    IDC_STATIC,10,44,178,21
+    DEFPUSHBUTTON   "OK",IDOK,192,7,50,14,WS_GROUP
+    LTEXT           "For use with Emergent Gamebryo",IDC_STATIC,40,21,
+                    117,8
+END
+
+IDD_TOOLPLUGINTESTBED_DIALOG DIALOGEX 0, 0, 276, 329
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Gamebryo Tool Plug-in Testbed"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    LTEXT           "Script Directory:",IDC_STATIC,13,14,62,8
+    EDITTEXT        IDC_SCRIPT_DIRECTORY,31,29,186,15,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    PUSHBUTTON      "...",IDC_SCRIPT_DIR_SEL,222,29,11,14
+    GROUPBOX        "Plug-in Script Setup",IDC_STATIC,7,48,262,252,BS_CENTER
+    GROUPBOX        "Step 1: Import the Scene",IDC_STATIC,13,58,248,50
+    LTEXT           "Select the file to load:",IDC_STATIC,19,69,69,9
+    EDITTEXT        IDC_IMPORT_FILENAME,31,82,186,15,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    PUSHBUTTON      "...",IDC_IMPORT_BUTTON,222,82,11,14
+    GROUPBOX        "Step 2: Process the Scene",IDC_STATIC,13,111,249,53
+    LTEXT           "Selected Process Script:",IDC_STATIC,19,124,78,8
+    COMBOBOX        IDC_PROCESS_COMBO,31,138,186,106,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Edit",IDC_PROCESS_OPTIONS_BTN,222,138,34,14
+    GROUPBOX        "Step 3: View or Export the Scene",IDC_STATIC,14,171,248,
+                    117
+    CONTROL         "View the Scene",IDC_VIEW_RADIO,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP,19,185,66,10
+    COMBOBOX        IDC_VIEW_COMBO,31,199,186,116,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Edit",IDC_VIEW_OPTIONS_BTN,222,199,34,14
+    CONTROL         "Export the Scene",IDC_EXPORT_RADIO,"Button",
+                    BS_AUTORADIOBUTTON,19,222,71,10
+    EDITTEXT        IDC_EXPORT_FILENAME,31,236,186,15,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    PUSHBUTTON      "...",IDC_EXPORT_BUTTON,222,236,11,14
+    COMBOBOX        IDC_EXPORT_COMBO,31,255,186,119,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Edit",IDC_EXPORT_OPTIONS_BTN,222,255,34,14
+    DEFPUSHBUTTON   "Run",IDC_RUN,74,308,50,14
+    PUSHBUTTON      "Exit",IDCANCEL,151,308,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,1,1
+ PRODUCTVERSION 1,0,1,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Emergent Game Technologies"
+            VALUE "FileDescription", "Gamebryo Tool Plug-in Testbed"
+            VALUE "FileVersion", "1, 0, 1, 1"
+            VALUE "InternalName", "ToolPluginTestbed"
+            VALUE "LegalCopyright", "Copyright (c) 1996-2008 Emergent Game Technologies"
+            VALUE "OriginalFilename", "ToolPluginTestbed.exe"
+            VALUE "ProductName", "Gamebryo Tool Plug-in Testbed Application"
+            VALUE "ProductVersion", "1, 0, 1, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_TOOLPLUGINTESTBED_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 269
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 322
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "&About Gamebryo Tool Plug-in Testbed..."
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "Gamebryo Tool Plug-in Testbed"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

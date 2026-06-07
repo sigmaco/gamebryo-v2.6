@@ -1,0 +1,86 @@
+// MyImmerseAddGamebryoEmitterAttributes.mel
+//
+// Mel script for applying Gamebryo Attributes to an Emitter
+
+
+global proc MyImmerseAddGamebryoEmitterAttributes(string $szEmitter)
+{
+    if (`attributeExists Ni_EmitterBeginKeyFrame $szEmitter` == 0)
+        addAttr -ln Ni_EmitterBeginKeyFrame -at "float" -dv 0 $szEmitter;
+        
+    if (`attributeExists Ni_EmitterEndKeyFrame $szEmitter` == 0)
+        addAttr -ln Ni_EmitterEndKeyFrame -at "float" -dv 1000 $szEmitter;
+        
+    if (`attributeExists Ni_EmitterEmitterStartFrame $szEmitter` == 0)
+        addAttr -ln Ni_EmitterEmitterStartFrame -at "float" -dv 0 $szEmitter;
+        
+    if (`attributeExists Ni_EmitterEmitterStopFrame $szEmitter` == 0)
+        addAttr -ln Ni_EmitterEmitterStopFrame -at "float" -dv 1000 $szEmitter;
+        
+    if (`attributeExists Ni_EmitterLoopingType $szEmitter` == 0)
+        addAttr -ln Ni_EmitterLoopingType -at enum -dv 0 -enumName "Loop Animation:No Looping" $szEmitter;
+        
+    if (`attributeExists Ni_ResetOnLoop $szEmitter` == 0)
+        addAttr -ln Ni_ResetOnLoop -at bool -dv 0 $szEmitter;
+    
+    if (`attributeExists Ni_SurfaceEmitLocation $szEmitter` == 0)
+    {
+        addAttr -ln Ni_SurfaceEmitLocation -at enum -enumName "Vertices:Face Center:Edge Center:Face Surface:Edge Surface" $szEmitter;
+        setAttr ($szEmitter + ".Ni_SurfaceEmitLocation") 0;
+    }
+    
+    if (`attributeExists Ni_SurfaceEmitDirection $szEmitter` == 0)
+    {
+        addAttr -ln Ni_SurfaceEmitDirection -at enum -enumName "Use Normals:Use Random:Use Direction" $szEmitter;
+        setAttr ($szEmitter + ".Ni_SurfaceEmitDirection") 0;
+    }
+
+    if (`attributeExists Ni_EmitterSurfaceEmitAxisX $szEmitter` == 0)
+        addAttr -ln Ni_EmitterSurfaceEmitAxisX -at "float" -dv 1.0 -k false $szEmitter;
+        
+    if (`attributeExists Ni_EmitterSurfaceEmitAxisY $szEmitter` == 0)
+        addAttr -ln Ni_EmitterSurfaceEmitAxisY -at "float" -dv 0.0 -k false $szEmitter;
+        
+    if (`attributeExists Ni_EmitterSurfaceEmitAxisZ $szEmitter` == 0)
+        addAttr -ln Ni_EmitterSurfaceEmitAxisZ -at "float" -dv 0.0 -k false $szEmitter;
+}
+
+global proc MyImmerseDeleteGamebryoEmitterAttributes(string $szEmitter)
+{
+    if (`attributeExists Ni_EmitterBeginKeyFrame $szEmitter` == 1)
+        deleteAttr -at Ni_EmitterBeginKeyFrame $szEmitter;
+        
+    if (`attributeExists Ni_EmitterEndKeyFrame $szEmitter` == 1)
+        deleteAttr -at Ni_EmitterEndKeyFrame $szEmitter;
+        
+    if (`attributeExists Ni_EmitterEmitterStartFrame $szEmitter` == 1)
+        deleteAttr -at Ni_EmitterEmitterStartFrame $szEmitter;
+        
+    if (`attributeExists Ni_EmitterEmitterStopFrame $szEmitter` == 1)
+        deleteAttr -at Ni_EmitterEmitterStopFrame $szEmitter;
+        
+    if (`attributeExists Ni_EmitterLoopingType $szEmitter` == 1)
+        deleteAttr -at Ni_EmitterLoopingType $szEmitter;
+        
+    if (`attributeExists Ni_ResetOnLoop $szEmitter` == 1)
+        deleteAttr -at Ni_ResetOnLoop $szEmitter;
+    
+    if (`attributeExists Ni_SurfaceEmitLocation $szEmitter` == 1)
+    {
+        deleteAttr -at Ni_SurfaceEmitLocation $szEmitter;
+    }
+    
+    if (`attributeExists Ni_SurfaceEmitDirection $szEmitter` == 1)
+    {
+        deleteAttr -at Ni_SurfaceEmitDirection $szEmitter;
+    }
+
+    if (`attributeExists Ni_EmitterSurfaceEmitAxisX $szEmitter` == 1)
+        deleteAttr -at Ni_EmitterSurfaceEmitAxisX $szEmitter;
+        
+    if (`attributeExists Ni_EmitterSurfaceEmitAxisY $szEmitter` == 1)
+        deleteAttr -at Ni_EmitterSurfaceEmitAxisY $szEmitter;
+        
+    if (`attributeExists Ni_EmitterSurfaceEmitAxisZ $szEmitter` == 1)
+        deleteAttr -at Ni_EmitterSurfaceEmitAxisZ $szEmitter;
+}

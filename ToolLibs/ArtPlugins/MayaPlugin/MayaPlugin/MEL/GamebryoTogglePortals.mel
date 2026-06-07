@@ -1,0 +1,17 @@
+global int $g_PortalWallsVisibility = 1;
+
+global proc GamebryoTogglePortals()
+{
+	global int $g_PortalWallsVisibility;
+	
+	string $szPluginName = MyImmerseGetPluginName();
+
+	if (MyImmerseCheckAndLoadPlugin($szPluginName))
+	{
+		error("Couldn't load the MyImmerse Plugin!");
+	}
+
+	$g_PortalWallsVisibility = !$g_PortalWallsVisibility; 
+	
+	MyImmersePortalSetWallAndPortalVisibility($g_PortalWallsVisibility);
+}

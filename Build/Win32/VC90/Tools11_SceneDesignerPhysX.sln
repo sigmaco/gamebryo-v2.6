@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TerrainPhysics", "..\..\..\Tools\SceneDesigner\TerrainPhysics\Win32\VC90\TerrainPhysics.vcproj", "{43810D57-22D0-4A5B-BD26-75F606966241}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL|Win32 = Debug DLL|Win32
+		Release DLL|Win32 = Release DLL|Win32
+		Shipping DLL|Win32 = Shipping DLL|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43810D57-22D0-4A5B-BD26-75F606966241}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{43810D57-22D0-4A5B-BD26-75F606966241}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{43810D57-22D0-4A5B-BD26-75F606966241}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{43810D57-22D0-4A5B-BD26-75F606966241}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{43810D57-22D0-4A5B-BD26-75F606966241}.Shipping DLL|Win32.ActiveCfg = Shipping DLL|Win32
+		{43810D57-22D0-4A5B-BD26-75F606966241}.Shipping DLL|Win32.Build.0 = Shipping DLL|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

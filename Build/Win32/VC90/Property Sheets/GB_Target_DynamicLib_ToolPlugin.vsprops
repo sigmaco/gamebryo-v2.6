@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Target_DynamicLib_ToolPlugin"
+	InheritedPropertySheets="GB_Target_DynamicLib.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PrecompiledHeaderThrough="stdafx.h"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		ImportLibrary="&quot;$(OutDir)\$(TargetName).lib&quot;"
+	/>
+	<UserMacro
+		Name="GB_Target_Path"
+		Value="ToolPlugins\Lib\VC90\"
+	/>
+	<UserMacro
+		Name="GB_Target_Filename"
+		Value="$(GB_Target_Path)\$(ProjectName).$(GB_Tool_Plugin_Extension)"
+	/>
+	<UserMacro
+		Name="GB_Target_Import_Path"
+		Value="$(TargetDir)..\..\..\Lib\VC90\$(GB_Configuration_Name)$(GB_Target_Suffix)"
+	/>
+</VisualStudioPropertySheet>

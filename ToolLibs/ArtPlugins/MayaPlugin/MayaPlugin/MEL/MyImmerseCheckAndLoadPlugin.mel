@@ -1,0 +1,26 @@
+//
+//  MyImmerseCheckAndLoadPlugin.mel
+//
+//---------------------------------------------------------------------------
+
+global proc int MyImmerseCheckAndLoadPlugin(string $pluginName)
+{
+    int $intVal;
+
+    // Stubbing print("Before Check An Load Plugin\n");
+
+	$intVal = `pluginInfo -query -registered $pluginName`;
+
+	if ( $intVal != 1 )
+	{
+		// Plugin is not registered.
+		// So try to register it now.
+		if(catch ( `loadPlugin $pluginName` ))
+        {
+            return 1;
+        }
+	}
+
+    return 0;
+}
+

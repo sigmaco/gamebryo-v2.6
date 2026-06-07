@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_PhysX"
+	>
+	<Tool
+        Name="VCCLCompilerTool"
+        AdditionalIncludeDirectories="&quot;$(PHYSXINSTALLPATH)\SDKs\Foundation\include&quot;;&quot;$(PHYSXINSTALLPATH)\SDKs\Physics\include&quot;;&quot;$(PHYSXINSTALLPATH)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSXINSTALLPATH)\SDKs\Cooking\include&quot;"
+		PreprocessorDefinitions="NOMINMAX"
+	/>
+</VisualStudioPropertySheet>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Max_Base"
+	OutputDirectory="$(GB_Configuration_Name)_$(GB_Max_Version_Name)"
+	IntermediateDirectory="$(GB_Configuration_Name)_$(GB_Max_Version_Name)"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..\;..\..\;..\..\..\..\..\sdk\Win32\Include;&quot;$(MAXSDKPATH)\maxsdk\include\MaxScrpt&quot;;&quot;$(MAXSDKPATH)\maxsdk\include&quot;;&quot;$(MAXSDKPATH)\maxsdk\include\CS&quot;"
+		PreprocessorDefinitions="QUICKSAVE;MI_EXPORT;NISYSTEM_IMPORT;NIMAIN_IMPORT;NIMESH_IMPORT;NIFLOODGATE_IMPORT;NIPARTICLE_IMPORT;NIOPTIMIZATION_IMPORT;NISTRIPIFY_IMPORT;NIANIMATION_IMPORT;NICOLLISION_IMPORT;NIPORTAL_IMPORT;NIDEVIMAGEQUANTIZER_IMPORT;NIHDRREADER_IMPORT;NIPNGREADER_IMPORT;NIMATERIALTOOLKIT_IMPORT;NIOPENEXRREADER_IMPORT;NINBTGENERATOR_IMPORT"
+		ExceptionHandling="1"
+		UsePrecompiledHeader="2"
+		PrecompiledHeaderThrough="MaxImmerse.h"
+	/>
+	<Tool
+		Name="VCCustomBuildTool"
+		CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(MAXINSTALLPATH)\plugins\$(TargetFileName)&quot;&#x0D;&#x0A;"
+		Outputs="&quot;$(MAXINSTALLPATH)\plugins\$(TargetFileName)&quot;"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="NiSystem$(GB_DLL_Suffix).lib NiMain$(GB_DLL_Suffix).lib NiMesh$(GB_DLL_Suffix).lib NiFloodgate$(GB_DLL_Suffix).lib NiAnimation$(GB_DLL_Suffix).lib NiCollision$(GB_DLL_Suffix).lib NiParticle$(GB_DLL_Suffix).lib NiPortal$(GB_DLL_Suffix).lib NiOptimization$(GB_DLL_Suffix).lib NiStripify$(GB_DLL_Suffix).lib NiHDRReader$(GB_DLL_Suffix).lib NiPNGReader$(GB_DLL_Suffix).lib NiDevImageQuantizer$(GB_DLL_Suffix).lib NiMaterialToolkit$(GB_DLL_Suffix).lib NiStandardSharedData$(GB_DLL_Suffix).lib NiPluginToolkit$(GB_DLL_Suffix).lib NiOpenEXRReader$(GB_DLL_Suffix).lib NiMeshTools$(GB_DLL_Suffix).lib NiNBTGenerator$(GB_DLL_Suffix).lib NiMeshProfileProcessor$(GB_DLL_Suffix).lib NiMeshProfileXMLParser$(GB_DLL_Suffix).lib bmm.lib core.lib geom.lib gup.lib maxscrpt.lib maxutil.lib mesh.lib paramblk2.lib particle.lib comctl32.lib winmm.lib Glu32.lib OpenGL32.lib poly.lib MNMath.lib"
+		OutputFile="$(OutDir)\GamebryoMaxPlugin.dlu"
+		AdditionalLibraryDirectories="&quot;..\..\..\..\..\sdk\Win32\Lib\VC90\$(GB_Configuration_Name)DLL&quot;;&quot;$(MAXSDKPATH)\maxsdk\lib&quot;"
+		ModuleDefinitionFile="..\..\MiDLL.def"
+	/>
+	<Tool
+		Name="VCPostBuildEventTool"
+		CommandLine="CALL &quot;$(ProjectDir)..\MaxPostBuildStep.bat&quot; &quot;$(ProjectDir)&quot; &quot;$(MAXINSTALLPATH)&quot;"
+	/>
+	<Tool
+		Name="VCResourceCompilerTool"
+		Culture="1033"
+		AdditionalIncludeDirectories="..\;..\..\;..\..\..\..\..\sdk\Win32\Include"
+		ResourceOutputFileName="$(IntDir)/MiResource.res"
+	/>
+</VisualStudioPropertySheet>

@@ -1,0 +1,10 @@
+Version: 1
+Script ("Default Xbox 360 Viewer Script","Viewer")
+{
+	Plugin ("NiXbox360ViewerPlugin","Xbox 360 Viewer","2.0","Viewer")
+	{
+		Parameter ("NiPluginToolkit Renderer","0");
+		Parameter ("IP Address","Default Xbox360");
+		Parameter ("Viewer Type","Nif Viewer");
+	}
+}

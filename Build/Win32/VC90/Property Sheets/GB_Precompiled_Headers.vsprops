@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_Precompiled_Headers"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="NI_USE_PCH"
+		UsePrecompiledHeader="2"
+		PrecompiledHeaderThrough="$(ProjectName)PCH.h"
+	/>
+</VisualStudioPropertySheet>

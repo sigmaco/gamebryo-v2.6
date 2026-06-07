@@ -1,0 +1,54 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXParticles", "..\..\..\Samples\Demos\PhysXParticles\Win32\VC90\PhysXParticles.vcproj", "{ABFB11C4-955E-4D0C-9000-9FD526A7998A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXParticlesInCode", "..\..\..\Samples\Demos\PhysXParticlesInCode\Win32\VC90\PhysXParticlesInCode.vcproj", "{14E57DA0-13BE-48C0-B1E4-DEBA2663BCBB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXTiming", "..\..\..\Samples\Demos\PhysXTiming\Win32\VC90\PhysXTiming.vcproj", "{6F2833E9-6F44-40F8-A7F2-18EC448513FF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXFluids", "..\..\..\Samples\Demos\PhysXFluids\Win32\VC90\PhysXFluids.vcproj", "{5D34B74B-3051-47FD-B389-9FE301F8E4CF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysXTerrainDemo", "..\..\..\Samples\Demos\PhysXTerrainDemo\Win32\VC90\PhysXTerrainDemo.vcproj", "{29D2ABA2-4785-42DB-9333-ED1C0CF11EF9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		Shipping|Win32 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ABFB11C4-955E-4D0C-9000-9FD526A7998A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ABFB11C4-955E-4D0C-9000-9FD526A7998A}.Debug|Win32.Build.0 = Debug|Win32
+		{ABFB11C4-955E-4D0C-9000-9FD526A7998A}.Release|Win32.ActiveCfg = Release|Win32
+		{ABFB11C4-955E-4D0C-9000-9FD526A7998A}.Release|Win32.Build.0 = Release|Win32
+		{ABFB11C4-955E-4D0C-9000-9FD526A7998A}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{ABFB11C4-955E-4D0C-9000-9FD526A7998A}.Shipping|Win32.Build.0 = Shipping|Win32
+		{14E57DA0-13BE-48C0-B1E4-DEBA2663BCBB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{14E57DA0-13BE-48C0-B1E4-DEBA2663BCBB}.Debug|Win32.Build.0 = Debug|Win32
+		{14E57DA0-13BE-48C0-B1E4-DEBA2663BCBB}.Release|Win32.ActiveCfg = Release|Win32
+		{14E57DA0-13BE-48C0-B1E4-DEBA2663BCBB}.Release|Win32.Build.0 = Release|Win32
+		{14E57DA0-13BE-48C0-B1E4-DEBA2663BCBB}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{14E57DA0-13BE-48C0-B1E4-DEBA2663BCBB}.Shipping|Win32.Build.0 = Shipping|Win32
+		{6F2833E9-6F44-40F8-A7F2-18EC448513FF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6F2833E9-6F44-40F8-A7F2-18EC448513FF}.Debug|Win32.Build.0 = Debug|Win32
+		{6F2833E9-6F44-40F8-A7F2-18EC448513FF}.Release|Win32.ActiveCfg = Release|Win32
+		{6F2833E9-6F44-40F8-A7F2-18EC448513FF}.Release|Win32.Build.0 = Release|Win32
+		{6F2833E9-6F44-40F8-A7F2-18EC448513FF}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{6F2833E9-6F44-40F8-A7F2-18EC448513FF}.Shipping|Win32.Build.0 = Shipping|Win32
+		{5D34B74B-3051-47FD-B389-9FE301F8E4CF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5D34B74B-3051-47FD-B389-9FE301F8E4CF}.Debug|Win32.Build.0 = Debug|Win32
+		{5D34B74B-3051-47FD-B389-9FE301F8E4CF}.Release|Win32.ActiveCfg = Release|Win32
+		{5D34B74B-3051-47FD-B389-9FE301F8E4CF}.Release|Win32.Build.0 = Release|Win32
+		{5D34B74B-3051-47FD-B389-9FE301F8E4CF}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{5D34B74B-3051-47FD-B389-9FE301F8E4CF}.Shipping|Win32.Build.0 = Shipping|Win32
+		{29D2ABA2-4785-42DB-9333-ED1C0CF11EF9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{29D2ABA2-4785-42DB-9333-ED1C0CF11EF9}.Debug|Win32.Build.0 = Debug|Win32
+		{29D2ABA2-4785-42DB-9333-ED1C0CF11EF9}.Release|Win32.ActiveCfg = Release|Win32
+		{29D2ABA2-4785-42DB-9333-ED1C0CF11EF9}.Release|Win32.Build.0 = Release|Win32
+		{29D2ABA2-4785-42DB-9333-ED1C0CF11EF9}.Shipping|Win32.ActiveCfg = Shipping|Win32
+		{29D2ABA2-4785-42DB-9333-ED1C0CF11EF9}.Shipping|Win32.Build.0 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

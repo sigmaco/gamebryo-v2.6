@@ -1,0 +1,156 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+//Warp bar effect for the alien warrior room.  The warp bars are "unlit" bars
+//that appear to glow blue with a translucent fresnel type effect.  They 
+//change color as they get close to each other.  The vertex shader does all 
+//the animation and places the color in oD0.  The pixel shader is simply a 
+//pass through of the diffuse color.  The animation depends upon the bars
+//being spaced in a circle in x and y.  The z value is used for the oscillation.
+//The vector centerlineConstants dictates the animation.  x should be the rest
+//height of the top of the bottom set of bars.  y should be the center line
+//where they touch.  z should be the rest height of the bottom of the top set
+//of bars.  w should be 1 over y.
+//
+//This shader is highly topology dependent.  It relies on the geometry of the
+//object to be as follows.  A number of vertical bars are arranged in a circle
+//of radius R.  The top of these bars is at Z = 0.  A second set of identical
+//bars lie above these bars where Z = 2R.  Breaking this topology can cause 
+//very odd behavior to occur.
+
+NSFShader WarpBars
+{
+    "This shader is used for the circular oscillating Warp Bars in the "
+    "Eturnum sample. This effect is highly dependent on the specific geometry "
+    "in that sample, and will not look good on arbitrary geometry. "
+    "Check the NSF file for details on this shader, including how to set "
+    "the CenterlineConstants."
+
+    //Global animation values.
+    Global_Attributes
+    {
+        Attrib_Float    Sine       Hidden  0.0
+        Attrib_Float    Cosine     Hidden  1.0
+        Attrib_Float    Retraction Hidden  -250.0
+        Attrib_Float    WarpBarTexKill Hidden  75.0
+    }
+
+    //Attribute list
+    Attributes
+    {
+        //Defines the boundaries of the bars.
+        //X = The top of the bottom set of bars.  Usually 0.
+        //Y = The radius of the circle and the object Z of the halfway point
+        //  between the bars.
+        //Z = The bottom of the top set of bars.
+        //W = 1 / Radius.
+        Attrib_Point4
+            CenterlineConstants
+            Artist
+            0.0, 100.0, 200.0, 0.01
+        //The material color of the bars.  This should have an alpha less 
+        //than 1.0 for the Fresnel effect to look cool.
+        Attrib_Color
+            MaterialColor
+            Artist
+            0.0, 0.0, 1.0, 0.8
+            [(0.0, 0.0, 0.0, 0.0) (1.0, 1.0, 1.0, 1.0)]
+        //The retraction of the bars.  Negative values pull them apart.
+        //Positive values will make them intersect.
+        Attrib_Float
+            Retraction
+            Artist
+            -100.0
+            [-1000.0 1000.0]
+        //Hidden Sine and Cosine attributes for the application to update to
+        //drive the animation.
+        Attrib_Float
+            Cosine
+            Hidden
+            1.0
+        Attrib_Float
+            Sine
+            Hidden
+            0.0
+    }
+
+    PackingDef PosNorm
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      1   PDT_Float3
+    }
+
+    Implementation VS10_PS10
+    {
+        "This implementation requires hardware that supports
+        vertex shader v1.0 and pixel shader v1.0"
+
+        Requirements
+        {
+            VSVersion   = v1.0
+            UserVersion = v0.0
+            PSVersion   = v1.0
+            UsesNIRenderState = true
+            Platform    = DX9|DX9|Xenon
+        }
+
+        PackingDef  PosNorm
+
+        
+        RenderStates
+        {
+            //Set alpha blending for translucent bars.  Turn off testing for
+            //safety.
+            AlphaBlendEnable    = true
+            AlphaTestEnable     = false
+            //We must set the cull mode to CW for safety.  Double-sided alpha
+            //objects may have set this to None previously.
+            CullMode            = CW
+            //Use blend constants of one to get an additive blending effect.
+            //In a well lit room, using traditional alpha blending with
+            //SrcAlpha and InvSrcAlpha also looks good.
+            DestBlend           = One
+            SrcBlend            = One
+            ZEnable             = ZB_True
+            ZWriteEnable        = false
+            ZFunc               = LessEqual
+        }
+
+        Pass WarpBarsSinglePass
+        {
+            VSProgram   "WarpBars"
+
+            //Zono is a standard constant I use.  It is short for
+            //zero-one-negative one.  The inverse world view matrix is used
+            //to convert the eye position into object space.  We send to 
+            //transpose to compensate for row major DX matrices versus column
+            //major math in the shader.  Eye position is assumed to be
+            //(0,0,0,1) and is constructed in the shader from Zono.xxxy.
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0       0
+                CM_Defined      InvWorldViewTranspose   4       0
+                CM_Constant     Zono                    8   1   0.0, 1.0, -1.0, 1.0
+                CM_Attribute    MaterialColor           9   1   0
+                CM_Attribute    CenterlineConstants     10  1   0
+                CM_Global       Cosine                  11  1
+                CM_Global       Sine                    12  1
+                CM_Attribute    Retraction              13  1   0
+                CM_Global       WarpBarTexKill          14  1
+            }
+
+            PSProgram   "WarpBars"
+        }
+    }
+}

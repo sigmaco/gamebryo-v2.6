@@ -1,0 +1,305 @@
+//
+// MyImmerseKeyFrameReduction.mel
+//
+//  This will automatically reduce the key frames associated with translate, rotate, scale
+// and visibility. Setting the AllDecendents flag also preform this on all decendents of
+// the selected nodes.
+//
+
+global proc MyImmerseKeyFrameReduction(string $sObject, float $fStartTime, float $fEndTime,  int $iAllDecendents, float $fErrorTollerance, float $fSequenceTimes[])
+{
+    string $szTransformNodes[]; 
+    
+    if ($sObject == "")
+    {
+        $szTransformNodes = `ls -l -sl -typ transform`;
+
+            // Check for Nothing Selected
+        if(size($szTransformNodes) == 0)
+        {
+            print("WARNING:: No Transforms Selected\n");
+        }
+    }
+    else
+    {
+        $szTransformNodes[0] = $sObject;
+    }
+
+//    print ("Sequence Times\n");
+//    print $fSequenceTimes;
+//    print ("\n");
+
+	int $iCount = 0;
+    while( $iCount < size($szTransformNodes))
+    {
+        MyImmerseReduceTransform($szTransformNodes[$iCount], $fStartTime, $fEndTime, $fErrorTollerance, 0.00001, $fSequenceTimes);
+
+        // Also do the children below
+        if ($iAllDecendents == 1)
+        {
+            string $szChildren[] = `listRelatives -ad -f -typ transform $szTransformNodes[$iCount]`;
+
+            int $iChildCount = 0;
+
+            while ($iChildCount < size($szChildren))
+            {
+                MyImmerseReduceTransform($szChildren[$iChildCount], $fStartTime, $fEndTime, $fErrorTollerance, 0.00001, $fSequenceTimes);
+
+                $iChildCount++;
+            }
+        }
+
+        $iCount++;
+    }
+
+}
+
+
+global proc MyImmerseReduceTransform(string $sObject, float $fStartTime, float $fEndTime, float $fEpsilon, float $fNearZero, float $fSequenceTimes[])
+{
+    // Start the timer
+//    $startTime = `timerX`;
+
+    print ("Reducing " + $sObject + "\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "translateX", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    print (".\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "translateY", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    print (".\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "translateZ", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    print (".\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "rotateX", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    print (".\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "rotateY", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    print (".\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "rotateZ", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    print (".\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "scaleX", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    print (".\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "scaleY", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    print (".\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "scaleZ", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    print (".\n");
+
+    MyImmerseReduceAttribute($sObject, $fStartTime, $fEndTime, "visibility", $fEpsilon, $fNearZero, $fSequenceTimes);
+
+    // Start the timer
+//    $totalTime = `timerX -startTime $startTime`;
+
+//    print ("Total Time" + $totalTime + "\n");
+
+}
+
+
+global proc int MyImmerseReduceConstantAttribute(string $sObject, string $sAttribute)
+{
+    int $iCurrentIndex = `keyframe -attribute $sAttribute -query -keyframeCount $sObject` - 2;         
+
+    // Check for at least 2 keys
+    if ($iCurrentIndex <= 0)
+        return 0;
+
+    float $fValues[] = `keyframe -attribute $sAttribute -query -vc $sObject`; 
+    float $fInAngles[] = `keyTangent -attribute $sAttribute -q -ia $sObject`;
+    float $fOutAngles[] = `keyTangent -attribute $sAttribute -q -oa $sObject`;
+
+    // Reduce all but the first and last key
+    while ($iCurrentIndex >= 0)
+    {
+
+        // Verify the keys are constant
+        if (($fValues[$iCurrentIndex] != $fValues[$iCurrentIndex + 1]) || 
+            ($fInAngles[$iCurrentIndex] != 0.0) ||
+            ($fOutAngles[$iCurrentIndex] != 0.0))
+        {
+            //print ("Index: " + $iCurrentIndex + " Values: " + $fValues[$iCurrentIndex] + ":" + $fValues[$iCurrentIndex+1] + " In:" + $fInAngles[$iCurrentIndex] + " Out:" + $fOutAngles[$iCurrentIndex] + "\n");
+            return 0;
+        }
+           
+       $iCurrentIndex--;
+    }
+
+    // Remove all but the first and last key
+    string $sCutTime = ("1:" + (`keyframe -attribute $sAttribute -query -keyframeCount $sObject` - 2) + "");
+    
+    //print("CutTime :" + $sCutTime + "\n");
+    cutKey -index $sCutTime -attribute $sAttribute $sObject;
+
+    return 1;
+}
+
+
+global proc MyImmerseReduceAttribute(string $sObject, float $fStartTime, float $fEndTime, string $sAttribute, float $fEpsilon, float $fNearZero, float $fSequenceTimes[] )
+{
+
+    // Check for a constant attribute
+    if (MyImmerseReduceConstantAttribute($sObject, $sAttribute) == 1)
+        return;
+
+
+
+    float $fCurrTime[];
+    float $fLastTime[];
+    float $fNextTime[];
+
+    float $fLowTime;
+    float $fCurrentTime;
+    float $fHighTime;
+
+
+    float $fLowValue[];
+    float $fCurrentValue[];
+    float $fHighValue[];
+
+    float $fNewLowValue[];
+    float $fNewCurrentValue[];
+    float $fNewHighValue[];
+
+    float $fLowEpsilon;
+    float $fCurrentEpsilon;
+    float $fHighEpsilon;
+
+
+    // Find the Maximum Key
+    int $iCurrentIndex = `keyframe -attribute $sAttribute -query -keyframeCount $sObject`; 
+    
+    // Check for no animation keys
+    if ($iCurrentIndex == 0)
+        return;
+            
+    $iCurrentIndex--;
+
+    $fCurrTime = `keyframe -attribute $sAttribute -index $iCurrentIndex -query -tc $sObject`;
+    
+    while ( ($fEndTime < $fCurrTime[0]) && (MyImmerseCloseTo($fCurrTime[0], $fEndTime, 0.001) == false))
+    {
+//        print ("EndTime\n");
+        $iCurrentIndex--;
+        $fCurrTime = `keyframe -attribute $sAttribute -index $iCurrentIndex -query -tc $sObject`;
+    }
+
+
+    // Find the Maximum Key
+    int $iMinIndex = 0;         
+
+    $fCurrTime = `keyframe -attribute $sAttribute -index $iMinIndex -query -tc $sObject`;
+    
+    while ( ($fStartTime > $fCurrTime[0]) && (MyImmerseCloseTo($fCurrTime[0], $fStartTime, 0.001) == false))
+    {
+//        print ("StartTime\n");
+        $iMinIndex++;
+        $fCurrTime = `keyframe -attribute $sAttribute -index $iMinIndex -query -tc $sObject`;
+    }
+
+    int $iCurrentSequenceIndex = size($fSequenceTimes) - 1;
+
+    // Reduce all but the first and last key
+    while ($iCurrentIndex > $iMinIndex)
+    {
+        $fCurrTime = `keyframe -attribute $sAttribute -index $iCurrentIndex -query -tc $sObject`;
+
+//        print ("CurrentSequenceIndex " + $iCurrentSequenceIndex + "\n");
+
+        while(($iCurrentSequenceIndex > 0) && ($fCurrTime[0] < $fSequenceTimes[$iCurrentSequenceIndex]) &&
+             (MyImmerseCloseTo($fCurrTime[0], $fSequenceTimes[$iCurrentSequenceIndex], 0.001) == false))
+        {
+            $iCurrentSequenceIndex--;
+        }
+
+
+        if (($iCurrentSequenceIndex < 0) || (MyImmerseCloseTo($fCurrTime[0], $fSequenceTimes[$iCurrentSequenceIndex], 0.001) == false))
+        {
+//            print ($fCurrTime[0] + " " + $fSequenceTimes[$iCurrentSequenceIndex] + "\n");
+
+            $fLastTime = `keyframe -attribute $sAttribute -index ($iCurrentIndex - 1) -query -tc $sObject`;
+            $fNextTime = `keyframe -attribute $sAttribute -index ($iCurrentIndex + 1) -query -tc $sObject`;
+
+            $fLowTime = ($fLastTime[0] + $fCurrTime[0]) / 2.0;
+            $fCurrentTime = $fCurrTime[0];
+            $fHighTime = ($fNextTime[0] + $fCurrTime[0]) / 2.0;
+
+
+            $fLowValue = `keyframe -attribute $sAttribute -t $fLowTime -query -eval $sObject`;
+            $fCurrentValue = `keyframe -attribute $sAttribute -t $fCurrentTime -query -eval $sObject`;
+            $fHighValue = `keyframe -attribute $sAttribute -t $fHighTime -query -eval $sObject`;
+
+
+            cutKey -attribute $sAttribute -index $iCurrentIndex -clear $sObject;
+
+
+            $fNewLowValue = `keyframe -attribute $sAttribute -t $fLowTime -query -eval $sObject`;
+            $fNewCurrentValue = `keyframe -attribute $sAttribute -t $fCurrentTime -query -eval $sObject`;
+            $fNewHighValue = `keyframe -attribute $sAttribute -t $fHighTime -query -eval $sObject`;
+
+
+            // print ("Low Time:" + $fLowTime + "    Value:" + $fLowValue[0] + "\n");
+            // print ("Current Time " + $fCurrentTime + "    Value:" + $fCurrentValue[0] + "\n");
+            // print ("High Time " + $fHighTime + "    Value:" + $fHighValue[0] + "\n");
+
+            // print ("New Low Time:" + $fLowTime + "    Value:" + $fNewLowValue[0] + "\n");
+            // print ("New Current Time " + $fCurrentTime + "    Value:" + $fNewCurrentValue[0] + "\n");
+            // print ("New High Time " + $fHighTime + "    Value:" + $fNewHighValue[0] + "\n");
+
+            // Compute the Epsilon values
+            $fLowEpsilon = $fLowValue[0] * $fEpsilon;
+            $fCurrentEpsilon = $fCurrentValue[0] * $fEpsilon;
+            $fHighEpsilon = $fHighValue[0] * $fEpsilon;
+
+            // Make Positive
+            if ($fLowEpsilon < 0.0)
+                $fLowEpsilon = -$fLowEpsilon;
+
+            if ($fCurrentEpsilon < 0.0)
+                $fCurrentEpsilon = -$fCurrentEpsilon;
+
+            if ($fHighEpsilon < 0.0)
+                $fHighEpsilon = -$fHighEpsilon;
+
+            // Check for Near Zero
+            if ($fLowEpsilon < $fNearZero)
+                $fLowEpsilon = $fNearZero;
+
+            if ($fCurrentEpsilon < $fNearZero)
+                $fCurrentEpsilon = $fNearZero;
+
+            if ($fHighEpsilon < $fNearZero)
+                $fHighEpsilon = $fNearZero;
+
+            // print ("Low Epsilon " + $fLowEpsilon + "\n");
+            // print ("Current Epsilon " + $fCurrentEpsilon + "\n");
+            // print ("High Epsilon " + $fHighEpsilon + "\n");
+
+
+            if ( (($fLowValue[0] - $fNewLowValue[0]) > $fLowEpsilon) ||
+                 (($fLowValue[0] - $fNewLowValue[0]) < -$fLowEpsilon) ||
+                 (($fCurrentValue[0] - $fNewCurrentValue[0]) > $fCurrentEpsilon) ||
+                 (($fCurrentValue[0] - $fNewCurrentValue[0]) < -$fCurrentEpsilon) ||
+                 (($fHighValue[0] - $fNewHighValue[0]) > $fHighEpsilon) ||
+                 (($fHighValue[0] - $fNewHighValue[0]) < -$fHighEpsilon) )
+            {
+                undo;
+            }
+        }
+
+        $iCurrentIndex--;
+    }
+}
+
+

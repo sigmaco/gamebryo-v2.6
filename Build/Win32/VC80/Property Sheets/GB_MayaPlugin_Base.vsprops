@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="GB_MayaPlugin_Base"
+	InheritedPropertySheets=".\GB_Maya_Base.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..\;..\..\;..\..\NiNBTGeneration;..\..\NiNBTGeneration\ATI;..\..\..\MDtAPI\Include;..\..\..\..\..\..\sdk\Win32\Include;&quot;$(MAYA_INSTALL_PATH)\Include&quot;"
+		PreprocessorDefinitions="NT_ENV;NT_PLUGIN;MAYA$(MAYA_VERSION_SUFFIX);NISYSTEM_IMPORT;NIMAIN_IMPORT;NIMESH_IMPORT;NIFLOODGATE_IMPORT;NIANIMATION_IMPORT;NICOLLISION_IMPORT;NIPORTAL_IMPORT;NISTRIPIFY_IMPORT;NIOPTIMIZATION_IMPORT;NICONTROLLEREXTRACTOR_IMPORT;NIMATERIALTOOLKIT_IMPORT;NIPARTICLE_IMPORT;NINBTGENERATOR_IMPORT;REQUIRE_IOSTREAM;NIMESHPROFILEPROCESSOR_IMPORT;NIMESHTOOLS_IMPORT"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="NiSystem$(GB_DLL_Suffix).lib NiFloodgate$(GB_DLL_Suffix).lib NiMain$(GB_DLL_Suffix).lib NiMesh$(GB_DLL_Suffix).lib NiAnimation$(GB_DLL_Suffix).lib NiCollision$(GB_DLL_Suffix).lib NiParticle$(GB_DLL_Suffix).lib NiPortal$(GB_DLL_Suffix).lib NiMaterialToolkit$(GB_DLL_Suffix).lib NiDevImageQuantizer$(GB_DLL_Suffix).lib NiPluginToolkit$(GB_DLL_Suffix).lib NiStandardSharedData$(GB_DLL_Suffix).lib NiStripify$(GB_DLL_Suffix).lib NiMeshProfileXMLParser$(GB_DLL_Suffix).lib NiMeshProfileProcessor$(GB_DLL_Suffix).lib NiMeshTools$(GB_DLL_Suffix).lib NiControllerExtractor$(GB_DLL_Suffix).lib NiOptimization$(GB_DLL_Suffix).lib NiOpenEXRReader$(GB_DLL_Suffix).lib NiHDRReader$(GB_DLL_Suffix).lib NiPNGReader$(GB_DLL_Suffix).lib NiNBTGenerator$(GB_DLL_Suffix).lib winmm.lib odbc32.lib odbccp32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib comctl32.lib"
+		OutputFile="$(IntDir)\GamebryoMayaPlugin.mll"
+		AdditionalLibraryDirectories="&quot;..\..\..\..\..\..\sdk\Win32\lib\VC80\$(GB_Configuration_Name)DLL&quot;;&quot;$(MAYA_INSTALL_PATH)\Lib&quot;"
+	/>
+	<Tool
+		Name="VCPostBuildEventTool"
+		CommandLine="&quot;$(ProjectDir)&quot;..\..\PostBuild\PostBuildScript &quot;$(ProjectDir)&quot; &quot;$(MAYA_INSTALL_PATH)&quot; &quot;$(IntDir)\$(TargetFileName)&quot;"
+	/>
+</VisualStudioPropertySheet>

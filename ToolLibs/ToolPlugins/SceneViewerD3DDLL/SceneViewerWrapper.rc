@@ -1,0 +1,117 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_WORLD               BITMAP                  "Data\\world.bmp"
+IDB_NODE                BITMAP                  "Data\\node.bmp"
+IDB_LIGHT               BITMAP                  "Data\\light.bmp"
+IDB_MESHDATA            BITMAP                  "data\\meshdata.bmp"
+IDB_MESH                BITMAP                  "Data\\mesh.bmp"
+IDB_CAMERA              BITMAP                  "Data\\camera.bmp"
+IDB_ATTRIBUTE           BITMAP                  "Data\\attribute.bmp"
+IDB_ATTRITEM            BITMAP                  "Data\\attritem.bmp"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SCENEVIEWER DIALOGEX 0, 0, 186, 159
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Scene Viewer D3D Options"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "User Interface Settings",IDC_STATIC,7,7,172,67
+    COMBOBOX        IDC_UIMAP_SELECTIONS,18,23,150,84,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "View Settings",IDC_VIEW_UI_BUTTON,18,49,63,14
+    PUSHBUTTON      "Create New Map",IDC_CREATE_NEW_UIMAP_BUTTON,105,49,63,14
+    GROUPBOX        "Additional Options",IDC_STATIC,7,81,172,33
+    CONTROL         "Show Scene Graph Tree View",IDC_SHOWTREEVIEW,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,96,138,12
+    DEFPUSHBUTTON   "OK",IDOK,37,128,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,101,128,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SCENEVIEWER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 150
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

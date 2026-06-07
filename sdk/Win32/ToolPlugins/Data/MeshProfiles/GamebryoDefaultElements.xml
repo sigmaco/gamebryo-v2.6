@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeshProfiles version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./NiMeshProfileSchema.xsd">
+    <Element type="INDEX" >
+        <Component value="INDEX.0" />
+    </Element>
+    <Element type="POSITION">
+        <Component value="POSITION.x" />
+        <Component value="POSITION.y" />
+        <Component value="POSITION.z" />
+    </Element>
+    <Element type="POSITIONT">
+        <Component value="POSITIONT.x" />
+        <Component value="POSITIONT.y" />
+        <Component value="POSITIONT.z" />
+        <Component value="POSITIONT.w" />
+    </Element>
+    <Element type="NORMAL">
+        <Component value="NORMAL.x" />
+        <Component value="NORMAL.y" />
+        <Component value="NORMAL.z" />
+    </Element>
+    <Element type="BINORMAL" range="0-7">
+        <Component value="BINORMAL[].x" />
+        <Component value="BINORMAL[].y" />
+        <Component value="BINORMAL[].z" />
+    </Element>
+    <Element type="TANGENT" range="0-7">
+        <Component value="TANGENT[].x" />
+        <Component value="TANGENT[].y" />
+        <Component value="TANGENT[].z" />
+    </Element>
+    <Element type="COLOR" range="0-7">
+        <Component value="COLOR[].r"/>
+        <Component value="COLOR[].g"/>
+        <Component value="COLOR[].b"/>
+        <Component value="COLOR[].a"/>
+    </Element>
+    <Element type="TEXCOORD" range="0-7">
+        <Component value="TEXCOORD[].u" />
+        <Component value="TEXCOORD[].v" />
+    </Element>
+    <Element type="BONE_PALETTE">
+        <Component value="BONE_PALETTE.0" />
+    </Element>
+    <Element type="BLENDWEIGHT">
+        <Component value="BLENDWEIGHT.0" />
+        <Component value="BLENDWEIGHT.1" />
+        <Component value="BLENDWEIGHT.2" />
+        <Component value="BLENDWEIGHT.3" />
+    </Element>
+    <Element type="BLENDINDICES">
+        <Component value="BLENDINDICES.0" />
+        <Component value="BLENDINDICES.1" />
+        <Component value="BLENDINDICES.2" />
+        <Component value="BLENDINDICES.3" />
+    </Element>
+    <Element type="POSITION_BP">
+        <Component value="POSITION_BP.x" />
+        <Component value="POSITION_BP.y" />
+        <Component value="POSITION_BP.z" />
+    </Element>
+    <Element type="NORMAL_BP">
+        <Component value="NORMAL_BP.x" />
+        <Component value="NORMAL_BP.y" />
+        <Component value="NORMAL_BP.z" />
+    </Element>
+    <Element type="BINORMAL_BP" range="0-7">
+        <Component value="BINORMAL_BP[].x" />
+        <Component value="BINORMAL_BP[].y" />
+        <Component value="BINORMAL_BP[].z" />
+    </Element>
+    <Element type="TANGENT_BP" range="0-7">
+        <Component value="TANGENT_BP[].x" />
+        <Component value="TANGENT_BP[].y" />
+        <Component value="TANGENT_BP[].z" />
+    </Element>
+    <Element name="MORPH_POSITION" range="0-31">
+        <Component value="MORPH_POSITION[].x" />
+        <Component value="MORPH_POSITION[].y" />
+        <Component value="MORPH_POSITION[].z" />
+    </Element>
+    <Element name="MORPH_NORMAL" range="0-31">
+        <Component value="MORPH_NORMAL[].x" />
+        <Component value="MORPH_NORMAL[].y" />
+        <Component value="MORPH_NORMAL[].z" />
+    </Element>
+    <Element name="MORPH_POSITION_BP" range="0-31">
+        <Component value="MORPH_POSITION_BP[].x" />
+        <Component value="MORPH_POSITION_BP[].y" />
+        <Component value="MORPH_POSITION_BP[].z" />
+    </Element>
+    <Element name="MORPH_NORMAL_BP" range="0-31">
+        <Component value="MORPH_NORMAL_BP[].x" />
+        <Component value="MORPH_NORMAL_BP[].y" />
+        <Component value="MORPH_NORMAL_BP[].z" />
+    </Element>
+    <Element type="MORPHWEIGHTS">
+        <Component value="MORPHWEIGHTS.x" />
+    </Element>
+    <Element type="TRANSFORMS" range="0-2">
+        <Component value="TRANSFORMS[].x" />
+        <Component value="TRANSFORMS[].y" />
+        <Component value="TRANSFORMS[].z" />
+        <Component value="TRANSFORMS[].w" />
+    </Element>
+    <Element type="INSTANCETRANSFORMS" range="0-2">
+        <Component value="INSTANCETRANSFORMS[].x" />
+        <Component value="INSTANCETRANSFORMS[].y" />
+        <Component value="INSTANCETRANSFORMS[].z" />
+        <Component value="INSTANCETRANSFORMS[].w" />
+    </Element>
+    <Element type="NORMALSHAREINDEX">
+        <Component value="NORMALSHAREINDEX.0" />
+    </Element>
+    <Element type="NORMALSHAREGROUP">
+        <Component value="NORMALSHAREGROUP.0" />
+    </Element>
+</MeshProfiles>

@@ -1,0 +1,33 @@
+//
+// MyImmerseCreateDynamicTextureMap.mel
+//
+// Mel script for applying Net Immerse Dynamic Texture Maps to a light
+
+
+global proc MyImmerseCreateDynamicTextureMap()
+{
+    string $szShape;
+    string $szTransform;
+    
+
+    $szShape = `spotLight -rgb 0.0 0.0 0.0 -i 0 -sc 0.0 0.0 0.0`;
+
+    $szTransform = `rename GamebryoDynamicTextureMap`;
+
+    addAttr -ln Ni_DynamicTextureMap -at bool $szTransform;
+
+    addAttr -ln Ni_TextureType -at enum -enumName "Projected Light:Projected Shadow:Environment Map" $szTransform;
+
+    addAttr -ln Ni_CoordinateType -at enum -enumName "World Parallel:World Perspective:Sphere Map:Specular Cube Map:Diffuse Cube Map" $szTransform;
+
+    addAttr -ln Ni_ParallelRadius -at "float" -min 0 -dv 5 $szTransform;
+
+    addAttr -ln Ni_PerspectiveAngle -at "float" -min 0 -max 180 -dv 30 $szTransform;
+
+    addAttr -ln Ni_ClampMode -at enum -enumName "Clamp S Clamp T:Clamp S Wrap T:Wrap S Clamp T:Wrap S Wrap T" $szTransform;
+
+    addAttr -ln Ni_Filter -at enum -enumName "Nearest:BILerp:Nearest MIP Nearest:BILerp MIP Nearest:Nearest MIPLerp:TriLerp" -dv 5 $szTransform;
+
+    addAttr -ln Ni_Use_Clipping_Plane -at bool $szTransform;
+}
+

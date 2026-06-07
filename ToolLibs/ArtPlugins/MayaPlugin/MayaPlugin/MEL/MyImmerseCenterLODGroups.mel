@@ -1,0 +1,81 @@
+//
+// MyImmerseCenterLODGroups.mel
+//
+// Mel script for applying adjusting the center of LOD nodes to be 
+// the average of it's children
+//
+
+global proc MyImmerseCenterLODGroups()
+{
+    string $sLODGroups[] = `ls -sl -typ lodGroup`;
+
+    int $iLODLoop = 0;
+
+    while($iLODLoop < size($sLODGroups))
+    {
+        //Debug:: print ($sLODGroups[$iLODLoop] + "\n");
+        select -r $sLODGroups[$iLODLoop];
+    
+        string $sChildren[] = `listRelatives -c -f $sLODGroups[$iLODLoop]`;
+    
+        // Find the Average Translate or Center Point of the Children
+        float $fX = 0;
+        float $fY = 0;
+        float $fZ = 0;
+        int $iChildLoop = 0;
+        string $sAttrX = $sChildren[$iChildLoop] + ".translateX";
+        string $sAttrY = $sChildren[$iChildLoop] + ".translateY";
+        string $sAttrZ = $sChildren[$iChildLoop] + ".translateZ";
+    
+        while($iChildLoop < size($sChildren))
+        {
+            //Debug:: print ($sChildren[$iChildLoop] + "\n");
+
+            $sAttrX = $sChildren[$iChildLoop] + ".translateX";
+            $sAttrY = $sChildren[$iChildLoop] + ".translateY";
+            $sAttrZ = $sChildren[$iChildLoop] + ".translateZ";
+    
+            $fX = $fX + `getAttr $sAttrX`;
+            $fY = $fY + `getAttr $sAttrY`;
+            $fZ = $fZ + `getAttr $sAttrZ`;
+            $iChildLoop = $iChildLoop + 1;
+        }
+        $fX = $fX / size($sChildren);
+        $fY = $fY / size($sChildren);
+        $fZ = $fZ / size($sChildren);
+    
+        // Adjust the LOD Group to the center
+        $sAttrX = $sLODGroups[$iLODLoop] + ".translateX";
+        $sAttrY = $sLODGroups[$iLODLoop] + ".translateY";
+        $sAttrZ = $sLODGroups[$iLODLoop] + ".translateZ";
+        float $fLODX = $fX + `getAttr $sAttrX`;
+        float $fLODY = $fY + `getAttr $sAttrY`;
+        float $fLODZ = $fZ + `getAttr $sAttrZ`;
+    
+        setAttr $sAttrX $fLODX;
+        setAttr $sAttrY $fLODY;
+        setAttr $sAttrZ $fLODZ;
+    
+        // Adjust each Child by the New Center
+        $iChildLoop = 0;
+        while($iChildLoop < size($sChildren))
+        {
+            //Debug:: print ($sChildren[$iChildLoop] + "\n");
+            $sAttrX = $sChildren[$iChildLoop] + ".translateX";
+            $sAttrY = $sChildren[$iChildLoop] + ".translateY";
+            $sAttrZ = $sChildren[$iChildLoop] + ".translateZ";
+    
+            float $fCX = `getAttr $sAttrX` - $fX;
+            float $fCY = `getAttr $sAttrY` - $fY;
+            float $fCZ = `getAttr $sAttrZ` - $fZ;
+    
+            setAttr $sAttrX $fCX;
+            setAttr $sAttrY $fCY;
+            setAttr $sAttrZ $fCZ;
+    
+            $iChildLoop = $iChildLoop + 1;
+        }
+    
+        $iLODLoop = $iLODLoop + 1;
+    }
+}

@@ -1,4 +1,0 @@
-global proc GamebryoLoadPlugins()
-{
-    loadPlugin "GamebryoMayaPlugin";
-}

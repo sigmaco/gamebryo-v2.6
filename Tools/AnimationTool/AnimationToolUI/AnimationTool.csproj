@@ -1,0 +1,1154 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{56EDF427-4FE0-414F-A83E-F73D462F64BA}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = "Resources\AnimationTool.ico"
+                AssemblyKeyContainerName = ""
+                AssemblyName = "AnimationTool"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "WinExe"
+                PreBuildEvent = ""
+                PostBuildEvent = 'copy "$(ProjectDir)$(TargetFileName).manifest" "$(TargetDir)"'
+                RootNamespace = "AnimationToolUI"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug DLL"
+                    AllowUnsafeBlocks = "true"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "..\Application\VC71\Debug_NoPhysX\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release DLL"
+                    AllowUnsafeBlocks = "true"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "..\Application\VC71\Release_NoPhysX\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Debug DLL PhysX"
+                    AllowUnsafeBlocks = "true"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE;EE_PHYSX_BUILD"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "..\Application\VC71\Debug\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release DLL PhysX"
+                    AllowUnsafeBlocks = "true"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE;EE_PHYSX_BUILD"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "..\Application\VC71\Release\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "System.Design"
+                    AssemblyName = "System.Design"
+                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Design.dll"
+                />
+                <Reference
+                    Name = "SegmentedTrackBar"
+                    Project = "{03B7B0EE-CF52-4883-B273-629168757600}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "SourceLibrary"
+                    AssemblyName = "SourceLibrary"
+                    HintPath = "..\SourceGrid2\References\SourceLibrary.dll"
+                />
+                <Reference
+                    Name = "SourceGrid2"
+                    Project = "{15001AC5-2185-4B39-BF6C-9FCDC39E7376}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "NiManagedToolInterface"
+                    Project = "{34E9B537-EDA9-4DB8-BDE0-116BE83F3C1D}"
+                    Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
+                />
+                <Reference
+                    Name = "WeifenLuo.WinFormsUI.Docking"
+                    AssemblyName = "WeifenLuo.WinFormsUI.Docking"
+                    HintPath = "..\..\..\ThirdPartyCode\DockPanel\WinFormsUI\VC71\WeifenLuo.WinFormsUI.Docking.dll"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\CharacterEdit.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\CharacterEdit.resx"
+                    DependentUpon = "CharacterEdit.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\ImageButton.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\ImageButton.resx"
+                    DependentUpon = "ImageButton.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\InteractivePreview.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\InteractivePreview.resx"
+                    DependentUpon = "InteractivePreview.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\KeystrokeBindings.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\KeystrokeBindings.resx"
+                    DependentUpon = "KeystrokeBindings.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\NoEditableProperties.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\NoEditableProperties.resx"
+                    DependentUpon = "NoEditableProperties.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\NumericSlider.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\NumericSlider.resx"
+                    DependentUpon = "NumericSlider.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\RenderPanel.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\RenderPanel.resx"
+                    DependentUpon = "RenderPanel.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\RollBarControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\RollBarControl.resx"
+                    DependentUpon = "RollBarControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SequenceCommon.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SequenceCommon.resx"
+                    DependentUpon = "SequenceCommon.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SequenceFolderEdit.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SequenceFolderEdit.resx"
+                    DependentUpon = "SequenceFolderEdit.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SequenceGroupCommon.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SequenceGroupCommon.resx"
+                    DependentUpon = "SequenceGroupCommon.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SequenceGroupFolderEdit.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SequenceGroupFolderEdit.resx"
+                    DependentUpon = "SequenceGroupFolderEdit.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SequenceGroupMixer.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SequenceGroupMixer.resx"
+                    DependentUpon = "SequenceGroupMixer.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SequenceGroupProperties.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SequenceGroupProperties.resx"
+                    DependentUpon = "SequenceGroupProperties.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SequenceIDOverview.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SequenceIDOverview.resx"
+                    DependentUpon = "SequenceIDOverview.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SequenceInterpolators.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SequenceInterpolators.resx"
+                    DependentUpon = "SequenceInterpolators.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SequenceTextKeys.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SequenceTextKeys.resx"
+                    DependentUpon = "SequenceTextKeys.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\SliderBar.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SliderBar.resx"
+                    DependentUpon = "SliderBar.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\TimeSlider.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\TimeSlider.resx"
+                    DependentUpon = "TimeSlider.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\TransitionChainEdit.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\TransitionChainEdit.resx"
+                    DependentUpon = "TransitionChainEdit.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\TransitionDefaultEdit.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\TransitionDefaultEdit.resx"
+                    DependentUpon = "TransitionDefaultEdit.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\TransitionDelayedBlendEdit.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\TransitionDelayedBlendEdit.resx"
+                    DependentUpon = "TransitionDelayedBlendEdit.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\TransitionEdit.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\TransitionEdit.resx"
+                    DependentUpon = "TransitionEdit.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\TransitionImmediateBlendEdit.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\TransitionImmediateBlendEdit.resx"
+                    DependentUpon = "TransitionImmediateBlendEdit.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\WorkSheet.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\WorkSheet.resx"
+                    DependentUpon = "WorkSheet.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\AboutBoxForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\AboutBoxForm.resx"
+                    DependentUpon = "AboutBoxForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\AddRemoveSeqToGrpForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\AddRemoveSeqToGrpForm.resx"
+                    DependentUpon = "AddRemoveSeqToGrpForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\CharacterEditForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\CharacterEditForm.resx"
+                    DependentUpon = "CharacterEditForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\DefaultTransitionSettingsForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\DefaultTransitionSettingsForm.resx"
+                    DependentUpon = "DefaultTransitionSettingsForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\EditViewForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\EditViewForm.resx"
+                    DependentUpon = "EditViewForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\FileOverwriteForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\FileOverwriteForm.resx"
+                    DependentUpon = "FileOverwriteForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\MainForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\MainForm.resx"
+                    DependentUpon = "MainForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\MessageBoxForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\MessageBoxForm.resx"
+                    DependentUpon = "MessageBoxForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\MessageBoxRegistryEdit.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\MessageBoxRegistryEdit.resx"
+                    DependentUpon = "MessageBoxRegistryEdit.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\OutputViewForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\OutputViewForm.resx"
+                    DependentUpon = "OutputViewForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\PopupForSliderBar.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\PopupForSliderBar.resx"
+                    DependentUpon = "PopupForSliderBar.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\ProjectViewForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\ProjectViewForm.resx"
+                    DependentUpon = "ProjectViewForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\RenderForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\RenderForm.resx"
+                    DependentUpon = "RenderForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\SceneOptionsForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\SceneOptionsForm.resx"
+                    DependentUpon = "SceneOptionsForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\SelectTransitionTypeForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\SelectTransitionTypeForm.resx"
+                    DependentUpon = "SelectTransitionTypeForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\TransitionChainEditForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\TransitionChainEditForm.resx"
+                    DependentUpon = "TransitionChainEditForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\TransitionsViewForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\TransitionsViewForm.resx"
+                    DependentUpon = "TransitionsViewForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\TransitionTableSettingsForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\TransitionTableSettingsForm.resx"
+                    DependentUpon = "TransitionTableSettingsForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Physics\AddRemovePhysicsSequenceForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Physics\AddRemovePhysicsSequenceForm.resx"
+                    DependentUpon = "AddRemovePhysicsSequenceForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Physics\PhysicsViewForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Physics\PhysicsViewForm.resx"
+                    DependentUpon = "PhysicsViewForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Add.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\AnimationTool.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\AnimationToolDoc.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\ArrowDown.ICO"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\ArrowLeft.ICO"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\ArrowRight.ICO"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\ArrowUp.ICO"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\DefaultDockManager.config"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Delete.ICO"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Error.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\folder.png"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Info.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Left.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Minus.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\node.png"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Plus.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Question.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Right.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\vssver.scc"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Resources\Warning.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\AboutBox Images\NDL Logo.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\00_new project.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\01_project open.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\02_save project.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\03_sequence add multiple.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\04_view project.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\05_view edit.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\06_view render.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\07_view transitions.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\08_view output log.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MainForm Images\10_view physics.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\CannotCompleteOperationDueToIncompleteProj.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\CannotFindKFError.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\CannotFindResourceError.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\CannotSaveIncompleteProject.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\ChainCreateDefaultTransitions.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\ChangeTransitionWarning.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DeleteFolder.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DeleteLastBlendPair.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DeleteSequence.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DeleteSequenceGroup.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DependentChainsFoundDeleteDelete.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DependentChainsFoundModifyDelete.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DependentChainsFoundModifyModify.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DependentSequenceGroupsFound.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DependentSequenceInSequenceGroupFound.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\DependentSequenceInSequenceGroupFoundOnDeletion.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\FileHasChanged.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\FileOverwrite.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\GroupIDAlreadyInUse.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\InvalidTransitionError.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\KeystrokeMappingAlreadyInUse.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\LoadKFError.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\LoadKFMError.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\MakeUnique.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\MorphSequenceIsClamp.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\MorphsHavingClampTypeWarning.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\NestedChainError.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\RootInterpolatorMismatches.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\SaveKFMError.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\SequenceIDAlreadyInUse.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\TooFewIntermediates.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\MessageBoxes\UnableToChangeTransitionWarning.rtf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\00_orbit cam.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\01_pan cam.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\02_adjust background height.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\03_zoom extents.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\04_+lod.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\05_-lod.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\06_wireframe mode.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\07_default lights.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\08_toggle background.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\09_toggle fps.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\10_toggle abv.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\11_toggle trajectory.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\12_reload shaders.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\13_reset character position.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\14_options.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\NavigationPanel Images\15_move orbit center.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Physics Images\01_force mode.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TimeSlider Images\AnimationOptions.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TimeSlider Images\FinalFrame.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TimeSlider Images\FirstFrame.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TimeSlider Images\Pause.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TimeSlider Images\Play.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\00_character model.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\01_sequence root.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\02_folder sequence.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\03_sequence.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\04_sequence group root.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\05_folder sequence group.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\06_sequence group.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\07_sequence ID.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\08_sequence group ID.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\09_interactive preview.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\TreeView Images\10_transitions preview.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\View Icons\EditView.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\View Icons\OutputView.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\View Icons\ProjectView.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\View Icons\RenderView.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\View Icons\TransitionsView.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Source\AnimationHelpers.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\AppEvents.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\AppUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\AssociateFileTypes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\ColumnSort.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\EditorSliderBar.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\HelpManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\InputManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\InterfacePostShow.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\Invalidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\ListViewUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\MessageBoxManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\MRUManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\ProjectData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\ProjectTreeNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\TimeSliderBlend.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\TimeSliderBlendDelayed.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\TimeSliderBlendImmediate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\TimeSliderChain.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\TimeSliderCrossFade.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\TimeSliderMorph.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\TimeSliderSequence.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\TimeSliderTransitionInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\User32.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Source\UserLogs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

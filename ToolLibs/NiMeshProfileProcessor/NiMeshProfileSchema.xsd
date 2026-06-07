@@ -1,0 +1,645 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="MeshProfiles">
+		<xs:complexType>
+			<xs:sequence>
+				
+				<!-- Begin Element Definition -->
+				
+				<xs:element minOccurs="0" maxOccurs="unbounded" name="Element" >
+					<xs:complexType>
+						<xs:sequence>
+							
+							<!-- Begin Component Definition -->
+							
+							<xs:element maxOccurs="unbounded" name="Component">
+								<xs:complexType>
+									<xs:attribute name="type" use="required">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="x"/>
+												<xs:enumeration value="y"/>
+												<xs:enumeration value="z"/>
+												<xs:enumeration value="w"/>
+												<xs:enumeration value="r"/>
+												<xs:enumeration value="g"/>
+												<xs:enumeration value="b"/>
+												<xs:enumeration value="a"/>
+												<xs:enumeration value="0"/>
+												<xs:enumeration value="1"/>
+												<xs:enumeration value="2"/>
+												<xs:enumeration value="3"/>
+												<xs:enumeration value="u"/>
+												<xs:enumeration value="v"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="value" use="required" >
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:pattern value="(POSITION.[x-z])|(NORMAL.[x-z])|(TEXCOORD\[([0-32])\].[u-v])|(COLOR\[([0-32])\].[r|g|b|a])"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="default" type="xs:float" use="optional" />
+									<xs:attribute name="platform" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="All"/>
+												<xs:enumeration value="XBOX360"/>
+												<xs:enumeration value="PS3"/>
+												<xs:enumeration value="PC"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="clamp" use="optional" >
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:pattern value="min=(-*)(.*)([0-9]*) max=(-*)(.*)([0-9]*)"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="remap" use="optional" >
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:pattern value="src-a=(-*)(.*)([0-9]*) src-b=(-*)(.*)([0-9]*) dst-a=(-*)(.*)([0-9]*) dst-b=(-*)(.*)([0-9]*)"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							
+							<!-- End Component Definition -->	
+							
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="optional" />
+						<xs:attribute name="type" use="optional">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="POSITION"/>
+									<xs:enumeration value="NORMAL"/>
+									<xs:enumeration value="COLOR"/>
+									<xs:enumeration value="TEXCOORD"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="index" type="xs:unsignedByte" use="optional" />
+						<xs:attribute name="platform" use="optional">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="All"/>
+									<xs:enumeration value="XBOX360"/>
+									<xs:enumeration value="PS3"/>
+									<xs:enumeration value="PC"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="required" use="optional">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="REQUIRED_ERROR"/>
+									<xs:enumeration value="REQUIRED_DEFAULT"/>
+									<xs:enumeration value="REQUIRED_GENERATE"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="sharegroup" type="xs:unsignedInt" use="optional" />
+					</xs:complexType>
+				</xs:element>
+				
+				<!-- End Element Definition -->
+				
+				<!-- Begin PrepStream Definition -->
+				
+				<xs:element  minOccurs="0" maxOccurs="unbounded" name="PrepStream">
+					<xs:complexType mixed="true">
+						<xs:sequence minOccurs="0">
+							
+							<!-- Begin PrepStream Element Definition -->
+							
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="Element" >
+								<xs:complexType mixed="1">
+									<xs:sequence minOccurs="0">
+										
+										<!-- Begin PrepStream Element Component Definition -->
+										
+										<xs:element maxOccurs="unbounded" name="Component">
+											<xs:complexType>
+												<xs:attribute name="type" use="required">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="x"/>
+															<xs:enumeration value="y"/>
+															<xs:enumeration value="z"/>
+															<xs:enumeration value="w"/>
+															<xs:enumeration value="r"/>
+															<xs:enumeration value="g"/>
+															<xs:enumeration value="b"/>
+															<xs:enumeration value="a"/>
+															<xs:enumeration value="0"/>
+															<xs:enumeration value="1"/>
+															<xs:enumeration value="2"/>
+															<xs:enumeration value="3"/>
+															<xs:enumeration value="u"/>
+															<xs:enumeration value="v"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="value" use="required" >
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:pattern value="(POSITION.[x-z])|(NORMAL.[x-z])|(TEXCOORD\[([0-32])\].[u-v])|(COLOR\[([0-32])\].[r|g|b|a])"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="default" type="xs:float" use="optional" />
+												<xs:attribute name="platform" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="All"/>
+															<xs:enumeration value="XBOX360"/>
+															<xs:enumeration value="PS3"/>
+															<xs:enumeration value="PC"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="clamp" use="optional" >
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:pattern value="min=(-*)(.*)([0-9]*) max=(-*)(.*)([0-9]*)"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="remap" use="optional" >
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:pattern value="src-a=(-*)(.*)([0-9]*) src-b=(-*)(.*)([0-9]*) dst-a=(-*)(.*)([0-9]*) dst-b=(-*)(.*)([0-9]*)"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+										
+										<!-- End PrepStream Element Component Definition -->	
+										
+									</xs:sequence>
+									<xs:attribute name="name" type="xs:string" use="optional" />
+									<xs:attribute name="type" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="POSITION"/>
+												<xs:enumeration value="NORMAL"/>
+												<xs:enumeration value="COLOR"/>
+												<xs:enumeration value="TEXCOORD"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="index" type="xs:unsignedByte" use="optional" />
+									<xs:attribute name="platform" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="All"/>
+												<xs:enumeration value="XBOX360"/>
+												<xs:enumeration value="PS3"/>
+												<xs:enumeration value="PC"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="required" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="REQUIRED_ERROR"/>
+												<xs:enumeration value="REQUIRED_DEFAULT"/>
+												<xs:enumeration value="REQUIRED_GENERATE"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="sharegroup" type="xs:unsignedInt" use="optional" />
+								</xs:complexType>
+							</xs:element>
+							
+							<!-- End PrepStream Element Definition -->
+							
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="optional" />
+						<xs:attribute name="type" type="xs:string" use="optional" />
+						<xs:attribute name="platform" use="optional">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="ALL"/>
+									<xs:enumeration value="XBOX360"/>
+									<xs:enumeration value="PS3"/>
+									<xs:enumeration value="PC"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				
+				<!-- End PrepStream Definition -->
+				
+				<!-- Begin PackStream Definition -->
+				
+				<xs:element  minOccurs="0" maxOccurs="unbounded" name="PackStream">
+					<xs:complexType mixed="true">
+						<xs:sequence minOccurs="0">
+							
+							<!-- Begin PackStream Element Definition -->
+							
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="Element" >
+								<xs:complexType mixed="true">
+									<xs:sequence minOccurs="0">
+										
+										<!-- Begin PackStream Element Component Definition -->
+										
+										<xs:element maxOccurs="unbounded" name="Component">
+											<xs:complexType>
+												<xs:attribute name="type" use="required">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="x"/>
+															<xs:enumeration value="y"/>
+															<xs:enumeration value="z"/>
+															<xs:enumeration value="w"/>
+															<xs:enumeration value="r"/>
+															<xs:enumeration value="g"/>
+															<xs:enumeration value="b"/>
+															<xs:enumeration value="a"/>
+															<xs:enumeration value="0"/>
+															<xs:enumeration value="1"/>
+															<xs:enumeration value="2"/>
+															<xs:enumeration value="3"/>
+															<xs:enumeration value="u"/>
+															<xs:enumeration value="v"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="value" type="xs:string" use="required" />
+												<xs:attribute name="default" type="xs:float" use="optional" />
+												<xs:attribute name="platform" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="All"/>
+															<xs:enumeration value="XBOX360"/>
+															<xs:enumeration value="PS3"/>
+															<xs:enumeration value="PC"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="clamp" use="optional" >
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:pattern value="min=(-*)(.*)([0-9]*) max=(-*)(.*)([0-9]*)"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="remap" use="optional" >
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:pattern value="src-a=(-*)(.*)([0-9]*) src-b=(-*)(.*)([0-9]*) dst-a=(-*)(.*)([0-9]*) dst-b=(-*)(.*)([0-9]*)"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+										
+										<!-- End PackStream Element Component Definition -->	
+										
+									</xs:sequence>
+									<xs:attribute name="name" type="xs:string" use="optional" />
+									<xs:attribute name="type" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="POSITION"/>
+												<xs:enumeration value="NORMAL"/>
+												<xs:enumeration value="COLOR"/>
+												<xs:enumeration value="TEXCOORD"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="index" type="xs:unsignedByte" use="optional" />
+									<xs:attribute name="platform" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="All"/>
+												<xs:enumeration value="XBOX360"/>
+												<xs:enumeration value="PS3"/>
+												<xs:enumeration value="PC"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="required" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="REQUIRED_ERROR"/>
+												<xs:enumeration value="REQUIRED_DEFAULT"/>
+												<xs:enumeration value="REQUIRED_GENERATE"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="sharegroup" type="xs:unsignedInt" use="optional" />
+								</xs:complexType>
+							</xs:element>
+							
+							<!-- End PackStream Element Definition -->
+							
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="optional" />
+						<xs:attribute name="type" type="xs:string" use="optional" />
+						<xs:attribute name="platform" use="optional">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="ALL"/>
+									<xs:enumeration value="XBOX360"/>
+									<xs:enumeration value="PS3"/>
+									<xs:enumeration value="PC"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				
+				<!-- End PackStream Definition -->
+				
+				<!-- Begin MeshProfile Definition -->
+				
+				<xs:element maxOccurs="unbounded" name="MeshProfile">
+					<xs:complexType>
+						<xs:sequence>
+							
+							<!-- Begin MeshProfile PrepStream Definition -->
+							
+							<xs:element  minOccurs="0" maxOccurs="unbounded" name="PrepStream">
+								<xs:complexType mixed="true">
+									<xs:sequence minOccurs="0">
+										
+										<!-- Begin MeshProfile PrepStream Element Definition -->
+										
+										<xs:element minOccurs="0" maxOccurs="unbounded" name="Element" >
+											<xs:complexType mixed="true">
+												<xs:sequence minOccurs="0">
+													
+													<!-- Begin MeshProfile PrepStream Element Component Definition -->
+													
+													<xs:element maxOccurs="unbounded" name="Component">
+														<xs:complexType>
+															<xs:attribute name="type" use="required">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:enumeration value="x"/>
+																		<xs:enumeration value="y"/>
+																		<xs:enumeration value="z"/>
+																		<xs:enumeration value="w"/>
+																		<xs:enumeration value="r"/>
+																		<xs:enumeration value="g"/>
+																		<xs:enumeration value="b"/>
+																		<xs:enumeration value="a"/>
+																		<xs:enumeration value="0"/>
+																		<xs:enumeration value="1"/>
+																		<xs:enumeration value="2"/>
+																		<xs:enumeration value="3"/>
+																		<xs:enumeration value="u"/>
+																		<xs:enumeration value="v"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+															<xs:attribute name="value" use="required" >
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:pattern value="(POSITION.[x-z])|(NORMAL.[x-z])|(TEXCOORD\[([0-32])\].[u-v])|(COLOR\[([0-32])\].[r|g|b|a])"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+															<xs:attribute name="default" type="xs:float" use="optional" />
+															<xs:attribute name="platform" use="optional">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:enumeration value="All"/>
+																		<xs:enumeration value="XBOX360"/>
+																		<xs:enumeration value="PS3"/>
+																		<xs:enumeration value="PC"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+															<xs:attribute name="clamp" use="optional" >
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:pattern value="min=(-*)(.*)([0-9]*) max=(-*)(.*)([0-9]*)"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+															<xs:attribute name="remap" use="optional" >
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:pattern value="src-a=(-*)(.*)([0-9]*) src-b=(-*)(.*)([0-9]*) dst-a=(-*)(.*)([0-9]*) dst-b=(-*)(.*)([0-9]*)"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+														</xs:complexType>
+													</xs:element>
+													
+													<!-- End MeshProfile PrepStream Element Component Definition -->	
+													
+												</xs:sequence>
+												<xs:attribute name="name" type="xs:string" use="optional" />
+												<xs:attribute name="type" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="POSITION"/>
+															<xs:enumeration value="NORMAL"/>
+															<xs:enumeration value="COLOR"/>
+															<xs:enumeration value="TEXCOORD"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="index" type="xs:unsignedByte" use="optional" />
+												<xs:attribute name="platform" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="All"/>
+															<xs:enumeration value="XBOX360"/>
+															<xs:enumeration value="PS3"/>
+															<xs:enumeration value="PC"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="required" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="REQUIRED_ERROR"/>
+															<xs:enumeration value="REQUIRED_DEFAULT"/>
+															<xs:enumeration value="REQUIRED_GENERATE"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="sharegroup" type="xs:unsignedInt" use="optional" />
+											</xs:complexType>
+										</xs:element>
+										
+										<!-- End MeshProfile PrepStream Element Definition -->
+										
+									</xs:sequence>
+									<xs:attribute name="name" type="xs:string" use="optional" />
+									<xs:attribute name="type" type="xs:string" use="optional" />
+									<xs:attribute name="platform" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="ALL"/>
+												<xs:enumeration value="XBOX360"/>
+												<xs:enumeration value="PS3"/>
+												<xs:enumeration value="PC"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							
+							<!-- End MeshProfile PrepStream Definition -->
+							
+							<!-- Begin MeshProfile PackStream Definition -->
+							
+							<xs:element  minOccurs="0" maxOccurs="unbounded" name="PackStream">
+								<xs:complexType mixed="true">
+									<xs:sequence minOccurs="0">
+										
+										<!-- Begin MeshProfile PackStream Element Definition -->
+										
+										<xs:element minOccurs="0" maxOccurs="unbounded" name="Element" >
+											<xs:complexType>
+												<xs:sequence>
+													
+													<!-- Begin MeshProfile PackStream Element Component Definition -->
+													
+													<xs:element maxOccurs="unbounded" name="Component">
+														<xs:complexType>
+															<xs:attribute name="type" use="required">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:enumeration value="x"/>
+																		<xs:enumeration value="y"/>
+																		<xs:enumeration value="z"/>
+																		<xs:enumeration value="w"/>
+																		<xs:enumeration value="r"/>
+																		<xs:enumeration value="g"/>
+																		<xs:enumeration value="b"/>
+																		<xs:enumeration value="a"/>
+																		<xs:enumeration value="0"/>
+																		<xs:enumeration value="1"/>
+																		<xs:enumeration value="2"/>
+																		<xs:enumeration value="3"/>
+																		<xs:enumeration value="u"/>
+																		<xs:enumeration value="v"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+															<xs:attribute name="value" type="xs:string" use="required" />
+															<xs:attribute name="default" type="xs:float" use="optional" />
+															<xs:attribute name="platform" use="optional">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:enumeration value="All"/>
+																		<xs:enumeration value="XBOX360"/>
+																		<xs:enumeration value="PS3"/>
+																		<xs:enumeration value="PC"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+															<xs:attribute name="clamp" use="optional" >
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:pattern value="min=(-*)(.*)([0-9]*) max=(-*)(.*)([0-9]*)"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+															<xs:attribute name="remap" use="optional" >
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:pattern value="src-a=(-*)(.*)([0-9]*) src-b=(-*)(.*)([0-9]*) dst-a=(-*)(.*)([0-9]*) dst-b=(-*)(.*)([0-9]*)"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+														</xs:complexType>
+													</xs:element>
+													
+													<!-- End MeshProfile PackStream Element Component Definition -->	
+													
+												</xs:sequence>
+												<xs:attribute name="name" type="xs:string" use="optional" />
+												<xs:attribute name="type" use="required">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="POSITION"/>
+															<xs:enumeration value="NORMAL"/>
+															<xs:enumeration value="COLOR"/>
+															<xs:enumeration value="TEXCOORD"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="index" type="xs:unsignedByte" use="optional" />
+												<xs:attribute name="platform" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="All"/>
+															<xs:enumeration value="XBOX360"/>
+															<xs:enumeration value="PS3"/>
+															<xs:enumeration value="PC"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="required" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="REQUIRED_ERROR"/>
+															<xs:enumeration value="REQUIRED_DEFAULT"/>
+															<xs:enumeration value="REQUIRED_GENERATE"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="sharegroup" type="xs:unsignedInt" use="optional" />
+											</xs:complexType>
+										</xs:element>
+										
+										<!-- End MeshProfile PackStream Element Definition -->
+										
+									</xs:sequence>
+									<xs:attribute name="name" type="xs:string" use="optional" />
+									<xs:attribute name="type" type="xs:string" use="optional" />
+									<xs:attribute name="platform" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="ALL"/>
+												<xs:enumeration value="XBOX360"/>
+												<xs:enumeration value="PS3"/>
+												<xs:enumeration value="PC"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							
+							<!-- End MeshProfile PackStream Definition -->
+							
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required" />
+						<xs:attribute name="description" type="xs:string" use="optional" />
+						<xs:attribute name="strict" type="xs:boolean" use="optional" />
+						<xs:attribute name="platform" use="optional">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="ALL"/>
+									<xs:enumeration value="XBOX360"/>
+									<xs:enumeration value="PS3"/>
+									<xs:enumeration value="PC"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				
+				<!-- End MeshProfile Definition -->
+				
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:float" use="required" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

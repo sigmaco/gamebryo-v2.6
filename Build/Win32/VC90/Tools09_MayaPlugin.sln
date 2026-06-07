@@ -1,0 +1,84 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools09_MayaPlugin", "Tools09_MayaPlugin", "{490C1AC5-53A0-45B1-BACB-79E57DD4CFF7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MayaPlugin", "..\..\..\ToolLibs\ArtPlugins\MayaPlugin\MayaPlugin\Win32\VC90\MayaPlugin.vcproj", "{D7FBED9C-06E3-4793-8838-3E50B4F27390}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695} = {DFD88F17-38BE-417B-AEB5-74EFC68AB695}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MayaMELMunger", "..\..\..\ToolLibs\ArtPlugins\MayaPlugin\MayaMELMunger\Win32\VC90\MayaMELMunger.vcproj", "{DFD88F17-38BE-417B-AEB5-74EFC68AB695}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL Maya2008|Win32 = Debug DLL Maya2008|Win32
+		Debug DLL Maya2009|Win32 = Debug DLL Maya2009|Win32
+		Debug DLL Maya80|Win32 = Debug DLL Maya80|Win32
+		Debug DLL Maya85|Win32 = Debug DLL Maya85|Win32
+		Release DLL Maya2008|Win32 = Release DLL Maya2008|Win32
+		Release DLL Maya2009|Win32 = Release DLL Maya2009|Win32
+		Release DLL Maya80|Win32 = Release DLL Maya80|Win32
+		Release DLL Maya85|Win32 = Release DLL Maya85|Win32
+		Shipping DLL Maya2008|Win32 = Shipping DLL Maya2008|Win32
+		Shipping DLL Maya2009|Win32 = Shipping DLL Maya2009|Win32
+		Shipping DLL Maya80|Win32 = Shipping DLL Maya80|Win32
+		Shipping DLL Maya85|Win32 = Shipping DLL Maya85|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Debug DLL Maya2008|Win32.ActiveCfg = Debug DLL Maya2008|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Debug DLL Maya2008|Win32.Build.0 = Debug DLL Maya2008|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Debug DLL Maya2009|Win32.ActiveCfg = Debug DLL Maya2009|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Debug DLL Maya2009|Win32.Build.0 = Debug DLL Maya2009|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Debug DLL Maya80|Win32.ActiveCfg = Debug DLL Maya80|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Debug DLL Maya80|Win32.Build.0 = Debug DLL Maya80|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Debug DLL Maya85|Win32.ActiveCfg = Debug DLL Maya85|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Debug DLL Maya85|Win32.Build.0 = Debug DLL Maya85|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Release DLL Maya2008|Win32.ActiveCfg = Release DLL Maya2008|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Release DLL Maya2008|Win32.Build.0 = Release DLL Maya2008|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Release DLL Maya2009|Win32.ActiveCfg = Release DLL Maya2009|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Release DLL Maya2009|Win32.Build.0 = Release DLL Maya2009|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Release DLL Maya80|Win32.ActiveCfg = Debug DLL Maya80|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Release DLL Maya80|Win32.Build.0 = Debug DLL Maya80|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Release DLL Maya85|Win32.ActiveCfg = Release DLL Maya85|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Release DLL Maya85|Win32.Build.0 = Release DLL Maya85|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Shipping DLL Maya2008|Win32.ActiveCfg = Shipping DLL Maya2008|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Shipping DLL Maya2008|Win32.Build.0 = Shipping DLL Maya2008|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Shipping DLL Maya2009|Win32.ActiveCfg = Shipping DLL Maya2009|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Shipping DLL Maya2009|Win32.Build.0 = Shipping DLL Maya2009|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Shipping DLL Maya80|Win32.ActiveCfg = Shipping DLL Maya80|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Shipping DLL Maya80|Win32.Build.0 = Shipping DLL Maya80|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Shipping DLL Maya85|Win32.ActiveCfg = Shipping DLL Maya85|Win32
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390}.Shipping DLL Maya85|Win32.Build.0 = Shipping DLL Maya85|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Debug DLL Maya2008|Win32.ActiveCfg = Debug|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Debug DLL Maya2008|Win32.Build.0 = Debug|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Debug DLL Maya2009|Win32.ActiveCfg = Debug|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Debug DLL Maya2009|Win32.Build.0 = Debug|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Debug DLL Maya80|Win32.ActiveCfg = Debug|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Debug DLL Maya80|Win32.Build.0 = Debug|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Debug DLL Maya85|Win32.ActiveCfg = Debug|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Debug DLL Maya85|Win32.Build.0 = Debug|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Release DLL Maya2008|Win32.ActiveCfg = Release|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Release DLL Maya2008|Win32.Build.0 = Release|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Release DLL Maya2009|Win32.ActiveCfg = Release|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Release DLL Maya2009|Win32.Build.0 = Release|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Release DLL Maya80|Win32.ActiveCfg = Release|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Release DLL Maya80|Win32.Build.0 = Release|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Release DLL Maya85|Win32.ActiveCfg = Release|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Release DLL Maya85|Win32.Build.0 = Release|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Shipping DLL Maya2008|Win32.ActiveCfg = Shipping|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Shipping DLL Maya2008|Win32.Build.0 = Shipping|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Shipping DLL Maya2009|Win32.ActiveCfg = Shipping|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Shipping DLL Maya2009|Win32.Build.0 = Shipping|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Shipping DLL Maya80|Win32.ActiveCfg = Shipping|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Shipping DLL Maya80|Win32.Build.0 = Shipping|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Shipping DLL Maya85|Win32.ActiveCfg = Shipping|Win32
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695}.Shipping DLL Maya85|Win32.Build.0 = Shipping|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D7FBED9C-06E3-4793-8838-3E50B4F27390} = {490C1AC5-53A0-45B1-BACB-79E57DD4CFF7}
+		{DFD88F17-38BE-417B-AEB5-74EFC68AB695} = {490C1AC5-53A0-45B1-BACB-79E57DD4CFF7}
+	EndGlobalSection
+EndGlobal

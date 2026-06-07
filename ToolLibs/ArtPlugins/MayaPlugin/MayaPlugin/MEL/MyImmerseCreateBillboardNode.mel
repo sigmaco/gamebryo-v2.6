@@ -1,0 +1,109 @@
+//
+// MyImmerseCreateBillboardNode.mel
+//
+// Mel script for applying Net Immerse Attributes to a Group to make it 
+// a Switch Node
+
+
+global proc MyImmerseCreateBillboardNode(string $nodeName)
+{
+    // Return dag objects only
+
+    string $dagnodes[];
+    if($nodeName == "")
+    {
+        $dagnodes = `selectedNodes -dagObjects`;
+    }
+    else
+    {
+        if(size(`selectedNodes -dagObjects`) > 1)
+        {
+            $dagnodes = `selectedNodes -dagObjects`;
+        }
+        else
+        {
+            $dagnodes[0] = $nodeName;
+        }
+    }
+
+    string $szNode;
+
+    if(size($dagnodes) <= 0)
+    {
+        // Create a new polyPlane
+        $dagnodes = `polyPlane -w 1 -h 1 -sx 1 -sy 1 -ax 0 0 1 -tx 1 -ch 1`;
+    }
+
+    // Create the Billboard Node and Attribute
+    $szNode = `group -n "Billboard" $dagnodes`;
+
+    // Get the long file name of the new node
+    string $szNodes[] = `ls -sl -l`;
+    $szNode = $szNodes[0];
+        
+    
+    addAttr -ln Ni_BillboardNode -at enum -enumName "Always Face Camera Direction:Rotate About Up:Rigid Face Camera Direction:Always Face Camera Center:Rigid Face Camera Center" -dv 1 $szNode;
+
+
+    // Remove the rotatePivot added by the new Billboard Node
+
+    // Get the rotate Pivot
+    string $szAttrX = $szNode + ".rotatePivotX";
+    string $szAttrY = $szNode + ".rotatePivotY";
+    string $szAttrZ = $szNode + ".rotatePivotZ";
+    float $fX = `getAttr $szAttrX`;
+    float $fY = `getAttr $szAttrY`;
+    float $fZ = `getAttr $szAttrZ`;
+
+
+    // Moved pivot back into translate
+    $szAttrX = $szNode + ".translateX";
+    $szAttrY = $szNode + ".translateY";
+    $szAttrZ = $szNode + ".translateZ";
+    setAttr $szAttrX $fX;
+    setAttr $szAttrY $fY;
+    setAttr $szAttrZ $fZ;
+
+
+    // Zero Out rotate Pivot
+    $szAttrX = $szNode + ".rotatePivotX";
+    $szAttrY = $szNode + ".rotatePivotY";
+    $szAttrZ = $szNode + ".rotatePivotZ";
+    setAttr $szAttrX 0.0;
+    setAttr $szAttrY 0.0;
+    setAttr $szAttrZ 0.0;
+
+    // Zero Out Scale Pivot
+    $szAttrX = $szNode + ".scalePivotX";
+    $szAttrY = $szNode + ".scalePivotY";
+    $szAttrZ = $szNode + ".scalePivotZ";
+    setAttr $szAttrX 0.0;
+    setAttr $szAttrY 0.0;
+    setAttr $szAttrZ 0.0;
+
+
+    // Find the children
+    string $sChildren[] = `listRelatives -c -f $szNode`;
+
+        // Adjust each Child by the New Center
+    int $iChildLoop = 0;
+
+    while($iChildLoop < size($sChildren))
+    {
+        //Debug:: print ($sChildren[$iChildLoop] + "\n");
+        string $sAttrX = $sChildren[$iChildLoop] + ".translateX";
+        string $sAttrY = $sChildren[$iChildLoop] + ".translateY";
+        string $sAttrZ = $sChildren[$iChildLoop] + ".translateZ";
+    
+        float $fCX = `getAttr $sAttrX` - $fX;
+        float $fCY = `getAttr $sAttrY` - $fY;
+        float $fCZ = `getAttr $sAttrZ` - $fZ;
+    
+        setAttr $sAttrX $fCX;
+        setAttr $sAttrY $fCY;
+        setAttr $sAttrZ $fCZ;
+    
+        $iChildLoop = $iChildLoop + 1;
+    }
+
+}

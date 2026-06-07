@@ -1,0 +1,9 @@
+//Gamebryo Forwarding File DO NOT MODIFY!
+
+
+global proc AEtransformTemplate (string $nodeName) 
+{
+    GamebryoLoadPlugins();
+    eval AEGamebryoTransformCommon $nodeName;
+    eval _gb_AEtransformTemplate $nodeName;
+}

@@ -1,0 +1,207 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+string description
+<
+	string detail0 = "This shader is used for the circular oscillating Warp Bars in the ";
+	string detail1 = "Eturnum sample. This effect is highly dependent on the specific geometry ";
+	string detail2 = "in that sample, and will not look good on arbitrary geometry. ";
+	string detail3 = "Check the cgfx file for details on this shader, including how to set ";
+	string detail4 = "the CenterlineConstants";
+> = "Warp Bars Effect";
+
+float4x4 WorldViewProj : WorldViewProjection 
+<
+	string UIWidget="None";
+>;
+float4x4 InvWorld : WorldInverse
+<
+	string UIWidget="None";
+>;
+float4 EyePos : EyePos 
+<
+	string UIWidget="None";
+>;
+float4 Zono 
+<
+	string UIWidget="None";
+	
+> = {0.0, 1.0, -1.0, 1.0} ;
+
+float4 MaterialColor : Diffuse 
+<
+	string UIName =  "Material Color";
+	string UIWidget = "Color";
+> = {0.5f, 0.0f, 0.5f, 1.0f};
+
+float4 CenterlineConstants 
+<
+	string UIWidget = "Slider";
+	string UIName = "Center Line Constants";
+
+> = {0.0, 100.0, 200.0, 0.01};
+
+float Cosine 
+<
+	// Make accessible to application
+	string UIWidget="None";
+	string VarType="Global";
+> = 1.0;
+
+float Sine <
+	// Make accessible to application
+	string UIWidget="None";
+	string VarType = "Global";
+> = 0.0;
+
+float Retraction <
+	string UIName = "Retraction";
+	string UIWidget = "Slider";
+	float UIMin = -1000.0;
+	float UIMax = 1000.0;
+	float UIStep = 1.0;
+> = -100.0;
+
+float WarpBarTexKill <
+	string UIName = "Warp Bar Tex Kill";
+	string UIWidget = "Slider";
+	float UIMin = 0.0;
+	float UIMax = 1000.0;
+	float UIStep = 1.0;
+	string VarType="Global";
+> = 75.0;
+
+struct VS_INPUT 
+{
+    float3 Pos          : POSITION;
+    float3 Normal       : NORMAL;
+};
+
+struct VS_OUTPUT
+{
+    float4 Pos          : POSITION;
+    float4 TexCoord     : TEXCOORD0;
+    float4 Diffuse      : COLOR0;
+};
+
+VS_OUTPUT vmain(VS_INPUT In)
+{
+    //The offset is determined by taking the Y value of the object coordinates
+    //after it is rotated by some angle determined by c11 and c12 in the XY 
+    //plane. This offset is then applied to object Z of the vertex.  Since the
+    //bars are arranged in a circle, this results in a circular rise and fall 
+    //of the bars along a sine wave.  The Z offset therefore is:
+    // Y = Vx * sin + Vy * cos
+    //This is just an expansion of a 2D matrix rotation around Z in the 
+    //XY plane.
+
+    //Get vertical offset.  YRotated = Vx * Sine + Vy * Cosine
+    float4 InPos = float4(In.Pos, 1.0);
+    float YRotated = 
+        InPos.x * Sine + InPos.y * Cosine + Retraction;
+
+    //Select if this should be used as an upward or downward bias using 
+    // CenterlineConstants
+    float fYBias = 
+        (InPos.z < CenterlineConstants.y) ? YRotated : -YRotated;
+    
+    //Add into pos
+    InPos.z += fYBias;
+    
+    //Output to oPos as early as possible so HW can reject triangle if needed.
+    //r0 still holds position in object space after the fact.
+    VS_OUTPUT Out;
+
+    Out.Pos = mul(InPos, WorldViewProj);
+    
+    //If the bar is below a certain z threshold in
+    //object space.  I want to texkill in the pixel
+    //shader.
+    float4 WarpBarTexKill4 = 
+		float4(WarpBarTexKill,WarpBarTexKill,WarpBarTexKill,WarpBarTexKill);
+    Out.TexCoord.xyzw = InPos.zzzz + -WarpBarTexKill4;
+
+    //r0 now has the biased bar position.  If the vert falls between 0 and 200,
+    //we add in up to 1 to each color component.  This will be clamped on 
+    //export, so it won't matter if we add in on top of blue.  We use some 
+    //selections to either multiply the bias by 1 or 0 twice.  In the end we 
+    //have either 0 or the bias which is normalize by multiplying through by 
+    //CenterlineConstants.w and used to scale the vertex color.  The result is
+    //that bars near each other "glow" white while bars further away have a 
+    //dull blue look.
+
+    //Is vert above CenterlineConstants.x?
+    
+    float4 fXBias = (InPos.z > CenterlineConstants.x || 
+        InPos.z < CenterlineConstants.z) ? YRotated : 0.0;
+        
+    //Normalize bias - Scale by CenterlineConstants.w
+    fXBias *= CenterlineConstants.w;
+    
+    //Add in to each color component based off how 
+    //close the bars are(nomalized bias)
+    float4 BiasedColor = fXBias.xxxx * Zono.yyyy + MaterialColor;
+    
+    //We now know the diffuse color of the bar in r3.  Using the view vector 
+    //and the normal, we will simulate a Fresnel effect with 1 - (N dot V).  
+    //That factor will be used to modulate the already calculated vertex color 
+    //in r3.  This gives an effect where bars viewed edge on appear solid 
+    //while looking straight at the bars gives you translucency.
+
+    //Get eye pos in obj space - view space eye pos assumed 0,0,0    
+    float3 ObjSpaceEyePos = mul(EyePos, InvWorld).xyz;
+    
+    //Find normalized view vector(V)
+    float3 ViewVector = normalize(ObjSpaceEyePos - InPos.xyz);
+
+    // Compute 1 - (N dot V)
+    float4 OneMinusNdotV = Zono.yyyy - 
+        saturate(dot(In.Normal, ViewVector)).xxxx;
+    
+    //Modulate as diffuse color
+    Out.Diffuse = OneMinusNdotV * BiasedColor;
+    
+    return Out;
+}
+
+float4 fmain(VS_OUTPUT In) : COLOR
+{
+    //A shader so simple I don't think it needs explanation.  It outputs the 
+    //diffuse color.  
+    
+    //The texkill makes sure we don't get any artifacts 
+    //in the reflection of the temple.
+    if (any(In.TexCoord < 0))
+        discard;
+            
+    return In.Diffuse;
+}
+
+technique main 
+{
+	pass p0 
+	{
+	
+		
+		VertexProgram = compile arbvp1 vmain();
+		BlendEnable = true;
+		AlphaTestEnable = true;
+		CullFaceEnable = true;
+		BlendFunc = int2(One,One);
+        DepthTestEnable = true;
+        DepthMask = false;
+        DepthFunc = LEqual;
+		PolygonMode = int2(Front, Fill);
+		
+		FragmentProgram = compile arbfp1 fmain();
+	}
+}
