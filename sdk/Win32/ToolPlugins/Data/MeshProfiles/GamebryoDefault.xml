@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeshProfiles version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./NiMeshProfileSchema.xsd">
+    <MeshProfile name="Default" description="Default mesh profile">
+        <FinalizeStream name="Indices">
+            <Element convertformat="UINT16" converttype="SMARTCLAMP">INDEX</Element>
+        </FinalizeStream>
+        <FinalizeStream name="BaseVertexStream">
+            <Element renderer="WII">POSITION</Element>
+            <Element renderer="WII">NORMAL</Element>
+            <Element renderer="WII" range="0-7">BINORMAL</Element>
+            <Element renderer="WII" range="0-7">TANGENT</Element>
+            <Element>POSITION</Element>
+            <Element>NORMAL</Element>
+            <Element type="COLOR" convertformat="UINT8" converttype="NORMALIZE" range="0-7">COLOR</Element>
+            <Element range="0-7">TEXCOORD</Element>
+            <Element range="0-7">BINORMAL</Element>
+            <Element range="0-7">TANGENT</Element>
+            <Element>POSITION_BP</Element>
+            <Element>NORMAL_BP</Element>
+            <Element range="0-7">BINORMAL_BP</Element>
+            <Element range="0-7">TANGENT_BP</Element>
+            <Element convertformat="UINT8" converttype="SMARTCLAMP">BLENDINDICES</Element>
+            <Element type="BLENDWEIGHT">
+                <Component value="BLENDWEIGHT.0" />
+                <Component value="BLENDWEIGHT.1" />
+                <Component value="BLENDWEIGHT.2" />
+            </Element>
+        </FinalizeStream>
+        <FinalizeStream name="MorphVertexStream">
+            <Element range="0-31">MORPH_POSITION</Element>
+            <Element range="0-31">MORPH_NORMAL</Element>
+            <Element range="0-31">MORPH_POSITION_BP</Element>
+            <Element range="0-31">MORPH_NORMAL_BP</Element>
+        </FinalizeStream>
+        <FinalizeStream name="MorphWeightStream">
+            <Element>MORPHWEIGHTS</Element>
+        </FinalizeStream>
+        <FinalizeStream name="BoneIndexRemapStream">
+            <Element>BONE_PALETTE</Element>
+        </FinalizeStream>
+        <FinalizeStream name="TransformsStream">
+            <Element range="0-2">TRANSFORMS</Element>
+        </FinalizeStream>
+        <FinalizeStream name="InstanceTransformsStream">
+            <Element range="0-2">INSTANCETRANSFORMS</Element>
+        </FinalizeStream>
+        <FinalizeStream name="NormalShareIndexStream">
+            <Element>NORMALSHAREINDEX</Element>
+        </FinalizeStream>
+        <FinalizeStream name="NormalShareGroupStream">
+            <Element>NORMALSHAREGROUP</Element>
+        </FinalizeStream>
+    </MeshProfile>
+</MeshProfiles>

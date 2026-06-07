@@ -1,0 +1,255 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+// IceBlock shader
+texture FrameTexture
+<
+	string NTM = "shader";
+>;
+sampler FrameSampler
+< 
+    string NTM = "shader";
+    int NTMIndex = 0;
+> = sampler_state
+{ 
+		texture = (FrameTexture);
+    AddressU = Clamp;
+    AddressV = Clamp;
+    MipFilter = LINEAR; 
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+texture NormalTexture
+<
+	string NTM = "shader";
+>;
+sampler NormalSampler
+< 
+    string NTM = "shader";
+    int NTMIndex = 1;
+> = sampler_state
+{ 
+		texture = (NormalTexture);
+    AddressU = Clamp;
+    AddressV = Clamp;
+    MipFilter = LINEAR; 
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+texture AlphaTexture
+<
+	string NTM = "shader";
+>;
+sampler AlphaSampler
+< 
+    string NTM = "shader";
+    int NTMIndex = 2;
+> = sampler_state
+{ 
+		texture = (AlphaTexture);
+    AddressU = Clamp;
+    AddressV = Clamp;
+    MipFilter = LINEAR; 
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+texture BaseTexture
+<
+	string NTM = "base";
+>;
+sampler BaseSampler
+< 
+    string NTM = "base";
+> = sampler_state
+{ 
+		texture = (BaseTexture);
+    AddressU = Clamp;
+    AddressV = Clamp;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+texture EnvTexture
+<
+	string NTM = "shader";
+>;
+sampler EnvSampler
+< 
+	string NTM = "shader";
+    int NTMIndex = 3;
+> = sampler_state
+{
+	texture = (EnvTexture);
+	MinFilter = Linear;
+	MagFilter = Linear;
+	MipFilter = Linear;
+	AddressU = clamp;
+	AddressV = clamp;
+	AddressW = clamp;
+};
+
+float4x4 WorldViewProjection
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLDVIEWPROJECTION";
+>;
+
+float4x4 World
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLD";
+>;
+
+float4x4 ViewInv
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "VIEWINVERSE";
+>;
+
+
+float3 MSLightPos : Position
+<
+    string VarType = "Object";
+    string Object = "PointLight";
+    string ObjectProperty = "Position";
+>;
+
+
+float RefractionIndex           : ATTRIBUTE = 1.31f;
+float Bump          		    : ATTRIBUTE = 0.01f;
+float RefractionMult			: ATTRIBUTE = 0.05f;
+float BaseMapPercent			: ATTRIBUTE = 0.75f;
+float FresnelTransparency		: ATTRIBUTE = 0.9f;
+
+
+
+// Vertex Shaders
+struct VS_OUTPUT
+{
+    float4 Position   : POSITION;
+    float2 BaseTex  : TEXCOORD0;
+    float3 TSLightDir : TEXCOORD1;
+    float2 ScreenUV  : TEXCOORD2;    
+    float3 WorldNormal	: TEXCOORD3;
+    float3 WorldTangent	: TEXCOORD4;
+    float3 WorldBinorm	: TEXCOORD5;
+    float3 Vn : TEXCOORD6;
+};
+
+VS_OUTPUT VS(float3 Position : POSITION,
+    float3 Normal   : NORMAL,
+    float3 Binormal : BINORMAL,
+    float3 Tangent  : TANGENT,    
+    float2 TexCoord : TEXCOORD)
+{
+    VS_OUTPUT Out = (VS_OUTPUT)0;
+
+    // Transform position
+    Out.Position = mul(float4(Position, 1), WorldViewProjection);
+
+    // Fill in texture coordinates
+    Out.BaseTex = TexCoord;
+
+	// Transform screen positon to UV Tex-Coords of Frame buffer
+    float4 ScreenPos = Out.Position;
+    ScreenPos.xy = (ScreenPos.xy / ScreenPos.w) * 0.5f + 0.5f;
+    ScreenPos.y = 1-ScreenPos.y;
+    Out.ScreenUV.xy = ScreenPos;
+
+	// Output View Vector
+    float4 Po = float4(Position.xyz,1.0);
+    float3 Pw = mul(Po, World).xyz;
+	  Out.Vn = normalize(ViewInv[3].xyz - Pw);
+
+    Out.WorldNormal = normalize(mul(Normal, World).xyz);
+    Out.WorldTangent = normalize(mul(Tangent, World).xyz);
+    Out.WorldBinorm = normalize(mul(Binormal, World).xyz);
+
+    // Get model-space light direction
+    float3 MSLightDir = MSLightPos - Position;
+
+    // Transform into tangent-space light direction
+    Out.TSLightDir = normalize(MSLightDir);
+
+    return Out;
+}
+
+// Pixel shader
+float4 PS(VS_OUTPUT In) : COLOR
+{
+	float3 Norm = tex2D(NormalSampler, In.BaseTex);
+    Norm = Norm * 2.0 - 1.0;    	
+ 
+ 	// Compute refact color  
+    float2 FrameUV = In.ScreenUV;		
+	FrameUV += Norm * RefractionMult;
+	float4 refractColor = tex2D(FrameSampler, FrameUV);    	
+    
+    // Compure reflect color
+    float3 Nn = In.WorldNormal;
+    float3 Tn = In.WorldTangent;
+    float3 Bn = In.WorldBinorm;
+    
+    float3 bumps = Bump * (Norm-(0.5).xxx);
+    float3 Nb = Nn + (bumps.x * Tn + bumps.y * Bn);
+    Nb = normalize(Nb);
+    float4 reflVect = float4(reflect(In.Vn,Nb),0);
+    float4 reflColor = texCUBE(EnvSampler,reflVect);
+
+    // This value should be pre-computed on the CPU. It currently left in the
+    // shader to allow correct results when previewing an object with this
+    // shader in AssetViewer.
+    float  R0 = pow(1.0-RefractionIndex, 2.0) / pow(1.0+RefractionIndex, 2.0);
+ 
+	// light and normal are assumed to be normalized
+	float fresnel =  R0 + (1.0-R0) * pow(1.0-dot(In.TSLightDir, Norm), 5.0);    
+
+	fresnel = saturate(fresnel);
+	float FresnelPercent = tex2D(AlphaSampler, In.BaseTex).x * FresnelTransparency;
+	float4 Base = tex2D(BaseSampler, In.BaseTex);   
+	float4 ReflRefrColor = lerp(refractColor, reflColor, fresnel * FresnelPercent);
+ 
+ return lerp(ReflRefrColor, Base, BaseMapPercent);
+}
+
+// techniques
+technique IceBlock
+<
+    string Description = "This shader takes in a base map, normal map, "
+    "alpha map, environment map and texture containing the current contents of "
+    "the frame buffer. The normal map in this shader has three separate "
+    "purposes. First it is used to compute the reflection vector that is used "
+    "to sample the environment map to get the reflected color. Next it is used "
+    "to compute the Fresnel factor which is used to determine ratio between "
+    "reflection and refraction. Lastly it used as an offset when looking the "
+    "color to refract from the frame buffer. It uses HLSL shaders through an "
+    "FX file. ";
+    
+    string NBTMethod = "ATI";
+    bool UsesNiRenderState = true;
+    bool UsesNiLightState = false;
+>
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VS();
+        PixelShader = compile ps_2_0 PS();
+        
+        AlphaBlendEnable = FALSE;
+    }
+}
+

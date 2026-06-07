@@ -1,0 +1,118 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+// Simple FX Lite Skinning Shader
+
+float4x4 ViewProj
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "VIEWPROJECTION";
+>;
+
+static const int MAX_BONES = 30;
+float4x3 Bone[MAX_BONES]
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "SKINBONEMATRIX3";
+>;
+
+
+struct VS_INPUT 
+{
+    float3 Pos          : POSITION;
+    float3 BlendWeights : BLENDWEIGHT;
+    float4 BlendIndices : BLENDINDICES;
+    float2 TexCoords    : TEXCOORD0;
+};
+
+struct VS_OUTPUT
+{
+    float4 Pos          : POSITION;
+    float2 TexCoords    : TEXCOORD0;
+};
+
+texture BaseMap
+<
+    string NTM = "base";
+>;
+
+sampler BaseSampler 
+<
+    string NTM = "base";
+> = sampler_state
+{
+    Texture = (BaseMap);
+    ADDRESSU = WRAP;
+    ADDRESSV = WRAP;
+    MAGFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MIPFILTER = LINEAR;
+};
+
+VS_OUTPUT VS(VS_INPUT In)
+{
+    VS_OUTPUT Out = (VS_OUTPUT)0;
+
+    int4 indices = In.BlendIndices;
+
+    // Calculate normalized fourth bone weight
+    float weight4 = 1.0f 
+        - In.BlendWeights[0] 
+        - In.BlendWeights[1] 
+        - In.BlendWeights[2];
+        
+    float4 weights = float4(
+        In.BlendWeights[0], 
+        In.BlendWeights[1], 
+        In.BlendWeights[2], 
+        weight4);
+
+    // Calculate bone transform
+    float4x3 BoneTransform;
+    BoneTransform = weights[0] * Bone[indices[0]];
+    BoneTransform += weights[1] * Bone[indices[1]];
+    BoneTransform += weights[2] * Bone[indices[2]];
+    BoneTransform += weights[3] * Bone[indices[3]];
+    
+    float3 WorldPos = mul(float4(In.Pos, 1.0), BoneTransform);
+
+    Out.Pos = mul(float4(WorldPos, 1.0), ViewProj);
+
+    Out.TexCoords = In.TexCoords;
+
+    return Out;
+}
+
+float4 PS(VS_OUTPUT In) : COLOR
+{
+   return tex2D(BaseSampler, In.TexCoords);
+}
+
+technique FXLiteSkinning
+<
+    string Description = 
+    "This shader performs skinning in the vertex shader "
+    "using 30 bones. It uses HLSL shaders through an FX Lite file. "
+    "This shader does apply a base map. "
+    "This shader does not perform lighting.";
+
+    int BonesPerPartition = MAX_BONES;
+    bool UsesNiRenderState = true;
+>
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VS();
+        PixelShader = compile ps_2_0 PS();
+    }
+}

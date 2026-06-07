@@ -1,0 +1,145 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader OilyFilmWithGlow
+{
+    "This shader applies a glow map and base map lit with two lights, and "
+    "then uses the specular component of the lighting to generate a thin "
+    "film interference effect. The 'Exponent' attribute is the power of "
+    "the specular effect. The thin film texture should be a 1D thin film "
+    "destuctive interference pattern. This shader is similar to the one "
+    "used for the alien's gauntlets in the Eturnum sample, but without the "
+    "warping effect and with the addition of a glow map. "
+
+    Objects
+    {
+        Effect_GeneralLight   0   Light1
+        Effect_GeneralLight   1   Light2
+    }
+    
+    //Attribute list
+    Attributes
+    {
+        // This is the specular exponent for the effect.
+        Attrib_Float
+            Exponent
+            Artist
+            48.0
+            [8.0 64.0]
+        // The 1D ramp texture for the thin film interference effect. The
+        // texture should be approximately the interference pattern for 
+        // thin film interactions where increasing S is increasing thickness 
+        // of the film.
+        Attrib_Texture
+            filmRamp
+            Artist
+            0
+            "thinFilmRamp.bmp"
+    }
+
+    PackingDef PosNormUV0
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      1   PDT_Float3
+            PDP_TexCoord0   2   PDT_Float2
+    }
+
+    Implementation VS11_PS14
+    {
+        "This implementation requires hardware that supports
+        vertex shader v1.1 and pixel shader v1.4"
+
+        Requirements
+        {
+            VSVersion   = v1.1
+            UserVersion = v0.0
+            PSVersion   = v1.4
+            UsesNIRenderState = true
+            Platform    = DX9|XENON
+        }
+
+        PackingDef  PosNormUV0
+
+        RenderStates
+        {
+            // Alpha blending must be enabled for the object to fade out.
+            AlphaBlendEnable    = true
+            SrcBlend            = SrcAlpha
+            DestBlend           = InvSrcAlpha
+            
+            // Enable specular since we are using oD1. On some PC cards, 
+            // this must be enabled for oD1 to get passed through correctly.
+            SpecularEnable      = true
+        }
+
+        Pass OilyFilmSinglePass
+        {
+            VSProgram   "OilyFilmWithGlow"
+
+            // Nothing incredibly exciting here. Zoze is a standard constant,
+            // short for zero-one-zero. The inverse world view matrix is 
+            // used to convert the eye position in the shader to object 
+            // space. Transpose is sent because we use column major matrices 
+            // in the shaders. Eye position is not sent since it is assumed 
+            // to be (0,0,0,1) and we construct it from Zoze.xxxy.
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0       0
+                CM_Defined      InvWorldViewTranspose   4       0
+                CM_Attribute    Exponent                8   1   0
+                CM_Constant     Zoze                    10  1   0.0, 1.0, 0.0, 1.0
+                CM_Defined      InvWorldTranspose       11      0
+                CM_Defined      MaterialSpecular        15      0
+                CM_Object       Light1  ModelDirection  16
+                CM_Object       Light2  ModelDirection  17   
+                CM_Object       Light1  Diffuse         18     
+                CM_Object       Light2  Diffuse         19     
+                CM_Defined      MaterialDiffuse         20      0
+            }
+
+            Sampler 0   BaseMapSampler
+            {
+                TSS_Texture     = NTM_Base
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+            Sampler 1   OilyFilm
+            {
+                TSS_Texture     = <filmRamp>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_None
+            }
+            Sampler 2   GlowSampler
+            {
+                TSS_Texture     = NTM_Glow
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+
+            PSProgram   "OilyFilmWithGlow"
+        }
+    }
+}

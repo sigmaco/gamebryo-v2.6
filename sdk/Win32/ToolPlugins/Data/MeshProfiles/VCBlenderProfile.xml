@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeshProfiles version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./NiMeshProfileSchema.xsd">
+    <MeshProfile name="VCBlenderProfile" description="This profile exactly matches the expected input of the
+        VCAlphaTextureBlender shader. It does not work with skinning or morphing.">
+        <FinalizeStream name="Indices">
+            <Element convertformat="UINT16" converttype="SMARTCLAMP">INDEX</Element>
+        </FinalizeStream>
+        <FinalizeStream name="VertexDataStream">
+            <Element>POSITION</Element>
+            <Element>NORMAL</Element>
+            <Element convertformat="UINT8" converttype="NORMALIZE">COLOR</Element>
+            <Element range="0-2">TEXCOORD</Element>
+        </FinalizeStream>
+    </MeshProfile>
+</MeshProfiles>

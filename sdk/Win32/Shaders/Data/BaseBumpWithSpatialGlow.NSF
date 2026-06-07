@@ -1,0 +1,151 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader BaseBumpWithSpatialGlow
+{
+    "Apply a base map, normal map, and a glow map. The normal map is used "
+    "to modify the lighting from two directional lights, and the glow map "
+    "intensity is scaled by the distance to the glow source. The quadratic "
+    "and linear attenuation components of the glow map are controlled by "
+    "the x and y components of the 'GlowAttenuation' attribute, while the "
+    "w component of that attribute represents the size of the hot spot in "
+    "the middle of the glow. This shader is used in the Eturnum sample for "
+    "the walls of the temple. "
+
+    Global_Attributes
+    {
+        Attrib_Point4   GlowLightPosition    Hidden  0.0, 0.0, 0.0, 1.0
+    }
+    
+    Objects
+    {
+        Effect_GeneralLight   0   Light1
+        Effect_GeneralLight   1   Light2
+    }
+    
+    Attributes
+    {
+        //Constants for the light.
+        Attrib_Point4
+            GlowAttenuation
+            Artist
+            1.0, 1.0, 1.0, 200.0
+            [(0.0, 0.0, 0.0, 0.0) (1.0, 1.0, 10.0, 10000.0)]
+        //The normal map for the bump mapping.
+        Attrib_Texture
+            normalMap
+            Artist
+            0
+            "normals.bmp"
+    }
+
+    PackingDef PosNormUV0BinormalTangent
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      1   PDT_Float3
+            PDP_TexCoord0   2   PDT_Float2
+            PDP_Tangent     3   PDT_Float3
+            PDP_Binormal    4   PDT_Float3
+            PDP_Color       5   PDT_UByteColor
+    }
+
+    Implementation VS11_PS14
+    {
+        "This implementation requires hardware that supports
+        vertex shader v1.1 and pixel shader v1.4"
+
+        Requirements
+        {
+            VSVersion   = v1.1
+            UserVersion = v0.0
+            PSVersion   = v1.4
+            UsesNIRenderState = true
+            BinormalTangentMethod = NBTMethod_ATI
+            BinormalTangentUVSource = 0
+            Platform    = DX9|XENON
+        }
+
+        PackingDef  PosNormUV0BinormalTangent
+
+        RenderStates
+        {
+            //Turn off alpha blending for safety
+            AlphaBlendEnable    = false 
+            //Enable specular since we are using oD1 for glow scale.  On some 
+            //PC cards, this must be enabled for oD1 to get passed through 
+            //correctly.
+            SpecularEnable      = true   
+        }
+
+        Pass BaseGlowBump
+        {
+            VSProgram   "BaseBumpWithSpatialGlow.vsh"
+
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0       0
+                CM_Defined      InvWorldTranspose       4       0
+                CM_Global       GlowLightPosition       8   1   
+                CM_Constant     Zoze                    9   1   0.0, 1.0, 0.0, 0.3
+                CM_Attribute    GlowAttenuation         10  1   0
+                CM_Object       Light1  ModelDirection  11
+                CM_Object       Light2  ModelDirection  12    
+            }
+
+            //Here we set three samplers.  We're only going to use texture
+            //coordinate 0 to index the three texture maps, but we have to
+            //set the filtering settings for those maps.  Also, we use 
+            //oT1 to pass in the light direction to the pixel shader, so we
+            //need to set the sampler settings for that coordinate for safety.
+            Sampler 0   BaseMapSampler
+            {
+                TSS_Texture     = NTM_Base
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+            Sampler 1   NormalMapSampler
+            {
+                TSS_Texture     = <normalMap>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+            Sampler 2   GlowMapSampler
+            {
+                TSS_Texture     = NTM_Glow
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+
+            PSProgram   "BaseBumpWithSpatialGlow.psh"
+            
+            PS_Constantmap
+            {
+                CM_Object       Light1      Diffuse  4  
+                CM_Object       Light2      Diffuse  5  
+            }
+        }
+    }
+}

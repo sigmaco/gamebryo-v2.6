@@ -1,0 +1,86 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+;This shader normal maps the walls with two lights.  The base map and normal
+;map are sampled using an offset texture coordinate computed via a parallax
+;mapping algorithm.
+;
+;H  = Height from height map
+;V  = View vector
+;To = The orginal texture coordinate in t0
+;Tn = The new texture coordinate used to sample the base and normal map.
+;Off= The texture offset scale.
+;
+;Tn = To + (V * (H * Off + (-0.5 * Off))
+;
+;Since the normal and base map are only sampled as 2D textures, it does not
+;matter what we add to the third component of Tn when we add the scaled
+;view vector.  Note that this equation also implies that the height field at
+;0.5 represents a 0 offset from the polygon.
+;
+;v0 = Packed vertex color
+;N  = Normal sampled from map
+;B  = Base map color
+;D1 = Direction of light 1
+;D2 = Direction of light 2
+;C1 = Color of light 1
+;C2 = Color of light 2
+;Oc = Fragment output color
+;Oa = Fragment output alpha
+;
+;Oc = B * (v0 * ((N DOT D1) * C1 + (N DOT D2) * C2)) 
+;Oa = 1
+
+ps_2_0
+
+dcl_2d s0
+dcl_2d s1
+dcl_2d s2
+
+dcl_pp t0.xyzw
+dcl_pp t2.xyz
+dcl_pp t3.xyz
+dcl_pp t4.xyz
+dcl v0.rgba
+
+def c4, 0.5, 1.0, 2.0, 1.0          ;This constant is used for scale and bias
+
+texld_pp r2, t0, s2                 ;Sample the height field
+
+mov_pp r3, c2                          ;Load the offset scaling constant.
+mul_pp r3, r3, -c4.x                ;Calculate bias in r3.
+mad_pp r0, r2, c2, r3                  ;Calculate offset = height*scale + bias
+mov_pp r1, t0                          ;Load To
+mad_pp r2.xyz, t2, r0, r1                  ;Tn = offset * V + To
+
+;This next line is retained for debugging.  Turning it off and reloading the
+;shader will show the effect of parallax mapping snapping on and off.
+;mov r2, t0
+
+texld_pp r0, r2, s0                 ;Sample the base map
+texld_pp r1, r2, s1                 ;Sample the bump map
+
+; N dot L.  The light vector is not biased coming out of the vertex shader.
+mad_pp r1.rgb, r1, c4.zzz, -c4.yyy  ;Do the bx2 from ps_1_4
+dp3_pp r3, r1, t3                   ;N dot L for Light1
+mul_pp_sat r3, r3, c0               ;Color for Light2
+dp3_pp r5, r1, t4                   ;N dot L for Light2
+mad_pp_sat r5, r5, c1, r3           ;Color for Light2
+
+mul_pp r5.rgb, r5, v0                   ;Modulate lighting by vertex colors.
+mov_pp r5.a, c4                    ;Co-issue an alpha move to get 1
+
+mul_pp r0, r5, r0                   ;Modulate the base map by the lighting.
+mov oC0, r0                         ;Output the color.
+
+

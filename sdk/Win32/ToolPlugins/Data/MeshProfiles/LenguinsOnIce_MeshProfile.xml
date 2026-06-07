@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeshProfiles version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./NiMeshProfileSchema.xsd">
+    <MeshProfile name="LenguinsOnIce_FootPrint" description="Mesh Profile to use on the foot print mesh in the Lenguin's on Ice full demo.">
+        <!--
+            This profile is specifically tailored to deal with the lenguin.
+        -->
+        <FinalizeStream name="Indices" access="GPU_READ | CPU_WRITE_STATIC">
+            <Element convertformat="UINT16" converttype="SMARTCLAMP" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">INDEX</Element>
+        </FinalizeStream>
+        <FinalizeStream name="PositionVertexStream" access="GPU_READ | CPU_READ | CPU_WRITE_STATIC">
+            <Element strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">POSITION</Element>
+        </FinalizeStream>
+        <FinalizeStream name="BaseVertexStream" access="GPU_READ | CPU_WRITE_STATIC">
+            <Element type="TEXCOORD" index="0" strict="STRICT_FORMAT;STRICT_INTERLEAVE" required="REQUIRED_FAIL">TEXCOORD</Element>
+        </FinalizeStream>
+    </MeshProfile>
+    <MeshProfile name="LenguinsOnIce_LevelMetaData" description="Mesh Profile to use on the level meta data in the Lenguin's on Ice full demo.">
+        <FinalizeStream name="Indices" access="CPU_READ | CPU_WRITE_MUTABLE">
+            <Element convertformat="UINT16" converttype="SMARTCLAMP">INDEX</Element>
+        </FinalizeStream>
+        <FinalizeStream name="BaseVertexStream" access="CPU_READ | CPU_WRITE_MUTABLE">
+            <Element>POSITION</Element>
+            <Element>NORMAL</Element>
+            <Element type="COLOR" convertformat="UINT8" converttype="NORMALIZE" range="0-7">COLOR</Element>
+        </FinalizeStream>
+    </MeshProfile>
+</MeshProfiles>

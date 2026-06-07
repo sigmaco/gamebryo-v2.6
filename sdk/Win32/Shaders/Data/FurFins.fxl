@@ -1,0 +1,212 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+// Fin fur shader using skinning
+texture BaseMap 
+< 
+    string NTM = "base";
+>;
+sampler BaseSampler
+<
+    string NTM = "base";
+    int NTMIndex = 0;
+> = sampler_state 
+{
+    texture = (BaseMap);
+    AddressU  = CLAMP;
+    AddressV  = CLAMP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;
+};
+
+texture FinTexture
+<
+    string NTM = "shader";
+>;
+sampler FinSampler
+<
+    string NTM = "shader";
+    int NTMIndex = 0;
+> = sampler_state 
+{
+    texture = (FinTexture);
+    AddressU  = WRAP;
+    AddressV  = CLAMP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;
+};
+
+float4 FurTintColor : ATTRIBUTE = float4(2,2,2,1);
+
+float4x4 World
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLD";
+>;
+
+float4x4 InvView
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "INVVIEW";
+>;
+
+float4x4 ViewProj
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "VIEWPROJ";
+>;
+
+static const int MAX_BONES = 32;
+float4x3 Bone[MAX_BONES]
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "SKINBONEMATRIX3";
+>;  
+
+struct VS_OUTPUT
+{
+    float4 Pos          : POSITION;
+    float2 BaseCoords   : TEXCOORD0;
+    float2 FinCoords    : TEXCOORD1;
+    float4  Color : COLOR0;
+};
+
+VS_OUTPUT VS(
+    float4 Pos : POSITION,
+    float4 Norm : NORMAL,
+    float4 Color : COLOR,
+    float2 BaseCoords : TEXCOORD0,
+    float2 FinCoords : TEXCOORD1)
+{
+    VS_OUTPUT Out = (VS_OUTPUT)0;
+
+    float4 WorldPos = mul(Pos, World);
+    float3 WorldNorm = mul(Norm, (float3x3)World);
+
+    // Calculate the alpha based off of the view.
+    float3 WorldSpaceViewVector = normalize(InvView[3].xyz - WorldPos.xyz);
+    float Alpha = abs(dot(WorldSpaceViewVector, WorldNorm));
+
+    Out.Pos = mul(WorldPos, ViewProj);
+    Out.BaseCoords = BaseCoords;
+    Out.FinCoords = FinCoords;
+    Out.Color.rgb = Color.rgb;
+    Out.Color.a = Color.a * Alpha;
+
+    return Out;
+}
+
+VS_OUTPUT VS_SKINNING(float4 Pos : POSITION,
+    float4 Norm : NORMAL,
+    float4 Color : Color,
+    float2 BaseCoords : TEXCOORD0,
+    float2 FinCoords : TEXCOORD1,
+    float3 BlendWeights : BLENDWEIGHT,
+    int4 BlendIndices : BLENDINDICES)
+{
+    VS_OUTPUT Out = (VS_OUTPUT)0;
+
+    // Calculate normalized fourth bone weight
+    float BlendWeight3 = 1.0f - BlendWeights[0] - BlendWeights[1] - 
+        BlendWeights[2];
+
+    // Calculate bone transform
+    float4x3 BoneTransform;
+    BoneTransform = BlendWeights[0] * Bone[BlendIndices[0]];
+    BoneTransform += BlendWeights[1] * Bone[BlendIndices[1]];
+    BoneTransform += BlendWeights[2] * Bone[BlendIndices[2]];
+    BoneTransform += BlendWeight3 * Bone[BlendIndices[3]];
+
+    float3 WorldPos = mul(Pos, BoneTransform);
+
+    // Get the dot between the vertex normal and the view to fade the alpha.
+    float3 WorldNorm = mul(Norm, (float3x3)BoneTransform);
+    float3 WorldSpaceViewVector = normalize(InvView[3].xyz - WorldPos);
+    float Alpha = abs(dot(WorldSpaceViewVector, WorldNorm));
+
+    Out.Pos = mul(float4(WorldPos, 1.0), ViewProj);
+    Out.BaseCoords = BaseCoords;
+    Out.FinCoords = FinCoords;
+    Out.Color = float4(Color.rgb, Color.a * Alpha);
+
+    return Out;
+}
+
+float4 PS(VS_OUTPUT In) : COLOR
+{
+    float4 baseColor = tex2D( BaseSampler, In.BaseCoords) * FurTintColor;
+    float4 finColor = tex2D( FinSampler, In.FinCoords);
+    return float4(baseColor.xyz, finColor.a * In.Color.a * FurTintColor.a);
+}
+
+technique FurFins
+<
+    string Description = "This is a fin shader used for rendering fur. The "
+    "base map that is applied to the character is sampled here to get the "
+    "desired color for each fin. Then a fin texture is sampled to get the "
+    "shape of the fur. It uses HLSL shaders through an FX file. this shader "
+    "does not transform normals nor does it perform lighting calculations. ";
+
+    bool UsesNiRenderState = true;
+>
+{
+    pass P0
+    {
+        VertexShader = compile vs_1_1 VS();
+        PixelShader = compile ps_2_0 PS();
+        
+        CullMode = NONE;
+        AlphaTestEnable = true;
+        AlphaFunc = Greater;
+        AlphaRef = 0; 
+        AlphaBlendEnable = true;
+        ZWriteEnable = false;
+        BlendOp = Add;
+        SrcBlend = SRCALPHA;
+        DestBlend = INVSRCALPHA;
+    }
+}
+
+technique FurFinsSkinning
+<
+    string Description = "This is a fin shader used for rendering fur. The fin "
+    "geometry is animated and skinned through the same implementation as the "
+    "FX skinning shader. The base map that is applied to the animated "
+    "character is sampled here to get the desired color for each fin. Then a "
+    "fin texture is sampled to get the shape of the fur. This shader performs "
+    "skinning in the vertex shader using 32 bones. It uses HLSL shaders "
+    "through an FX file. this shader does not "
+    "transform normals nor does it perform lighting calculations. ";
+    int BonesPerPartition = MAX_BONES;
+    bool UsesNiRenderState = true;
+>
+{
+    pass P0
+    {
+        VertexShader = compile vs_1_1 VS_SKINNING();
+        PixelShader = compile ps_2_0 PS();
+        
+        CullMode = NONE;
+        AlphaTestEnable = true;
+        AlphaFunc = Greater;
+        AlphaRef = 0; 
+        AlphaBlendEnable = true;
+        ZWriteEnable = false;
+        BlendOp = Add;
+        SrcBlend = SRCALPHA;
+        DestBlend = INVSRCALPHA;
+    }
+}
+

@@ -1,8 +1,0 @@
-//Gamebryo Forwarding File DO NOT MODIFY!
-
-global proc AEblinnTemplate ( string $nodeName )
-{
-    GamebryoLoadPlugins();
-    eval AEGamebryoMaterialCommon $nodeName;
-    eval _gb_AEblinnTemplate $nodeName;
-}

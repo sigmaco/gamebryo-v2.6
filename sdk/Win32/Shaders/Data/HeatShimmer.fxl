@@ -1,0 +1,150 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+// HeatShimmer shader
+texture FrameTexture
+<
+	string NTM = "shader";
+>;
+sampler FrameSampler
+< 
+    string NTM = "shader";
+    int NTMIndex = 0;
+> = sampler_state
+{ 
+    texture = (FrameTexture);
+    AddressU = Clamp;
+    AddressV = Clamp;
+    MipFilter = LINEAR; 
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+texture HeatTexture
+<
+	string NTM = "shader";
+>;
+sampler HeatSampler
+< 
+    string NTM = "shader";
+    int NTMIndex = 1;
+> = sampler_state
+{ 
+    texture = (HeatTexture);
+    AddressU = Wrap;
+    AddressV = Wrap;
+    MipFilter = LINEAR; 
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+float4x4 WorldViewProjection
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLDVIEWPROJECTION";
+>;
+
+float PerturbationMultiplier : ATTRIBUTE = 0.05;
+float ShimmerBrightness : ATTRIBUTE = 1;
+
+float Timer
+<
+   string VarType = "Predefined";
+   string DefinedMapping = "TIME";
+> = 0.0f;
+
+// Vertex Shaders
+struct VS_OUTPUT
+{
+    float4 Position   : POSITION;
+    float4 Color 	  :	Color0;
+    float2 BaseTex    : TEXCOORD0;
+    float4 ScreenUV   : TEXCOORD2;    
+};
+
+VS_OUTPUT HeatShimmer_VS(float3 Position : POSITION,
+	float4 Color : Color0, float2 TexCoord : TEXCOORD)
+{
+    VS_OUTPUT Out = (VS_OUTPUT)0;
+
+    // Transform position
+    Out.Position = mul(float4(Position, 1), WorldViewProjection);
+    
+    // Fill in texture coordinates
+    Out.BaseTex = TexCoord;
+	Out.ScreenUV = Out.Position;
+	
+	Out.Color = Color;
+	
+    return Out;
+}
+
+
+
+// Pixel shader
+float4 HeatShimmer_PS(VS_OUTPUT In) : COLOR
+{	
+    float4 ScreenPos = In.ScreenUV;
+    ScreenPos.xy = (ScreenPos.xy / ScreenPos.w) * 0.5f + 0.5f;
+    ScreenPos.y = 1-ScreenPos.y;
+
+	float2 vNewTexCoord = ScreenPos.xy;
+	
+    float2 NewBaseCoords = In.BaseTex;
+    NewBaseCoords.y += Timer * 0.1f;
+    
+    float4 vHeatBright = tex2D(HeatSampler, NewBaseCoords);
+    float2 vHeat = vHeatBright.rg;
+        if (any(vHeat - 0.5))
+    {
+        vHeat = vHeat * 2 - 1;
+        float2 vOffsetTexCoord = ScreenPos.xy + (vHeat.xy 
+            * PerturbationMultiplier);
+
+        if (any(tex2D(HeatSampler, vOffsetTexCoord).rg - 0.5))
+        {
+            vNewTexCoord = vOffsetTexCoord;
+        }
+    }
+      
+	float4 HeatResult = tex2D(FrameSampler, vNewTexCoord) * (1 
+        + ShimmerBrightness * vHeatBright.b);  
+	
+
+    return float4(HeatResult.xyz, In.Color.x);
+}
+
+// techniques
+technique HeatShimmer
+<
+    string Description = "This shader performs a heat shimmer effect using "
+    "an offset texture to define and a frame buffer texture. The offset "
+    "texture is used to calculate what texel to look up from a provided frame "
+    "buffer texture. It uses HLSL shaders through an FX file. "
+    "This shader does apply a base map. ";
+    
+    string NBTMethod = "ATI";
+    bool UsesNiRenderState = true;
+    bool UsesNiLightState = false;
+>
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 HeatShimmer_VS();
+        PixelShader = compile ps_2_0 HeatShimmer_PS();
+        
+        ZWriteEnable = FALSE;   
+        AlphaBlendEnable = TRUE;
+    }
+}
+

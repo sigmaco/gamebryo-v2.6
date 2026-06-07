@@ -1,0 +1,287 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SCRIPT_EDITOR DIALOGEX 0, 0, 409, 282
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+CAPTION "Script Editor"
+MENU IDR_SCRIPT_MENU
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    COMBOBOX        IDC_SCRIPT_EDIT_COMBO,14,30,247,136,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Tab1",IDC_KNOWNPLUGINTAB,"SysTabControl32",0x0,15,100,171,142,WS_EX_CLIENTEDGE
+    LISTBOX         IDC_KNOWN_PLUGINS_LIST,24,120,154,114,LBS_SORT | LBS_NOINTEGRALHEIGHT | LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_PLUGIN_EDIT_LIST,274,100,120,144,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Add Plugin",IDC_ADD_PLUGIN,204,103,57,15
+    PUSHBUTTON      "Remove Plugin",IDC_REMOVE_PLUGIN,204,123,57,15
+    PUSHBUTTON      "See Description",IDC_PLUGIN_DESCRIPTION,204,143,57,15
+    PUSHBUTTON      "Edit Plugin",IDC_EDIT_PLUGIN,204,169,57,15
+    PUSHBUTTON      "Move Up",IDC_MOVE_PLUGIN_UP,204,189,57,15
+    PUSHBUTTON      "Move Down",IDC_MOVE_PLUGIN_DOWN,204,209,57,15
+    DEFPUSHBUTTON   "OK",IDOK,119,260,55,15
+    PUSHBUTTON      "Cancel",IDCANCEL,234,260,55,15
+    LTEXT           "Current Script (Template File Name):",IDC_STATIC,15,20,191,10,SS_CENTERIMAGE
+    LTEXT           "Plugin List for Current Script (in order):",IDC_STATIC,275,77,119,8,SS_CENTERIMAGE
+    LTEXT           "Known Plugins:",IDC_STATIC,15,77,50,8,SS_CENTERIMAGE
+    LTEXT           "(Double-click to add to current script)",IDC_STATIC,15,87,120,10
+    LTEXT           "(Double-click to edit)",IDC_STATIC,275,87,120,10
+    GROUPBOX        "Plugin Information",IDC_STATIC,10,61,392,192
+    COMBOBOX        IDC_TYPE_COMBO,318,46,76,137,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Script Type:",IDC_STATIC,274,47,42,11,SS_CENTERIMAGE
+    LTEXT           "Note: Scripts with * after their name are unsaved templates",IDC_STATIC,14,47,187,11
+    PUSHBUTTON      "New",IDC_NEW_SCRIPT,268,29,32,14
+    PUSHBUTTON      "Clone",IDC_NEW_FROM_TEMPLATE,336,29,32,14
+    PUSHBUTTON      "Save",IDC_SAVE_SCRIPT,302,29,32,14
+    PUSHBUTTON      "Rename",IDC_RENAME_SCRIPT,370,29,32,14
+END
+
+IDD_SCRIPT_SELECTOR DIALOG  0, 0, 332, 221
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Script Selection"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_SCRIPT_SELECT_COMBO,15,18,300,137,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_PLUGIN_SELECT_LIST,15,60,300,130,LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "Script Editor",IDC_SCRIPT_EDITOR,45,202,55,15
+    DEFPUSHBUTTON   "OK",IDOK,138,202,55,15
+    PUSHBUTTON      "Cancel",IDCANCEL,231,202,55,15
+    GROUPBOX        "Plugins Executed By Script:",IDC_STATIC,5,45,320,150
+    GROUPBOX        "Select Script:",IDC_STATIC,5,2,320,40
+END
+
+IDD_RENAME_SCRIPT DIALOG  0, 0, 186, 71
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Rename Script"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_RENAME_SCRIPT_EDIT,19,25,145,15,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,35,50,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,100,50,50,14
+    LTEXT           "New Name:",IDC_STATIC,19,10,95,10
+END
+
+IDD_PLUGIN_SELECTOR DIALOG  0, 0, 217, 311
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Add Plugins"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_ADD_PLUGIN_LIST,15,20,180,245,LBS_SORT | LBS_MULTIPLESEL | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,36,290,55,15
+    PUSHBUTTON      "Cancel",IDCANCEL,126,290,55,15
+    GROUPBOX        "Select Plugins",-1,5,5,200,270
+END
+
+IDD_NEW_FROM_TEMPLATE DIALOG  0, 0, 186, 105
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "New Script From Template"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_RENAME_SCRIPT_EDIT,19,25,145,15,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,35,84,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,100,84,50,14
+    LTEXT           "New Name:",IDC_STATIC,19,10,95,10
+    LTEXT           "Copy Settings From Which Script:",IDC_STATIC,19,48,151,10
+    COMBOBOX        IDC_SELECT_SCRIPT_TEMPLATE_COMBO,19,63,145,147,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_PROGRESS_DLG DIALOGEX 0, 0, 187, 70
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_POPUP
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "012345678901234567890123456789012345678",IDC_PROGRESS_NAME,6,7,174,56
+    LTEXT           "012345678901234567890123456789012345678",IDC_PRIMARY_TEXT,13,19,157,8,SS_CENTERIMAGE
+    LTEXT           "012345678901234567890123456789012345678",IDC_SECONDARY_TEXT,13,33,157,8,SS_CENTERIMAGE
+    CONTROL         "Progress1",IDC_PROGRESS_BAR,"msctls_progress32",WS_BORDER,13,47,157,11
+END
+
+IDD_INFO_DLG DIALOG  0, 0, 413, 301
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,181,278,50,14
+    EDITTEXT        IDC_INFO_EDIT,7,10,399,264,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    PUSHBUTTON      "Save As...",IDC_SAVE,325,278,65,14
+END
+
+IDD_CONVERT_SCRIPT DIALOGEX 0, 0, 221, 95
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Convert script to latest version"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Yes",IDOK,19,74,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,151,74,50,14
+    CONTROL         "Save script without adding plug-ins.",IDC_CONVERT_SCRIPT_ADD,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,57,130,10
+    LTEXT           "Do you wish to modify the current script to add the Finalize plug-in?\n\nIf you don't include the Finalize plug-in the data produced won't be optimal.",IDC_STATIC,13,7,201,42
+    DEFPUSHBUTTON   "Yes To All",ID_YES_TO_ALL,85,74,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SCRIPT_EDITOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 402
+        BOTTOMMARGIN, 275
+    END
+
+    IDD_SCRIPT_SELECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 325
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 214
+    END
+
+    IDD_RENAME_SCRIPT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 64
+    END
+
+    IDD_PLUGIN_SELECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 210
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 304
+    END
+
+    IDD_NEW_FROM_TEMPLATE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 98
+    END
+
+    IDD_PROGRESS_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 63
+    END
+
+    IDD_INFO_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 406
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 294
+    END
+
+    IDD_CONVERT_SCRIPT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 214
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_SCRIPT_MENU MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New Blank",                  IDC_NEW_SCRIPT
+        MENUITEM "New From &Template",          IDC_NEW_FROM_TEMPLATE
+        MENUITEM SEPARATOR
+        MENUITEM "&Open Template",              IDC_ADD_SCRIPT
+        MENUITEM "&Save Template",              IDC_SAVE_SCRIPT
+        MENUITEM "Save Template &As...",        IDC_SAVE_SCRIPT_AS
+        MENUITEM SEPARATOR
+        MENUITEM "&Close",                      IDOK
+    END
+    POPUP "&Script"
+    BEGIN
+        MENUITEM "&Rename",                     IDC_RENAME_SCRIPT
+        MENUITEM SEPARATOR
+        MENUITEM "&Make Template",              IDC_SAVE_SCRIPT
+    END
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,224 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader TwoPass
+{
+    "This shader is a simple example of a two-pass shader. "
+    "It applies the base map modulated by SelectedColor, and then "
+    "alpha-blends the TestMap onto the result in the second pass."
+
+    // Attribute list
+    Attributes
+    {
+        Attrib_Color
+            SelectedColor
+            Artist
+            1.0,0.0,0.0,0.5
+            [(0.0,0.0,0.0,0.0)  (1.0,1.0,1.0,1.0)]
+            
+        Attrib_Texture      TestMap     Artist      0
+    }
+
+    // Packing Definition
+    PackingDef PosNormUV0
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      3   PDT_Float3
+            PDP_TexCoord0   7   PDT_Float2
+    }
+    
+    // Implementation
+    Implementation VS11
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform            = DX9
+            VSVersion           = v1.1
+            UserVersion         = v0.0
+            PSVersion           = v0.0
+            UsesNiRenderState   = true
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosNormUV0
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "TwoPass.vsh"
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0   0
+                CM_Attribute    SelectedColor           4   1   0
+            }
+            
+            // Texture stage 0
+            Stage 0 Stage0
+            {
+                TSS_TexCoordIndex   = 0
+                TSS_ColorOp     = TOP_Modulate
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Diffuse
+                TSS_AlphaOp     = TOP_Disable
+                TSS_Texture     = NTM_Base
+            }
+            
+            // Sampler stage 0
+            Sampler 0   Sampler0
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_None
+            }
+        }
+
+        // Second pass
+        Pass Pass1
+        {
+            RenderStates
+            {
+                AlphaBlendEnable    = true
+                SrcBlend            = SrcAlpha
+                DestBlend           = InvSrcAlpha
+            }
+            
+            // Vertex shader program
+            VSProgram   "TwoPass.vsh"
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0   0
+                CM_Constant     SelectedColor           4   1   1.0, 1.0, 1.0, 1.0
+            }
+
+            // Texture stage 0
+            Stage 0 Stage0
+            {
+                TSS_ColorOp     = TOP_Modulate
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Current
+                TSS_AlphaOp     = TOP_Modulate
+                TSS_AlphaArg1   = TA_Texture
+                TSS_AlphaArg2   = TA_Current
+                TSS_Texture     = <TestMap>
+                TSS_TexCoordIndex   = 0
+            }
+            
+            // Sampler stage 0
+            Sampler 0   Sampler0
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_None
+            }
+        }
+    }
+    
+    // Implementation
+    Implementation VS11_PS11
+    {
+        "This implementation is intended for hardware that does not support "
+        "a fixed-function pixel pipeline."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform            = DX9|XENON
+            VSVersion           = v1.1
+            UserVersion         = v0.0
+            PSVersion           = v1.1
+            UsesNiRenderState   = true
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosNormUV0
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "TwoPass.vsh"
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0   0
+                CM_Attribute    SelectedColor           4   1   0
+            }
+            
+            // Sampler stage 0
+            Sampler 0   Sampler0
+            {
+                TSS_Texture     = NTM_Base
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_None
+            }
+            
+            PSProgram "TwoPassOne.psh"
+        }
+
+        // Second pass
+        Pass Pass1
+        {
+            RenderStates
+            {
+                AlphaBlendEnable    = true
+                SrcBlend            = SrcAlpha
+                DestBlend           = InvSrcAlpha
+            }
+            
+            // Vertex shader program
+            VSProgram   "TwoPass.vsh"
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0   0
+                CM_Constant     SelectedColor           4   1   1.0, 1.0, 1.0, 1.0
+            }
+            
+            // Sampler stage 0
+            Sampler 0   Sampler0
+            {
+                TSS_Texture     = <TestMap>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_None
+            }
+            
+            PSProgram "TwoPassTwo.psh"
+        }
+    }
+}

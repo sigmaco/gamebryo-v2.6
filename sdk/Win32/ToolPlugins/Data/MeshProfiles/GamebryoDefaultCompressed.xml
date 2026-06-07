@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeshProfiles version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./NiMeshProfileSchema.xsd">
+    <MeshProfile name="DefaultCompressed" description="Default compressed mesh profile">
+        <FinalizeStream name="Indices">
+            <Element convertformat="UINT16" converttype="SMARTCLAMP">INDEX</Element>
+        </FinalizeStream>
+	<FinalizeStream renderer="WII" name="BaseVertexStream">
+            <Element renderer="WII">POSITION</Element>
+            <Element renderer="WII" type="COLOR" convertformat="UINT8" converttype="NORMALIZE" range="0-7">COLOR</Element>
+            <Element renderer="WII" range="0-7">TEXCOORD</Element>
+            <Element renderer="WII">POSITION_BP</Element>
+            <Element renderer="WII" convertformat="UINT8" converttype="SMARTCLAMP">BLENDINDICES</Element>
+            <Element renderer="WII" type="BLENDWEIGHT" convertformat="UINT8" converttype="NORMALIZE">
+                <Component value="BLENDWEIGHT.0" />
+                <Component value="BLENDWEIGHT.1" />
+                <Component value="BLENDWEIGHT.2" />
+                <Component value="BLENDWEIGHT.3" />
+            </Element>
+        </FinalizeStream>
+        <FinalizeStream name="BaseVertexStream">
+            <Element type="POSITION" convertformat="FLOAT16">
+                <Component value="POSITION.x" />
+                <Component value="POSITION.y" />
+                <Component value="POSITION.z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" type="POSITION" convertformat="FLOAT16">
+                <Component value="POSITION.x" />
+                <Component value="POSITION.y" />
+                <Component value="POSITION.z" />
+            </Element>
+            <Element type="NORMAL" convertformat="FLOAT16">
+                <Component value="NORMAL.x" />
+                <Component value="NORMAL.y" />
+                <Component value="NORMAL.z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" type="NORMAL" convertformat="FLOAT16">
+                <Component value="NORMAL.x" />
+                <Component value="NORMAL.y" />
+                <Component value="NORMAL.z" />
+            </Element>
+            <Element type="BINORMAL" range="0-7" convertformat="FLOAT16">
+                <Component value="BINORMAL[].x" />
+                <Component value="BINORMAL[].y" />
+                <Component value="BINORMAL[].z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" type="BINORMAL" range="0-7" convertformat="FLOAT16">
+                <Component value="BINORMAL[].x" />
+                <Component value="BINORMAL[].y" />
+                <Component value="BINORMAL[].z" />
+            </Element>
+            <Element type="TANGENT" range="0-7" convertformat="FLOAT16">
+                <Component value="TANGENT[].x" />
+                <Component value="TANGENT[].y" />
+                <Component value="TANGENT[].z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" type="TANGENT" range="0-7" convertformat="FLOAT16">
+                <Component value="TANGENT[].x" />
+                <Component value="TANGENT[].y" />
+                <Component value="TANGENT[].z" />
+            </Element>
+            <Element type="COLOR" convertformat="UINT8" converttype="NORMALIZE" range="0-7">COLOR</Element>
+            <Element convertformat="FLOAT16" range="0-7">TEXCOORD</Element>
+            <Element type="POSITION_BP" convertformat="FLOAT16">
+                <Component value="POSITION_BP.x" />
+                <Component value="POSITION_BP.y" />
+                <Component value="POSITION_BP.z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" type="POSITION_BP" convertformat="FLOAT16">
+                <Component value="POSITION_BP.x" />
+                <Component value="POSITION_BP.y" />
+                <Component value="POSITION_BP.z" />
+            </Element>
+            <Element type="NORMAL_BP" convertformat="FLOAT16">
+                <Component value="NORMAL_BP.x" />
+                <Component value="NORMAL_BP.y" />
+                <Component value="NORMAL_BP.z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" type="NORMAL_BP" convertformat="FLOAT16">
+                <Component value="NORMAL_BP.x" />
+                <Component value="NORMAL_BP.y" />
+                <Component value="NORMAL_BP.z" />
+            </Element>
+            <Element type="BINORMAL_BP" range="0-7" convertformat="FLOAT16">
+                <Component value="BINORMAL_BP[].x" />
+                <Component value="BINORMAL_BP[].y" />
+                <Component value="BINORMAL_BP[].z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" type="BINORMAL_BP" range="0-7" convertformat="FLOAT16">
+                <Component value="BINORMAL_BP[].x" />
+                <Component value="BINORMAL_BP[].y" />
+                <Component value="BINORMAL_BP[].z" />
+            </Element>
+            <Element type="TANGENT_BP" range="0-7" convertformat="FLOAT16">
+                <Component value="TANGENT_BP[].x" />
+                <Component value="TANGENT_BP[].y" />
+                <Component value="TANGENT_BP[].z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" type="TANGENT_BP" range="0-7" convertformat="FLOAT16">
+                <Component value="TANGENT_BP[].x" />
+                <Component value="TANGENT_BP[].y" />
+                <Component value="TANGENT_BP[].z" />
+            </Element>
+            <Element convertformat="UINT8" converttype="SMARTCLAMP">BLENDINDICES</Element>
+            <Element type="BLENDWEIGHT" convertformat="FLOAT16">
+                <Component value="BLENDWEIGHT.0" />
+                <Component value="BLENDWEIGHT.1" />
+                <Component value="BLENDWEIGHT.2" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" type="BLENDWEIGHT" convertformat="FLOAT16">
+                <Component value="BLENDWEIGHT.0" />
+                <Component value="BLENDWEIGHT.1" />
+                <Component value="BLENDWEIGHT.2" />
+            </Element>
+        </FinalizeStream>
+        <FinalizeStream renderer="WII" name="WiiNBTVertexStream">
+            <Element renderer="WII" type="NORMAL" convertformat="INT16" converttype="NORMALIZE" strict="STRICT_FORMAT">
+                <Component value="NORMAL.x" />
+                <Component value="NORMAL.y" />
+                <Component value="NORMAL.z" />
+            </Element>
+            <Element renderer="WII" type="BINORMAL" range="0-7" convertformat="INT16" converttype="NORMALIZE" strict="STRICT_FORMAT">
+                <Component value="BINORMAL[].x" />
+                <Component value="BINORMAL[].y" />
+                <Component value="BINORMAL[].z" />
+            </Element>
+            <Element renderer="WII" type="TANGENT" range="0-7" convertformat="INT16" converttype="NORMALIZE" strict="STRICT_FORMAT">
+                <Component value="TANGENT[].x" />
+                <Component value="TANGENT[].y" />
+                <Component value="TANGENT[].z" />
+            </Element>
+            <Element renderer="WII" type="NORMAL_BP" convertformat="INT16" converttype="NORMALIZE" strict="STRICT_FORMAT">
+                <Component value="NORMAL_BP.x" />
+                <Component value="NORMAL_BP.y" />
+                <Component value="NORMAL_BP.z" />
+            </Element>
+            <Element renderer="WII" type="BINORMAL_BP" range="0-7" convertformat="INT16" converttype="NORMALIZE" strict="STRICT_FORMAT">
+                <Component value="BINORMAL_BP[].x" />
+                <Component value="BINORMAL_BP[].y" />
+                <Component value="BINORMAL_BP[].z" />
+            </Element>
+            <Element renderer="WII" type="TANGENT_BP" range="0-7" convertformat="INT16" converttype="NORMALIZE" strict="STRICT_FORMAT">
+                <Component value="TANGENT_BP[].x" />
+                <Component value="TANGENT_BP[].y" />
+                <Component value="TANGENT_BP[].z" />
+            </Element>
+        </FinalizeStream>
+        <FinalizeStream name="MorphVertexStream">
+            <Element name="MORPH_POSITION" range="0-31" convertformat="FLOAT16">
+                <Component value="MORPH_POSITION[].x" />
+                <Component value="MORPH_POSITION[].y" />
+                <Component value="MORPH_POSITION[].z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" name="MORPH_POSITION" range="0-31" convertformat="FLOAT16">
+                <Component value="MORPH_POSITION[].x" />
+                <Component value="MORPH_POSITION[].y" />
+                <Component value="MORPH_POSITION[].z" />
+            </Element>
+            <Element renderer="WII" name="MORPH_POSITION" range="0-31">
+                <Component value="MORPH_POSITION[].x" />
+                <Component value="MORPH_POSITION[].y" />
+                <Component value="MORPH_POSITION[].z" />
+            </Element>
+            <Element name="MORPH_NORMAL" range="0-31" convertformat="FLOAT16">
+                <Component value="MORPH_NORMAL[].x" />
+                <Component value="MORPH_NORMAL[].y" />
+                <Component value="MORPH_NORMAL[].z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" name="MORPH_NORMAL" range="0-31" convertformat="FLOAT16">
+                <Component value="MORPH_NORMAL[].x" />
+                <Component value="MORPH_NORMAL[].y" />
+                <Component value="MORPH_NORMAL[].z" />
+            </Element>
+            <Element renderer="WII" name="MORPH_NORMAL" range="0-31">
+                <Component value="MORPH_NORMAL[].x" />
+                <Component value="MORPH_NORMAL[].y" />
+                <Component value="MORPH_NORMAL[].z" />
+            </Element>
+            <Element name="MORPH_POSITION_BP" range="0-31" convertformat="FLOAT16">
+                <Component value="MORPH_POSITION_BP[].x" />
+                <Component value="MORPH_POSITION_BP[].y" />
+                <Component value="MORPH_POSITION_BP[].z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" name="MORPH_POSITION_BP" range="0-31" convertformat="FLOAT16">
+                <Component value="MORPH_POSITION_BP[].x" />
+                <Component value="MORPH_POSITION_BP[].y" />
+                <Component value="MORPH_POSITION_BP[].z" />
+            </Element>
+            <Element renderer="WII" name="MORPH_POSITION_BP" range="0-31">
+                <Component value="MORPH_POSITION_BP[].x" />
+                <Component value="MORPH_POSITION_BP[].y" />
+                <Component value="MORPH_POSITION_BP[].z" />
+            </Element>
+            <Element name="MORPH_NORMAL_BP" range="0-31" convertformat="FLOAT16">
+                <Component value="MORPH_NORMAL_BP[].x" />
+                <Component value="MORPH_NORMAL_BP[].y" />
+                <Component value="MORPH_NORMAL_BP[].z" />
+                <Component value="1.0" />
+            </Element>
+            <Element renderer="PS3" name="MORPH_NORMAL_BP" range="0-31" convertformat="FLOAT16">
+                <Component value="MORPH_NORMAL_BP[].x" />
+                <Component value="MORPH_NORMAL_BP[].y" />
+                <Component value="MORPH_NORMAL_BP[].z" />
+            </Element>
+            <Element renderer="WII" name="MORPH_NORMAL_BP" range="0-31">
+                <Component value="MORPH_NORMAL_BP[].x" />
+                <Component value="MORPH_NORMAL_BP[].y" />
+                <Component value="MORPH_NORMAL_BP[].z" />
+            </Element>
+        </FinalizeStream>
+        <FinalizeStream name="MorphWeightStream">
+            <Element>MORPHWEIGHTS</Element>
+        </FinalizeStream>
+        <FinalizeStream name="BoneIndexRemapStream">
+            <Element>BONE_PALETTE</Element>
+        </FinalizeStream>
+        <FinalizeStream name="TransformsStream">
+            <Element range="0-2">TRANSFORMS</Element>
+        </FinalizeStream>
+        <FinalizeStream name="InstanceTransformsStream">
+            <Element range="0-2">INSTANCETRANSFORMS</Element>
+        </FinalizeStream>
+        <FinalizeStream name="NormalShareIndexStream">
+            <Element>NORMALSHAREINDEX</Element>
+        </FinalizeStream>
+        <FinalizeStream name="NormalShareGroupStream">
+            <Element>NORMALSHAREGROUP</Element>
+        </FinalizeStream>
+    </MeshProfile>
+</MeshProfiles>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeshProfiles version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./NiMeshProfileSchema.xsd">
+    <MeshProfile name="DX9FixedFunctionPipeline" description="DX9 Fixed Function Pipeline profile">
+        <FinalizeStream name="Indices">
+            <Element convertformat="UINT16" converttype="SMARTCLAMP">INDEX</Element>
+        </FinalizeStream>
+        <FinalizeStream name="BaseVertexStream">
+            <Element convertformat="FLOAT32">POSITION</Element>
+            <Element convertformat="FLOAT32">POSITION_BP</Element>
+            <Element convertformat="FLOAT32">NORMAL</Element>
+            <Element convertformat="FLOAT32">NORMAL_BP</Element>
+            <Element type="COLOR" range="0-1" specialformat="NORMUINT8_4_BGRA">
+                <Component value="COLOR[].r" />
+                <Component value="COLOR[].g" />
+                <Component value="COLOR[].b" />
+                <Component value="COLOR[].a" />
+            </Element>
+            <Element convertformat="FLOAT32" range="0-7">TEXCOORD</Element>
+            <Element convertformat="UINT8" converttype="SMARTCLAMP">BLENDINDICES</Element>
+            <Element name="BLENDWEIGHT" convertformat="FLOAT32" converttype="NORMALIZE">
+                <Component value="BLENDWEIGHT.0" />
+                <Component value="BLENDWEIGHT.1" />
+                <Component value="BLENDWEIGHT.2" />
+            </Element>
+        </FinalizeStream>
+        <FinalizeStream name="MorphVertexStream">
+            <Element range="0-31">MORPH_POSITION</Element>
+            <Element range="0-31">MORPH_NORMAL</Element>
+            <Element range="0-31">MORPH_POSITION_BP</Element>
+            <Element range="0-31">MORPH_NORMAL_BP</Element>
+        </FinalizeStream>
+        <FinalizeStream name="MorphWeightStream">
+            <Element>MORPHWEIGHTS</Element>
+        </FinalizeStream>
+        <FinalizeStream name="BoneIndexRemapStream">
+            <Element>BONE_PALETTE</Element>
+        </FinalizeStream>
+    </MeshProfile>
+</MeshProfiles>

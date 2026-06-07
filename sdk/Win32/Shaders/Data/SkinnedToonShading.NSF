@@ -1,0 +1,107 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader SkinnedToonShading
+{
+    "This shader skins a model using 20 bones per partition, applies a base "
+    "map, and lights it with two directional lights. Then, it uses a "
+    "luminance function to sample a 1D texture to produce toon shading. "
+
+    Objects
+    {
+        Effect_GeneralLight   0   Light1
+        Effect_GeneralLight   1   Light2
+    }
+
+    // Attribute list
+    Attributes
+    {
+        Attrib_Texture
+            ToonRamp
+            Artist
+            0
+            "ToonRamp.bmp"
+    }
+
+    // Packing Definition
+    PackingDef PosBlendWeightBlendIndicesNormUV0
+    {
+        PD_Stream   0
+            PDP_Position        0   PDT_Float3
+            PDP_BlendWeights    1   PDT_Float3
+            PDP_BlendIndices    2   PDT_UByteColor
+            PDP_Normal          3   PDT_Float3
+            PDP_TexCoord0       7   PDT_Float2
+    }
+
+    Implementation ToonShading
+    {
+        "This implementation requires hardware that supports "
+        "Vertex Shader v1.1 and Pixel Shader v1.1."
+
+        Requirements
+        {
+            Platform                = DX9|XENON
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v1.1
+            BonesPerPartition       = 20
+            UsesNIRenderState       = true
+        }
+
+        PackingDef  PosBlendWeightBlendIndicesNormUV0
+
+        Pass ToonShading
+        {
+            VSProgram   "SkinnedToonShading.vsh"
+
+            VS_Constantmap
+            {
+                CM_Defined      ViewProjTranspose       0       0
+                CM_Object       Light1  WorldDirection  4
+                CM_Object       Light2  WorldDirection  5  
+                CM_Object       Light1  Diffuse         6
+                CM_Object       Light2  Diffuse         7   
+                CM_Constant     Constants               8   1   1.0, 0.0, 1.0, 765.01
+                CM_Constant     YUVConversion           9   1   0.299, 0.587, 0.114, 1.0
+                CM_Defined      MaterialDiffuse         10      0
+                CM_Defined      InvWorldTranspose       11      0
+                CM_Defined      SkinBoneMatrix3         15  0   20
+            }
+
+            Sampler 0   BaseMapSampler
+            {
+                TSS_Texture     = NTM_Base
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+            
+            Sampler 1   ToonRamp
+            {
+                TSS_Texture     = <ToonRamp>
+                TSAMP_AddressU  = TADDR_Clamp
+                TSAMP_AddressV  = TADDR_Clamp
+                TSAMP_AddressW  = TADDR_Clamp
+                TSAMP_MagFilter    = TEXF_Point
+                TSAMP_MinFilter    = TEXF_Point
+                TSAMP_MipFilter    = TEXF_None
+            }
+
+            PSProgram   "ToonShading.psh"
+        }
+    }
+}

@@ -1,0 +1,31 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+//---------------------------------------------------------------------------
+//	Alpha Texture Blender
+//---------------------------------------------------------------------------
+//	Vertex shader for blending 2 textures together by a third.
+//
+//---------------------------------------------------------------------------
+// t0   Texture1
+// t1   Texture2
+// t2   AlphaBlendMap
+
+ps_1_1
+
+tex t0
+tex t1
+tex t2
+
+mov r0, t0
+lrp r0, t2.aaaa, t1, r0

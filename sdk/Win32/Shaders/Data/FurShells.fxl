@@ -1,0 +1,216 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+// Shells fur shader using skinning
+
+texture BaseMap 
+< 
+    string NTM = "base";
+>;
+sampler BaseSampler
+<
+    string NTM = "base";
+    int NTMIndex = 0;
+> = sampler_state 
+{
+    texture = (BaseMap);
+    AddressU  = WRAP;
+    AddressV  = WRAP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;
+};
+
+texture ShellTexture
+<
+    string NTM = "shader";
+>;
+sampler ShellSampler
+<
+    string NTM = "shader";
+    int NTMIndex = 0;
+> = sampler_state 
+{
+    texture = (ShellTexture);
+    AddressU  = WRAP;
+    AddressV  = WRAP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;
+};
+
+float ShellFurDensity : ATTRIBUTE = 1.0f;
+float ShellTextureCellUVSize     : ATTRIBUTE = 0.25f;
+float ShellTextureCellUVHalfSize : ATTRIBUTE = 0.125f;
+float4 FurTintColor : ATTRIBUTE = float4(2,2,2,1);
+
+float4x4 World
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "WORLD";
+>;
+
+float4x4 ViewProj
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "VIEWPROJ";
+>;
+    
+static const int MAX_BONES = 32;
+float4x3 Bone[MAX_BONES]
+<
+    string VarType = "Predefined";
+    string DefinedMapping = "SKINBONEMATRIX3";
+>;  
+
+struct VS_OUTPUT
+{
+    float4 Pos        : POSITION;
+    float  Color      : Color;
+    float2 BaseCoord  : TEXCOORD0;
+    float2 AtlasCoord : TEXCOORD1;
+};
+
+
+VS_OUTPUT VS(float4 Pos : POSITION,
+    float4 Color        : COLOR,
+    float2 TexCoord0    : TEXCOORD0,
+    float2 TexCoord1    : TEXCOORD1)
+{
+    VS_OUTPUT Out = (VS_OUTPUT)0;
+
+    float4 WorldPos = mul(Pos, World);
+
+    Out.Pos = mul(WorldPos, ViewProj);
+    
+    Out.BaseCoord = TexCoord0;
+    Out.AtlasCoord = TexCoord1;
+    Out.Color = Color.a;
+
+    return Out;
+}
+
+VS_OUTPUT VS_SKINNING(float4 Pos : POSITION,
+    float4 Color        : COLOR,
+    float2 TexCoord0    : TEXCOORD0,
+    float2 TexCoord1    : TEXCOORD1,
+    float3 BlendWeights : BLENDWEIGHT,
+    int4 BlendIndices : BLENDINDICES)
+{
+    VS_OUTPUT Out = (VS_OUTPUT)0;
+
+    int4 indices = BlendIndices;
+
+    // Calculate normalized fourth bone weight
+    float weight4 = 1.0f - BlendWeights[0] - BlendWeights[1] - 
+        BlendWeights[2];
+    float4 weights = float4(BlendWeights[0], BlendWeights[1], 
+        BlendWeights[2], weight4);
+
+    // Calculate bone transform
+    float4x3 BoneTransform;
+    BoneTransform = weights[0] * Bone[indices[0]];
+    BoneTransform += weights[1] * Bone[indices[1]];
+    BoneTransform += weights[2] * Bone[indices[2]];
+    BoneTransform += weights[3] * Bone[indices[3]];
+    
+    float3 BoneSpacePos = mul(Pos, BoneTransform);
+
+    Out.Pos = mul(float4(BoneSpacePos, 1.0), ViewProj);
+    
+    Out.BaseCoord = TexCoord0;
+    Out.AtlasCoord = TexCoord1;
+    Out.Color = Color.a;
+
+    return Out;
+}
+
+float4 PS(VS_OUTPUT In) : COLOR
+{
+    float4 baseColor = tex2D( BaseSampler, In.BaseCoord) * FurTintColor;
+    float2 shellCoord = In.BaseCoord * ShellFurDensity;
+
+    float2 minCell = In.AtlasCoord;
+    minCell.x -= ShellTextureCellUVHalfSize;
+    minCell.y -= ShellTextureCellUVHalfSize;
+
+    // Drop integer portion, effectivly wrapping the tex coords
+    shellCoord = frac(shellCoord);
+
+    shellCoord *= ShellTextureCellUVSize;
+    shellCoord += minCell;
+
+    float4 shellColor = tex2D(ShellSampler, shellCoord);
+
+    return float4(baseColor.rgb, shellColor.a * In.Color * FurTintColor.a);
+}
+
+technique FurShells
+<
+    string Description = "This is a shell shader used for rendering fur. The "
+    "base map that is applied to the character is sampled here to get the "
+    "desired color for each shell. Then the cell that the current shell "
+    "texture references is sampled from the texture atlas. It uses HLSL "
+    "shaders through an FX file. this shader does not transform normals and "
+    "does not perform lighting calculations.";
+
+    bool UsesNiRenderState = true;
+>
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VS();
+        PixelShader = compile ps_2_0 PS();
+
+        AlphaTestEnable = true;
+        AlphaFunc = Greater;
+        AlphaRef = 32; 
+        AlphaBlendEnable = true;
+        ZWriteEnable = false;
+        BlendOp = Add;
+        SrcBlend = SRCALPHA;
+        DestBlend = INVSRCALPHA;
+    }
+}
+
+technique FurShellsSkinning
+<
+    string Description = "This is a shell shader used for rendering fur. The "
+    "shell geometry is animated and skinned through the same implementation as "
+    "the FX skinning shader. The base map that is applied to the animated "
+    "character is sampled here to get the desired color for each shell. Then "
+    "the cell that the current shell texture references is sampled from the "
+    "texture atlas. This shader performs skinning in the vertex shader using "
+    "32 bones. It uses HLSL shaders through an FX file. this shader "
+    "does not transform normals and does not perform "
+    "lighting calculations. ";
+    int BonesPerPartition = MAX_BONES;
+    bool UsesNiRenderState = true;
+>
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VS_SKINNING();
+        PixelShader = compile ps_2_0 PS();
+
+        AlphaTestEnable = true;
+        AlphaFunc = Greater;
+        AlphaRef = 32;
+        AlphaBlendEnable = true;
+        ZWriteEnable = false;
+        BlendOp = Add;
+        SrcBlend = SRCALPHA;
+        DestBlend = INVSRCALPHA;
+    }
+}
+

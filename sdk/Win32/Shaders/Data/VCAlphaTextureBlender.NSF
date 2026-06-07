@@ -1,0 +1,423 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader VCAlphaTextureBlender
+{
+    "This shader blends between two textures, Texture1 and Texture2, "
+    "using the alpha value from the vertex colors. The alpha values "
+    "represent the fraction of Texture2 used, so a value of 1.0 will "
+    "cause only Texture2 to be visible. The blended texture then has a "
+    "detail map applied to it. It uses only the fixed-function pipeline, "
+    "and it is used on the terrain in the MOUT sample. "
+    
+    // Object list
+    Objects
+    {
+        Effect_PointLight   0   PointLight
+        Effect_DirectionalLight   0   DirLight
+    }
+    
+    // Attribute list
+    Attributes
+    {
+        Attrib_Texture      Texture1        Artist      0
+        Attrib_Texture      Texture2        Artist      1
+        Attrib_Texture      Detail          Artist      2
+    }
+    
+    
+    PackingDef PosNormUVsVCs
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      3   PDT_Float3
+            PDP_Color       5   PDT_UByteColor
+            PDP_TexCoord0   7   PDT_Float2
+            PDP_TexCoord1   8   PDT_Float2
+            PDP_TexCoord2   9   PDT_Float2
+    }
+
+    Implementation Shader
+    {
+        "This implementation is intended for any SM 2.0 Compliant hardware"
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform    = DX9|D3D10|Xenon|PS3
+            VSVersion   = v2.0
+            UserVersion = v0.0
+            PSVersion   = v2.0
+            UsesNiRenderState = true
+        }
+        
+        
+        // 'Global' render states
+        RenderStates
+        {
+            // Disable alpha blending and testing since the alpha values
+            // are used for a different purpose.
+            AlphaBlendEnable    = false
+            AlphaTestEnable     = false
+        }
+
+        PackingDef  PosNormUVsVCs
+        
+        Pass Pass0
+        {   
+            VSProgram
+            {
+                Platform = DX9|D3D10|Xenon
+                Program = "VCAlphaTextureBlender-V.hlsl"
+                ShaderTarget = vs_2_0
+                EntryPoint = vmain
+            }
+
+            VSProgram
+            {
+                Platform = PS3
+                Program = "VCAlphaTextureBlender.cg"
+                ShaderTarget = vs_2_0
+                EntryPoint = vmain
+            }
+
+            VS_Constantmap
+            {
+                CM_Defined      World               g_World         0
+                CM_Defined      ViewProj            g_ViewProj      0
+                CM_Defined      MaterialEmissive    g_MaterialEmissive 0
+                CM_Defined      AmbientLight        g_AmbientLight 0
+                CM_Defined      TexTransformShader  UVSet0_TexTransform 0  
+                CM_Defined      TexTransformShader  UVSet1_TexTransform 1  
+                CM_Defined      TexTransformShader  UVSet2_TexTransform 2  
+                CM_Object       PointLight          Ambient         g_PointAmbient0
+                CM_Object       PointLight          Diffuse         g_PointDiffuse0
+                CM_Object       PointLight          WorldPosition   g_PointWorldPosition0
+                CM_Object       PointLight          Attenuation     g_PointAttenuation0
+                CM_Object       DirLight            Ambient         g_DirAmbient0
+                CM_Object       DirLight            Diffuse         g_DirDiffuse0
+                CM_Object       DirLight            WorldDirection  g_DirWorldDirection0
+            }
+            
+            PSProgram
+            {
+                Platform = DX9|Xenon
+                Program = "VCAlphaTextureBlender-P.hlsl"
+                ShaderTarget = ps_2_0
+                EntryPoint = fmain
+            }
+            
+            PSProgram
+            {
+                Platform = D3D10
+                Program = "VCAlphaTextureBlenderD3D10-P.hlsl"
+                ShaderTarget = ps_2_0
+                EntryPoint = fmain
+            }
+            
+            PSProgram
+            {
+                Platform = PS3
+                Program = "VCAlphaTextureBlender.cg"
+                ShaderTarget = ps_2_0
+                EntryPoint = fmain
+            }
+            // Sampler stage 0
+            Sampler 0   Texture1
+            {
+                TSS_Texture     = <Texture1>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+            // Sampler stage 1
+            Sampler 1   Texture2
+            {
+                TSS_Texture     = <Texture2>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+
+            // Sampler stage 3
+            Sampler 2   Detail
+            {
+                TSS_Texture     = <Detail>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+    }
+    
+    // Implementation
+    Implementation OnePass
+    {
+        "This implementation is intended for any hardware capable "
+        "of 4 stages per pass."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform    = DX9
+            VSVersion   = v0.0
+            UserVersion = v0.0
+            PSVersion   = v0.0
+            UsesNiRenderState = true
+            UsesNiLightState = true
+        }
+        
+        // 'Global' render states
+        RenderStates
+        {
+            // Disable alpha blending and testing since the alpha values
+            // are used for a different purpose.
+            AlphaBlendEnable    = false
+            AlphaTestEnable     = false
+        }
+
+        // First pass
+        Pass Pass0
+        {   
+            // Texture stage 0
+            Stage 0 T1Stage
+            {
+                TSS_ColorOp     = TOP_SelectArg1
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Diffuse
+                TSS_AlphaOp     = TOP_SelectArg2
+                TSS_AlphaArg1   = TA_Texture
+                TSS_AlphaArg2   = TA_Diffuse
+                TSS_Texture     = <Texture1>
+                TSS_TexCoordIndex = UseMapIndex
+            }
+            
+            // Texture stage 1
+            Stage 1 T2Stage
+            {
+                TSS_ColorOp     = TOP_BlendDiffuseAlpha
+                TSS_ColorArg1   = TA_Current
+                TSS_ColorArg2   = TA_Texture
+                TSS_AlphaOp     = TOP_SelectArg1
+                TSS_AlphaArg1   = TA_Current
+                TSS_AlphaArg2   = TA_Texture
+                TSS_Texture     = <Texture2>
+                TSS_TexCoordIndex = UseMapIndex
+            }
+            
+            // Texture stage 2
+            Stage 2 VertexColorStage 
+            {
+                TSS_ColorOp = TOP_Modulate
+                TSS_ColorArg1   = TA_Current
+                TSS_ColorArg2   = TA_Diffuse
+                TSS_AlphaOp = TOP_SelectArg1
+                TSS_AlphaArg1   = TA_Current
+                TSS_AlphaArg2   = TA_Diffuse
+            }
+
+            // Texture stage 3
+            Stage 3 DetailStage 
+            {
+                TSS_ColorOp = TOP_Modulate2x
+                TSS_ColorArg1   = TA_Current
+                TSS_ColorArg2   = TA_Texture
+                TSS_AlphaOp = TOP_SelectArg1
+                TSS_AlphaArg1   = TA_Current
+                TSS_AlphaArg2   = TA_Texture
+                TSS_Texture     = <Detail>
+                TSS_TexCoordIndex = UseMapIndex
+            }
+
+            // Sampler stage 0
+            Sampler 0   T1Sampler
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+            // Sampler stage 1
+            Sampler 1   T2Sampler
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+
+            // Sampler stage 3
+            Sampler 3   DetailSampler
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+    }
+    
+    Implementation TwoPass
+    {
+        "This implementation is intended for any hardware not capable "
+        "of 4 stages per pass."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform    = DX9
+            VSVersion   = v0.0
+            UserVersion = v0.0
+            PSVersion   = v0.0
+            UsesNiRenderState = true
+            UsesNiLightState = true
+        }
+        
+        // 'Global' render states
+        RenderStates
+        {
+            // Disable alpha blending and testing since the alpha values
+            // are used for a different purpose.
+            AlphaBlendEnable    = false
+            AlphaTestEnable     = false
+        }
+
+        // First pass
+        Pass Pass0
+        {   
+
+            // Texture stage 0
+            Stage 0 T1Stage
+            {
+                TSS_ColorOp     = TOP_Modulate
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Diffuse
+                TSS_AlphaOp     = TOP_SelectArg2
+                TSS_AlphaArg1   = TA_Texture
+                TSS_AlphaArg2   = TA_Diffuse
+                TSS_Texture     = <Texture1>
+                TSS_TexCoordIndex = UseMapIndex
+            }
+
+            // Texture stage 1
+            Stage 1 DetailStage
+            {
+                TSS_ColorOp     = TOP_Modulate2x
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Current
+                TSS_AlphaOp     = TOP_SelectArg2
+                TSS_AlphaArg1   = TA_Texture
+                TSS_AlphaArg2   = TA_Diffuse
+                TSS_Texture     = <Detail>
+                TSS_TexCoordIndex = UseMapIndex
+            }
+
+            // Sampler stage 0
+            Sampler 0   T1Sampler
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+
+            // Sampler stage 0
+            Sampler 1   DetailSampler
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+        
+        // Second Pass
+        Pass Pass1
+        {
+            RenderStates
+            {
+                // Use alpha blending to combine the passes.
+                AlphaBlendEnable = true
+                SrcBlend = InvSrcAlpha
+                DestBlend = SrcAlpha
+            }
+            
+            // Texture stage 0
+            Stage 0 T2Stage
+            {
+                TSS_ColorOp     = TOP_Modulate
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Diffuse
+                TSS_AlphaOp     = TOP_SelectArg2
+                TSS_AlphaArg1   = TA_Texture
+                TSS_AlphaArg2   = TA_Diffuse
+                TSS_Texture     = <Texture2>
+                TSS_TexCoordIndex = UseMapIndex
+            }
+
+            // Texture stage 1
+            Stage 1 DetailStage
+            {
+                TSS_ColorOp     = TOP_Modulate2x
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Current
+                TSS_AlphaOp     = TOP_SelectArg2
+                TSS_AlphaArg1   = TA_Texture
+                TSS_AlphaArg2   = TA_Diffuse
+                TSS_Texture     = <Detail>
+                TSS_TexCoordIndex = UseMapIndex
+            }
+            
+            // Sampler stage 0
+            Sampler 0 T2Sampler
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+
+            // Sampler stage 1
+            Sampler 1   DetailSampler
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_Linear
+            }
+        }
+    }
+}

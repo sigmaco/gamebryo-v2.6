@@ -1,0 +1,211 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader Colorize
+{
+    "This shader is a simple example. "
+    "It applies the base map modulated by SelectedColor."
+
+    // Attribute list
+    Attributes
+    {
+        Attrib_Color
+            SelectedColor
+            Artist
+            1.0,0.0,0.0,0.5
+            [(0.0,0.0,0.0,0.0)  (1.0,1.0,1.0,1.0)]
+    }
+
+    // Packing Definition
+    PackingDef PosNormUV0
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      3   PDT_Float3
+            PDP_TexCoord0   7   PDT_Float2
+    }
+    
+    // Implementation
+    Implementation D3D10
+    {
+        "This implementation is intended for hardware "
+        "that supports D3D10."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform            = D3D10
+            VSVersion           = v4.0
+            UserVersion         = v0.0
+            PSVersion           = v4.0
+            UsesNiRenderState   = true
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosNormUV0
+
+        // 'Global' render states
+        RenderStates
+        {
+            Lighting            = false
+        }
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "Colorize.hlsl" VSMain vs_4_0 
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProj   WorldViewProj   0
+                CM_Attribute    SelectedColor   0   1   0
+            }
+            
+            // Sampler stage 0
+            Sampler 0 BaseSampler
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_None
+            }
+            
+            // Texture 0
+            Texture 0 BaseTexture
+            {
+                Source  = NTM_Base
+            }
+            
+            PSProgram "Colorize.hlsl" PSMain ps_4_0 
+        }
+    }    
+    
+    // Implementation
+    Implementation VS11_PS11
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v1.1."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform            = DX9|XENON
+            VSVersion           = v1.1
+            UserVersion         = v0.0
+            PSVersion           = v1.1
+            UsesNiRenderState   = true
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosNormUV0
+
+        // 'Global' render states
+        RenderStates
+        {
+            Lighting            = false
+        }
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "Colorize.vsh"
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0   0
+                CM_Attribute    SelectedColor           4   1   0
+            }
+            
+            // Sampler stage 0
+            Sampler 0   Sampler0
+            {
+                TSS_Texture     = NTM_Base
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_None
+            }
+            
+            PSProgram "Colorize.psh"
+        }
+    }
+    
+    // Implementation
+    Implementation VS11
+    {
+        "This implementation is intended for hardware 
+         that supports Vertex Shader v1.1"
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform            = DX9
+            VSVersion           = v1.1
+            UserVersion         = v0.0
+            PSVersion           = v0.0
+            UsesNiRenderState   = true
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosNormUV0
+
+        // 'Global' render states
+        RenderStates
+        {
+            Lighting            = false
+        }
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "Colorize.vsh"
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0   0
+                CM_Attribute    SelectedColor           4   1   0
+            }
+            
+            // Texture stage 0
+            Stage 0 Stage0
+            {
+                TSS_ColorOp     = TOP_Modulate
+                TSS_ColorArg1   = TA_Texture
+                TSS_ColorArg2   = TA_Diffuse
+                TSS_AlphaOp     = TOP_Disable
+                TSS_Texture     = NTM_Base
+            }
+            
+            // Sampler stage 0
+            Sampler 0   Sampler0
+            {
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter = TEXF_Linear
+                TSAMP_MinFilter = TEXF_Linear
+                TSAMP_MipFilter = TEXF_None
+            }
+        }
+    }
+}

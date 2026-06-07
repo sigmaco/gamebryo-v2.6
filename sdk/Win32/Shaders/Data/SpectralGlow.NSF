@@ -1,0 +1,157 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader SpectralGlow
+{
+    "This shader simulates a ghostly effect by causing an object to be "
+    "visible only where its normals are perpendicular to the view vector. "
+    "The shader doesn't perform any lighting or texturing it just returns "
+    "the material diffuse color. There are two versions of the shader, one "
+    "of which uses a normal map with a pixel shader to do a per-pixel "
+    "effect, and one of which just uses the vertex normals with the fixed-"
+    "function pixel pipeline."
+    
+    // Attribute list
+    Attributes
+    {
+        // This normal map is only used in the implementation with a pixel
+        // shader.
+        Attrib_Texture
+            normalMap
+            Artist
+            0
+            "normals.tga"
+    }
+
+    PackingDef PosNorm
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      1   PDT_Float3
+    }
+
+    PackingDef PosNormUV0BinormalTangent
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      1   PDT_Float3
+            PDP_TexCoord0   2   PDT_Float2
+            PDP_Tangent     3   PDT_Float3
+            PDP_Binormal    4   PDT_Float3
+    }
+
+    Implementation PerPixel
+    {
+        "This implementation calculates per-pixel values "
+        "using the normal map. It is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v1.1."
+
+        Requirements
+        {
+            VSVersion   = v1.1
+            UserVersion = v0.0
+            PSVersion   = v1.1
+            UsesNIRenderState = true
+            BinormalTangentMethod = NBTMethod_ATI
+            BinormalTangentUVSource = 0
+            Platform    = DX9|XENON
+        }
+
+        PackingDef  PosNormUV0BinormalTangent
+
+        RenderStates
+        {
+            // Force alpha blending to be enabled
+            AlphaBlendEnable    = true
+            SrcBlend            = SrcAlpha
+            DestBlend           = InvSrcAlpha
+        }
+
+        Pass SpectralVertex
+        {
+            VSProgram   "SpectralPixel.vsh"
+
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0       0
+                CM_Defined      InvWorldViewTranspose   4       0
+                CM_Constant     Zoze                    8   1   0.0, 1.0, 0.0, 0.5
+            }
+
+            Sampler 0   NormalSampling
+            {
+                TSS_Texture = <normalMap>
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+
+            PSProgram   "SpectralPixel.psh"
+
+            PS_Constantmap
+            {
+                CM_Defined      MaterialDiffuse  0       0
+            }
+        }
+    }
+
+    Implementation PerVertex
+    {
+        "This implementation calculates per-vertex values, and "
+        "ignores the normal map. It is intended for hardware "
+        "that supports Vertex Shader v1.1."
+
+        Requirements
+        {
+            VSVersion   = v1.1
+            UserVersion = v0.0
+            PSVersion   = v0.0
+            UsesNIRenderState = true
+            Platform    = DX9
+        }
+
+        PackingDef  PosNorm
+
+        RenderStates
+        {
+            // Force alpha blending to be enabled
+            AlphaBlendEnable    = true
+            SrcBlend            = SrcAlpha
+            DestBlend           = InvSrcAlpha
+        }
+
+        Pass SpectralVertex
+        {
+            VSProgram   "SpectralVertex.vsh"
+
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0       0
+                CM_Defined      InvWorldViewTranspose   4       0
+                CM_Defined      MaterialDiffuse         8       0
+                CM_Constant     Zoze                    9   1   0.0, 1.0, 0.0, 1.0
+            }
+
+            Stage 0     SpectralShading
+            {
+                TSS_ColorOp     = TOP_SelectArg1
+                TSS_ColorArg1   = TA_Diffuse
+                TSS_AlphaOp     = TOP_SelectArg1
+                TSS_AlphaArg1   = TA_Diffuse
+            }
+        }
+    }
+}

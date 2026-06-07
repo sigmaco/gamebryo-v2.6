@@ -1,0 +1,116 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader TexColorNoAlpha
+{
+    "This shader writes out the base map color with an alpha value of 0."
+
+    // Packing Definition
+    PackingDef PosTexDef
+    {
+        PD_Stream   0
+            PDP_Position        0   PDT_Float3
+            PDP_TexCoord0       1   PDT_Float2
+    }
+    
+    // Implementations
+    Implementation VS11PS11
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v1.1."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform                = DX9
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v1.1
+            UsesNiRenderState       = true
+            UsesNiLightState        = false
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosTexDef
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "TexColorNoAlpha.hlsl" VS vs_1_1
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProj   WorldViewProj   0
+            }
+            
+            PSProgram   "TexColorNoAlpha.psh"
+            
+            Sampler 0 BaseSampler
+            {
+                TSS_Texture = NTM_Base
+                TSAMP_AddressU = TADDR_Clamp
+                TSAMP_AddressV = TADDR_Clamp
+                TSAMP_MipFilter = TEXF_None
+                TSAMP_MagFilter = TEXF_Point
+                TSAMP_MinFilter = TEXF_Point
+            }
+        }
+    }
+    
+    Implementation VS11PS20
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v2.0."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            Platform                = D3D10
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v2.0
+            UsesNiRenderState       = true
+            UsesNiLightState        = false
+        }
+        
+        // Packing Definition it uses
+        PackingDef  PosTexDef
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram   "TexColorNoAlpha.hlsl" VS vs_1_1
+
+            // Vertex Shader constant map
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProj   WorldViewProj   0
+            }
+            
+            PSProgram   "TexColorNoAlpha.hlsl" PS ps_2_0
+            
+            Sampler 0 BaseSampler
+            {
+                TSS_Texture = NTM_Base
+                TSAMP_AddressU = TADDR_Clamp
+                TSAMP_AddressV = TADDR_Clamp
+                TSAMP_MipFilter = TEXF_None
+                TSAMP_MagFilter = TEXF_Point
+                TSAMP_MinFilter = TEXF_Point
+            }
+        }
+    }
+}

@@ -1,0 +1,158 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader LuminanceTransfer
+{
+    "This shader applies two lights and a base map to an object, and then "
+    "uses the resulting color intensity to look up a gradient texture. "
+    "The default gradient texture simulates an infrared ramp. Under the "
+    "ps.1.4 implementation, the base map affects the intensity lookup, but "
+    "under the ps.1.1 implementation, only the lit material color does."
+
+    Objects
+    {
+        Effect_GeneralLight   0   Light1
+        Effect_GeneralLight   1   Light2
+    }
+
+    //Attribute list
+    Attributes
+    {
+        Attrib_Texture
+            TransferRamp
+            Artist
+            0
+            "IRRamp.bmp"
+    }
+
+    PackingDef PosNormUV0
+    {
+        PD_Stream   0
+            PDP_Position    0   PDT_Float3
+            PDP_Normal      1   PDT_Float3
+            PDP_TexCoord0   2   PDT_Float2
+    }
+
+    Implementation TransferWithBaseMap
+    {
+        "This implementation requires hardware that supports "
+        "Vertex Shader v1.1 and Pixel Shader v1.4.  It uses "
+        "the base map and the material to calculate the intensity "
+        "for the transfer ramp lookup. "
+
+        Requirements
+        {
+            Platform    = DX9|XENON
+            VSVersion   = v1.1
+            UserVersion = v0.0
+            PSVersion   = v1.4
+            UsesNIRenderState = true
+        }
+
+        PackingDef  PosNormUV0
+
+        Pass Transfer
+        {
+            VSProgram   "LumaTransv11p14"
+
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0       0
+                CM_Object       Light1  ModelDirection  4
+                CM_Object       Light2  ModelDirection  5  
+                CM_Object       Light1  Diffuse         6  
+                CM_Object       Light2  Diffuse         7  
+                CM_Defined      MaterialDiffuse         8       0
+                CM_Constant     Zoze                    9   1   0.0,1.0,0.0,1.0
+            }
+
+            // Grab the thin film interference texture from the extra data 
+            // attributes.
+            Sampler 0   BaseMapSampler
+            {
+                TSS_Texture     = <TransferRamp>
+                TSAMP_AddressU  = TADDR_Clamp
+                TSAMP_AddressV  = TADDR_Clamp
+                TSAMP_AddressW  = TADDR_Clamp
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_None
+            }
+            
+            Sampler 1   IRRamp
+            {
+                TSS_Texture     = NTM_Base
+                TSAMP_AddressU  = TADDR_Wrap
+                TSAMP_AddressV  = TADDR_Wrap
+                TSAMP_AddressW  = TADDR_Wrap
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+            
+            PSProgram   "LumaTransv11p14"
+        }
+    }
+
+    Implementation TransferWithMaterial
+    {
+        "This implementation requires hardware that supports "
+        "Vertex Shader v1.1 and Pixel Shader v1.1.  It only uses "
+        "the lit material color to calculate the intensity "
+        "for the transfer ramp lookup. "
+
+        Requirements
+        {
+            Platform    = DX9|XENON
+            VSVersion   = v1.1
+            UserVersion = v0.0
+            PSVersion   = v1.1
+            UsesNIRenderState = true
+        }
+
+        PackingDef  PosNormUV0
+
+        Pass Transfer
+        {
+            VSProgram   "LumaTransv11p11"
+
+            VS_Constantmap
+            {
+                CM_Defined      WorldViewProjTranspose  0       0
+                CM_Object       Light1  ModelDirection  4
+                CM_Object       Light2  ModelDirection  5  
+                CM_Object       Light1  Diffuse         6  
+                CM_Object       Light2  Diffuse         7  
+                CM_Defined      MaterialDiffuse         8       0
+                CM_Constant     Zoze                    9   1   0.0,1.0,0.0,1.0
+                CM_Constant     YUVConversion           10  1   0.299, 0.587, 0.114, 1.0
+            }
+
+            // Grab the thin film interference texture from the extra data 
+            // attributes.
+            
+            Sampler 0   TransferRampSampler
+            {
+                TSS_Texture     = <TransferRamp>
+                TSAMP_AddressU  = TADDR_Clamp
+                TSAMP_AddressV  = TADDR_Clamp
+                TSAMP_AddressW  = TADDR_Clamp
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_None
+            }
+
+            PSProgram   "LumaTransv11p11"
+        }
+    }
+}

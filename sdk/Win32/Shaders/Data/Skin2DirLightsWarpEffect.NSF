@@ -1,0 +1,171 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader Skin2DirLightsWarpEffect
+{
+
+    "This shader skins a model using 20 bones per partition, applies a base "
+    "map, and lights it with two directional lights using a normal map. "
+    "Then, the entire effect is modified by a warping effect that allows "
+    "the shader to fade out over time. The warp effect is a 2D texture that "
+    "will be sampled using (N dot V) as the U coordinate and 'warpAlpha' as "
+    "the V coordinate. This shader was used for the alien's skin in the " 
+    "Eturnum sample."
+    
+    // The values for the lights.  
+    Objects
+    {
+        Effect_GeneralLight   0   Light1
+        Effect_GeneralLight   1   Light2
+    }
+    
+    // Attribute list
+    Attributes
+    {
+        // Effectively the V coordinate of the WarpEffects texture lookup.
+        Attrib_Float
+            WarpAlpha
+            Artist
+            0.3
+            [-2.0 2.0]
+        // The texture for the effect.  WarpAlpha will be used as V.  
+        // N dot V will be used for U
+        Attrib_Texture
+            WarpEffects
+            Artist
+            0
+            "WarpEffects.tga"
+        // The texture for the normals.  
+        Attrib_Texture
+            NormalMap
+            Artist
+            1
+            "normals.tga"
+    }
+
+    // Packing Definition
+    PackingDef PosBlendWeightBlendIndicesNormUV0
+    {
+        PD_Stream    0
+            PDP_Position        0    PDT_Float3
+            PDP_BlendWeights    1    PDT_Float3
+            PDP_BlendIndices    2    PDT_UByteColor
+            PDP_Normal          3    PDT_Float3
+            PDP_Binormal        4    PDT_Float3
+            PDP_Tangent         5    PDT_Float3
+            PDP_TexCoord0       7    PDT_Float2
+    }
+    
+    // Implementation
+    Implementation VS11_PS14
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v1.4."
+        
+        // Requirements for this implementation
+        Requirements
+        {
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v1.4
+            BinormalTangentMethod   = NBTMethod_ATI
+            BinormalTangentUVSource = 0
+            BonesPerPartition       = 20
+            UsesNIRenderState       = true
+            Platform                = DX9|XENON
+        }
+        
+        // Packing Definition it uses
+        PackingDef    PosBlendWeightBlendIndicesNormUV0
+
+        // We are writing Z which can cause problems with alpha
+        // sorting. We sidestep this in the application by turning off
+        // alpha sorting for the alien when he's opaque. There are 
+        // artifacts as he warps in, but they are hard to notice with
+        // so much going on visually.
+        RenderStates
+        {
+            // Alpha blending must be enabled for the object to fade out.
+            AlphaBlendEnable    = true
+            SrcBlend            = SrcAlpha
+            DestBlend           = InvSrcAlpha
+        }
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram    "Skin2DirLightsWarpEffect.vsh"
+
+            // Vertex Shader constant map. 
+            VS_Constantmap
+            {
+                CM_Defined      ViewProjTranspose           0    0
+                CM_Defined      MaterialDiffuse             4    0
+                CM_Constant     const_1_1_1_255             5    1    1.0,1.0,1.0,765.01
+                CM_Constant     Zoze                        6    1    0.0,1.0,0.0,1.0
+                CM_Object       Light1  WorldDirection      7
+                CM_Object       Light2  WorldDirection      8  
+                CM_Defined      InvViewTranspose            11      0
+                CM_Attribute    WarpAlpha                   15  1   0
+                
+                CM_Defined      SKinBoneMatrix3             18    0    20
+            }
+            
+            // Sampler stage 0
+            Sampler    0    BaseMapSampler
+            {
+                TSS_Texture        = NTM_Base
+                TSAMP_AddressU    = TADDR_Clamp
+                TSAMP_AddressV    = TADDR_Clamp
+                TSAMP_AddressW    = TADDR_Clamp
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+
+            // Sampler stage 1
+            Sampler    1    WarpEffectSampler
+            {
+                TSS_Texture     = <WarpEffects>
+                TSAMP_AddressU    = TADDR_Clamp
+                TSAMP_AddressV    = TADDR_Clamp
+                TSAMP_AddressW    = TADDR_Clamp
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_None
+            }
+
+            // Sampler stage 2
+            Sampler    2    NormalMapSampler
+            {
+                TSS_Texture     = <NormalMap>
+                TSAMP_AddressU    = TADDR_Clamp
+                TSAMP_AddressV    = TADDR_Clamp
+                TSAMP_AddressW    = TADDR_Clamp
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+
+            PSProgram "Skin2DirLightsWarpEffect.psh"
+
+            PS_Constantmap
+            {
+                CM_Object       Light1      Diffuse  2  
+                CM_Object       Light2      Diffuse  3  
+                CM_Attribute    WarpAlpha            4  1  0   
+            }
+        }
+    }
+}

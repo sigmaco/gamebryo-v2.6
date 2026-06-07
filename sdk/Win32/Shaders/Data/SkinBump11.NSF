@@ -1,0 +1,123 @@
+// EMERGENT GAME TECHNOLOGIES PROPRIETARY INFORMATION
+//
+// This software is supplied under the terms of a license agreement or
+// nondisclosure agreement with Emergent Game Technologies and may not 
+// be copied or disclosed except in accordance with the terms of that 
+// agreement.
+//
+//      Copyright (c) 1996-2008 Emergent Game Technologies.
+//      All Rights Reserved.
+//
+// Emergent Game Technologies, Chapel Hill, North Carolina 27517
+// http://www.emergent.net
+
+NSFShader SkinBump11
+{
+    "This shader skins a model using 28 bones per partition, applies a base "
+    "map, and lights it with two directional lights using a normal map."
+
+    // The values for the lights.  
+    Objects
+    {
+        Effect_GeneralLight   0   Light1
+        Effect_GeneralLight   1   Light2
+    }
+    
+    // Attribute list
+    Attributes
+    {
+        // The texture for the normals.  
+        Attrib_Texture
+            NormalMap
+            Artist
+            0
+            "normals.tga"
+    }
+
+    // Packing Definition
+    PackingDef PosBlendWeightBlendIndicesNormUV0
+    {
+        PD_Stream    0
+            PDP_Position        0    PDT_Float3
+            PDP_BlendWeights    1    PDT_Float3
+            PDP_BlendIndices    2    PDT_UByteColor
+            PDP_Normal          3    PDT_Float3
+            PDP_Binormal        4    PDT_Float3
+            PDP_Tangent         5    PDT_Float3
+            PDP_TexCoord0       7    PDT_Float2
+    }
+    
+    // Implementation
+    Implementation VS11_PS11
+    {
+        "This implementation is intended for hardware "
+        "that supports Vertex Shader v1.1 and Pixel Shader v1.1."
+
+        // Requirements for this implementation
+        Requirements
+        {
+            VSVersion               = v1.1
+            UserVersion             = v0.0
+            PSVersion               = v1.1
+            BinormalTangentMethod   = NBTMethod_ATI
+            BinormalTangentUVSource = 0
+            BonesPerPartition       = 28
+            UsesNIRenderState       = true
+            Platform                = DX9|XENON
+        }
+        
+        // Packing Definition it uses
+        PackingDef    PosBlendWeightBlendIndicesNormUV0
+
+        // First pass
+        Pass Pass0
+        {
+            // Vertex shader program
+            VSProgram    "SkinBump11.vsh"
+
+            // Vertex Shader constant map. 
+            VS_Constantmap
+            {
+                CM_Defined      ViewProjTranspose      0    0
+                CM_Constant     const_1_1_1_255             4    1    1.0,1.0,1.0,765.01
+                CM_Object       Light1      WorldDirection  5
+                CM_Object       Light2      WorldDirection  6  
+                CM_Constant     Half                        7    1   0.5,0.5,0.5,0.5   
+                CM_Defined      SkinBoneMatrix3             8   0    28
+            }
+            
+            // Sampler stage 0
+            Sampler    0    BaseMapSampler
+            {
+                TSS_Texture        = NTM_Base
+                TSAMP_AddressU    = TADDR_Clamp
+                TSAMP_AddressV    = TADDR_Clamp
+                TSAMP_AddressW    = TADDR_Clamp
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+
+            // Sampler stage 1
+            Sampler    1    NormalMapSampler
+            {
+                TSS_Texture     = <NormalMap>
+                TSAMP_AddressU    = TADDR_Clamp
+                TSAMP_AddressV    = TADDR_Clamp
+                TSAMP_AddressW    = TADDR_Clamp
+                TSAMP_MagFilter    = TEXF_Linear
+                TSAMP_MinFilter    = TEXF_Linear
+                TSAMP_MipFilter    = TEXF_Linear
+            }
+
+            PSProgram "SkinBump11.psh"
+
+            PS_Constantmap
+            {
+                CM_Defined      MaterialDiffuse      1     0
+                CM_Object       Light1      Diffuse  2  
+                CM_Object       Light2      Diffuse  3  
+            }
+        }
+    }
+}
